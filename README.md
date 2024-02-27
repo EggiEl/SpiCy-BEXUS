@@ -6,7 +6,7 @@
 in der cmd ihres Vertrauens: 
 clone this repo: 
 ```
-git clone "link"'
+git clone https://github.com/EggiEl/SpiCy-BEXUS.git
 ```
 - Neue Dateien aus Repo runterladen und mergen:
 ```
