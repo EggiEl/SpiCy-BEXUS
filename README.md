@@ -38,7 +38,18 @@ git log
 git checkout "hashcode" 
 ```
 
+Installs: 
+## Node 
+https://nodejs.org/en/download
 
+Könnte nötig sein: 
+```
+npm install express
+npm install express dotenv
+npm install --dev typescript
+npm install --dev @types/express @types/node
+npm install --dev concurrently nodemon
+```
 
 
 
