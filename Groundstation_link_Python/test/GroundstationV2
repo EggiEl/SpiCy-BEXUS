@@ -1,0 +1,73 @@
+import os
+import sys
+import time
+import serial
+import random
+import serial.tools.list_ports
+import threading
+import PySimpleGUI as psg
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import numpy as np
+
+
+class GUI:
+	def __init__(self) -> None:
+		self.window = psg.Window('Spicy_Groundstation', self.generatelayout(),
+						   resizable=True, finalize=True, location = (0,0),
+						   auto_close=True,auto_close_duration=2)
+		self.temperature_data = []
+		ax,line,canvas = self.generategraph()
+		while True:
+			event, values = self.window.read()
+			match event:
+				case psg.WIN_CLOSED:
+					self.window.close()
+					sys.exit()
+				case '-Add Temperature-':
+					# Generate random temperature value
+					new_temperature = np.random.uniform(0, 100)
+					# Add the new temperature value to the array
+					self.temperature_data.append(new_temperature)
+					# Update the plot with the new temperature data
+					line.set_xdata(np.arange(len(self.temperature_data)))
+					line.set_ydata(self.temperature_data)
+					ax.relim()
+					ax.autoscale_view()
+					canvas.draw()
+		
+	def generatelayout(self):
+		psg.theme('DarkAmber')
+		sensors = psg.Frame('Sensor Data', layout=[
+			[psg.Canvas(size=(1000, 900), key=f'-CANVAS-')]
+		])
+
+		selectgraph = psg.Listbox(values=["All Graphs"], size=(40, 2), key='-GraphSel-', enable_events=True)
+
+		status =  psg.Frame('Status', layout=[
+			[selectgraph],
+			[psg.Multiline(default_text="hier könnte ihre Werbungs stehen", size=(40, 50), autoscroll=True)],
+			[psg.Button('-Add Temperature-')]
+			])
+
+		layout = [
+			[sensors]+[status]
+		]
+		return layout
+
+	def generategraph(self):
+		# Create a Matplotlib figure and axis
+		fig, ax = plt.subplots(figsize=(8,9))
+		line, = ax.plot([], [])
+
+		# Get the Matplotlib canvas
+		canvas_elem = self.window['-CANVAS-'].TKCanvas
+
+		# Display the Matplotlib plot on the PySimpleGUI window
+		canvas = FigureCanvasTkAgg(fig, master=canvas_elem)
+		canvas.draw()
+		canvas.get_tk_widget().pack(side='top', fill='both', expand=1)
+		return (ax,line,canvas)	
+		
+if __name__=='__main__':
+	guit = GUI()
