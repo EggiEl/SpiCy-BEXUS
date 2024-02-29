@@ -7,14 +7,14 @@ dotenv.config();
 const port = process.env.PORT;
 
 
-// Starte den CSV-Listener
-csvListener();
 
 
 
 
 console.log("Server starting...");
 //Starte App
-app.listen(port, () => {
-    console.log(`Server started at http://localhost:${port}`);
-});
+
+app.listen(port , () => {
+  console.log(`Server started at http://localhost:${port}`); 
+
+})
