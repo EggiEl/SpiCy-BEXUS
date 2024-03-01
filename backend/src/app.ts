@@ -7,11 +7,14 @@ import mongoose from 'mongoose';
 
 
 
-
 const app : Express = express() 
 
+const corsOptions = {
+    origin: 'http://localhost:8080', // Erlaubt nur Anfragen von diesem Origin
+  };
+  
+app.use(cors(corsOptions));
 
-app.use(cors()); 
 app.use(bodyParser.json()) ;
 app.use(databaserouter) ; 
 
