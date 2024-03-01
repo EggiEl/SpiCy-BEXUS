@@ -12,7 +12,6 @@ void testServer() {
   SPI.setSCK(SCK_LAN);
   Ethernet.init(CS_LAN);
 
-  Serial.begin(9600);
   while (!Serial) {}
   Serial.println("Ethernet WebServer Example");
   byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };

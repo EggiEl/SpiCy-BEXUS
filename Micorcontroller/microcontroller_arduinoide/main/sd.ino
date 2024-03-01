@@ -174,7 +174,6 @@ bool printfile() {
 }
 
 void testSD() {
-  Serial.begin(115200);
   while (!Serial) {}
 
   init_SD();

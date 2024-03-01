@@ -1,4 +1,3 @@
-
 void printIO(uint8_t anzahl_Ios) {
   Serial.println();
   Serial.println("printio: ");
@@ -38,9 +37,9 @@ void printIO(uint8_t anzahl_Ios) {
 }
 
 void blinkLed() {
-  delay(1000);
+  delay(200);
   digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
+  delay(200);
   digitalWrite(LED_BUILTIN, LOW);
 }
 

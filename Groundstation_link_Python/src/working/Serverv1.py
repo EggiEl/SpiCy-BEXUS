@@ -3,16 +3,34 @@ import struct
 import threading
 import time
 
+ip_uC = '192.168.178.23'
+ip_Laptop = '169.254.171.44'
+ip_Desktop = '192.168.178.23'
+port = 8888
+
 def millis():
 	return round(time.time() * 1000)
 
-
+def get_ip_address():
+    try:
+        # Create a socket object
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # Connect to a remote server (doesn't matter which one)
+        s.connect(("8.8.8.8", 80))
+        # Get the socket's own IP address
+        ip_address = s.getsockname()[0]
+        # Close the socket
+        s.close()
+        return ip_address
+    except Exception as e:
+        print("Error:", e)
+        return None
+    
 class TCP_SERVER:
 	def __init__(self, _struct_format="L L 6L 6f 6f 6i i f 2i 80s"):
 		self.packets = []
 		self.rawdata = []
-#		self.ipadress = "192.168.178.23" #PC
-		self.ipadress="192.168.178.32" #laptop
+		self.ipadress= ip_Laptop
 		self.port = 8888
 		self.isRunning = 1
 		self.struct_format = _struct_format
@@ -168,6 +186,7 @@ if __name__ == "__main__":
 	# 	print(a.packets[0])
 	# 	a.isRunning = 0
 
+	
 	test_packet = (
 		3522,
 		0,
