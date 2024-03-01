@@ -2,6 +2,7 @@ import socket
 import struct
 import threading
 import time
+from MongoDB import MongoDB 
 
 # ip_uC = '192.168.178.23'
 ip_Laptop = '169.254.171.44'
@@ -225,8 +226,12 @@ class DATALOGGER:
         else:
             print("rawdata convertion to rawdata.csv went wrong")
 
-if __name__ == "__main__":
+def writetomongo():
+    pass
+    
 
+if __name__ == "__main__":
+    
     # 	a = TCP_SERVER()
     # # 	# while True:
     # 	time.sleep(2)
@@ -268,9 +273,15 @@ if __name__ == "__main__":
  
     a = TCP_SERVER()
     datalog = DATALOGGER()
+    mongodb = MongoDB("localhost:27017", "Probe", "Probecollect" )
+    mongodb.connect()
     time.sleep(2)
     
     while True:
+        for packet in a.packets:
+            mongodb.write_mongodb({"test" : str(packet)})
+        a.packets = []
+        
         datalog.savepackets(a)
         datalog.saveraw(a)
         time.sleep(2)

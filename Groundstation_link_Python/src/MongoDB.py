@@ -1,0 +1,35 @@
+import pymongo
+
+class MongoDB: 
+    def __init__(self, uri, db_name, db_collection_name) -> None:
+          self.uri = uri
+          self.db_name = db_name
+          self.db_collection_name = db_collection_name
+          self.client = None 
+
+    def connect(self): 
+        try:
+            # Verbindung zur MongoDB-Datenbank herstellen
+            self.client = pymongo.MongoClient(self.uri)
+            print("Verbunden mit der Datenbank")
+        except pymongo.errors.PyMongoError as e:
+            print("Fehler beim Verbinden mit der DB:", e)
+
+    def write_mongodb(self, struct: dict, db_name, db_collection_name) : 
+        if self.client:
+            try: 
+                mydb = self.client[db_name]
+                mycol = mydb[db_collection_name]
+                insert_result = mycol.insert_one(struct)
+                # print("Eingefügte ID:", insert_result.inserted_id)
+            except pymongo.errors.PyMongoError as e:
+                print("Fehler beim Schreiben in die DB:", e)
+        else:
+            print("Keine Verbindung zur Datenbank vorhanden.")
+
+
+# mongodb = MongoDB("localhost:27017", "Probe", "Probecollect" )
+# mongodb.connect()
+# mongodb.write_mongodb({"test" : "testdata"}, "Test1", "Sensor1")
+# mongodb.write_mongodb({"test2" : "testdata2"}, "test2", "Sensor2")
+

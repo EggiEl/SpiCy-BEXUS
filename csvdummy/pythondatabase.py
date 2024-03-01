@@ -28,4 +28,7 @@ class MongoDB:
             print("Keine Verbindung zur Datenbank vorhanden.")
 
 
+mongodb = MongoDB("localhost:27017", "Probe", "Probecollect" )
+mongodb.connect()
+mongodb.write_mongodb({"test" : "testdata"})
 
