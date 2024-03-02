@@ -15,11 +15,11 @@ class MongoDB:
         except pymongo.errors.PyMongoError as e:
             print("Fehler beim Verbinden mit der DB:", e)
 
-    def write_mongodb(self, struct: dict) : 
+    def write_mongodb(self, struct: dict, db_name, collection_name ) : 
         if self.client:
             try: 
-                mydb = self.client[self.db_name]
-                mycol = mydb[self.db_collection_name]
+                mydb = self.client[db_name]
+                mycol = mydb[collection_name]
                 insert_result = mycol.insert_one(struct)
                 print("Eingefügte ID:", insert_result.inserted_id)
             except pymongo.errors.PyMongoError as e:
@@ -30,5 +30,6 @@ class MongoDB:
 
 mongodb = MongoDB("localhost:27017", "Probe", "Probecollect" )
 mongodb.connect()
-mongodb.write_mongodb({"test" : "testdata"})
+mongodb.write_mongodb({"test" : "testdata"}, "probe1","Sensor1" )
+mongodb.write_mongodb({"test2" : "testdata2"},"probe2","Sensor2" )
 

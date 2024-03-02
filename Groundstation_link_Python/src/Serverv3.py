@@ -196,12 +196,12 @@ if __name__ == "__main__":
  
     server = TCP_SERVER()
     datalog = server.datalog
-    # mongodb = MongoDB("localhost:27017", "Probe", "Probecollect" )
+    # mongodb = MongoDB("localhost:27017" )
     # mongodb.connect()
     time.sleep(5)    
     server.isRunning = 0
     
     # for packet in datalog.rawdata:
-    #     mongodb.write_mongodb({"test" : str(packet)})
+    #     mongodb.write_mongodb({"test" : str(packet)}, "Sensor1", "Collection 1")
     
     datalog.saveraw_csv()
