@@ -2,8 +2,7 @@ import socket
 import struct
 import threading
 import time
-import os
-# from MongoDB import MongoDB 
+from MongoDB import MongoDB 
 
 # ip_uC = '192.168.178.23'
 ip_Laptop = '169.254.171.44'
@@ -30,24 +29,34 @@ def get_ip_address():
         return None
     
 class TCP_SERVER:
-    def __init__(self, _struct_format="L L 6L 6f 6f 6i i f 2i 80s"):
+    def __init__(self):
         self.datalog = DATALOGGER()
         self.ipadress= ip_Laptop
         self.port = 8888
-        self.isRunning = 1
-        self.struct_format = _struct_format
+        self.__isRunning = 1
         self.thread = threading.Thread(target=self.StartServer)
         self.thread.start()
 
+    def shutdown(self):
+        print("")
+        print("--shutdown of server--")
+        self.__isRunning = 0
+        self.datalog.isRunning = 0
+        time.sleep(0.5)
+        self.thread.join()
+        self.datalog.thread.join()
+        print("Server down")
+        
     def StartServer(self):  
         """startet eine TCP Server an den sich ein Client verbinden kann"""          
         counter_recieved = counter_corrupted = 0
         client_socket = client_address = 0
         print(f'- starting TCP server at "{self.ipadress}" at "{time.asctime(time.localtime())}"')
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Erstellen Sie einen Socket für den Server
+        # server_socket.settimeout(2)
         
         #tries to connect to sockel
-        while True:
+        while self.__isRunning:
             try:
                 server_socket.bind((self.ipadress, self.port))  # Binden Sie den Socket an den Host und Port
                 break
@@ -78,7 +87,7 @@ class TCP_SERVER:
         client_socket, client_address = ConnectClient()
         timestamp_server = millis()-1 #-1 damit später be der packet/s berechnung kein 0 unterm bruch landen kann
             
-        while self.isRunning:
+        while self.__isRunning:
             
             #recieve binary
             try:
@@ -119,27 +128,43 @@ class TCP_SERVER:
                 print("\r" + " " * 70 + "\r", end='', flush=True)  # Clear the  last line
                 print(f'- recieved_structs: {counter_recieved} | sizeof(latest_data): {len(received_data)} bytes | corrupted wip: {counter_corrupted} | packets/sec: {round(1000*counter_recieved/(millis()-timestamp_server),2)}', end='',flush=True)
 
-
+        print("-closing socket")
         server_socket.close()  # schließt den Sockel wenn der Thread geschlossen wird
 
 class DATALOGGER:
     """datalogger takes data from listener and saves it in corresponding files"""
     def __init__(self) -> None:
         self.rawdata = []
-
-    def bintolist(binary_data,struct_format):
-        """convert binary to (struct)list"""
-        try:
-            unpacked_data = struct.unpack(struct_format, binary_data) # Entpacken Sie die Daten in die Struktur
-            return(unpacked_data)
-        except:
-            print("\nstruct_format is wrong or data is corrupted")
-            print(f"Length of binary Data: {len(binary_data)}")
-            print(f"Binary Data: {binary_data}")
-            print()
+        self.mongodb = MongoDB("localhost:27017")
+        self.mongodb.connect()
+        self.isRunning = 1
+        self.thread = threading.Thread(target=self.SavingLoop)
+        self.thread.start()
+    
+    def SavingLoop(self):
+        while(self.isRunning):
+            self.saveraw_mongo()
+            if(self.saveraw_csv()):
+                print(f"saved {len(datalog.rawdata)} packages")
+                self.rawdata = []
+                
+    
+    def saveraw_mongo(self):
+        sucess = 1
+        for packet in self.rawdata:
+            try:
+                self.mongodb.write_mongodb({packet[0] : packet[1]},"Probe", "Probecollect")
+            except Exception as e:
+                print(e)
+                break
+        else:
+            sucess = 0
+        return sucess
         
+    
     def saveraw_csv(self):
         """reads the rawdata from the buffer of the TCP_Server, reads them in rawdata.csv and deletes the rawdata in TCP_Server if saving was successful"""
+        sucess = 1
         for el in self.rawdata:
             try:
                 with open("./rawdata.csv", "a") as f:
@@ -153,10 +178,16 @@ class DATALOGGER:
                 print("File not found.")
                 break
             except IOError:
+                print(IOError)
                 print("Error reading the file.")
                 break
-            else:
-                pass #delete the packages from
+            except Exception as e:
+                print(e)
+                break
+        else:
+            sucess = 0
+        return sucess
+        
         
 
 
@@ -198,8 +229,8 @@ if __name__ == "__main__":
     datalog = server.datalog
     # mongodb = MongoDB("localhost:27017" )
     # mongodb.connect()
-    time.sleep(5)    
-    server.isRunning = 0
+    time.sleep(20)    
+    server.shutdown()
     
     # for packet in datalog.rawdata:
     #     mongodb.write_mongodb({"test" : str(packet)}, "Sensor1", "Collection 1")
