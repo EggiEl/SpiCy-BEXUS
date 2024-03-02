@@ -1,10 +1,8 @@
 import pymongo
 
 class MongoDB: 
-    def __init__(self, uri, db_name, db_collection_name) -> None:
+    def __init__(self, uri) -> None:
           self.uri = uri
-          self.db_name = db_name
-          self.db_collection_name = db_collection_name
           self.client = None 
 
     def connect(self): 
