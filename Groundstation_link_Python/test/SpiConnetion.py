@@ -62,5 +62,4 @@ def logCom():
 if __name__ == "__main__":
 	# logCom()
 	# gui = GUI()
-
-	
+	pass 

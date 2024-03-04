@@ -1,10 +1,9 @@
 import pymongo
+import time
 
 class MongoDB: 
-    def __init__(self, uri, db_name, db_collection_name) -> None:
+    def __init__(self, uri) -> None:
           self.uri = uri
-          self.db_name = db_name
-          self.db_collection_name = db_collection_name
           self.client = None 
 
     def connect(self): 
@@ -28,8 +27,11 @@ class MongoDB:
             print("Keine Verbindung zur Datenbank vorhanden.")
 
 
-mongodb = MongoDB("localhost:27017", "Probe", "Probecollect" )
-mongodb.connect()
-mongodb.write_mongodb({"test" : "testdata"}, "probe1","Sensor1" )
-mongodb.write_mongodb({"test2" : "testdata2"},"probe2","Sensor2" )
+mongodb = MongoDB("localhost:27017")
+mongodb.connect()#
+
+while True:
+
+    mongodb.write_mongodb({"temperature" : 20, "time" : "20"}, "testDB","Sensor1" )
+    time.sleep(2)
 
