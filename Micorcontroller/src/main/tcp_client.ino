@@ -236,17 +236,21 @@ int send_TCP_packet(struct packet data) {
   }
 }
 
-//Serial prints in debug mode weather cable is connected or not
-void cabletest() {
+/* Returns 1 if sucessfull, 0 if not
+ Also serial prints in debug mode weather cable is connected or not */
+uint8_t cabletest() {
   debug("-cable: ");
   switch (Ethernet.linkStatus()) {
     case 1:
       debug("con-");
-      break;
+      return 1;
     case 2:
       debug("discon_or_iC_faulty-");
-      break;
+      return 0;
     default:
       debug(Ethernet.linkStatus());
   }
 }
+
+/*Hadware test via a ICMP ping*/
+uint8_t ICMP_ping(){}

@@ -1,8 +1,8 @@
 // #include <Arduino.h>
 #include <stdio.h>
-// #include <SPI.h>  // #include <SoftwareSerial.h>
 #include <Ethernet.h>
 #include <SD.h>
+// #include <SPI.h>  // #include <SoftwareSerial.h>
 
 #define DEBUG 1
 #define MICROS 1
@@ -56,7 +56,7 @@ struct packet {  // struct_format L L 6L 6f 6f 6i i f 2i 80s
   int error = 0;
 
   float tempCpu = analogReadTemp(3.3f);
-  int power[2] = { 0 };
+  unsigned long power[2] = { 0 };
 
   char info[80] = { 0 };
 };
@@ -71,7 +71,6 @@ void setup() {
   // Serial.begin(7812500);
   while (!Serial) {}
   debugln("\n----------Main is running-C0-------------------\n");
-  struct packet a;
   // Serial.println(max_freq_sd());
 
 
