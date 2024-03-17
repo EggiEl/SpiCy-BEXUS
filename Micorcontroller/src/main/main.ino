@@ -66,7 +66,6 @@ struct packet {  // struct_format L L 6L 6f 6f 6i i f 2i 80s
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
-
   Serial.begin(115200);
   Serial.setTimeout(1000);
   // Serial.begin(7812500);
@@ -81,14 +80,14 @@ void setup() {
 
   // testServer();
 
-  struct packet first = packet_create();
-  packet_writeinfo(first, "First Packet");
-  send_TCP_packet(first);
+  // struct packet first = packet_create();
+  // packet_writeinfo(first, "First Packet");
+  // send_TCP_packet(first);
 
-  // printpacketardesses();
-  // init_SD();
+  // // printpacketardesses();
+  // // init_SD();
 
-  test_TCP_manually();
+  // test_TCP_manually();
 }
 
 
@@ -104,7 +103,8 @@ void setup1() {
 }
 
 void loop1() {
-  if (TCP_init) { fadeLED(); }
+   fadeLED();
+  // if (TCP_init) { fadeLED(); }
   // fadeLED();
   // heartbeat();
 }
