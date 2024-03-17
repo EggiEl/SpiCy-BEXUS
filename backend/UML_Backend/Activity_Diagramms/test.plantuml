@@ -1,0 +1,14 @@
+@startuml getall 
+
+(*) --> [DatabaseRouter.ts] "Recieve Get Request on URL /storedData" 
+--> [DatabaseController.ts] "Call getAllData()"
+--> [DatabaseService.ts] "Try to collect Data" 
+if "Data found" then
+  -->[true] "Structure Data in List" 
+  --> return List of Data
+  --> (*)
+else
+  ->[false] "Return Error"
+  --> (*)
+
+@enduml
