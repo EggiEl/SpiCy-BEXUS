@@ -1,3 +1,4 @@
+/*Coordination of the struct packet, wich is a container for downlink purposes*/
 volatile unsigned long id_struct = 0;
 
 struct packet packet_create() {
@@ -96,7 +97,7 @@ void packet_print(struct packet pkt) {
 }
 
 void packet_writeinfo(struct packet &data, const char *info) {
-  unsigned int len = strlen(info);
+  unsigned int len = strnlen(info,sizeof(data.info)+1);
   if (len >= sizeof(data.info)) {
     Serial.print("This char was too big for struct packet info: ");
     Serial.println(info);

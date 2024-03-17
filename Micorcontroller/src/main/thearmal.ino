@@ -1,3 +1,4 @@
+/*manages the heating elements*/
 #define PIN_H0 6
 #define PIN_H1 7
 #define PIN_H2 8
@@ -16,14 +17,9 @@
  * @param unsigned int HeaterPWM[] the PWM in an array
  * @return nothing
  */
-void updateAllHeater(uint16_t HeaterPWM[])
+void updateAllHeater(uint16_t *  HeaterPWM)
 {
   debug("-updateHeater:");
-  if (sizeof(HeaterPWM) != 6)
-  {
-    debugln("not enouth heater values-");
-    return;
-  }
   analogWriteFreq(HEAT_FREQ); // 100Hz to 1MHz
   analogWriteRange(HEAT_HUNDERTPERCENT);
   // analogWriteResolution
@@ -36,18 +32,18 @@ void updateAllHeater(uint16_t HeaterPWM[])
   debug("success-");
 }
 
-void updateOneHeater(uint0_t PIN, uint16_t PWM)
+void updateOneHeater(uint8_t PIN, uint16_t PWM)
 {
   if (PWM != 1)
   {
-    analogWrite(i, PWM);
+    analogWrite(PIN, PWM);
   }
 }
 
 void heaterTest_manual()
 {
   uint16_t buf[] = {100, 200, 300, 400, 500, 600};
-  updateHeater(buf);
+  updateAllHeater(buf);
 }
 
 /*can evalue the functionality fo individual heaters via the currentdraw*/
@@ -59,8 +55,8 @@ uint8_t heaterTest_auto()
   uint8_t results = 0;
   unsigned long current_start = get_current(); // current with all heater off
   unsigned long current_heat;
-  
-  for (uint8_t = 0; i < 6; i++)
+
+  for (uint8_t i = 0; i < 6; i++)
   {
     buf[i] = HEAT_HUNDERTPERCENT;
     current_heat = get_current() - current_start;

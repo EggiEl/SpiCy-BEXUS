@@ -1,4 +1,5 @@
-// #include <Arduino.h>
+/*Main programm coordinating the different sections*/
+#include <Arduino.h>
 #include <stdio.h>
 #include <Ethernet.h>
 #include <SD.h>
@@ -87,7 +88,7 @@ void setup() {
   // printpacketardesses();
   // init_SD();
 
-  test_TCP();
+  test_TCP_manually();
 }
 
 
