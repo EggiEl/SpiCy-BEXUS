@@ -1,6 +1,7 @@
 /*Coordination of the struct packet, wich is a container for downlink purposes*/
 volatile unsigned long id_struct = 0;
 
+/*return a packet with a timestamp, id and a readout of the CpuTemp*/
 struct packet packet_create() {
   struct packet a;
   a.id = id_struct;
@@ -10,7 +11,11 @@ struct packet packet_create() {
   return a;
 };
 
-
+/**
+ *  writes a packet to a char* buffer
+ * @param struct packet data to write to 
+* @return pointer to buffer
+*/
 char *packettochar(struct packet data) {
   char *buffer = (char *)malloc(sizeof(struct packet));
   memcpy(buffer, &data, sizeof(struct packet));  //converts struct in a char array
@@ -96,6 +101,10 @@ void packet_print(struct packet pkt) {
   Serial.println();
 }
 
+/**
+ *  writes a char array in the info of an packet
+ * @param char* info pointer to a string with carrige return!!!
+*/
 void packet_writeinfo(struct packet &data, const char *info) {
   unsigned int len = strnlen(info,sizeof(data.info)+1);
   if (len >= sizeof(data.info)) {

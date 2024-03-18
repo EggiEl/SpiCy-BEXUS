@@ -1,6 +1,10 @@
 /*handles the downlink as TCP client*/
 uint32_t get_Status();
 
+// #define MISO_LAN 0 //16
+// #define CS_LAN 1 //17
+// #define SCK_LAN 2 // 18
+// #define MOSI_LAN 3 //19
 #define MISO_LAN 16
 #define CS_LAN 17
 #define SCK_LAN 18
@@ -8,9 +12,9 @@ uint32_t get_Status();
 #define SPI_FREQ_LAN 12MHz // not used and no need to change
 
 #define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-#define SERVERIP IPAddress(169, 254, 171, 44) //(192, 168, 178, 23)  // IP address of the PC
+#define SERVERIP IPAddress(169,254,218,4) ////(169, 254, 171, 44) (192, 168, 178, 23)// IP address of the PC
 // #define SERVERIP IPAddress(100, 81, 57, 236)
-#define CLIENTIP IPAddress(169, 254, 1, 2) // ip of this uC, leve blank for auto generation IPAddress(169, 168, 1, 100)
+#define CLIENTIP  // ip of this uC, leve blank for auto generation IPAddress(169, 168, 1, 100)
 // #define DNS IPAddress(8, 8, 8, 8)             // DNS server (e.g., Google DNS)
 // #define GATEWAY IPAddress(192, 168, 1, 1)
 #define SUBNET IPAddress(255, 255, 0, 0)
@@ -29,6 +33,9 @@ struct test
   float b = 4.4;
 } testa;
 
+/**
+ *  Test function for the TCP Server
+*/
 void test_TCP_manually()
 {
   // packet send
@@ -62,7 +69,11 @@ void test_TCP_manually()
   //  }
 }
 
-// sets the RP2040 as TCP Client for the given ip adress
+
+/**
+ *  sets the RP2040 as TCP Client for the given ip adress
+ * @param TCP_init changes this global variable to true if succesfull
+*/
 void setup_TCP_Client()
 {
   debugln("-{setup_TCP_Client-");
@@ -169,6 +180,9 @@ void send_TCP(char *data, unsigned long int size)
   }
 }
 
+/**
+ *  Reads in commands via the TCP Server connection.
+*/
 void recieve_TCP_command()
 {
   debug("-{recieve_TCPdTCPpacket-id:");

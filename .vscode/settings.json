@@ -1,5 +1,5 @@
 {
-    "arduino.logLevel": "verbose",
+    "arduino.logLevel": "info",
     "files.associations": {
         "array": "cpp",
         "deque": "cpp",
@@ -8,5 +8,6 @@
         "vector": "cpp",
         "string_view": "cpp",
         "initializer_list": "cpp"
-    }
+    },
+    "C_Cpp.loggingLevel": "Debug"
 }

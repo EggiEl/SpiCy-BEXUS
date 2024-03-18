@@ -66,13 +66,40 @@ struct packet {  // struct_format L L 6L 6f 6f 6i i f 2i 80s
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
+
+
+  heat_testmanual();
+  heat_updateone(2,50);
+
   Serial.begin(115200);
   Serial.setTimeout(1000);
   // Serial.begin(7812500);
   while (!Serial) {}
   debugln("\n----------Main is running-C0-------------------\n");
-  // Serial.println(max_freq_sd());
+   test_TCP_manually();
+}
 
+
+void loop() {
+  printMemoryUse();
+  delay(1000);
+  // Serial.println(millis());
+  // Serial.println(analogReadTemp(3.3f));
+}
+
+
+//-------------------------core2------------------------
+void setup1() {
+  // debugln("----------Main is running-C1-------------------");
+}
+
+void loop1() {
+  // if (TCP_init) { fadeLED(); }
+  heartbeat();
+}
+
+void tests(){
+ // Serial.println(max_freq_sd());
 
   // Serial.println(startuptest(), BIN);
 
@@ -88,23 +115,4 @@ void setup() {
   // // init_SD();
 
   // test_TCP_manually();
-}
-
-
-void loop() {
-  // Serial.println(millis());
-  // Serial.println(analogReadTemp(3.3f));
-}
-
-
-//-------------------------core2------------------------
-void setup1() {
-  // debugln("----------Main is running-C1-------------------");
-}
-
-void loop1() {
-   fadeLED();
-  // if (TCP_init) { fadeLED(); }
-  // fadeLED();
-  // heartbeat();
 }

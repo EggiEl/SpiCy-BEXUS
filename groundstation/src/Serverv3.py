@@ -3,14 +3,7 @@ import struct
 import threading
 import time
 from MongoDB import MongoDB 
-
 # ip_uC = '192.168.178.23'
-ip_Laptop = '169.254.171.44'
-ip_Desktop = '192.168.178.23'
-port = 8888
-
-def millis():
-    return round(time.time() * 1000)
 
 def get_ip_address():
     """returns some randomas Ip adress. dkn wich one. dk"""
@@ -27,7 +20,23 @@ def get_ip_address():
     except Exception as e:
         print("Error:", e)
         return None
+
+# troubleshooting tools:
+#"ipconfig"
+#"netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
     
+# ip_Laptop = get_ip_address()
+ip_Laptop =" 169.254.218.4"
+# ip_Laptop ='169, 254, 171, 44'
+# ip_Laptop ='0,0,0,0'
+
+# ip_Desktop = '192.168.178.23'
+port = 8888
+
+def millis():
+    return round(time.time() * 1000)
+
+
 class TCP_SERVER:
     def __init__(self):
         self.datalog = DATALOGGER()
@@ -224,7 +233,8 @@ if __name__ == "__main__":
         0,
         b"Hier steht die zu \xc3\xbcbertragende Info\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
     )
- 
+    # print(get_ip_address())
+    
     server = TCP_SERVER()
     datalog = server.datalog
     # mongodb = MongoDB("localhost:27017" )
