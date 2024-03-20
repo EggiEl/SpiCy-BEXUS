@@ -3,6 +3,29 @@ import struct
 import threading
 import time
 from MongoDB import MongoDB 
+import netifaces
+
+def get_network_info():
+    # Get host name and IP address
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+
+    print("Hostname:", hostname)
+    print("IP Address:", ip_address)
+
+    # Get information about network interfaces
+    print("\nNetwork Interfaces:")
+    interfaces = netifaces.interfaces()
+    for iface in interfaces:
+        iface_details = netifaces.ifaddresses(iface)
+        print("Interface:", iface)
+        if netifaces.AF_INET in iface_details:
+            for addr_info in iface_details[netifaces.AF_INET]:
+                print("  IP Address:", addr_info['addr'])
+                print("  Netmask:", addr_info['netmask'])
+                print("  Broadcast Address:", addr_info.get('broadcast'))
+        else:
+            print("  No IPv4 address")
 # ip_uC = '192.168.178.23'
 
 def get_ip_address():
@@ -25,8 +48,8 @@ def get_ip_address():
 #"ipconfig"
 #"netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
     
-# ip_Laptop = get_ip_address()
-ip_Laptop =" 169.254.218.4"
+ip_Laptop = '169.254.218.4'
+# ip_Laptop =" 169.254.218.4"
 # ip_Laptop ='169, 254, 171, 44'
 # ip_Laptop ='0,0,0,0'
 
@@ -239,10 +262,11 @@ if __name__ == "__main__":
     datalog = server.datalog
     # mongodb = MongoDB("localhost:27017" )
     # mongodb.connect()
-    time.sleep(20)    
-    server.shutdown()
+    time.sleep(2)
+    get_network_info()    
+    # server.shutdown()
     
     # for packet in datalog.rawdata:
     #     mongodb.write_mongodb({"test" : str(packet)}, "Sensor1", "Collection 1")
     
-    datalog.saveraw_csv()
+    # datalog.saveraw_csv()

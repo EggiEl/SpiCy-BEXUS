@@ -12,9 +12,9 @@ uint32_t get_Status();
 #define SPI_FREQ_LAN 12MHz // not used and no need to change
 
 #define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-#define SERVERIP IPAddress(169,254,218,4) ////(169, 254, 171, 44) (192, 168, 178, 23)// IP address of the PC
+#define SERVERIP IPAddress(169,254,218,4) //(169,254,218,4) (169, 254, 171, 44) (192, 168, 178, 23)// IP address of the PC
 // #define SERVERIP IPAddress(100, 81, 57, 236)
-#define CLIENTIP  // ip of this uC, leve blank for auto generation IPAddress(169, 168, 1, 100)
+#define CLIENTIP IPAddress(169, 254, 218, 100)// ip of this uC, leve blank for auto generation IPAddress(169, 168, 1, 100)
 // #define DNS IPAddress(8, 8, 8, 8)             // DNS server (e.g., Google DNS)
 // #define GATEWAY IPAddress(192, 168, 1, 1)
 #define SUBNET IPAddress(255, 255, 0, 0)
