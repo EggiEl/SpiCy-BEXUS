@@ -1,14 +1,11 @@
 /*handles the downlink as TCP client*/
 uint32_t get_Status();
 
-// #define MISO_LAN 0 //16
-// #define CS_LAN 1 //17
-// #define SCK_LAN 2 // 18
-// #define MOSI_LAN 3 //19
-#define MISO_LAN 16
-#define CS_LAN 17
-#define SCK_LAN 18
-#define MOSI_LAN 19
+#define MISO_LAN 0 //16
+#define CS_LAN 1 //17
+#define SCK_LAN 2 // 18
+#define MOSI_LAN 3 //19
+
 #define SPI_FREQ_LAN 12MHz // not used and no need to change
 
 #define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};

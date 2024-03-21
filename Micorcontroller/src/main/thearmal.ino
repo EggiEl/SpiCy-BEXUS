@@ -8,9 +8,9 @@
 #define PIN_H6 12
 #define PIN_H7 13
 
-#define HEAT_FREQ 12000000
+#define HEAT_FREQ 1000 //5kmax for the facy Ics
 #define HEAT_HUNDERTPERCENT 100 // value where the heaters are fully turned on
-#define HEAT_CURRENT 250         // aproximation of the current of a single Heater in mA
+#define HEAT_CURRENT 317         // aproximation of the current of a single Heater in mA
 
 char heat_init = 0;
 
@@ -24,6 +24,7 @@ void heat_initialize()
   pinMode(PIN_H3, OUTPUT);
   pinMode(PIN_H4, OUTPUT);
   pinMode(PIN_H5, OUTPUT);
+  heat_init = 1;
 }
 
 /**
@@ -52,6 +53,10 @@ void heat_updateall(uint16_t *HeaterPWM)
  */
 void heat_updateone(uint8_t PIN, uint16_t PWM)
 {
+  if(!heat_init){
+    heat_initialize();
+  }
+
   if (PWM != 1)
   {
     analogWrite(PIN, PWM);

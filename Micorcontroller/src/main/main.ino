@@ -69,19 +69,20 @@ void setup() {
 
 
   heat_testmanual();
-  heat_updateone(2,50);
+  heat_updateone(2,100);
 
   Serial.begin(115200);
   Serial.setTimeout(1000);
   // Serial.begin(7812500);
   while (!Serial) {}
   debugln("\n----------Main is running-C0-------------------\n");
-   test_TCP_manually();
+  printMemoryUse();
+  //  test_TCP_manually();
 }
 
 
 void loop() {
-  printMemoryUse();
+  // printMemoryUse();
   delay(1000);
   // Serial.println(millis());
   // Serial.println(analogReadTemp(3.3f));

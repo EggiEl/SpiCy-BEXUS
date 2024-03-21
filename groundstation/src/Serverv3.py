@@ -28,27 +28,11 @@ def get_network_info():
             print("  No IPv4 address")
 # ip_uC = '192.168.178.23'
 
-def get_ip_address():
-    """returns some randomas Ip adress. dkn wich one. dk"""
-    try:
-        # Create a socket object
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # Connect to a remote server (doesn't matter which one)
-        s.connect(("8.8.8.8", 80))
-        # Get the socket's own IP address
-        ip_address = s.getsockname()[0]
-        # Close the socket
-        s.close()
-        return ip_address
-    except Exception as e:
-        print("Error:", e)
-        return None
-
 # troubleshooting tools:
 #"ipconfig"
 #"netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
     
-ip_Laptop = '169.254.218.4'
+ip_Laptop = '169.254.218.4' #if of Ethernet-Adapter Ethernet 6
 # ip_Laptop =" 169.254.218.4"
 # ip_Laptop ='169, 254, 171, 44'
 # ip_Laptop ='0,0,0,0'
@@ -263,7 +247,7 @@ if __name__ == "__main__":
     # mongodb = MongoDB("localhost:27017" )
     # mongodb.connect()
     time.sleep(2)
-    get_network_info()    
+    # get_network_info()    
     # server.shutdown()
     
     # for packet in datalog.rawdata:
