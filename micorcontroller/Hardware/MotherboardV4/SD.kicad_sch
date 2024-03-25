@@ -3,7 +3,7 @@
 	(generator "eeschema")
 	(generator_version "8.0")
 	(uuid "09423b80-c050-4253-a9d0-0c95928f74dd")
-	(paper "A4")
+	(paper "A5")
 	(lib_symbols
 		(symbol "Connector:Micro_SD_Card"
 			(pin_names
