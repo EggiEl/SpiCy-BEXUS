@@ -29,9 +29,10 @@ class MongoDB:
 
 mongodb = MongoDB("localhost:27017")
 mongodb.connect()#
-
+eintrag = 1 
 while True:
-
-    mongodb.write_mongodb({"temperature" : 20, "time" : "20"}, "testDB","Sensor1" )
+    
+    mongodb.write_mongodb({"temperature" : 20, "time" : "20", "eintragsnummer" : eintrag}, "testDB","Sensor1" )
+    eintrag+=1 
     time.sleep(2)
 
