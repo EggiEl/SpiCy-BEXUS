@@ -21,6 +21,26 @@ unsigned long get_current()
   return buf / (R_SHUNT * 2.5);
 }
 
+void printMemoryUse()
+{
+  int totalHeap = rp2040.getTotalHeap();
+  debug("-TotalHeap: ");
+  debug(rp2040.getTotalHeap());
+  debugln(" bytes");
+
+  debug("-FreeHeap: ");
+  debug(rp2040.getFreeHeap());
+  debug(" bytes| ");
+  debug((float)rp2040.getFreeHeap() / totalHeap);
+  debugln(" percent");
+
+  debug("-UsedHeap: ");
+  debug(rp2040.getUsedHeap());
+  debug(" bytes| ");
+  debug((float)rp2040.getUsedHeap() / totalHeap);
+  debugln(" percent");
+}
+
 void printIO(uint8_t anzahl_Ios)
 {
   Serial.println();

@@ -3,31 +3,47 @@ import struct
 import threading
 import time
 from MongoDB import MongoDB 
+import netifaces
 
+def get_network_info():
+    # Get host name and IP address
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+
+    print("Hostname:", hostname)
+    print("IP Address:", ip_address)
+
+    # Get information about network interfaces
+    print("\nNetwork Interfaces:")
+    interfaces = netifaces.interfaces()
+    for iface in interfaces:
+        iface_details = netifaces.ifaddresses(iface)
+        print("Interface:", iface)
+        if netifaces.AF_INET in iface_details:
+            for addr_info in iface_details[netifaces.AF_INET]:
+                print("  IP Address:", addr_info['addr'])
+                print("  Netmask:", addr_info['netmask'])
+                print("  Broadcast Address:", addr_info.get('broadcast'))
+        else:
+            print("  No IPv4 address")
 # ip_uC = '192.168.178.23'
-ip_Laptop = '169.254.171.44'
-ip_Desktop = '192.168.178.23'
+
+# troubleshooting tools:
+#"ipconfig"
+#"netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
+    
+ip_Laptop = '169.254.218.4' #if of Ethernet-Adapter Ethernet 6
+# ip_Laptop =" 169.254.218.4"
+# ip_Laptop ='169, 254, 171, 44'
+# ip_Laptop ='0,0,0,0'
+
+# ip_Desktop = '192.168.178.23'
 port = 8888
 
 def millis():
     return round(time.time() * 1000)
 
-def get_ip_address():
-    """returns some randomas Ip adress. dkn wich one. dk"""
-    try:
-        # Create a socket object
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # Connect to a remote server (doesn't matter which one)
-        s.connect(("8.8.8.8", 80))
-        # Get the socket's own IP address
-        ip_address = s.getsockname()[0]
-        # Close the socket
-        s.close()
-        return ip_address
-    except Exception as e:
-        print("Error:", e)
-        return None
-    
+
 class TCP_SERVER:
     def __init__(self):
         self.datalog = DATALOGGER()
@@ -224,15 +240,17 @@ if __name__ == "__main__":
         0,
         b"Hier steht die zu \xc3\xbcbertragende Info\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00",
     )
- 
+    # print(get_ip_address())
+    
     server = TCP_SERVER()
     datalog = server.datalog
     # mongodb = MongoDB("localhost:27017" )
     # mongodb.connect()
-    time.sleep(20)    
-    server.shutdown()
+    time.sleep(2)
+    # get_network_info()    
+    # server.shutdown()
     
     # for packet in datalog.rawdata:
     #     mongodb.write_mongodb({"test" : str(packet)}, "Sensor1", "Collection 1")
     
-    datalog.saveraw_csv()
+    # datalog.saveraw_csv()

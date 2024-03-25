@@ -19,7 +19,7 @@ class MongoDB:
                 mydb = self.client[db_name]
                 mycol = mydb[collection_name]
                 insert_result = mycol.insert_one(struct)
-                print("Eingefügte ID:", insert_result.inserted_id)
+                # print("Eingefügte ID:", insert_result.inserted_id)
             except pymongo.errors.PyMongoError as e:
                 print("Fehler beim Schreiben in die DB:", e)
         else:
