@@ -1,5 +1,5 @@
 # SpiCy-BEXUS
-
+Please take a look at the wiki if you´re searching something.
 
 
 # Git-for beginners: 
