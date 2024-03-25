@@ -1,5 +1,5 @@
 import express, {Request, Response, response} from 'express'; 
-import {GetAllEntries} from "../controllers/DatabaseController" 
+import {GetAllEntries, GetNewerEntries} from "../controllers/DatabaseController" 
 
 
 
@@ -11,3 +11,8 @@ databaserouter.get('/storedData',  (request: Request, response) => {
 }); 
 
 export default databaserouter
+
+databaserouter.get("/storedData_latest/:sensor/:id", (request: Request, response: Response) => 
+{
+    GetNewerEntries(request, response);
+}); 
