@@ -1,5 +1,7 @@
 import pymongo
 import time
+import random
+from datetime import datetime
 
 class MongoDB: 
     def __init__(self, uri) -> None:
@@ -28,11 +30,8 @@ class MongoDB:
 
 
 mongodb = MongoDB("localhost:27017")
-mongodb.connect()#
+mongodb.connect()
 eintrag = 1 
-while True:
-    
-    mongodb.write_mongodb({"temperature" : 20, "time" : "20", "eintragsnummer" : eintrag}, "testDB","Sensor1" )
+for i in range(100): 
+    mongodb.write_mongodb({"temperature" : random.randint(10,20), "time" : datetime.now(), "eintragsnummer" : eintrag}, "testDB","Sensor1" )
     eintrag+=1 
-    time.sleep(2)
-

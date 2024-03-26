@@ -1,0 +1,25 @@
+@startuml getall 
+
+(*) --> [DatabaseRouter.ts] "Recieve Get Request on URL storedData_latest/:sensorname/:id" 
+--> [DatabaseController.ts] "Call getNewerEntries()"
+--> Check for right Sensorname
+if Sensorname found then 
+     -->[true] collect new Data newer than last Data 
+        if "Data found" then
+            -->[true] "Structure Data in List" 
+            --> return List of Data
+            --> (*)
+        else
+            ->[false] "Return Error"
+            --> (*)
+endif
+else  
+    -->[false] return Error
+    --> (*) 
+    
+
+
+    
+    
+
+@enduml
