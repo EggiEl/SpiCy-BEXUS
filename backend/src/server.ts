@@ -8,6 +8,6 @@ const port = process.env.PORT ? parseInt(process.env.PORT) : 8000;
 console.log("Server starting...");
 //Starte App
 
-app.listen(port, 'localhost', () => {
+app.listen(port,  () => {
   console.log(`Server listening at http://localhost:${port}`);
 });

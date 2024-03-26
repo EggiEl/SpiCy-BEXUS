@@ -53,6 +53,7 @@ export async function getNewerEntries(sensor: string, id: string): Promise<any[]
                 break;
             default:
                 throw new Error("Invalid sensor type");
+                
         }
 
         const newerEntries = await sensorModel.find({ _id: { $gt: id } }).lean().exec();
