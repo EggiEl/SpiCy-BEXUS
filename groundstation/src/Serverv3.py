@@ -33,7 +33,7 @@ def get_network_info():
 #"netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
     
 ip_Laptop = '169.254.218.4' #if of Ethernet-Adapter Ethernet 6
-# ip_Laptop =" 169.254.218.4"
+# ip_Laptop =" 169.254.218.4"e
 # ip_Laptop ='169, 254, 171, 44'
 # ip_Laptop ='0,0,0,0'
 

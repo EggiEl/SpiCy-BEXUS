@@ -1,0 +1,16 @@
+General Structure:
+
+Commands can be used to alter variables or read out data.
+Read out data will be returned with the next struct in the info array.
+Commands and data are seperated via "\n"
+
+char | char | char | ":" | char[16] | "\n" |
+Command_A | Command_B | Command_C | Seperator | Param | end
+
+Param is Command dependent but max. 16 byte long
+
+Read out Startuptests:
+Command: sro:"\n"
+Return: sro | 32 bit |
+// |default 1 |sd init check | sd struct write check| sd struct read check |      cableTest     | TCP setup Check | HeaterTestAuto  |
+//      31        30                  29                      28                      27                   26            25-19
