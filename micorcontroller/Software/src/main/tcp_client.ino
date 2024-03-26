@@ -86,7 +86,7 @@ void setup_TCP_Client()
   client.setConnectionTimeout(CONNECTIONTIMEOUT);
 
   Ethernet.init(CS_LAN);
-
+ 
   //----automatic ip allocation : ----
   // if (!Ethernet.begin(mac)) {
   //   debug("DHCP configuration failed}-");
