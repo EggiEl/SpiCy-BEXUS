@@ -42,13 +42,12 @@ Installs:
 ## Node 
 https://nodejs.org/en/download
 
-Könnte nötig sein: 
+## How to setup Project after cloning: 
+
+In the root of the Project use:
 ```
-npm install express
-npm install express dotenv
-npm install --dev typescript
-npm install --dev @types/express @types/node
-npm install --dev concurrently nodemon
+pip install -r requirements.txt
+npm install
 ```
 
 
