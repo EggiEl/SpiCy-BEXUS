@@ -1,0 +1,27 @@
+@startuml getall 
+
+(*) --> "Initialization of plot serverside render"
+--> "Get AllData from DatabaseService.ts"
+
+if "Data found" then
+    -down->[false] "Error Message"
+    --> (*)
+  
+else 
+  -->[true] "Render the Plot with received Data"
+  --> "Check last received entry data for extreme values"
+
+  if "Extreme values found" then 
+    -->[true] "Render Extreme Values"
+    --> "Render Warning Message"
+    -down-> "Deliver the plot with warning to the client side"
+    --> (*)
+  else
+    -->[false] "Render the Plot"
+    -down-> "Deliver the plot to the client side"
+    --> (*)
+
+
+
+
+@enduml

@@ -3,7 +3,7 @@ import axios from 'axios';
 export async function get_latest_data(lastid : string , sensorname : string): Promise<any[]> {
   try {
     const response = await axios.get(`http://localhost:8000/storedData_latest/${sensorname}/${lastid}`);
-    console.log(response.data);
+    
     return response.data;
   } catch (error: any) {
     if (error.response?.status === 404) {
