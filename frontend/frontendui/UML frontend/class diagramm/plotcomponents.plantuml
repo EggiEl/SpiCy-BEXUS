@@ -1,0 +1,49 @@
+@startuml   plotcomponents 
+
+class PlotArea {
+    # getAllData() : list<json>
+    # getLatestData() : json
+
+}
+
+
+
+
+class PlotComponent {
+    - mountData : json  
+    - newData : json
+    - lowerToleranceLimit : number 
+    - upperToleranceLimit : number 
+    - color : string 
+    - setData(newData) : void 
+    - useColor(color) : void 
+    - plot(data) : void 
+    - useEffect(newData) : void 
+}
+
+
+
+class SensorButton(data : json) {
+    - SensorName : string 
+    - lower_tolerance_limit : number 
+    - upper_tolerance_limit : number 
+    - color : string 
+    - toleranceBreak : boolean 
+
+
+    # usecolor(color) : void 
+    # handle click event() 
+    # change color(upper_tolerance_limit, lower_tolerance_limit) 
+    # useEffect(toleranceBreak) : void 
+
+} 
+
+
+PlotArea o--> PlotComponent : contains 1-6 
+PlotArea o--> SensorButton : contains  6 
+
+
+
+
+
+@enduml

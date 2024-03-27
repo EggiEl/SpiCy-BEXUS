@@ -3,34 +3,27 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 import { useEffect , useState} from 'react';
 
-export default function MyResponsiveChart() {
-  // Define the parameters for your function
-  const m = 2; // slope
-  const t = 3; // y-interceptcd ..
+export default function MyResponsiveChart({ m = 2, t = 3 }) {
+  const [useddata, setUsedData] = useState(0);
+  const [stroke, setStroke] = useState("#8884d8");
 
-  const [useddata, setuseddata] = useState(0);
-  const [stroke, setstroke] = useState("#8884d8");
-
-  
   useEffect(() => {
     const interval = setInterval(() => {
-      setuseddata(useddata => {
-        if (useddata > 10) {
+      setUsedData(usedData => {
+        if (usedData > 10) {
           console.log("Changing color");
-          setstroke("green");
+          setStroke("green");
         }
-        return useddata + 1;
+        return usedData + 1;
       });
     }, 2000);
   
-    // Clear interval on component unmount
     return () => {
       clearInterval(interval);
     };
-  }, [useddata]); // Add useddata to the dependency array// Empty dependency array means this effect runs once on mount and clean up on unmount
+  }, [useddata]);
 
-  // Generate the data
-  const data = Array.from({length: useddata}, (_, i) => ({name: `Point ${i}`, uv: m * i + t}));
+  const data = Array.from({ length: useddata }, (_, i) => ({ name: `Point ${i}`, uv: m * i + t }));
 
   return (
     <ResponsiveContainer width="50%" height="100%">
