@@ -23,7 +23,7 @@ class PlotComponent {
 
 
 
-class SensorButton(data : json) {
+class SensorButton {
     - SensorName : string 
     - lower_tolerance_limit : number 
     - upper_tolerance_limit : number 
