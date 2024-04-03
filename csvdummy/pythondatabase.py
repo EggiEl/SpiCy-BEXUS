@@ -32,6 +32,6 @@ class MongoDB:
 mongodb = MongoDB("localhost:27017")
 mongodb.connect()
 eintrag = 1 
-for i in range(100): 
-    mongodb.write_mongodb({"temperature" : random.randint(10,20), "time" : datetime.now(), "eintragsnummer" : eintrag}, "testDB","Sensor1" )
+for i in range(90): 
+    mongodb.write_mongodb({"temperature" : random.randint(20,27), "time" : datetime.now(), "eintragsnummer" : eintrag}, "testDB","Sensor1" )
     eintrag+=1 
