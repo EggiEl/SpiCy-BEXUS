@@ -1,4 +1,4 @@
-22926765392250881
+22938748204240901
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -87164,6 +87164,13 @@ Schottky Diode
 2
 2
 SamacSys_Parts
+DIOM7959X262N
+SS34
+Schottky Diode
+0
+2
+2
+SamacSys_Parts
 ECS250633B2CTPTR
 ECS-250-6-33B2-CTP-TR-1
 Crystal or Oscillator
@@ -87192,6 +87199,13 @@ Connector
 14
 14
 SamacSys_Parts
+KTT0005B
+KTT0005B
+Integrated Circuit
+0
+8
+8
+SamacSys_Parts
 LEDC2012X120N
 0805_2
 LED
@@ -87212,6 +87226,20 @@ LED (Multiple)
 0
 4
 4
+SamacSys_Parts
+Logo
+
+
+0
+0
+0
+SamacSys_Parts
+MPU6050
+MPU-6050-4
+Integrated Circuit
+0
+25
+25
 SamacSys_Parts
 MS5637_1
 MS5637_1
@@ -87262,6 +87290,13 @@ Resistor
 2
 2
 SamacSys_Parts
+SOIC127P600X170-9N
+DDA0008J
+Integrated Circuit
+0
+9
+9
+SamacSys_Parts
 SOIC127P600X175-8N
 D0008A
 Integrated Circuit
@@ -87275,6 +87310,13 @@ Integrated Circuit
 0
 8
 8
+SamacSys_Parts
+SON50P300X200X100-9N-D
+MCP73831T-2ACI/MC-1
+Integrated Circuit
+0
+9
+9
 SamacSys_Parts
 SOP65P640X120-16N
 TMUX1108PWR-1
@@ -87291,11 +87333,18 @@ Integrated Circuit
 20
 SamacSys_Parts
 SOT95P237X112-3N
-DBZ
-Integrated Circuit
+SQ2310ES-T1_GE3
+MOSFET (N-Channel)
 0
 3
 3
+SamacSys_Parts
+SOT95P270X145-5N
+(OT) [SOT-23]
+Integrated Circuit
+0
+5
+5
 SamacSys_Parts
 SOT230P700X170-4N
 SOT-223-4
@@ -87305,7 +87354,7 @@ Integrated Circuit
 4
 SamacSys_Parts
 SOT230P700X180-4N
-DCY (R-PDSO-G4)
+SOT-223 CASE 318H
 Integrated Circuit
 0
 4

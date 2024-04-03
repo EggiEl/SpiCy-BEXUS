@@ -48,7 +48,7 @@
         "silk_text_thickness": 0.09999999999999999,
         "silk_text_upright": false,
         "zones": {
-          "min_clearance": 0.5
+          "min_clearance": 0.15
         }
       },
       "diff_pair_dimensions": [
@@ -118,7 +118,7 @@
         "min_clearance": 0.0,
         "min_connection": 0.0,
         "min_copper_edge_clearance": 0.5,
-        "min_hole_clearance": 0.25,
+        "min_hole_clearance": 0.16999999999999998,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.19999999999999998,
         "min_microvia_drill": 0.09999999999999999,
@@ -479,6 +479,7 @@
       "+1V1": "rgb(30, 255, 253)",
       "+28V": "rgb(191, 0, 255)",
       "/3V3_rest": "rgb(255, 197, 0)",
+      "/3V3lan": "rgb(255, 160, 73)",
       "/5V": "rgb(0, 121, 50)",
       "/Ethernet/3V3": "rgb(255, 161, 46)",
       "/Heater/Vs_Heat": "rgb(255, 151, 162)",
@@ -505,7 +506,7 @@
     "page_layout_descr_file": ""
   },
   "schematic": {
-    "annotate_start_num": 0,
+    "annotate_start_num": -1,
     "bom_fmt_presets": [],
     "bom_fmt_settings": {
       "field_delimiter": ";",
@@ -560,7 +561,7 @@
           "group_by": false,
           "label": "#",
           "name": "${ITEM_NUMBER}",
-          "show": true
+          "show": false
         },
         {
           "group_by": false,
@@ -624,7 +625,7 @@
         }
       ],
       "filter_string": "",
-      "group_symbols": true,
+      "group_symbols": false,
       "name": "",
       "sort_asc": true,
       "sort_field": "Reference"
@@ -695,15 +696,11 @@
     ],
     [
       "8a172d80-b3ea-4528-a032-f8b18436f05b",
-      "Ethernet"
+      "EthernetaSD"
     ],
     [
       "ef45ab9a-94f0-47f5-90d7-9f2f46e21e77",
       "Heater"
-    ],
-    [
-      "a8132881-ef2f-4675-97ba-225bfc38fe3d",
-      "SD"
     ]
   ],
   "text_variables": {}
