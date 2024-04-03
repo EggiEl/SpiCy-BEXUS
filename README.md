@@ -42,6 +42,10 @@ Installs:
 ## Node 
 https://nodejs.org/en/download
 
+## MongoDB Community Server: 
+https://www.mongodb.com/try/download/community
+
+
 ## How to setup Project after cloning: 
 
 In the root of the Project use:
