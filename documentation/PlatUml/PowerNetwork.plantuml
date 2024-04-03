@@ -1,0 +1,76 @@
+@startuml Power
+skinparam class {
+  BorderColor Black
+  ArrowColor Black
+}
+
+skinparam object {
+  BorderColor Black
+  ArrowColor Black
+}
+
+skinparam linetype ortho
+
+class "30V Battery" as bat {
+    Max Power: 50W
+}
+class "Heating Elements" as heat {
+    Max Power: 47W
+}
+class "Buck Converter" as buck {
+    Voltage: 6V
+    Max Current: 3A
+    Max Power: 18W
+}
+class "LDO-Regulator" as five {
+    Max Current: 1A
+}
+class "LDO-Regulator" as three_one {
+    Max Current: 1A
+}
+class "LDO-Regulator" as three_two {
+    Max Current: 1A
+}
+class "LDO-Regulator" as three_three {
+    Max Current: 1A
+}
+class "USB" as usb {
+    Max Power: 15W
+}
+
+object "Microcontroller" as mc {
+    Typical Current: 301mA
+    Max Current: 500mA
+    Max Power: 1.65W
+}
+object "SD/LAN" as sd {
+    SD Max Current: 150mA
+    LAN Max Current: 128mA
+    Total Max Power: 0.918W
+}
+object "External Connections" as ext_sens {
+    Atlas Oxygen Sensors Current: 104mA
+    Power: 0.343W
+    Total Max Power: 0.343W
+}
+object "External Connector" as ext_conn {
+    Power: 0W
+}
+object "System Voltage" as sysvol {
+    Typical Power: 1W
+    Max Power: >3W
+}
+
+bat -down-|> heat : "30V"
+bat -down-|> buck : "30V"
+buck -down-|> sysvol : "6V"
+usb -down-|> sysvol : "5V"
+sysvol -down-|> five : "5-6V"
+sysvol -down-|> three_one : "5-6V"
+sysvol -down-|> three_two : "5-6V"
+sysvol -down-|> three_three : "5-6V"
+three_one -down-|> mc : "3.3V"
+three_two -down-|> sd : "3.3V"
+three_three -down-|> ext_sens : "3.3V"
+five -down-|> ext_conn : "5V"
+@enduml

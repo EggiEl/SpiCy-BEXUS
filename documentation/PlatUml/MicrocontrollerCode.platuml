@@ -1,0 +1,94 @@
+@startuml MicrocontrollerCode
+skinparam defaultTextAlignment center
+skinparam monochrome false
+skinparam useShadow true
+skinparam classAttributeIconSize 0
+
+skinparam rectangle {
+    BorderColor Black
+    BorderThickness 2
+}
+
+skinparam class {
+    BackgroundColor<<Microcontroller>> LightGreen
+    BackgroundColor<<GroundStation>> Wheat
+    BackgroundColor<<DataFlow>> LightBlue
+    BackgroundColor<<UseCase>> LightYellow
+    ArrowColor DarkSlateGray
+    BorderColor SlateGray
+}
+
+skinparam note {
+    BorderColor GoldenRod
+    BackgroundColor LightYellow
+    Shadowing true
+}
+
+package "Microcontroller" <<Microcontroller>> {
+  class HeatingSystem {
+    - heat_initialize(): void
+    - heat_updateall(HeaterPWM): void
+    - heat_updateone(PIN, PWM): void
+    - heat_testmanual(): void
+    - heat_testauto(): uint8_t
+  }
+  class OxigenSensors{
+    - readSensors():float
+  }
+  class Packet {
+    - packet_create(): packet
+    - packettochar(data): char*
+    - packet_print(pkt): void
+    - packet_writeinfo(data, info): void
+  }
+  class TCPClient {
+    - test_TCP_manually(): void
+    - setup_TCP_Client(): void
+    - send_TCP(data, size): void
+    - recieve_TCP_command(): void
+    - send_TCP_packet(data): int
+    - cabletest(): uint8_t
+  }
+  class SDManagement {
+    - init_SD(): void
+    - sd_numpackets(filepath): int
+    - writestruct(s_out, filepath): bool
+    - readstruct(data, filepath, position): bool
+    - writetofile(): bool
+    - printfile(): bool
+    - testSD(): void
+  }
+}
+
+package "GroundStation" <<GroundStation>> {
+  class TCP_SERVER {
+    - shutdown(): void
+    - StartServer(): void
+    - ConnectClient(): tuple
+  }
+  class DATALOGGER {
+    - isRunning: int
+    - SavingLoop(): void
+    - saveraw_mongo(): bool
+    - saveraw_csv(): bool
+  }
+  class MongoDB {
+    - connect(): void
+    - write_mongodb(data, collection): void
+  }
+}
+
+HeatingSystem --> Packet : <<DataFlow>>\nHeating data
+OxigenSensors --> Packet : <<DataFlow>>\nSensor data
+Packet --> SDManagement : <<DataFlow>>\nsaves data
+Packet --> TCPClient : <<DataFlow>>\ngets data
+TCPClient --> TCP_SERVER : <<DataFlow>>\nDownlink
+TCP_SERVER --> DATALOGGER : <<DataFlow>>\nraw data
+DATALOGGER --> MongoDB : <<DataFlow>>\nstruct packet
+
+note "Embedded code running on a microcontroller and written in C" as N2
+N2 .down.> Microcontroller : description
+
+note "Python code running on a Laptop" as N1
+N1 .down.> GroundStation : description
+@enduml
