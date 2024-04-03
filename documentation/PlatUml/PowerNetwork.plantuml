@@ -11,11 +11,13 @@ skinparam object {
 
 skinparam linetype ortho
 
-class "30V Battery" as bat {
+class "~30V Battery" as bat {
     Max Power: 50W
 }
 class "Heating Elements" as heat {
-    Max Power: 47W
+Power per Heater: 10W
+but will be kept under 7W
+    Max Power: 42W
 }
 class "Buck Converter" as buck {
     Voltage: 6V
@@ -38,22 +40,22 @@ class "USB" as usb {
     Max Power: 15W
 }
 
-object "Microcontroller" as mc {
+object "3V3 Microcontroller" as mc {
     Typical Current: 301mA
     Max Current: 500mA
     Max Power: 1.65W
 }
-object "SD/LAN" as sd {
+object "3V3 SD/LAN" as sd {
     SD Max Current: 150mA
     LAN Max Current: 128mA
     Total Max Power: 0.918W
 }
-object "External Connections" as ext_sens {
+object "3V3 External Connections" as ext_sens {
     Atlas Oxygen Sensors Current: 104mA
     Power: 0.343W
     Total Max Power: 0.343W
 }
-object "External Connector" as ext_conn {
+object "5V External Connector" as ext_conn {
     Power: 0W
 }
 object "System Voltage" as sysvol {
