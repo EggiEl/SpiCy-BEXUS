@@ -1,4 +1,4 @@
-@startuml 
+@startuml Overall System Architecture
 
 package "Frontend" {
   [User Interface]
@@ -15,8 +15,10 @@ database "MongoDB" {
 package "PythonGroundstation" {
   [Data Processing]
 }
-[Data Processing] --> [Stored Sensor Data]
-[API services] --> [Stored Sensor Data]
-[User Interface] --> [API services]
+[Data Processing] --> [Stored Sensor Data] : write data
+[API services] --> [Stored Sensor Data] : get data
+[User Interface] --> [API services] : collect data from backend
+
+
 
 @enduml
