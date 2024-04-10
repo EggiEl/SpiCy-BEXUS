@@ -1,0 +1,22 @@
+@startuml 
+
+package "Frontend" {
+  [User Interface]
+}
+
+package "Backend" {
+  [API services]
+}
+
+database "MongoDB" { 
+  [Stored Sensor Data]
+}
+
+package "PythonGroundstation" {
+  [Data Processing]
+}
+[Data Processing] --> [Stored Sensor Data]
+[API services] --> [Stored Sensor Data]
+[User Interface] --> [API services]
+
+@enduml
