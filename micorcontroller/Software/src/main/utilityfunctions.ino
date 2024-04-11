@@ -92,6 +92,115 @@ void printIO(uint8_t anzahl_Ios)
   }
 }
 
+/*Reads Serial Commands wich start with "/". /? for help */
+void serial_commands()
+{
+  if (Serial.available() > 0)
+  {
+    uint32_t buffer_status;
+    char buffer_comand = Serial.read();
+    if (buffer_comand == '/')
+    {
+      int buffer; // multipurpose buffer pirmarily for inputs after command
+      buffer_comand = Serial.read();
+      switch (buffer_comand)
+      {
+      case '?':
+        debugln("<help>");
+        debugln("/p|Returns Battery Voltage and current");
+        debugln("/s|Read out Status");
+        debugln("/l|Sets the controller in deep sleep");
+        debugln("/r|Reboots. if followed by a 1 reboots in Boot Mode");
+        debugln("/m|Read out Memory Info");
+        debugln("/h x y| set heater x at y prozent");
+        break;
+
+      case 'p':
+        debug("BatteryVoltage: ");
+        debug(get_batvoltage() * 1000.0);
+        debug("V, Current: ");
+        debug(get_current() * 1000.0);
+        debugln("A");
+        break;
+
+      case 's':
+        buffer_status = get_Status();
+        debug("Status: ");
+        debugln(buffer_status);
+        break;
+
+      case 'r':
+        buffer = Serial.parseInt(SKIP_WHITESPACE);
+        if (buffer == 1)
+        {
+          debugln("-Reboot in Boot Mode-");
+          rp2040.rebootToBootloader();
+          break;
+        }
+        else{
+            debugln("-Reboot-");
+          rp2040.reboot();
+          break;
+        }
+
+      case 'l':
+        debugln("Entering Sleep");
+        buffer = Serial.parseInt(SKIP_WHITESPACE) * 1000;
+        // sleep_config_set_default();
+        // // Set wake-up source to time
+        // sleep_configure_wakeup(
+        //     rtc_time_ms() + 5000, // Wake up after 5 seconds
+        //     0,                    // Don't repeat
+        //     false                 // Wake up on time, not alarm
+        // );
+        // // Enter deep sleep mode
+        // sleep_manager_deep_sleep();
+        debugln("Awake Again");
+        break;
+
+      case 'm':
+        printMemoryUse();
+        break;
+
+      case 'h':
+        debug("-Heater ");
+        uint16_t buffer_heat_pw;
+        uint8_t buffer_heat_pin;
+        // wich heater? saves in the buffer_command
+        buffer_heat_pin = Serial.read();
+        switch (buffer_heat_pin)
+        {
+        case 0:
+          debugln("no heater value given-");
+          break;
+        default:
+          debug("Heater selected: ");
+          debug(buffer_heat_pin);
+
+          // how mutch power? saves the value in buffer
+          buffer_heat_pw = Serial.parseInt(SKIP_WHITESPACE);
+          switch (buffer_heat_pw)
+          {
+          case 0:
+            debugln("no power value given");
+            break;
+          default:
+            debug(" is set to: ");
+            debug(buffer_heat_pw);
+            heat_updateone(buffer_heat_pin, buffer_heat_pw);
+            break;
+          }
+          break;
+        }
+
+      default:
+        debugln("Command invalid\n");
+        break;
+      }
+    }
+  }
+}
+
 void StatusLedBlink()
 {
   pinMode(STATLED_R, OUTPUT);

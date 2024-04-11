@@ -23,6 +23,7 @@ char *packettochar(struct packet data) {
 }
 
 
+/*Prints all avaliable infos about a packet like pointers, size, values and memory*/
 void packet_print(struct packet pkt) {
   Serial.println("-----infos about packet----------");
   Serial.print("Size in uC Memory: ");

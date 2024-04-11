@@ -75,6 +75,7 @@ void init_SD() {
   }
 }
 
+/*returns number of saved packets in a file*/
 int sd_numpackets(const char filepath[]) {
   debug("-{SD_sd_sizesavedpackets-file:");
   debug(filepath);
@@ -91,8 +92,7 @@ int sd_numpackets(const char filepath[]) {
   }
 }
 
-
-// writes a struct to sd card
+// writes a packet to sd card
 bool writestruct(struct packet s_out, const char filepath[]) {
   debug("-{SD_writestru.id:");
   debug(s_out.id);
@@ -114,7 +114,7 @@ bool writestruct(struct packet s_out, const char filepath[]) {
   }
 }
 
-// reads a struct from sd card @position = position of struct packet
+// reads a packet from sd card @position = position of struct packet
 bool readstruct(struct packet* data, const char filepath[], unsigned long position) {
   debug("-{SD_readstru-file:");
   debug(filepath);
@@ -144,7 +144,8 @@ bool readstruct(struct packet* data, const char filepath[], unsigned long positi
   }
 }
 
-bool writetofile() {
+/*Writes in the file test.txt the String "testing 1, 2, 3."*/
+bool test_writetofile() {
   if (!SD_init) { init_SD(); }
   File myFile = SD.open("test.txt", FILE_WRITE);
   if (myFile) {  // if the file opened okay, write to it:
@@ -158,9 +159,10 @@ bool writetofile() {
   return 0;
 }
 
-bool printfile() {
+/*prints everything from a file*/
+bool printfile(const char filepath[]) {
   if (!SD_init) { init_SD(); }
-  File myFile = SD.open("test.txt");
+  File myFile = SD.open(filepath);
   if (myFile) {
     Serial.println("test.txt:");
     while (myFile.available()) {  // read from the file until there's nothing else in it:
@@ -173,6 +175,7 @@ bool printfile() {
   return 1;
 }
 
+/*Tests the SD. Work in Progress*/
 void testSD() {
   while (!Serial) {}
 

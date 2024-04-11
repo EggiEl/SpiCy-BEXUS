@@ -14,6 +14,7 @@
 
 char heat_init = 0;
 
+/*initializes the pins, freq and range of the heating elements*/
 void heat_initialize()
 {
   analogWriteFreq(HEAT_FREQ); // 100Hz to 1MHz
@@ -64,7 +65,7 @@ void heat_updateone(uint8_t PIN, uint16_t PWM)
 }
 
 /**
- * Turns all heaters on tiff different PWM duticycles
+ * Sets all heaters on different PWM duticycles
  */
 void heat_testmanual()
 {

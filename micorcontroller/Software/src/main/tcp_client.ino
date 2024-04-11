@@ -1,17 +1,17 @@
 /*handles the downlink as TCP client*/
 uint32_t get_Status();
 
-#define MISO_LAN 0 //16
-#define CS_LAN 1 //17
-#define SCK_LAN 2 // 18
-#define MOSI_LAN 3 //19
+#define MISO_LAN 0 // 16
+#define CS_LAN 1   // 17
+#define SCK_LAN 2  // 18
+#define MOSI_LAN 3 // 19
 
 #define SPI_FREQ_LAN 12MHz // not used and no need to change
 
 #define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-#define SERVERIP IPAddress(169,254,218,4) //(169,254,218,4) (169, 254, 171, 44) (192, 168, 178, 23)// IP address of the PC
+#define SERVERIP IPAddress(169, 254, 218, 4) //(169,254,218,4) (169, 254, 171, 44) (192, 168, 178, 23)// IP address of the PC
 // #define SERVERIP IPAddress(100, 81, 57, 236)
-#define CLIENTIP IPAddress(169, 254, 218, 100)// ip of this uC, leve blank for auto generation IPAddress(169, 168, 1, 100)
+#define CLIENTIP IPAddress(169, 254, 218, 100) // ip of this uC, leve blank for auto generation IPAddress(169, 168, 1, 100)
 // #define DNS IPAddress(8, 8, 8, 8)             // DNS server (e.g., Google DNS)
 // #define GATEWAY IPAddress(192, 168, 1, 1)
 #define SUBNET IPAddress(255, 255, 0, 0)
@@ -32,7 +32,7 @@ struct test
 
 /**
  *  Test function for the TCP Server
-*/
+ */
 void test_TCP_manually()
 {
   // packet send
@@ -66,11 +66,10 @@ void test_TCP_manually()
   //  }
 }
 
-
 /**
  *  sets the RP2040 as TCP Client for the given ip adress
  * @param TCP_init changes this global variable to true if succesfull
-*/
+ */
 void setup_TCP_Client()
 {
   debugln("-{setup_TCP_Client-");
@@ -86,7 +85,7 @@ void setup_TCP_Client()
   client.setConnectionTimeout(CONNECTIONTIMEOUT);
 
   Ethernet.init(CS_LAN);
- 
+
   //----automatic ip allocation : ----
   // if (!Ethernet.begin(mac)) {
   //   debug("DHCP configuration failed}-");
@@ -179,7 +178,7 @@ void send_TCP(char *data, unsigned long int size)
 
 /**
  *  Reads in commands via the TCP Server connection.
-*/
+ */
 void recieve_TCP_command()
 {
   debug("-{recieve_TCPdTCPpacket-id:");
@@ -301,8 +300,11 @@ int send_TCP_packet(struct packet data)
   }
 }
 
-/* Returns 1 if sucessfull, 0 if not
- Also serial prints in debug mode weather cable is connected or not */
+/* 
+Tests the cable connection via the Ethernit libary.
+Returns 1 if sucessfull, 0 if not
+Serial prints in debug mode wether cable is connected or not 
+*/
 uint8_t cabletest()
 {
   debug("-cable: ");
@@ -322,3 +324,80 @@ uint8_t cabletest()
 
 /*Hadware test via a ICMP ping*/
 uint8_t ICMP_ping();
+
+/*hosts a Server wich can be acessed via the Ip in local Networks.*/
+void testServer() {
+  IPAddress ip(192, 168, 1, 177); 
+  EthernetServer server(80); // (port 80 is default for HTTP):
+  SPI.setRX(MISO_LAN);
+  SPI.setTX(MOSI_LAN);
+  SPI.setSCK(SCK_LAN);
+  Ethernet.init(CS_LAN);
+
+  while (!Serial) {}
+  Serial.println("Ethernet WebServer Example");
+  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+  Ethernet.begin(mac);  // Ethernet.begin(mac,ip);
+  if (Ethernet.hardwareStatus() == EthernetNoHardware) {
+    Serial.println("Ethernet shield was not found.  Sorry, can't run without hardware. :(");
+    while (true) {
+      delay(1);  // do nothing, no point running without Ethernet hardware
+    }
+  }
+  if (Ethernet.linkStatus() == LinkOFF) {
+    Serial.println("Ethernet cable is not connected.");
+  }
+  server.begin();
+  Serial.print("server is at ");
+  Serial.println(Ethernet.localIP());
+  while (1) {  // listen for incoming clients
+    EthernetClient client = server.available();
+    if (client) {
+      Serial.println("new client");
+      // an HTTP request ends with a blank line
+      bool currentLineIsBlank = true;
+      while (client.connected()) {
+        if (client.available()) {
+          char c = client.read();
+          Serial.write(c);
+          // if you've gotten to the end of the line (received a newline
+          // character) and the line is blank, the HTTP request has ended,
+          // so you can send a reply
+          if (c == '\n' && currentLineIsBlank) {
+            // send a standard HTTP response header
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-Type: text/html");
+            client.println("Connection: close");  // the connection will be closed after completion of the response
+            client.println("Refresh: 5");         // refresh the page automatically every 5 sec
+            client.println();
+            client.println("<!DOCTYPE HTML>");
+            client.println("<html>");
+            // output the value of each analog input pin
+            for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
+              int sensorReading = analogRead(analogChannel);
+              client.print("analog input ");
+              client.print(analogChannel);
+              client.print(" is ");
+              client.print(sensorReading);
+              client.println("<br />");
+            }
+            client.println("</html>");
+            break;
+          }
+          if (c == '\n') {
+            // you're starting a new line
+            currentLineIsBlank = true;
+          } else if (c != '\r') {
+            // you've gotten a character on the current line
+            currentLineIsBlank = false;
+          }
+        }
+      }
+      // give the web browser time to receive the data
+      delay(1);
+      // close the connection:
+      client.stop();
+      Serial.println("client disconnected");
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
-    "port": "COM6",
-    "configuration": "flash=2097152_0,freq=133,opt=Small,rtti=Disabled,stackprotect=Enabled,exceptions=Disabled,dbgport=Disabled,dbglvl=None,usbstack=picosdk,ipbtstack=ipv4only,uploadmethod=default",
+    "port": "COM10",
     "board": "rp2040:rp2040:rpipico",
-    "sketch": "Micorcontroller\\src\\main\\main.ino",
-    "output": "../output_arduino_ignore"
+    "sketch": "micorcontroller\\Software\\src\\main\\main.ino",
+    "output": "../output_arduino_ignore",
+    "configuration": "flash=2097152_0,freq=133,opt=Small,rtti=Disabled,stackprotect=Disabled,exceptions=Disabled,dbgport=Disabled,dbglvl=None,usbstack=picosdk,ipbtstack=ipv4only,uploadmethod=default"
 }
