@@ -6931,6 +6931,17 @@
 		)
 		(uuid "3f15e349-8b54-4866-bf99-8ac0e4e04225")
 	)
+	(label "E1"
+		(at 69.85 63.5 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "53ea1e58-55ae-4bd1-b346-f99562074399")
+	)
 	(label "RXN"
 		(at 146.685 155.575 0)
 		(fields_autoplaced yes)
@@ -6975,6 +6986,17 @@
 		)
 		(uuid "7caf7252-e93c-4c38-98e5-deb61f30dc72")
 	)
+	(label "E2"
+		(at 67.31 76.2 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7f060c80-3561-407a-bd06-94c801931560")
+	)
 	(label "TCT"
 		(at 166.37 128.905 0)
 		(fields_autoplaced yes)
@@ -7007,6 +7029,17 @@
 			(justify left bottom)
 		)
 		(uuid "b354ab66-1745-4a4f-902c-649f92c0d52d")
+	)
+	(label "E0"
+		(at 77.47 63.5 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cde552d6-6ead-4de9-af68-ebb86d801393")
 	)
 	(label "XI"
 		(at 41.91 118.11 180)

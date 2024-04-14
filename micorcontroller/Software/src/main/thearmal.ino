@@ -8,9 +8,9 @@
 #define PIN_H6 12
 #define PIN_H7 13
 
-#define HEAT_FREQ 1000 //5kmax for the facy Ics
+#define HEAT_FREQ 1000          // 5kmax for the facy Ics
 #define HEAT_HUNDERTPERCENT 100 // value where the heaters are fully turned on
-#define HEAT_CURRENT 317         // aproximation of the current of a single Heater in mA
+#define HEAT_CURRENT 317        // aproximation of the current of a single Heater in mA
 
 char heat_init = 0;
 
@@ -38,7 +38,6 @@ void heat_updateall(uint16_t *HeaterPWM)
   {
     heat_initialize();
   }
-  debug("-updateHeater:");
   // analogWriteResolution
   heat_updateone(PIN_H0, HeaterPWM[0]);
   heat_updateone(PIN_H1, HeaterPWM[1]);
@@ -46,7 +45,8 @@ void heat_updateall(uint16_t *HeaterPWM)
   heat_updateone(PIN_H3, HeaterPWM[3]);
   heat_updateone(PIN_H4, HeaterPWM[4]);
   heat_updateone(PIN_H5, HeaterPWM[5]);
-  debug("success-");
+  heat_updateone(PIN_H6, HeaterPWM[6]);
+  heat_updateone(PIN_H7, HeaterPWM[7]);
 }
 
 /**
@@ -54,7 +54,8 @@ void heat_updateall(uint16_t *HeaterPWM)
  */
 void heat_updateone(uint8_t PIN, uint16_t PWM)
 {
-  if(!heat_init){
+  if (!heat_init)
+  {
     heat_initialize();
   }
 
@@ -69,11 +70,15 @@ void heat_updateone(uint8_t PIN, uint16_t PWM)
  */
 void heat_testmanual()
 {
+  debugln("<Manual Heater Test>");
+  debugln("sets heater 1 to 10%, 2 to 20% and so on");
+  debug("first Heater Pin: ");
+  debugln(PIN_H0);
   if (!heat_init)
   {
     heat_initialize();
   }
-  uint16_t buf[] = {100, 200, 300, 400, 500, 600};
+  uint16_t buf[] = {10, 20, 30, 40, 50, 60,70,80};
   heat_updateall(buf);
 }
 

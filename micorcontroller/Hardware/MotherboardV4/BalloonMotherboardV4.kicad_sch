@@ -202,6 +202,108 @@
 				)
 			)
 		)
+		(symbol "Mechanical:MountingHole_Pad"
+			(pin_numbers hide)
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "H"
+				(at 0 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole_Pad"
+				(at 0 4.445 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Mounting Hole with connection"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*Pad*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "MountingHole_Pad_0_1"
+				(circle
+					(center 0 1.27)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "MountingHole_Pad_1_1"
+				(pin input line
+					(at 0 -2.54 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "power:GND"
 			(power)
 			(pin_numbers hide)
@@ -324,10 +426,34 @@
 		(uuid "62083981-285a-40dd-b4d2-5bc691ac08d9")
 	)
 	(junction
+		(at 242.57 43.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7a749397-a58b-4687-8948-be67a2815c9b")
+	)
+	(junction
+		(at 203.2 54.61)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "813c1392-128d-4012-9b46-9eb347fbdb72")
+	)
+	(junction
 		(at 52.07 76.2)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "90f97d32-cfba-44f2-bbf1-57c0524ec9ac")
+	)
+	(junction
+		(at 203.2 43.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f19b82e3-b060-44da-ae59-5aa279107812")
+	)
+	(junction
+		(at 223.52 43.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f775c334-8677-459c-aa9c-19f3a33e34ad")
 	)
 	(wire
 		(pts
@@ -381,6 +507,16 @@
 	)
 	(wire
 		(pts
+			(xy 223.52 43.18) (xy 223.52 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0cf82541-8983-485d-9465-7090dab3b0f8")
+	)
+	(wire
+		(pts
 			(xy 100.33 59.69) (xy 100.33 73.66)
 		)
 		(stroke
@@ -431,6 +567,16 @@
 	)
 	(wire
 		(pts
+			(xy 203.2 43.18) (xy 203.2 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "18d24cd4-41ea-4225-bda5-4bda06e8b48d")
+	)
+	(wire
+		(pts
 			(xy 128.27 82.55) (xy 118.11 82.55)
 		)
 		(stroke
@@ -438,6 +584,16 @@
 			(type default)
 		)
 		(uuid "197cb712-ad7b-4dcd-9e7e-672bc8880e3e")
+	)
+	(wire
+		(pts
+			(xy 203.2 53.34) (xy 203.2 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d1ca389-9919-4cf5-a841-ef70e44ede81")
 	)
 	(wire
 		(pts
@@ -491,13 +647,53 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 76.2) (xy 200.66 74.93)
+			(xy 203.2 43.18) (xy 223.52 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3446564e-4b80-41e5-bd46-9b60d73376e3")
+	)
+	(wire
+		(pts
+			(xy 261.62 43.18) (xy 261.62 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "347baaae-489f-4d72-b6ed-8d0cebd3b5d1")
+	)
+	(wire
+		(pts
+			(xy 203.2 44.45) (xy 203.2 43.18)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "37617133-888a-46c5-b9a7-ba6317baef7f")
+	)
+	(wire
+		(pts
+			(xy 242.57 43.18) (xy 261.62 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b668058-dfa5-486d-bf05-ed7206cb8f5d")
+	)
+	(wire
+		(pts
+			(xy 242.57 43.18) (xy 242.57 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b864139-fb34-405f-b472-2a44b2ef1a56")
 	)
 	(wire
 		(pts
@@ -541,16 +737,6 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 66.04) (xy 200.66 64.77)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "51b81252-14f8-4b7b-9965-04ee6d392ca4")
-	)
-	(wire
-		(pts
 			(xy 93.98 105.41) (xy 93.98 128.27)
 		)
 		(stroke
@@ -578,6 +764,16 @@
 			(type default)
 		)
 		(uuid "5a865655-b903-4870-82c1-9b1771ac10b8")
+	)
+	(wire
+		(pts
+			(xy 223.52 43.18) (xy 242.57 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5ce97e6b-e239-491a-a775-1d4daa820ab2")
 	)
 	(wire
 		(pts
@@ -641,6 +837,16 @@
 	)
 	(wire
 		(pts
+			(xy 226.06 54.61) (xy 203.2 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "74395ddf-812c-42b6-b3d2-2183e6459317")
+	)
+	(wire
+		(pts
 			(xy 36.83 76.2) (xy 36.83 102.87)
 		)
 		(stroke
@@ -678,6 +884,16 @@
 			(type default)
 		)
 		(uuid "9e23ee6d-392d-4f07-9a41-f088e694457e")
+	)
+	(wire
+		(pts
+			(xy 203.2 54.61) (xy 203.2 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a88f5e45-d4f1-49b3-86e4-d4ed604096db")
 	)
 	(wire
 		(pts
@@ -748,6 +964,16 @@
 			(type default)
 		)
 		(uuid "c61982c0-3a66-45c0-8005-bd318db4bd38")
+	)
+	(wire
+		(pts
+			(xy 226.06 54.61) (xy 226.06 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d03e9a8b-8551-4e05-beb9-72302d12f218")
 	)
 	(wire
 		(pts
@@ -920,16 +1146,16 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint_Probe")
-		(at 200.66 74.93 0)
+		(at 226.06 53.34 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "425b88db-428b-4168-8454-cc6a9f2c67d0")
 		(property "Reference" "TPGND1"
-			(at 204.47 72.0724 0)
+			(at 229.87 50.4824 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -938,7 +1164,7 @@
 			)
 		)
 		(property "Value" "TestPoint_Probe"
-			(at 204.47 74.6124 0)
+			(at 229.87 53.0224 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -947,7 +1173,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded"
-			(at 205.74 74.93 0)
+			(at 231.14 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -956,7 +1182,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 205.74 74.93 0)
+			(at 231.14 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -965,7 +1191,7 @@
 			)
 		)
 		(property "Description" "test point (alternative probe-style design)"
-			(at 200.66 74.93 0)
+			(at 226.06 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -986,16 +1212,16 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole")
-		(at 203.2 57.15 0)
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 261.62 39.37 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "4b53c699-47fb-4475-aa73-f4a390656a74")
-		(property "Reference" "H3"
-			(at 205.74 55.9816 0)
+		(property "Reference" "H3_M0"
+			(at 264.16 38.2016 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1004,7 +1230,7 @@
 			)
 		)
 		(property "Value" "MountingHole"
-			(at 205.74 58.293 0)
+			(at 264.16 40.513 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1013,7 +1239,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_Pad_Via"
-			(at 203.2 57.15 0)
+			(at 261.62 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1022,7 +1248,73 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 203.2 57.15 0)
+			(at 261.62 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 261.62 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8e8fda50-7181-44af-96c0-5d6b7365b79a")
+		)
+		(instances
+			(project "BalloonMotherboardV4"
+				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e"
+					(reference "H3_M0")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 203.2 64.77 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "6187ff40-7d3c-48c1-bb85-689021fa34b0")
+		(property "Reference" "L1"
+			(at 205.74 63.6016 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "InstaLogo"
+			(at 205.74 65.913 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "SamacSys_Parts:insta"
+			(at 203.2 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 203.2 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1031,7 +1323,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 203.2 57.15 0)
+			(at 203.2 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1042,7 +1334,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e"
-					(reference "H3")
+					(reference "L1")
 					(unit 1)
 				)
 			)
@@ -1050,7 +1342,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 200.66 66.04 0)
+		(at 203.2 55.88 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1058,7 +1350,7 @@
 		(dnp no)
 		(uuid "6cba49b0-6106-4236-afe4-7344b1fccc35")
 		(property "Reference" "#PWR00"
-			(at 200.66 72.39 0)
+			(at 203.2 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1067,7 +1359,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 200.787 70.4342 0)
+			(at 203.327 60.2742 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1075,7 +1367,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 200.66 66.04 0)
+			(at 203.2 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1084,7 +1376,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 66.04 0)
+			(at 203.2 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1093,7 +1385,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 200.66 66.04 0)
+			(at 203.2 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1114,16 +1406,16 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole")
-		(at 203.2 52.07 0)
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 242.57 39.37 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "7f7d59f8-e623-47c8-8d4c-6c6f384c66e8")
-		(property "Reference" "H2"
-			(at 205.74 50.9016 0)
+		(property "Reference" "H2_M0"
+			(at 245.11 38.2016 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1132,7 +1424,7 @@
 			)
 		)
 		(property "Value" "MountingHole"
-			(at 205.74 53.213 0)
+			(at 245.11 40.513 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1141,7 +1433,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_Pad_Via"
-			(at 203.2 52.07 0)
+			(at 242.57 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1150,7 +1442,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 203.2 52.07 0)
+			(at 242.57 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1158,35 +1450,38 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Mounting Hole without connection"
-			(at 203.2 52.07 0)
+		(property "Description" "Mounting Hole with connection"
+			(at 242.57 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
+		)
+		(pin "1"
+			(uuid "4d8bb4b8-acca-471c-b318-cf737726b3f8")
 		)
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e"
-					(reference "H2")
+					(reference "H2_M0")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole")
-		(at 203.2 41.91 0)
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 203.2 39.37 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "936bcd00-c7a2-42ca-8f09-b8e16e522655")
-		(property "Reference" "H0"
-			(at 205.74 40.7416 0)
+		(property "Reference" "H0_M0"
+			(at 205.74 38.2016 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1195,7 +1490,7 @@
 			)
 		)
 		(property "Value" "MountingHole"
-			(at 205.74 43.053 0)
+			(at 205.74 40.513 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1204,7 +1499,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_Pad_Via"
-			(at 203.2 41.91 0)
+			(at 203.2 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1213,7 +1508,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 203.2 41.91 0)
+			(at 203.2 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1221,19 +1516,22 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Mounting Hole without connection"
-			(at 203.2 41.91 0)
+		(property "Description" "Mounting Hole with connection"
+			(at 203.2 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
+		)
+		(pin "1"
+			(uuid "8d852ed2-42da-4567-9584-22eff439f1b5")
 		)
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e"
-					(reference "H0")
+					(reference "H0_M0")
 					(unit 1)
 				)
 			)
@@ -1241,7 +1539,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 200.66 76.2 0)
+		(at 203.2 44.45 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1249,7 +1547,7 @@
 		(dnp no)
 		(uuid "a6fb5e69-987a-4102-8604-a77715b0030d")
 		(property "Reference" "#PWR01"
-			(at 200.66 82.55 0)
+			(at 203.2 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1258,7 +1556,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 200.787 80.5942 0)
+			(at 203.327 48.8442 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1266,7 +1564,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 200.66 76.2 0)
+			(at 203.2 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1275,7 +1573,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 200.66 76.2 0)
+			(at 203.2 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1284,7 +1582,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 200.66 76.2 0)
+			(at 203.2 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1306,16 +1604,16 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint_Probe")
-		(at 200.66 64.77 0)
+		(at 203.2 53.34 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e097fe61-c309-4d6f-aba8-dabc6c1125cd")
 		(property "Reference" "TPGND0"
-			(at 204.47 61.9124 0)
+			(at 207.01 50.4824 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1324,7 +1622,7 @@
 			)
 		)
 		(property "Value" "TestPoint_Probe"
-			(at 204.47 64.4524 0)
+			(at 207.01 53.0224 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1333,7 +1631,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded"
-			(at 205.74 64.77 0)
+			(at 208.28 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1342,7 +1640,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 205.74 64.77 0)
+			(at 208.28 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1351,7 +1649,7 @@
 			)
 		)
 		(property "Description" "test point (alternative probe-style design)"
-			(at 200.66 64.77 0)
+			(at 203.2 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1372,16 +1670,16 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole")
-		(at 203.2 46.99 0)
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 223.52 39.37 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(uuid "f168c277-d46d-49dc-b33c-770ab9daa1f1")
-		(property "Reference" "H1"
-			(at 205.74 45.8216 0)
+		(property "Reference" "H1_M0"
+			(at 226.06 38.2016 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1390,7 +1688,7 @@
 			)
 		)
 		(property "Value" "MountingHole"
-			(at 205.74 48.133 0)
+			(at 226.06 40.513 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1399,7 +1697,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2_Pad_Via"
-			(at 203.2 46.99 0)
+			(at 223.52 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1408,7 +1706,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 203.2 46.99 0)
+			(at 223.52 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1416,19 +1714,22 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Mounting Hole without connection"
-			(at 203.2 46.99 0)
+		(property "Description" "Mounting Hole with connection"
+			(at 223.52 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
+		)
+		(pin "1"
+			(uuid "c7aa7055-5785-43d3-9e4c-fdcb0752b828")
 		)
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e"
-					(reference "H1")
+					(reference "H1_M0")
 					(unit 1)
 				)
 			)

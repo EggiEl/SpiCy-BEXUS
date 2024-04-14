@@ -1,8 +1,12 @@
 /*Main programm coordinating the different sections*/
 #include <Arduino.h>
-#include <stdio.h>
 #include <Ethernet.h>
 #include <SD.h>
+#include <stdio.h>
+#include "pico/stdlib.h"
+#include "pico/time.h"
+#include "hardware/timer.h"
+
 // #include <SPI.h>  // #include <SoftwareSerial.h>
 
 #define DEBUG 1
@@ -66,22 +70,28 @@ struct packet
 //------------------------core1--------------------------------
 void setup()
 {
+
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
 
   Serial.begin(115200);
   Serial.setTimeout(1000);
-
+  rp2040.enableDoubleResetBootloader();
   while (!Serial)
   {
   }
   delay(50);
-  debugln("\n<<Main is running-C0>>");
-  debugln("/? for help\n");
+  if (watchdog_caused_reboot())
+  {
+    debugln("<Watchdog Reset:>");
+  }
+  debugln("\n<<C0 is running MotherboardV4.ino>>");
+  debugln("\"/?\" for help\n");
 }
 
 void loop()
 {
+  check_periodic_tasks();
   serial_commands();
 }
 
@@ -95,4 +105,9 @@ void loop1()
 {
   // if (TCP_init) { fadeLED(); }
   // heartbeat();
+}
+
+void check_periodic_tasks()
+{
+  rp2040.wdt_reset();
 }

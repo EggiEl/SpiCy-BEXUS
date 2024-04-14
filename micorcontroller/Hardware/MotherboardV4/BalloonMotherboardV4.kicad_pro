@@ -496,7 +496,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "../../../../../../../../Downloads/Balloon/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
@@ -625,10 +625,10 @@
         }
       ],
       "filter_string": "",
-      "group_symbols": true,
+      "group_symbols": false,
       "name": "",
-      "sort_asc": true,
-      "sort_field": "Value"
+      "sort_asc": false,
+      "sort_field": "Reference"
     },
     "connection_grid_size": 50.0,
     "drawing": {

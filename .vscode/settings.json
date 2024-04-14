@@ -1,5 +1,5 @@
 {
-    "arduino.logLevel": "info",
+    "arduino.logLevel": "verbose",
     "files.associations": {
         "array": "cpp",
         "deque": "cpp",
@@ -7,7 +7,9 @@
         "unordered_map": "cpp",
         "vector": "cpp",
         "string_view": "cpp",
-        "initializer_list": "cpp"
+        "initializer_list": "cpp",
+        "numbers": "cpp"
     },
-    "C_Cpp.loggingLevel": "Debug"
+    "C_Cpp.loggingLevel": "Debug",
+    "arduino.clearOutputOnBuild": true
 }

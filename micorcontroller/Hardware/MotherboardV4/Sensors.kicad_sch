@@ -4005,10 +4005,16 @@
 		(uuid "3b22ef9b-8a3b-40c7-972d-1e54b001ccd5")
 	)
 	(junction
-		(at 217.17 49.53)
+		(at 217.17 53.34)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "47304768-5d1c-45c8-9160-e851857bb900")
+	)
+	(junction
+		(at 86.36 168.91)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "488b5306-358c-401a-a39d-6059e17d8273")
 	)
 	(junction
 		(at 121.92 62.23)
@@ -4033,6 +4039,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "587b8cc5-ac20-4e61-a634-6b40268bd269")
+	)
+	(junction
+		(at 127 166.37)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "64d7e753-e4f1-4c9c-8898-4d4ce7872ec6")
 	)
 	(junction
 		(at 128.27 59.69)
@@ -4282,7 +4294,7 @@
 	)
 	(wire
 		(pts
-			(xy 147.32 52.07) (xy 156.21 52.07)
+			(xy 151.13 52.07) (xy 156.21 52.07)
 		)
 		(stroke
 			(width 0)
@@ -4562,7 +4574,7 @@
 	)
 	(wire
 		(pts
-			(xy 217.17 46.99) (xy 217.17 49.53)
+			(xy 217.17 50.8) (xy 217.17 53.34)
 		)
 		(stroke
 			(width 0)
@@ -5882,7 +5894,7 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 46.99) (xy 217.17 46.99)
+			(xy 218.44 50.8) (xy 217.17 50.8)
 		)
 		(stroke
 			(width 0)
@@ -5909,6 +5921,16 @@
 			(type default)
 		)
 		(uuid "3bde7beb-01b2-47c6-a73a-f1ba3f3557c2")
+	)
+	(wire
+		(pts
+			(xy 127 180.34) (xy 127 166.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3bf8fd88-95f4-4c6c-8706-a5a3c06ea896")
 	)
 	(polyline
 		(pts
@@ -6099,6 +6121,16 @@
 			(type default)
 		)
 		(uuid "414ef12a-8361-474d-8978-bc2b94510f04")
+	)
+	(wire
+		(pts
+			(xy 109.22 180.34) (xy 127 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "41d1386b-27e5-40cd-b8bb-c3e353ee9a14")
 	)
 	(wire
 		(pts
@@ -6360,6 +6392,16 @@
 		)
 		(uuid "49dc372e-1aed-4e3e-8eda-5ad7d0cd8a49")
 	)
+	(wire
+		(pts
+			(xy 86.36 168.91) (xy 86.36 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "49f55799-69cd-49d9-ad70-c86ecc34064b")
+	)
 	(polyline
 		(pts
 			(xy 76.5295 134.4797) (xy 77.65 134.4899)
@@ -6449,6 +6491,16 @@
 			(type default)
 		)
 		(uuid "4b19777b-7308-448b-82da-5a8a0a5ef82b")
+	)
+	(wire
+		(pts
+			(xy 104.14 180.34) (xy 86.36 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4bc6489f-1421-43a4-b659-c17754e67fad")
 	)
 	(polyline
 		(pts
@@ -6560,6 +6612,26 @@
 		)
 		(uuid "4f7c300b-7e50-4b5d-8eb7-2c40d9a05416")
 	)
+	(wire
+		(pts
+			(xy 127 166.37) (xy 128.27 166.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4fa1c084-6423-4c1a-9ae7-b2df2df55afc")
+	)
+	(wire
+		(pts
+			(xy 86.36 168.91) (xy 92.71 168.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4fdfd820-b84f-4a4a-9f4e-989c721d70d3")
+	)
 	(polyline
 		(pts
 			(xy 81.6056 136.4098) (xy 82.2553 136.4177)
@@ -6642,7 +6714,7 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 52.07) (xy 241.3 52.07)
+			(xy 238.76 50.8) (xy 241.3 50.8)
 		)
 		(stroke
 			(width 0)
@@ -6882,7 +6954,7 @@
 	)
 	(wire
 		(pts
-			(xy 148.59 44.45) (xy 156.21 44.45)
+			(xy 151.13 44.45) (xy 156.21 44.45)
 		)
 		(stroke
 			(width 0)
@@ -7052,7 +7124,7 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 43.18) (xy 238.76 46.99)
+			(xy 238.76 43.18) (xy 238.76 45.72)
 		)
 		(stroke
 			(width 0)
@@ -7482,7 +7554,7 @@
 	)
 	(wire
 		(pts
-			(xy 248.92 52.07) (xy 248.92 49.53)
+			(xy 248.92 52.07) (xy 248.92 48.26)
 		)
 		(stroke
 			(width 0)
@@ -7552,7 +7624,7 @@
 	)
 	(wire
 		(pts
-			(xy 241.3 54.61) (xy 241.3 52.07)
+			(xy 241.3 54.61) (xy 241.3 50.8)
 		)
 		(stroke
 			(width 0)
@@ -7712,7 +7784,7 @@
 	)
 	(wire
 		(pts
-			(xy 125.73 166.37) (xy 128.27 166.37)
+			(xy 125.73 166.37) (xy 127 166.37)
 		)
 		(stroke
 			(width 0)
@@ -8232,7 +8304,7 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 49.53) (xy 248.92 49.53)
+			(xy 238.76 48.26) (xy 248.92 48.26)
 		)
 		(stroke
 			(width 0)
@@ -8492,7 +8564,7 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 54.61) (xy 238.76 62.23)
+			(xy 238.76 53.34) (xy 238.76 62.23)
 		)
 		(stroke
 			(width 0)
@@ -8592,7 +8664,7 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 168.91) (xy 92.71 168.91)
+			(xy 76.2 168.91) (xy 86.36 168.91)
 		)
 		(stroke
 			(width 0)
@@ -10292,7 +10364,7 @@
 	)
 	(wire
 		(pts
-			(xy 217.17 49.53) (xy 218.44 49.53)
+			(xy 217.17 53.34) (xy 218.44 53.34)
 		)
 		(stroke
 			(width 0)
@@ -10412,7 +10484,7 @@
 	)
 	(wire
 		(pts
-			(xy 217.17 49.53) (xy 217.17 62.23)
+			(xy 217.17 53.34) (xy 217.17 62.23)
 		)
 		(stroke
 			(width 0)
@@ -30580,7 +30652,7 @@
 		(uuid "ffe8c95d-adb5-42ee-9e64-a44f3ccddfda")
 	)
 	(label "A"
-		(at 248.92 49.53 0)
+		(at 241.3 50.8 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -30613,7 +30685,7 @@
 		(uuid "610714d2-a9fa-4259-90d4-67192db88897")
 	)
 	(label "B"
-		(at 241.3 52.07 0)
+		(at 248.92 48.26 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -30865,6 +30937,17 @@
 		)
 		(uuid "e12537f6-8f17-436a-b993-ef5284c08588")
 	)
+	(label "ntc+"
+		(at 88.9 146.05 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "edd476d0-dbb9-41d8-b82d-fc1d0bcab1f7")
+	)
 	(label "RX1_RS486"
 		(at 165.1 44.45 90)
 		(fields_autoplaced yes)
@@ -30981,18 +31064,6 @@
 		)
 		(uuid "34ffec08-d0b8-401e-ae60-8b7b87a079b4")
 	)
-	(hierarchical_label "5V"
-		(shape input)
-		(at 88.9 146.05 90)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "37b326ae-c5dc-4f65-ab1d-c57d359f2f54")
-	)
 	(hierarchical_label "3V3"
 		(shape input)
 		(at 121.92 50.8 90)
@@ -31019,7 +31090,7 @@
 	)
 	(hierarchical_label "sda_rs"
 		(shape bidirectional)
-		(at 147.32 52.07 180)
+		(at 151.13 52.07 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -31067,7 +31138,7 @@
 	)
 	(hierarchical_label "scl_rs"
 		(shape bidirectional)
-		(at 148.59 44.45 180)
+		(at 151.13 44.45 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -31630,7 +31701,7 @@
 				)
 			)
 		)
-		(property "Value" "72,5k"
+		(property "Value" "6,5k"
 			(at 93.98 152.4 0)
 			(effects
 				(font
@@ -31833,7 +31904,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "4,7k"
 			(at 216.916 28.702 90)
 			(effects
 				(font
@@ -32737,7 +32808,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "THRMC1608X90N"
+		(property "Footprint" "SamacSys_Parts:THRMC1608X90N"
 			(at 123.19 95.25 0)
 			(effects
 				(font
@@ -33902,6 +33973,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small")
+		(at 106.68 180.34 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp yes)
+		(uuid "66da9b31-38d6-44b6-9933-29394a9dd832")
+		(property "Reference" "R88"
+			(at 106.934 178.562 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "0 DNP"
+			(at 106.934 182.372 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 106.68 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, small symbol"
+			(at 106.68 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "2e4eaa75-d569-489d-8721-4336865bd27a")
+		)
+		(pin "1"
+			(uuid "32d63d8d-9760-4a79-8bfa-e82ad60f46e6")
+		)
+		(instances
+			(project "BalloonMotherboardV4"
+				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/5e9e7f42-9819-4074-87ce-68c089720394"
+					(reference "R88")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Jumper:SolderJumper_3_Open")
 		(at 116.84 39.37 0)
 		(unit 1)
@@ -34059,7 +34199,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "4,7k"
 			(at 192.024 28.956 90)
 			(effects
 				(font
@@ -34126,7 +34266,7 @@
 				)
 			)
 		)
-		(property "Value" "5k"
+		(property "Value" "5.1k"
 			(at 65.786 176.784 0)
 			(effects
 				(font
@@ -35934,7 +36074,8 @@
 	)
 	(symbol
 		(lib_id "SamacSys_Parts:502352-0400")
-		(at 218.44 46.99 0)
+		(at 218.44 53.34 0)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -35942,7 +36083,7 @@
 		(dnp no)
 		(uuid "e7b569b7-ae90-48ba-b129-08e68990e0b0")
 		(property "Reference" "RS-0"
-			(at 228.6 40.005 0)
+			(at 225.298 41.402 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35950,7 +36091,7 @@
 			)
 		)
 		(property "Value" "502352-0400"
-			(at 228.6 42.545 0)
+			(at 225.298 38.862 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35958,7 +36099,7 @@
 			)
 		)
 		(property "Footprint" "SamacSys_Parts:5023520400"
-			(at 234.95 44.45 0)
+			(at 234.95 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35968,7 +36109,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.molex.com/webdocs/datasheets/pdf/en-us/5023520400_PCB_HEADERS.pdf"
-			(at 234.95 46.99 0)
+			(at 234.95 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35978,7 +36119,7 @@
 			)
 		)
 		(property "Description" "Molex DURACLIK 502352, 2mm Pitch, 4 Way, 1 Row, Right Angle PCB Header, Surface Mount"
-			(at 234.95 49.53 0)
+			(at 234.95 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35988,7 +36129,7 @@
 			)
 		)
 		(property "Height" "6"
-			(at 234.95 52.07 0)
+			(at 234.95 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35998,7 +36139,7 @@
 			)
 		)
 		(property "Mouser Part Number" "538-502352-0400"
-			(at 234.95 54.61 0)
+			(at 234.95 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -36008,7 +36149,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Molex/502352-0400?qs=trbuaetfxXR36zZJ3J6CsQ%3D%3D"
-			(at 234.95 57.15 0)
+			(at 234.95 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -36018,7 +36159,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Molex"
-			(at 234.95 59.69 0)
+			(at 234.95 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -36028,7 +36169,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "502352-0400"
-			(at 234.95 62.23 0)
+			(at 234.95 38.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
