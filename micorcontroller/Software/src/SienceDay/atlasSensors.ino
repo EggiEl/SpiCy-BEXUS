@@ -1,9 +1,9 @@
 /*Manages the ATLAS Oxygen Probes*/
 #include <SoftwareSerial.h> //we have to include the SoftwareSerial library, or else we can't use it
-#define rx 12               // define what pin rx is going to be
-#define tx 13
+#define PIN_RX 12               // define what pin PIN_RX is going to be
+#define PIN_TX 13
 
-SoftwareSerial myserial(rx, tx);
+SoftwareSerial myserial(PIN_RX, PIN_TX);
 
 String sensorstring = "";
 

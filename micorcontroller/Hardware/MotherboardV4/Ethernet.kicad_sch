@@ -7336,7 +7336,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0325376b-4405-4f95-a1d5-b2bf4fa8e15e")
-		(property "Reference" "#PWR090"
+		(property "Reference" "#PWR096"
 			(at 185.42 43.18 0)
 			(effects
 				(font
@@ -7386,7 +7386,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR090")
+					(reference "#PWR096")
 					(unit 1)
 				)
 			)
@@ -7401,7 +7401,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "08847213-e263-488e-947a-57a90997738c")
-		(property "Reference" "#PWR088"
+		(property "Reference" "#PWR094"
 			(at 149.225 146.05 0)
 			(effects
 				(font
@@ -7451,7 +7451,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR088")
+					(reference "#PWR094")
 					(unit 1)
 				)
 			)
@@ -7593,7 +7593,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2227155e-06ae-44af-a6bc-0fa59f3ddbcc")
-		(property "Reference" "C61"
+		(property "Reference" "C64"
 			(at 194.31 150.495 0)
 			(effects
 				(font
@@ -7647,7 +7647,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C61")
+					(reference "C64")
 					(unit 1)
 				)
 			)
@@ -7726,7 +7726,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2461a9f8-aba4-485d-93bf-8f383f2e0b5d")
-		(property "Reference" "R58"
+		(property "Reference" "R70"
 			(at 129.54 111.125 90)
 			(effects
 				(font
@@ -7778,7 +7778,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R58")
+					(reference "R70")
 					(unit 1)
 				)
 			)
@@ -7794,7 +7794,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "24ba9162-2015-45bd-8621-2847d45581c2")
-		(property "Reference" "#PWR093"
+		(property "Reference" "#PWR099"
 			(at 255.27 90.17 0)
 			(effects
 				(font
@@ -7844,7 +7844,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR093")
+					(reference "#PWR099")
 					(unit 1)
 				)
 			)
@@ -7860,7 +7860,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2d389c69-abee-46fc-9def-d565240f23f7")
-		(property "Reference" "#PWR082"
+		(property "Reference" "#PWR088"
 			(at 87.63 92.075 0)
 			(effects
 				(font
@@ -7910,7 +7910,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR082")
+					(reference "#PWR088")
 					(unit 1)
 				)
 			)
@@ -7925,7 +7925,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2fdac81e-5826-401b-85e1-81a65ff8b642")
-		(property "Reference" "C57"
+		(property "Reference" "C60"
 			(at 144.145 133.35 0)
 			(effects
 				(font
@@ -7979,7 +7979,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C57")
+					(reference "C60")
 					(unit 1)
 				)
 			)
@@ -8116,7 +8116,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "32b221eb-4b8d-4ec0-a432-58e50790634d")
-		(property "Reference" "#PWR089"
+		(property "Reference" "#PWR095"
 			(at 180.975 121.92 0)
 			(effects
 				(font
@@ -8166,7 +8166,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR089")
+					(reference "#PWR095")
 					(unit 1)
 				)
 			)
@@ -8181,7 +8181,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "39181013-3495-4e51-822e-274b51766c7a")
-		(property "Reference" "#PWR091"
+		(property "Reference" "#PWR097"
 			(at 199.39 161.925 0)
 			(effects
 				(font
@@ -8231,7 +8231,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR091")
+					(reference "#PWR097")
 					(unit 1)
 				)
 			)
@@ -8246,7 +8246,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3a2b514a-e733-4568-97b5-fbbd820d65a5")
-		(property "Reference" "C49"
+		(property "Reference" "C52"
 			(at 102.616 62.738 0)
 			(effects
 				(font
@@ -8300,7 +8300,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C49")
+					(reference "C52")
 					(unit 1)
 				)
 			)
@@ -8316,7 +8316,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "40c91b7e-5985-4bf3-8da4-e7aa2457d6f5")
-		(property "Reference" "#PWR074"
+		(property "Reference" "#PWR080"
 			(at 27.305 141.605 0)
 			(effects
 				(font
@@ -8366,7 +8366,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR074")
+					(reference "#PWR080")
 					(unit 1)
 				)
 			)
@@ -8450,7 +8450,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "424346cd-ccee-4a1a-bc2c-66036a8c653d")
-		(property "Reference" "#PWR075"
+		(property "Reference" "#PWR081"
 			(at 57.15 169.545 0)
 			(effects
 				(font
@@ -8500,7 +8500,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR075")
+					(reference "#PWR081")
 					(unit 1)
 				)
 			)
@@ -8515,7 +8515,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "44188b96-381f-4b7e-804d-558e6033798a")
-		(property "Reference" "#PWR087"
+		(property "Reference" "#PWR093"
 			(at 137.795 186.055 0)
 			(effects
 				(font
@@ -8565,7 +8565,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR087")
+					(reference "#PWR093")
 					(unit 1)
 				)
 			)
@@ -8580,7 +8580,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4419270c-1f03-4ccd-bdbe-8cf0e8646781")
-		(property "Reference" "C55"
+		(property "Reference" "C58"
 			(at 137.795 160.655 0)
 			(effects
 				(font
@@ -8634,7 +8634,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C55")
+					(reference "C58")
 					(unit 1)
 				)
 			)
@@ -8649,7 +8649,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4443e8c0-6643-4fe0-a421-40beab4a69de")
-		(property "Reference" "C44"
+		(property "Reference" "C47"
 			(at 33.655 126.365 0)
 			(effects
 				(font
@@ -8703,7 +8703,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C44")
+					(reference "C47")
 					(unit 1)
 				)
 			)
@@ -8718,7 +8718,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "47de3bbb-3a24-49c3-a5a7-8ac9a76b46a7")
-		(property "Reference" "C54"
+		(property "Reference" "C57"
 			(at 142.875 176.53 0)
 			(effects
 				(font
@@ -8772,7 +8772,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C54")
+					(reference "C57")
 					(unit 1)
 				)
 			)
@@ -8788,7 +8788,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "49b95cba-281e-4f98-9bd0-6278ddb9c625")
-		(property "Reference" "#PWR077"
+		(property "Reference" "#PWR083"
 			(at 62.23 171.45 0)
 			(effects
 				(font
@@ -8838,7 +8838,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR077")
+					(reference "#PWR083")
 					(unit 1)
 				)
 			)
@@ -8853,7 +8853,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "51ca48bc-278e-4c93-bc21-d6115e408a71")
-		(property "Reference" "R67"
+		(property "Reference" "R79"
 			(at 227.33 131.445 90)
 			(effects
 				(font
@@ -8905,7 +8905,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R67")
+					(reference "R79")
 					(unit 1)
 				)
 			)
@@ -8921,7 +8921,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "566fd059-35f0-495d-b33d-040bdae416d2")
-		(property "Reference" "#PWR078"
+		(property "Reference" "#PWR084"
 			(at 77.47 56.515 0)
 			(effects
 				(font
@@ -8971,7 +8971,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR078")
+					(reference "#PWR084")
 					(unit 1)
 				)
 			)
@@ -8986,7 +8986,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "574296fe-c619-4759-b6bb-54c54785404a")
-		(property "Reference" "C56"
+		(property "Reference" "C59"
 			(at 138.43 140.97 0)
 			(effects
 				(font
@@ -9040,7 +9040,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C56")
+					(reference "C59")
 					(unit 1)
 				)
 			)
@@ -9055,7 +9055,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "59b0d8f8-d49d-4b76-aefd-a1e97d71d652")
-		(property "Reference" "C53"
+		(property "Reference" "C56"
 			(at 133.096 63.246 0)
 			(effects
 				(font
@@ -9109,7 +9109,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C53")
+					(reference "C56")
 					(unit 1)
 				)
 			)
@@ -9124,7 +9124,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "60258269-b6d2-41bc-935c-c258aa81432f")
-		(property "Reference" "C48"
+		(property "Reference" "C51"
 			(at 96.012 63.246 0)
 			(effects
 				(font
@@ -9178,7 +9178,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C48")
+					(reference "C51")
 					(unit 1)
 				)
 			)
@@ -9193,7 +9193,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "650b9666-141b-4ae6-bf7d-9f48319c91ee")
-		(property "Reference" "C60"
+		(property "Reference" "C63"
 			(at 192.151 29.3116 0)
 			(effects
 				(font
@@ -9247,7 +9247,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C60")
+					(reference "C63")
 					(unit 1)
 				)
 			)
@@ -9262,7 +9262,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "66dabab8-2850-4444-88ec-d0eab1235b70")
-		(property "Reference" "C58"
+		(property "Reference" "C61"
 			(at 162.179 108.4834 0)
 			(effects
 				(font
@@ -9316,7 +9316,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C58")
+					(reference "C61")
 					(unit 1)
 				)
 			)
@@ -9331,7 +9331,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "696366ca-901f-474e-8dfc-0f92411178b4")
-		(property "Reference" "R51"
+		(property "Reference" "R63"
 			(at 99.06 130.81 90)
 			(effects
 				(font
@@ -9383,7 +9383,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R51")
+					(reference "R63")
 					(unit 1)
 				)
 			)
@@ -9398,7 +9398,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6a31ef3f-2d5c-4a33-b932-d3bacf951741")
-		(property "Reference" "R60"
+		(property "Reference" "R72"
 			(at 146.685 113.665 90)
 			(effects
 				(font
@@ -9450,7 +9450,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R60")
+					(reference "R72")
 					(unit 1)
 				)
 			)
@@ -9465,7 +9465,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6aa03eaa-0c18-4061-9354-6d3243e6bec4")
-		(property "Reference" "C59"
+		(property "Reference" "C62"
 			(at 179.959 31.6484 0)
 			(effects
 				(font
@@ -9519,7 +9519,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C59")
+					(reference "C62")
 					(unit 1)
 				)
 			)
@@ -9534,7 +9534,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6d38ea3a-b51a-424a-a9d8-b86006bfdbed")
-		(property "Reference" "R61"
+		(property "Reference" "R73"
 			(at 162.56 95.25 90)
 			(effects
 				(font
@@ -9586,7 +9586,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R61")
+					(reference "R73")
 					(unit 1)
 				)
 			)
@@ -9602,7 +9602,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6fa631ea-368c-430c-b692-0f1e512ed08b")
-		(property "Reference" "#PWR080"
+		(property "Reference" "#PWR086"
 			(at 77.47 164.465 0)
 			(effects
 				(font
@@ -9652,7 +9652,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR080")
+					(reference "#PWR086")
 					(unit 1)
 				)
 			)
@@ -9667,7 +9667,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6fff0d4a-f197-45ad-a675-af42d495f2e0")
-		(property "Reference" "R52"
+		(property "Reference" "R64"
 			(at 113.665 158.115 90)
 			(effects
 				(font
@@ -9719,7 +9719,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R52")
+					(reference "R64")
 					(unit 1)
 				)
 			)
@@ -9734,7 +9734,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "716dd9a6-a563-4e25-b66f-abe0062563a1")
-		(property "Reference" "C52"
+		(property "Reference" "C55"
 			(at 124.206 62.738 0)
 			(effects
 				(font
@@ -9788,7 +9788,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C52")
+					(reference "C55")
 					(unit 1)
 				)
 			)
@@ -9876,7 +9876,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7c2266a3-30a0-4c34-ba71-6e934ac7cffe")
-		(property "Reference" "R63"
+		(property "Reference" "R75"
 			(at 202.184 30.988 0)
 			(effects
 				(font
@@ -9928,7 +9928,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R63")
+					(reference "R75")
 					(unit 1)
 				)
 			)
@@ -9944,7 +9944,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7d33f8a3-533b-4b1b-9c87-db4ce47541a9")
-		(property "Reference" "#PWR092"
+		(property "Reference" "#PWR098"
 			(at 222.25 71.12 0)
 			(effects
 				(font
@@ -9994,7 +9994,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR092")
+					(reference "#PWR098")
 					(unit 1)
 				)
 			)
@@ -10010,7 +10010,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7e327be8-be14-494e-ad3b-3673a88d7061")
-		(property "Reference" "R66"
+		(property "Reference" "R78"
 			(at 217.678 30.988 0)
 			(effects
 				(font
@@ -10062,7 +10062,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R66")
+					(reference "R78")
 					(unit 1)
 				)
 			)
@@ -10078,7 +10078,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "824f9d5d-853a-4614-9ab9-f526f308235c")
-		(property "Reference" "R64"
+		(property "Reference" "R76"
 			(at 207.518 30.988 0)
 			(effects
 				(font
@@ -10130,7 +10130,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R64")
+					(reference "R76")
 					(unit 1)
 				)
 			)
@@ -10145,7 +10145,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "82a0ee33-14d9-412f-87f0-ec84922772c9")
-		(property "Reference" "R62"
+		(property "Reference" "R74"
 			(at 184.15 85.09 90)
 			(effects
 				(font
@@ -10197,7 +10197,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R62")
+					(reference "R74")
 					(unit 1)
 				)
 			)
@@ -10212,7 +10212,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "86ec3926-5bad-4756-bc81-f22f49e01d9f")
-		(property "Reference" "C51"
+		(property "Reference" "C54"
 			(at 116.84 62.992 0)
 			(effects
 				(font
@@ -10266,7 +10266,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C51")
+					(reference "C54")
 					(unit 1)
 				)
 			)
@@ -10281,7 +10281,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "89501bcb-d12b-4f41-89d3-f4d7ba809047")
-		(property "Reference" "R59"
+		(property "Reference" "R71"
 			(at 138.43 111.125 90)
 			(effects
 				(font
@@ -10333,7 +10333,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R59")
+					(reference "R71")
 					(unit 1)
 				)
 			)
@@ -10464,7 +10464,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "97bae066-bb17-4a1c-a8b7-caf870e13ebe")
-		(property "Reference" "R65"
+		(property "Reference" "R77"
 			(at 211.836 30.988 0)
 			(effects
 				(font
@@ -10516,7 +10516,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R65")
+					(reference "R77")
 					(unit 1)
 				)
 			)
@@ -10531,7 +10531,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "980249f6-fb5e-4e9c-85fd-446f5599fb28")
-		(property "Reference" "R53"
+		(property "Reference" "R65"
 			(at 114.935 107.95 90)
 			(effects
 				(font
@@ -10583,7 +10583,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R53")
+					(reference "R65")
 					(unit 1)
 				)
 			)
@@ -10599,7 +10599,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "99dfb5e7-5f50-4257-b838-8c150330358e")
-		(property "Reference" "#PWR081"
+		(property "Reference" "#PWR087"
 			(at 90.17 50.165 0)
 			(effects
 				(font
@@ -10649,7 +10649,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR081")
+					(reference "#PWR087")
 					(unit 1)
 				)
 			)
@@ -10924,7 +10924,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a288ed97-65ff-47da-b858-1552efade8ca")
-		(property "Reference" "#PWR076"
+		(property "Reference" "#PWR082"
 			(at 66.04 62.865 0)
 			(effects
 				(font
@@ -10974,7 +10974,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR076")
+					(reference "#PWR082")
 					(unit 1)
 				)
 			)
@@ -11112,7 +11112,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ac525fb2-024e-4ab4-8586-0e700baf311b")
-		(property "Reference" "R57"
+		(property "Reference" "R69"
 			(at 127.635 163.83 90)
 			(effects
 				(font
@@ -11164,7 +11164,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R57")
+					(reference "R69")
 					(unit 1)
 				)
 			)
@@ -11179,7 +11179,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "acc2e5b7-21e8-47bc-97be-833d5ebcbba5")
-		(property "Reference" "R55"
+		(property "Reference" "R67"
 			(at 118.745 163.83 90)
 			(effects
 				(font
@@ -11231,7 +11231,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R55")
+					(reference "R67")
 					(unit 1)
 				)
 			)
@@ -11246,7 +11246,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "acc4ecac-2839-4ab2-8f0e-a7f91293c870")
-		(property "Reference" "C47"
+		(property "Reference" "C50"
 			(at 88.9 63.5 0)
 			(effects
 				(font
@@ -11300,7 +11300,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C47")
+					(reference "C50")
 					(unit 1)
 				)
 			)
@@ -11455,7 +11455,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b6b6bffb-a2a2-4ccb-976e-96ed2519be83")
-		(property "Reference" "R68"
+		(property "Reference" "R80"
 			(at 228.6 141.605 90)
 			(effects
 				(font
@@ -11507,7 +11507,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R68")
+					(reference "R80")
 					(unit 1)
 				)
 			)
@@ -11522,7 +11522,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b9f00f2f-0216-410e-a85b-382eb94d9383")
-		(property "Reference" "C62"
+		(property "Reference" "C65"
 			(at 207.264 107.8484 0)
 			(effects
 				(font
@@ -11576,7 +11576,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C62")
+					(reference "C65")
 					(unit 1)
 				)
 			)
@@ -11592,7 +11592,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c3a35efd-1bef-47a2-af2d-a4b0cb42746c")
-		(property "Reference" "#PWR085"
+		(property "Reference" "#PWR091"
 			(at 101.6 143.51 0)
 			(effects
 				(font
@@ -11642,7 +11642,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR085")
+					(reference "#PWR091")
 					(unit 1)
 				)
 			)
@@ -11658,7 +11658,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c9130be7-8a8b-4d6c-89b4-fedfd7fa960d")
-		(property "Reference" "#PWR086"
+		(property "Reference" "#PWR092"
 			(at 110.49 81.28 0)
 			(effects
 				(font
@@ -11708,7 +11708,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR086")
+					(reference "#PWR092")
 					(unit 1)
 				)
 			)
@@ -11795,7 +11795,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "db52ca4d-4b2b-4000-b794-88fa0414867d")
-		(property "Reference" "C50"
+		(property "Reference" "C53"
 			(at 109.474 62.992 0)
 			(effects
 				(font
@@ -11849,7 +11849,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C50")
+					(reference "C53")
 					(unit 1)
 				)
 			)
@@ -11864,7 +11864,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "dc83870f-bc0e-442a-8445-bc6b79bfe529")
-		(property "Reference" "C43"
+		(property "Reference" "C46"
 			(at 20.32 126.365 0)
 			(effects
 				(font
@@ -11918,7 +11918,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C43")
+					(reference "C46")
 					(unit 1)
 				)
 			)
@@ -11933,7 +11933,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "df70cf02-6dfb-4dc9-879b-83c1bba504c2")
-		(property "Reference" "R54"
+		(property "Reference" "R66"
 			(at 114.935 151.13 90)
 			(effects
 				(font
@@ -11985,7 +11985,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R54")
+					(reference "R66")
 					(unit 1)
 				)
 			)
@@ -12001,7 +12001,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e34feef1-9106-4ac7-ae01-3f6c30097668")
-		(property "Reference" "#PWR084"
+		(property "Reference" "#PWR090"
 			(at 95.885 114.3 0)
 			(effects
 				(font
@@ -12051,7 +12051,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR084")
+					(reference "#PWR090")
 					(unit 1)
 				)
 			)
@@ -12067,7 +12067,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ee9e1060-33ff-4e09-9d4d-8ce61e107219")
-		(property "Reference" "#PWR079"
+		(property "Reference" "#PWR085"
 			(at 72.39 163.195 0)
 			(effects
 				(font
@@ -12117,7 +12117,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR079")
+					(reference "#PWR085")
 					(unit 1)
 				)
 			)
@@ -12132,7 +12132,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f2e93476-ae57-42a9-90e4-e008d148c790")
-		(property "Reference" "C46"
+		(property "Reference" "C49"
 			(at 64.77 156.845 0)
 			(effects
 				(font
@@ -12186,7 +12186,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C46")
+					(reference "C49")
 					(unit 1)
 				)
 			)
@@ -12201,7 +12201,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f3328b37-7719-4edf-bd0b-70367c5fb1f7")
-		(property "Reference" "C45"
+		(property "Reference" "C48"
 			(at 53.975 154.94 0)
 			(effects
 				(font
@@ -12255,7 +12255,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "C45")
+					(reference "C48")
 					(unit 1)
 				)
 			)
@@ -12270,7 +12270,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f8830b51-0d80-432b-8640-884f21fe7b27")
-		(property "Reference" "R56"
+		(property "Reference" "R68"
 			(at 127.635 133.985 90)
 			(effects
 				(font
@@ -12322,7 +12322,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "R56")
+					(reference "R68")
 					(unit 1)
 				)
 			)
@@ -12338,7 +12338,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "fb314d12-40e3-4bf6-bf80-62b0b35bbaaf")
-		(property "Reference" "#PWR083"
+		(property "Reference" "#PWR089"
 			(at 95.25 129.54 0)
 			(effects
 				(font
@@ -12388,7 +12388,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/8a172d80-b3ea-4528-a032-f8b18436f05b"
-					(reference "#PWR083")
+					(reference "#PWR089")
 					(unit 1)
 				)
 			)

@@ -1,71 +1,7 @@
-/*Main programm coordinating the different sections*/
-#include <Arduino.h>
-#include <Ethernet.h>
-#include <SD.h>
-#include <stdio.h>
-#include "pico/stdlib.h"
-#include "pico/time.h"
-#include "hardware/timer.h"
-
-// #include <SPI.h>  // #include <SoftwareSerial.h>
-
-#define DEBUG 1
-#define MICROS 1
-
-#if DEBUG == 1
-#define debug(x) Serial.print(x)
-#define debugln(x) Serial.println(x)
-
-#if MICROS == 1
-#define MESSURETIME_START      \
-  unsigned long ta = micros(); \
-  unsigned long tb;
-#define MESSURETIME_STOP \
-  debug("-Time:");       \
-  tb = micros() - ta;    \
-  debug(tb);             \
-  debug("us");
-#else
-#define MESSURETIME_START      \
-  unsigned long ta = millis(); \
-  unsigned long tb;
-#define MESSURETIME_STOP \
-  debug("-Time:");       \
-  tb = millis() - ta;    \
-  debug(tb);             \
-  debug("ms");
-#endif
-
-#else
-#define debug(x)
-#define debugln(x)
-#define MESSURETIME_START
-#define MESSURETIME_STOP
-#endif
+/*-------------Main programm coordinating the different sections-------------------*/
+#include "header.h"
 
 // https://arduino-pico.readthedocs.io/en/latest/index.html
-
-extern volatile uint8_t SD_init;
-extern volatile uint8_t TCP_init;
-
-struct packet
-{ // struct_format L L 6L 6f 6f 6i i f 2i 80s
-  unsigned long id = 0;
-  unsigned long timestampPacket = 0;
-
-  unsigned long timestampOxy[6] = {0};
-
-  float oxigen[6] = {0.0f};
-  float tempTube[6] = {0.0f};
-
-  int heaterPWM[6] = {0};
-  int error = 0;
-
-  float tempCpu = analogReadTemp(3.3f);
-  unsigned long power[2] = {0};
-
-  char info[80] = {0};
-};
 
 //------------------------core1--------------------------------
 void setup()
@@ -80,13 +16,7 @@ void setup()
   while (!Serial)
   {
   }
-  delay(50);
-  if (watchdog_caused_reboot())
-  {
-    debugln("<Watchdog Reset:>");
-  }
-  debugln("\n<<C0 is running MotherboardV4.ino>>");
-  debugln("\"/?\" for help\n");
+  print_startup_message();
 }
 
 void loop()
@@ -110,4 +40,25 @@ void loop1()
 void check_periodic_tasks()
 {
   rp2040.wdt_reset();
+}
+
+void print_startup_message()
+{
+  delay(50);
+  debug("<<[MotherboardV4.ino] is running on Chip ");
+  debug(rp2040.getChipID());
+  debug("|Core ");
+  debug(rp2040.cpuid());
+  debug("|Freq ");
+  debug(rp2040.f_cpu()/1000000.0);
+  if (watchdog_caused_reboot())
+  {
+    debugln("MHz after a Watchdog Reset>>\n");
+  }
+  else
+  {
+    debugln("MHz>>\n");
+  }
+
+  debugln("\"/?\" for help\n");
 }

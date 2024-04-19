@@ -432,6 +432,12 @@
 		(uuid "7a749397-a58b-4687-8948-be67a2815c9b")
 	)
 	(junction
+		(at 91.44 66.04)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7abde84b-89ef-431e-bffd-cd61be660ccb")
+	)
+	(junction
 		(at 203.2 54.61)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -587,6 +593,16 @@
 	)
 	(wire
 		(pts
+			(xy 120.65 52.07) (xy 167.64 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1b920e07-ced3-40b1-b48d-c716139dfcc6")
+	)
+	(wire
+		(pts
 			(xy 203.2 53.34) (xy 203.2 54.61)
 		)
 		(stroke
@@ -617,6 +633,16 @@
 	)
 	(wire
 		(pts
+			(xy 167.64 52.07) (xy 167.64 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2341dfcf-8f9d-4065-ad77-39dd925a8062")
+	)
+	(wire
+		(pts
 			(xy 57.15 88.9) (xy 80.01 88.9)
 		)
 		(stroke
@@ -624,6 +650,16 @@
 			(type default)
 		)
 		(uuid "23af82b4-6c43-4953-9d83-df4988cb33f7")
+	)
+	(wire
+		(pts
+			(xy 125.73 130.81) (xy 125.73 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2905bc6b-cb80-4104-a941-01bcece925c5")
 	)
 	(wire
 		(pts
@@ -857,6 +893,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 66.04) (xy 91.44 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "78df36ad-735e-4260-b90a-e01244da7e6c")
+	)
+	(wire
+		(pts
 			(xy 104.14 105.41) (xy 104.14 128.27)
 		)
 		(stroke
@@ -867,6 +913,16 @@
 	)
 	(wire
 		(pts
+			(xy 124.46 130.81) (xy 125.73 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8c83144c-de63-4f17-b8ff-1fd25b359528")
+	)
+	(wire
+		(pts
 			(xy 118.11 93.98) (xy 132.08 93.98)
 		)
 		(stroke
@@ -874,6 +930,16 @@
 			(type default)
 		)
 		(uuid "9230bb03-b4eb-49e9-bb3e-ad3ac504467e")
+	)
+	(wire
+		(pts
+			(xy 125.73 66.04) (xy 91.44 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "935d4bf2-5302-431e-8cfe-fc08628669a7")
 	)
 	(wire
 		(pts
@@ -967,6 +1033,16 @@
 	)
 	(wire
 		(pts
+			(xy 167.64 135.89) (xy 124.46 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cfd2e315-5fa1-40ba-b52d-217beed33dbb")
+	)
+	(wire
+		(pts
 			(xy 226.06 54.61) (xy 226.06 53.34)
 		)
 		(stroke
@@ -977,7 +1053,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 59.69) (xy 91.44 73.66)
+			(xy 91.44 59.69) (xy 91.44 66.04)
 		)
 		(stroke
 			(width 0)
@@ -1286,7 +1362,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6187ff40-7d3c-48c1-bb85-689021fa34b0")
-		(property "Reference" "L1"
+		(property "Reference" "L0"
 			(at 205.74 63.6016 0)
 			(effects
 				(font
@@ -1334,7 +1410,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e"
-					(reference "L1")
+					(reference "L0")
 					(unit 1)
 				)
 			)
@@ -1349,7 +1425,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6cba49b0-6106-4236-afe4-7344b1fccc35")
-		(property "Reference" "#PWR00"
+		(property "Reference" "#PWR01"
 			(at 203.2 62.23 0)
 			(effects
 				(font
@@ -1399,7 +1475,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e"
-					(reference "#PWR00")
+					(reference "#PWR01")
 					(unit 1)
 				)
 			)
@@ -1546,7 +1622,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a6fb5e69-987a-4102-8604-a77715b0030d")
-		(property "Reference" "#PWR01"
+		(property "Reference" "#PWR00"
 			(at 203.2 50.8 0)
 			(effects
 				(font
@@ -1596,7 +1672,7 @@
 		(instances
 			(project "BalloonMotherboardV4"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e"
-					(reference "#PWR01")
+					(reference "#PWR00")
 					(unit 1)
 				)
 			)
@@ -1834,6 +1910,16 @@
 				(justify right)
 			)
 			(uuid "1dc4025b-dc48-47ec-ab19-ce1152acc9b3")
+		)
+		(pin "VBUCK" input
+			(at 120.65 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "57c3ef05-0781-4e82-9506-85b86e90918d")
 		)
 		(instances
 			(project "BalloonMotherboardV4"
@@ -2290,6 +2376,26 @@
 				(justify right)
 			)
 			(uuid "a52a54a9-4c88-4da5-b836-e86af3312153")
+		)
+		(pin "3V3uC" input
+			(at 124.46 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "0e471227-b14e-48ac-a6b2-6326708ab251")
+		)
+		(pin "BUCK" input
+			(at 124.46 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "a1d0bb47-28f8-4763-8b42-7445144279d7")
 		)
 		(instances
 			(project "BalloonMotherboardV4"

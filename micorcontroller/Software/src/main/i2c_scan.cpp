@@ -1,6 +1,5 @@
-#include <Arduino.h>
+#include "header.h"
 #include <Wire.h>
-
 /*scan the Wire interfaces for devices. Only works on RP2040 boards.*/
 void scan_wire()
 {

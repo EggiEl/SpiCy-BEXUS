@@ -1,5 +1,5 @@
 /*Coordination of the struct packet, wich is a container for downlink purposes*/
-volatile unsigned long id_struct = 0;
+#include "header.h"
 
 /*return a packet with a timestamp, id and a readout of the CpuTemp*/
 struct packet packet_create() {

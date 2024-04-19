@@ -1,10 +1,5 @@
-extern volatile uint8_t SD_init;
-extern volatile uint8_t TCP_init;
-
-void init_SD();
-int sd_numpackets(const char filepath[]);
-uint8_t cabletest();
-
+#include "header.h"
+#include <SD.h>
 /**
  * returns a status value wich can be decoded to get infos about the parts of the module
  *  @return uint32_t status bitwise encoded as:

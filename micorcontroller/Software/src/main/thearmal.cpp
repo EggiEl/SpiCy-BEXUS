@@ -1,18 +1,4 @@
-/*manages the heating elements*/
-#define PIN_H0 6
-#define PIN_H1 7
-#define PIN_H2 8
-#define PIN_H3 9
-#define PIN_H4 10
-#define PIN_H5 11
-#define PIN_H6 12
-#define PIN_H7 13
-
-#define HEAT_FREQ 1000          // 5kmax for the facy Ics
-#define HEAT_HUNDERTPERCENT 100 // value where the heaters are fully turned on
-#define HEAT_CURRENT 317        // aproximation of the current of a single Heater in mA
-
-char heat_init = 0;
+#include "header.h"
 
 /*initializes the pins, freq and range of the heating elements*/
 void heat_initialize()

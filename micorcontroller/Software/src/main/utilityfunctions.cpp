@@ -1,11 +1,5 @@
-#define STATLED_R 23 // Status LeD pins
-#define STATLED_G 22
-#define STATLED_B 21
-
-#define PIN_VOLT A3
-#define PIN_CURR A2
+#include "header.h"
 #define R_SHUNT 1 // in mOhms
-
 // returns the battery voltage at the moment in mV
 unsigned long get_batvoltage()
 {
@@ -157,11 +151,12 @@ please add to every numerical input one, it will be automaticly subtracted\n\
       }
       case 'l':
       {
-
+        rp2040.idleOtherCore();
         buffer = Serial.parseInt(SKIP_WHITESPACE);
         debug("RP2040 sleepy for ");
         debug(buffer / 1000.0);
         debugln("s.");
+
         // // Calculate the number of microseconds to sleep
         // uint64_t microseconds = (uint64_t)buffer * 1000;
         // // Clear any existing alarm interrupts
@@ -178,6 +173,7 @@ please add to every numerical input one, it will be automaticly subtracted\n\
         // // For Arduino, you can use delay() or other sleep functions provided by Arduino libraries
         delay(buffer);
         debugln("Awake Again");
+        rp2040.resumeOtherCore();
         break;
       }
       case 'm':
@@ -294,7 +290,7 @@ void short_detection()
     {
       debug("Pin ");
       debug(i);
-      debug(" is shorted to ground.");
+      debug(" is connected to ground.");
       debug(" |AnalogRead = ");
       debugln(analogRead(i));
     }
@@ -311,7 +307,7 @@ void short_detection()
     {
       debug("Pin ");
       debug(i);
-      debug(" is shorted to VCC.");
+      debug(" is connected to VCC. I2C?.");
       debug(" |AnalogRead = ");
       debugln(analogRead(i));
     }
@@ -415,3 +411,50 @@ void heartbeat()
     delay(i ^ 2);                  // Wait
   }
 }
+
+/*
+void sleep_goto_sleep_until(datetime_t *t, rtc_callback_t callback)
+{
+  // We should have already called the sleep_run_from_dormant_source function
+  assert(dormant_source_valid(_dormant_source));
+
+  // Turn off all clocks when in sleep mode except for RTC
+  clocks_hw->sleep_en0 = CLOCKS_SLEEP_EN0_CLK_RTC_RTC_BITS;
+  clocks_hw->sleep_en1 = 0x0;
+
+  rtc_set_alarm(t, callback);
+
+  uint save = scb_hw->scr;
+  // Enable deep sleep at the proc
+  scb_hw->scr = save | M0PLUS_SCR_SLEEPDEEP_BITS;
+
+  // Go to sleep
+  __wfi();
+}
+*/
+
+/*
+void sleep_goto_dormant_until_pin(uint gpio_pin, bool edge, bool high) {
+ bool low = !high;
+ bool level = !edge;
+
+ // Configure the appropriate IRQ at IO bank 0
+ assert(gpio_pin < NUM_BANK0_GPIOS);
+
+ uint32_t event = 0;
+
+ if (level && low) event = IO_BANK0_DORMANT_WAKE_INTE0_GPIO0_LEVEL_LOW_BITS;
+ if (level && high) event = IO_BANK0_DORMANT_WAKE_INTE0_GPIO0_LEVEL_HIGH_BITS;
+ if (edge && high) event = IO_BANK0_DORMANT_WAKE_INTE0_GPIO0_EDGE_HIGH_BITS;
+ if (edge && low) event = IO_BANK0_DORMANT_WAKE_INTE0_GPIO0_EDGE_LOW_BITS;
+
+ gpio_set_dormant_irq_enabled(gpio_pin, event, true);
+
+_go_dormant();
+
+ // Execution stops here until woken up
+
+ // Clear the irq so we can go back to dormant mode again if we want
+ gpio_acknowledge_irq(gpio_pin, event);
+ }
+*/

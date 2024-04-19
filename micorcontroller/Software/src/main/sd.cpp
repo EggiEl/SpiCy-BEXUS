@@ -1,10 +1,6 @@
-#define MISO_SD 0
-#define MOSI_SD 3
-#define CS_SD 1
-#define SCK_SD 2
-
+#include "header.h"
+#include <SD.h>
 //if testing via breadboard make sure to just connect the SD Card and not the LAN
-volatile uint8_t SD_init = 0;
 
 unsigned long int max_freq_sd() {
   debug("-{sd_freq_calib-");

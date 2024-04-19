@@ -1,10 +1,8 @@
 /*handles the downlink as TCP client*/
-uint32_t get_Status();
+#include "header.h"
+#include <SPI.h>
+#include <Ethernet.h>
 
-#define MISO_LAN 0 // 16
-#define CS_LAN 1   // 17
-#define SCK_LAN 2  // 18
-#define MOSI_LAN 3 // 19
 
 #define SPI_FREQ_LAN 12MHz // not used and no need to change
 
@@ -15,12 +13,10 @@ uint32_t get_Status();
 // #define DNS IPAddress(8, 8, 8, 8)             // DNS server (e.g., Google DNS)
 // #define GATEWAY IPAddress(192, 168, 1, 1)
 #define SUBNET IPAddress(255, 255, 0, 0)
-
 #define SERVERPORT 8888
-
 #define CONNECTIONTIMEOUT 10000
 
-volatile uint8_t TCP_init = 0;
+
 
 EthernetClient client;
 
