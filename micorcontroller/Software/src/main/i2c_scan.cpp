@@ -1,5 +1,7 @@
 #include "header.h"
 #include <Wire.h>
+void scan_wire_single(unsigned int pinsda, unsigned int pinscl, char Wire_select, unsigned long freq);
+
 /*scan the Wire interfaces for devices. Only works on RP2040 boards.*/
 void scan_wire()
 {

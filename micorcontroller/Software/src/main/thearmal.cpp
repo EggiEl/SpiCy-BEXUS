@@ -1,5 +1,5 @@
 #include "header.h"
-
+char heat_init = 0;
 /*initializes the pins, freq and range of the heating elements*/
 void heat_initialize()
 {

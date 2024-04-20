@@ -3,5 +3,5 @@
     "board": "rp2040:rp2040:rpipico",
     "sketch": "micorcontroller\\Software\\src\\main\\main.ino",
     "output": "../output_arduino_ignore",
-    "configuration": "flash=2097152_0,freq=133,opt=Small,rtti=Disabled,stackprotect=Disabled,exceptions=Disabled,dbgport=Disabled,dbglvl=None,usbstack=picosdk,ipbtstack=ipv4only,uploadmethod=default"
+    "configuration": "flash=2097152_262144,freq=133,opt=Small,rtti=Disabled,stackprotect=Disabled,exceptions=Disabled,dbgport=Disabled,dbglvl=None,usbstack=picosdk,ipbtstack=ipv4only,uploadmethod=default"
 }

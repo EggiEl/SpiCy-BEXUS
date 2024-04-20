@@ -1,8 +1,10 @@
 #ifndef HEADER_H
 #define HEADER_H
+
 #include <Arduino.h>
 
 #define DEBUG 1
+#define USB_ENABLE 1
 #define MICROS 1
 
 #if DEBUG == 1
@@ -64,8 +66,7 @@
 #define PIN_CURR A2
 
 /*struct_packet*/
-volatile unsigned long id_struct = 0;
-
+extern volatile unsigned long id_struct;
 struct packet
 { // struct_format L L 6L 6f 6f 6i i f 2i 80s
     unsigned long id = 0;
@@ -91,10 +92,9 @@ void packet_writeinfo(struct packet &data, const char *info);
 
 /*i2c scan*/
 void scan_wire();
-void scan_wire_single(unsigned int pinsda, unsigned int pinscl, char Wire_select, unsigned long freq);
 
 /*tcp_client*/
-volatile uint8_t TCP_init = 0;
+extern char TCP_init;
 void test_TCP_manually();
 void setup_TCP_Client();
 void send_TCP(char *data, unsigned long int size);
@@ -104,8 +104,7 @@ uint8_t cabletest();
 void testServer();
 
 /*sd*/
-volatile uint8_t SD_init = 0;
-unsigned long int max_freq_sd();
+extern char SD_init;
 void init_SD();
 int sd_numpackets(const char filepath[]);
 bool writestruct(struct packet s_out, const char filepath[]);
@@ -117,7 +116,7 @@ bool printfile(const char filepath[]);
 #define HEAT_HUNDERTPERCENT 100 // value where the heaters are fully turned on
 #define HEAT_CURRENT 317        // aproximation of the current of a single Heater in mA
 
-char heat_init = 0;
+extern char heat_init;
 void heat_initialize();
 void heat_updateall(uint16_t *HeaterPWM);
 void heat_updateone(uint8_t PIN, uint16_t PWM);
@@ -130,13 +129,19 @@ uint32_t get_Status();
 /*utilitly functions*/
 unsigned long get_batvoltage();
 unsigned long get_current();
-void printMemoryUse();
-void printIO(uint8_t anzahl_Ios);
 void serial_commands();
-void short_detection();
 void StatusLedBlink();
 void blinkLed();
 void fadeLED();
 void heartbeat();
 
+/*single File USB*/
+extern char singleFileUsb_init;
+void usb_singlefile_setup();
+void usb_singlefile_update();
+void headerCSV();
+void plug(uint32_t i);
+void unplug(uint32_t i);
+void deleteCSV(uint32_t i);
+void singlefile_close();
 #endif

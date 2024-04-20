@@ -2,7 +2,7 @@
 #include "header.h"
 #include <SPI.h>
 #include <Ethernet.h>
-
+char TCP_init = 0;
 
 #define SPI_FREQ_LAN 12MHz // not used and no need to change
 

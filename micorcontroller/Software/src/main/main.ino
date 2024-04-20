@@ -6,16 +6,6 @@
 //------------------------core1--------------------------------
 void setup()
 {
-
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
-
-  Serial.begin(115200);
-  Serial.setTimeout(1000);
-  rp2040.enableDoubleResetBootloader();
-  while (!Serial)
-  {
-  }
   print_startup_message();
 }
 
@@ -28,6 +18,11 @@ void loop()
 //-------------------------core2------------------------
 void setup1()
 {
+  #if DEBUG ==1
+  delay(60*60*1000);
+  debugln("<<rebooted to bootloader after on hour>>");
+  rp2040.rebootToBootloader();
+  #endif
   // debugln("----------Main is running-C1-------------------");
 }
 
@@ -44,21 +39,30 @@ void check_periodic_tasks()
 
 void print_startup_message()
 {
+  #if DEBUG == 1
+  Serial.begin(115200);
+  Serial.setTimeout(1000);
+  while (!Serial)
+  {
+  }
   delay(50);
   debug("<<[MotherboardV4.ino] is running on Chip ");
   debug(rp2040.getChipID());
-  debug("|Core ");
+  debug(">>\nCore ");
   debug(rp2040.cpuid());
   debug("|Freq ");
-  debug(rp2040.f_cpu()/1000000.0);
+  debug(rp2040.f_cpu() / 1000000.0);
   if (watchdog_caused_reboot())
   {
-    debugln("MHz after a Watchdog Reset>>\n");
+    debugln("MHz|Watchdog Reset\n");
   }
   else
   {
-    debugln("MHz>>\n");
+    debugln("MHz\n");
   }
-
   debugln("\"/?\" for help\n");
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
+  rp2040.enableDoubleResetBootloader();
+  #endif
 }

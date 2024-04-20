@@ -1,6 +1,9 @@
 #include "header.h"
 #include <SD.h>
-//if testing via breadboard make sure to just connect the SD Card and not the LAN
+//if testing via breadboard make sure to just connect the SD Card and disconnecting the LAN
+unsigned long int max_freq_sd();
+
+char SD_init = 0;
 
 unsigned long int max_freq_sd() {
   debug("-{sd_freq_calib-");

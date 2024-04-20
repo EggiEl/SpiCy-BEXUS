@@ -1,5 +1,11 @@
 #include "header.h"
 #define R_SHUNT 1 // in mOhms
+#define nGPIOS 29
+
+void printMemoryUse();
+void printIO(uint8_t anzahl_Ios);
+void short_detection();
+
 // returns the battery voltage at the moment in mV
 unsigned long get_batvoltage()
 {
@@ -36,13 +42,13 @@ void printMemoryUse()
   debugln(" percent");
 }
 
-void printIO(uint8_t anzahl_Ios)
+void printIO()
 {
   Serial.println();
   Serial.println("printio: ");
   Serial.print("Pinnumb: ");
-  char *d = (char *)malloc(anzahl_Ios);
-  char *a = (char *)malloc(anzahl_Ios);
+  char *d = (char *)malloc(nGPIOS);
+  char *a = (char *)malloc(nGPIOS);
   if (d == NULL)
   {
     Serial.println("Initializing of dynamic array d failed");
@@ -51,13 +57,13 @@ void printIO(uint8_t anzahl_Ios)
   {
     Serial.println("Initializing of dynamic array a failed");
   }
-  for (int i = 0; i < anzahl_Ios; i++)
+  for (int i = 0; i < nGPIOS; i++)
   {
     pinMode(i, INPUT);
     d[i] = digitalRead(i);
     a[i] = analogRead(i);
   }
-  for (int i = 0; i < anzahl_Ios; i++)
+  for (int i = 0; i < nGPIOS; i++)
   {
     Serial.print(i);
     if (i < 10)
@@ -68,7 +74,7 @@ void printIO(uint8_t anzahl_Ios)
   }
   Serial.println();
   Serial.print("Digital: ");
-  for (int i = 0; i < anzahl_Ios; i++)
+  for (int i = 0; i < nGPIOS; i++)
   {
     Serial.print(d[i], BIN);
     Serial.print(" ");
@@ -76,7 +82,7 @@ void printIO(uint8_t anzahl_Ios)
   }
   Serial.println();
   Serial.print("Analog:  ");
-  for (int i = 0; i < anzahl_Ios; i++)
+  for (int i = 0; i < nGPIOS; i++)
   {
     Serial.print(a[i], DEC);
     if (a[i] < 100)
@@ -90,6 +96,7 @@ void printIO(uint8_t anzahl_Ios)
 /*Reads Serial Commands wich start with "/". /? for help */
 void serial_commands()
 {
+#if DEBUG == 1
   if (Serial.available() > 0)
   {
     char buffer_comand = Serial.read();
@@ -114,7 +121,8 @@ please add to every numerical input one, it will be automaticly subtracted\n\
 /c|prints current clock speed of the RP2040\n\
 /d|pin shorts detection\n\
 /p|sends a test packet over lan\n\
-/w|Sets Watchdog to ... ms. Cant be disables till reboot.");
+/w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
+/u|single file usb update. /u 1 closes singlefileusb\n");
         break;
       }
       case 'b':
@@ -262,6 +270,19 @@ please add to every numerical input one, it will be automaticly subtracted\n\
         }
         break;
       }
+      case 'u':
+      {
+        if (Serial.parseInt(SKIP_WHITESPACE) == 1)
+        {
+          singlefile_close();
+        }
+        else
+        {
+          usb_singlefile_update();
+        }
+
+        break;
+      }
       default:
       {
         debug("dafuck is \"");
@@ -272,78 +293,84 @@ please add to every numerical input one, it will be automaticly subtracted\n\
       }
     }
   }
+#endif
 }
 
-#define nGPIOS 30
 void short_detection()
 {
   debugln("<shorted_pin_detection>");
+  char *pin_buffer = (char *)calloc(nGPIOS + 1, 1);
 
   // shorts to ground detection
-  for (int i = 0; i < nGPIOS; i++)
+  for (int i = 0; i <= nGPIOS + 1; i++)
   {
     pinMode(i, INPUT_PULLUP);
   }
-  for (int i = 0; i < nGPIOS; i++)
+  for (int i = 0; i <= nGPIOS + 1; i++)
   {
     if (digitalRead(i) == 0)
     {
       debug("Pin ");
       debug(i);
-      debug(" is connected to ground.");
-      debug(" |AnalogRead = ");
-      debugln(analogRead(i));
+      debug(" is connected to ground.\n");
     }
   }
 
   // shorts to VCC detection
-  for (int i = 0; i < nGPIOS; i++)
+  for (int i = 0; i <= nGPIOS; i++)
   {
     pinMode(i, INPUT_PULLDOWN);
   }
-  for (int i = 0; i < nGPIOS; i++)
+  for (int i = 0; i <= nGPIOS; i++)
   {
     if (digitalRead(i) == 1)
     {
       debug("Pin ");
       debug(i);
-      debug(" is connected to VCC. I2C?.");
-      debug(" |AnalogRead = ");
-      debugln(analogRead(i));
+      debug(" is connected to VCC. I2C?.\n");
+      pin_buffer[i] = 1;
     }
   }
 
   // pin shorting each other
-  for (int i = 0; i < nGPIOS; i++)
+  for (int i = 0; i <= nGPIOS; i++)
   {
     pinMode(i, INPUT_PULLDOWN);
   }
 
-  for (int Pin_now = 0; Pin_now < nGPIOS; Pin_now++)
+  for (int Pin_now = 0; Pin_now <= nGPIOS; Pin_now++)
   {
-    // sets all pins to 0
-    for (int i = 0; i < nGPIOS; i++)
+    if (pin_buffer[Pin_now] == 1)
     {
-      digitalWrite(i, 0);
     }
-
-    // tests for a short by individually setting each pin high
-    for (int i = 0; i < nGPIOS; i++)
+    else
     {
-      if (i != Pin_now)
+      // sets all pins to 0
+      for (int i = 0; i <= nGPIOS; i++)
       {
-        digitalWrite(i, HIGH);
-        if (digitalRead(Pin_now) == 1)
+        digitalWrite(i, 0);
+      }
+
+      // tests for a short by individually setting each pin high
+      for (int i = 0; i <= nGPIOS; i++)
+      {
+
+        if (i != Pin_now)
         {
-          debug("Pin ");
-          debug(Pin_now);
-          debug(" is shorted to ");
-          debugln(i);
+          digitalWrite(i, HIGH);
+          if (digitalRead(Pin_now) == 1)
+          {
+            debug("Pin ");
+            debug(Pin_now);
+            debug(" is shorted to ");
+            debugln(i);
+          }
+          digitalWrite(i, LOW);
         }
-        digitalWrite(i, LOW);
       }
     }
   }
+  free(pin_buffer);
   debugln("Short detection done.");
 }
 
