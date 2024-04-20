@@ -40,7 +40,8 @@ void check_periodic_tasks()
 void print_startup_message()
 {
   #if DEBUG == 1
-  Serial.begin(115200);
+  Serial.begin(5000000);
+  //  Serial.begin(115200);
   Serial.setTimeout(1000);
   while (!Serial)
   {
