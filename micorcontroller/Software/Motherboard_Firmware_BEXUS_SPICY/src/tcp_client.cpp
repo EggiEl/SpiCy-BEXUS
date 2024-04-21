@@ -2,10 +2,8 @@
 #include "header.h"
 #include <SPI.h>
 #include <Ethernet.h>
-char TCP_init = 0;
 
 #define SPI_FREQ_LAN 12MHz // not used and no need to change
-
 #define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 #define SERVERIP IPAddress(169, 254, 218, 4) //(169,254,218,4) (169, 254, 171, 44) (192, 168, 178, 23)// IP address of the PC
 // #define SERVERIP IPAddress(100, 81, 57, 236)
@@ -16,8 +14,7 @@ char TCP_init = 0;
 #define SERVERPORT 8888
 #define CONNECTIONTIMEOUT 10000
 
-
-
+char TCP_init = 0;
 EthernetClient client;
 
 struct test

@@ -20,23 +20,19 @@
                 "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\include",
                 "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\cores\\rp2040",
                 "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\variants\\rpipico",
-                "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\libraries\\LittleFS\\src",
-                "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\libraries\\SingleFileDrive\\src",
                 "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\libraries\\Wire\\src",
                 "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\libraries\\SD\\src",
                 "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\libraries\\SDFS\\src",
                 "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\libraries\\SPI\\src",
                 "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\libraries\\ESP8266SdFat\\src",
-                "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\pico-sdk\\lib\btstack\\platform\\lwip\\port\\arch",
-                "C:\\Users\\fgewi\\Documents\\Arduino\\libraries\\Ethernet\\src",
+                "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\libraries\\LittleFS\\src",
+                "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\libraries\\SingleFileDrive\\src",
                 "c:\\users\\fgewi\\appdata\\local\\arduino15\\packages\\rp2040\\tools\\pqt-gcc\\2.2.0-d04e724\\arm-none-eabi\\include\\c++\\12.3.0",
                 "c:\\users\\fgewi\\appdata\\local\\arduino15\\packages\\rp2040\\tools\\pqt-gcc\\2.2.0-d04e724\\arm-none-eabi\\include\\c++\\12.3.0\\arm-none-eabi\\thumb",
                 "c:\\users\\fgewi\\appdata\\local\\arduino15\\packages\\rp2040\\tools\\pqt-gcc\\2.2.0-d04e724\\arm-none-eabi\\include\\c++\\12.3.0\\backward",
                 "c:\\users\\fgewi\\appdata\\local\\arduino15\\packages\\rp2040\\tools\\pqt-gcc\\2.2.0-d04e724\\lib\\gcc\\arm-none-eabi\\12.3.0\\include",
                 "c:\\users\\fgewi\\appdata\\local\\arduino15\\packages\\rp2040\\tools\\pqt-gcc\\2.2.0-d04e724\\lib\\gcc\\arm-none-eabi\\12.3.0\\include-fixed",
-                "c:\\users\\fgewi\\appdata\\local\\arduino15\\packages\\rp2040\\tools\\pqt-gcc\\2.2.0-d04e724\\arm-none-eabi\\include",
-                "C:\\Users\\fgewi\\Documents\\Arduino\\libraries\\lwIP\\src\\lwip\\include",
-                "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\pico-sdk"
+                "c:\\users\\fgewi\\appdata\\local\\arduino15\\packages\\rp2040\\tools\\pqt-gcc\\2.2.0-d04e724\\arm-none-eabi\\include"
             ],
             "forcedInclude": [
                 "C:\\Users\\fgewi\\AppData\\Local\\Arduino15\\packages\\rp2040\\hardware\\rp2040\\3.7.2\\cores\\rp2040\\Arduino.h"
