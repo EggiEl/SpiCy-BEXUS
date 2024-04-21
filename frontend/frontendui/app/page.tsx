@@ -6,18 +6,24 @@ import {get_latest_data} from '../functions/get_latest_data';
 import {get_all_data} from '../functions/get_all_data';
 
 export default function LandingPage() {
-  const [data, setData] = useState([]);
-  const [limit, setLimit] = useState(20); // Neuer Zustand für das Limit
+  const [data, setData] = useState<any[]>([]);
+  const [limit, setLimit] = useState(100); // Neuer Zustand für das Limit
 
-  const fetchData = async () => {
-    const data = await get_latest_data("6601d39a57c1ff9b7787bd03", "Sensor1");
-    console.log(data);
+  const fetchNewData = async () => {
+    if (data.length > 0) {
+      const lastData = data[data.length - 1];
+      if (lastData && lastData._id) {
+        const newData = await get_latest_data(lastData._id, "Sensor1");
+        console.log(newData);
+        setData((prevData: any[]) => [...prevData, ...newData]);
+      }
+    }
   }
 
   const fetchAllData = async () => {
     const allData = await get_all_data();
     console.log(allData);
-    setData(allData[0] );
+    setData(allData[0]);
   }
 
   const increaseLimit = () => setLimit(prevLimit => prevLimit + 1); // Funktion zum Erhöhen des Limits
@@ -27,12 +33,17 @@ export default function LandingPage() {
     fetchAllData();
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(fetchNewData, 1000); // Fetch new data every second
+    return () => clearInterval(intervalId); // Clean up on component unmount
+  }, [data]); // Add data as a dependency
+
   return(
     <div>
       <h1>
         Hallo Welt
       </h1>
-      <button onClick={fetchData}>
+      <button onClick={fetchNewData}>
         Daten abrufen
       </button>
       <button onClick={fetchAllData}>
