@@ -287,7 +287,7 @@ please add to every numerical input one, it will be automaticly subtracted\n\
       {
         debug("dafuck is \"/");
         debug(buffer_comand);
-        debugln("\" ?!?! try \"/?\" or switching to BWL.\n");
+        debugln("\" ?!?! try \"/?\".\n");
         break;
       }
       }
