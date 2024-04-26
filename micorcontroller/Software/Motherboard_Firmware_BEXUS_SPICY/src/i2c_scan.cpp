@@ -1,11 +1,13 @@
 #include "header.h"
 #include <Wire.h>
-void scan_wire_single(unsigned int pinsda, unsigned int pinscl, char Wire_select, unsigned long freq);
+static void scan_wire_single(unsigned int pinsda, unsigned int pinscl, char Wire_select, unsigned long freq);
 
 /*scan the Wire interfaces for devices. Only works on RP2040 boards.*/
 void scan_wire()
 {
+    SET_COLOUR_YELLOW
     debugln("\n<I2C Scan>");
+    SET_COLOUR_RESET
     unsigned long freq = 100000;
     scan_wire_single(0, 1, 0, freq);
     scan_wire_single(2, 3, 1, freq);
@@ -94,17 +96,7 @@ void scan_wire_single(unsigned int pinsda, unsigned int pinscl, char Wire_select
 
         if (error == 0)
         {
-            debugln("adr  |sda|scl|freq");
-            if (address < 16)
-                debug("0");
-            debug(address);
-            debug("  | ");
-            debug(pinsda);
-            debug(" | ");
-            debug(pinscl);
-            debug(" | ");
-            debugln(freq);
-            debugln();
+            debugf("adr: %i| sda: %i| scl: %i| wire: %i|freq: %i\n", address, pinsda, pinscl, Wire_select,freq);
             nDevices++;
         }
         else if (error == 4)

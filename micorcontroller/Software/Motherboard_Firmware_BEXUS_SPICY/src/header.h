@@ -4,12 +4,14 @@
 #include <Arduino.h>
 
 #define DEBUG 1
+#define COLOUR_SERIAL 1
 #define USB_ENABLE 1
 #define MICROS 1
 
 #if DEBUG == 1
 #define debug(x) Serial.print(x)
 #define debugln(x) Serial.println(x)
+#define debugf(...) Serial.printf(__VA_ARGS__)
 
 #if MICROS == 1
 #define MESSURETIME_START        \
@@ -34,10 +36,33 @@
 #else
 #define debug(x)
 #define debugln(x)
+#define debugf(...)
 #define MESSURETIME_START
 #define MESSURETIME_STOP
 #endif
 
+/*-------Serial_printing_colours------------------*/
+#if COLOUR_SERIAL == 1
+#define SET_COLOUR_BLACK Serial.print("\033[30m");
+#define SET_COLOUR_RED Serial.print("\033[31m");
+#define SET_COLOUR_GREEN Serial.print("\033[32m");
+#define SET_COLOUR_YELLOW Serial.print("\033[33m");
+#define SET_COLOUR_BLUE Serial.print("\033[34m");
+#define SET_COLOUR_MAGENTA Serial.print("\033[35m");
+#define SET_COLOUR_CYAN Serial.print("\033[36m");
+#define SET_COLOUR_WHITE Serial.print("\033[37m");
+#define SET_COLOUR_RESET Serial.print("\033[0m");
+#else
+#define SET_COLOUR_BLACK
+#define SET_COLOUR_RED
+#define SET_COLOUR_GREEN
+#define SET_COLOUR_YELLOW
+#define SET_COLOUR_BLUE
+#define SET_COLOUR_MAGENTA
+#define SET_COLOUR_CYAN
+#define SET_COLOUR_WHITE
+#define SET_COLOUR_RESET
+#endif
 /*----------------Pin mapping-------------*/
 #define MISO_LAN 0 // 16
 #define CS_LAN 1   // 17
@@ -136,6 +161,7 @@ void StatusLedBlink();
 void blinkLed();
 void fadeLED();
 void heartbeat();
+void printMemoryUse();
 
 /*single File USB*/
 extern char singleFileUsb_init;

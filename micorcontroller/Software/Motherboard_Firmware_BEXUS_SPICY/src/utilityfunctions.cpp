@@ -2,9 +2,9 @@
 #define R_SHUNT 1 // in mOhms
 #define nGPIOS 29
 
-void printMemoryUse();
-void printIO();
-void short_detection();
+// void printMemoryUse();
+static void printIO();
+static void short_detection();
 
 // returns the battery voltage at the moment in mV
 unsigned long get_batvoltage()
@@ -108,8 +108,11 @@ void serial_commands()
       {
       case '?':
       {
-        debugln("<help>\n\
-please add to every numerical input one, it will be automaticly subtracted\n\
+        SET_COLOUR_YELLOW
+        debug("<help>\n");
+        SET_COLOUR_RESET
+        debugln(
+          "please add to every numerical input one, it will be automaticly subtracted\n\
 /b|Returns Battery Voltage and current\n\
 /s|Read out Status\n\
 /l|Sets the controller in sleep for ... ms.\n\
@@ -118,7 +121,6 @@ please add to every numerical input one, it will be automaticly subtracted\n\
 /h x y| set heater pin x at prozent y . if pin_numb > 256 is given will set all heater to different numbers for testing.\n\
 /i|scans for i2c devices\n\
 /f|changes the analogWrite frequency. For heater run one heating command and change then.\n\
-/c|prints current clock speed of the RP2040\n\
 /d|pin shorts detection\n\
 /p|sends a test packet over lan\n\
 /w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
@@ -137,12 +139,15 @@ please add to every numerical input one, it will be automaticly subtracted\n\
       case 's':
       {
         uint32_t buffer_status = get_Status();
+        SET_COLOUR_YELLOW
         debug("Status: ");
+        SET_COLOUR_RESET
         debugln(buffer_status);
         break;
       }
       case 'r':
       {
+        SET_COLOUR_YELLOW
         buffer = Serial.parseInt(SKIP_WHITESPACE);
         if (buffer == 1)
         {
@@ -198,7 +203,9 @@ please add to every numerical input one, it will be automaticly subtracted\n\
           heat_testmanual();
           break;
         }
+        SET_COLOUR_YELLOW
         debug("Update Heater ");
+        SET_COLOUR_RESET
         debug(pin_numb - 1);
         debug(" to ");
         debugln(pwm_duty - 1);
@@ -208,7 +215,9 @@ please add to every numerical input one, it will be automaticly subtracted\n\
         }
         else
         {
+          SET_COLOUR_YELLOW
           debugln("Please Numbers above 0.");
+          SET_COLOUR_RESET
         }
         break;
       }
@@ -234,20 +243,19 @@ please add to every numerical input one, it will be automaticly subtracted\n\
 
         break;
       }
-      case 'c':
-      {
-        debug("System freuqncy: ");
-        debugln(rp2040.f_cpu());
-        break;
-      }
       case 'd':
       {
+        SET_COLOUR_YELLOW
+        debugln("<shorted_pin_detection>");
+        SET_COLOUR_RESET
         short_detection();
         break;
       }
       case 'p':
       {
+        SET_COLOUR_YELLOW
         debugln("<Sending a Test Packet with info \"testlö\".>");
+        SET_COLOUR_RESET
         struct packet test = packet_create();
         packet_writeinfo(test, "testlö");
         send_TCP_packet(test);
@@ -260,13 +268,17 @@ please add to every numerical input one, it will be automaticly subtracted\n\
         {
           rp2040.wdt_reset();
           rp2040.wdt_begin(buffer_time);
+          SET_COLOUR_YELLOW
           debug("Set watchdog to ");
           debug(buffer_time / 1000.0);
           debugln("s.");
+          SET_COLOUR_RESET
         }
         else
         {
+          SET_COLOUR_RED
           debugln("Watchdog value to high, 8.3 seconds are the maximum");
+          SET_COLOUR_RESET
         }
         break;
       }
@@ -285,9 +297,9 @@ please add to every numerical input one, it will be automaticly subtracted\n\
       }
       default:
       {
-        debug("dafuck is \"/");
-        debug(buffer_comand);
-        debugln("\" ?!?! try \"/?\".\n");
+        SET_COLOUR_RED
+        debugf("dafuck is \"/%c\" ?!?! try \"/?\".\n", buffer_comand);
+        SET_COLOUR_RESET
         break;
       }
       }
@@ -298,7 +310,6 @@ please add to every numerical input one, it will be automaticly subtracted\n\
 
 void short_detection()
 {
-  debugln("<shorted_pin_detection>");
   char *pin_buffer = (char *)calloc(nGPIOS + 1, 1);
 
   // shorts to ground detection

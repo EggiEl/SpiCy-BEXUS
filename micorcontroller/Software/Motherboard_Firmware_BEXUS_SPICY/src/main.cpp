@@ -46,13 +46,10 @@ void print_startup_message()
   {
   }
   delay(50);
+  SET_COLOUR_GREEN
   TextSpicyv4();
-  debug("\n<<[MotherboardV4.ino] is running on Chip ");
-  debug(rp2040.getChipID());
-  debug(">>\nCore ");
-  debug(rp2040.cpuid());
-  debug("|Freq ");
-  debug(rp2040.f_cpu() / 1000000.0);
+  SET_COLOUR_YELLOW
+  debugf("\n<<[MotherboardV4.ino] is running on Chip %i>>\n Core %i |Freq %.1f ", rp2040.getChipID(), rp2040.cpuid(), rp2040.f_cpu() / 1000000.0);
   if (watchdog_caused_reboot())
   {
     debugln("MHz|Watchdog Reset");
@@ -65,13 +62,18 @@ void print_startup_message()
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
   rp2040.enableDoubleResetBootloader();
+  SET_COLOUR_RESET
 #endif
 }
 
-/*Serial.prints the SpiCy Logo*/
+/**
+*Serial.prints the SpiCy Logo.
+*source: https://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20
+*/
 void TextSpicyv4()
 {
-  if (random(3) == 1)
+#if DEBUG == 1
+  if (random(3) != 1)
   {
     // ghost
     Serial.println(
@@ -95,4 +97,5 @@ void TextSpicyv4()
     Serial.println("/_______  /|   __/ |__| \\______  // ____|   \\_/ \\____   | ");
     Serial.println("        \\/ |__|                \\/ \\/                 |__|");
   }
+#endif
 }
