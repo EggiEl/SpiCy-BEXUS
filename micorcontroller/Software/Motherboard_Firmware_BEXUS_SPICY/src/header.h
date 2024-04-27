@@ -1,38 +1,29 @@
+/*-----------Header file for global defines, objekts, variables and functions-----------*/
+
 #ifndef HEADER_H
 #define HEADER_H
 
 #include <Arduino.h>
 
+/*--------Settings-----------------------*/
 #define DEBUG 1
 #define COLOUR_SERIAL 1
 #define USB_ENABLE 1
-#define MICROS 1
+#define COLOUR_SERIAL 1
 
+/*-------Debug Features-------------------*/
 #if DEBUG == 1
 #define debug(x) Serial.print(x)
 #define debugln(x) Serial.println(x)
 #define debugf(...) Serial.printf(__VA_ARGS__)
-
-#if MICROS == 1
 #define MESSURETIME_START        \
+    unsigned long tb = 0;        \
     unsigned long ta = micros(); \
-    unsigned long tb;
+    debugf_magenta(".");
 #define MESSURETIME_STOP \
-    debug("-Time:");     \
-    tb = micros() - ta;  \
-    debug(tb);           \
-    debug("us");
-#else
-#define MESSURETIME_START        \
-    unsigned long ta = millis(); \
-    unsigned long tb;
-#define MESSURETIME_STOP \
-    debug("-Time:");     \
-    tb = millis() - ta;  \
-    debug(tb);           \
-    debug("ms");
-#endif
-
+    tb = micros();       \
+    ta = tb - ta;        \
+    debugf_magenta("Time: %.2fs|%.2fms|%ius\n", ta / 1000000.0, ta / 1000.0, ta);
 #else
 #define debug(x)
 #define debugln(x)
@@ -41,8 +32,50 @@
 #define MESSURETIME_STOP
 #endif
 
-/*-------Serial_printing_colours------------------*/
+
+/*-------Serial_printing_colours------------*/
 #if COLOUR_SERIAL == 1
+#define debugf_yellow(...)      \
+    Serial.print("\033[33m");   \
+    Serial.printf(__VA_ARGS__); \
+    Serial.print("\033[0m");
+
+#define debugf_black(...)       \
+    Serial.print("\033[30m");   \
+    Serial.printf(__VA_ARGS__); \
+    Serial.print("\033[0m");
+
+#define debugf_red(...)         \
+    Serial.print("\033[31m");   \
+    Serial.printf(__VA_ARGS__); \
+    Serial.print("\033[0m");
+
+#define debugf_green(...)       \
+    Serial.print("\033[32m");   \
+    Serial.printf(__VA_ARGS__); \
+    Serial.print("\033[0m");
+
+#define debugf_blue(...)        \
+    Serial.print("\033[34m");   \
+    Serial.printf(__VA_ARGS__); \
+    Serial.print("\033[0m");
+
+#define debugf_magenta(...)     \
+    Serial.print("\033[35m");   \
+    Serial.printf(__VA_ARGS__); \
+    Serial.print("\033[0m");
+
+#define debugf_cyan(...)        \
+    Serial.print("\033[36m");   \
+    Serial.printf(__VA_ARGS__); \
+    Serial.print("\033[0m");
+
+#define debugf_white(...)       \
+    Serial.print("\033[37m");   \
+    Serial.printf(__VA_ARGS__); \
+    Serial.print("\033[0m");
+
+// You can keep the original definitions for color setting macros without changes.
 #define SET_COLOUR_BLACK Serial.print("\033[30m");
 #define SET_COLOUR_RED Serial.print("\033[31m");
 #define SET_COLOUR_GREEN Serial.print("\033[32m");
@@ -53,6 +86,16 @@
 #define SET_COLOUR_WHITE Serial.print("\033[37m");
 #define SET_COLOUR_RESET Serial.print("\033[0m");
 #else
+
+#define debugf_yellow(...)
+#define debugf_black(...)
+#define debugf_red(...)
+#define debugf_green(...)
+#define debugf_blue(...)
+#define debugf_magenta(...)
+#define debugf_cyan(...)
+#define debugf_white(...)
+
 #define SET_COLOUR_BLACK
 #define SET_COLOUR_RED
 #define SET_COLOUR_GREEN
@@ -63,11 +106,17 @@
 #define SET_COLOUR_WHITE
 #define SET_COLOUR_RESET
 #endif
+
 /*----------------Pin mapping-------------*/
-#define MISO_LAN 0 // 16
-#define CS_LAN 1   // 17
-#define SCK_LAN 2  // 18
-#define MOSI_LAN 3 // 19
+// #define MISO_LAN 0 // 16
+// #define CS_LAN 1   // 17
+// #define SCK_LAN 2  // 18
+// #define MOSI_LAN 3 // 19
+
+#define MISO_LAN  16
+#define CS_LAN  17
+#define SCK_LAN  18
+#define MOSI_LAN  19
 
 #define MISO_SD 0
 #define MOSI_SD 3
@@ -172,4 +221,5 @@ void plug(uint32_t i);
 void unplug(uint32_t i);
 void deleteCSV(uint32_t i);
 void singlefile_close();
+
 #endif

@@ -1,5 +1,6 @@
 /*Coordination of the struct packet, wich is a container for downlink purposes*/
 #include "header.h"
+
 volatile unsigned long id_struct = 0;
 /*return a packet with a timestamp, id and a readout of the CpuTemp*/
 struct packet packet_create() {
@@ -25,7 +26,9 @@ char *packettochar(struct packet data) {
 
 /*Prints all avaliable infos about a packet like pointers, size, values and memory*/
 void packet_print(struct packet pkt) {
+  SET_COLOUR_YELLOW
   Serial.println("-----infos about packet----------");
+  SET_COLOUR_RESET
   Serial.print("Size in uC Memory: ");
   Serial.println(sizeof(struct packet));
 
@@ -109,8 +112,10 @@ void packet_print(struct packet pkt) {
 void packet_writeinfo(struct packet &data, const char *info) {
   unsigned int len = strnlen(info,sizeof(data.info)+1);
   if (len >= sizeof(data.info)) {
+    SET_COLOUR_RED
     Serial.print("This char was too big for struct packet info: ");
     Serial.println(info);
+    SET_COLOUR_RESET
     return;
   }
   strncpy(data.info, info, sizeof(data.info));

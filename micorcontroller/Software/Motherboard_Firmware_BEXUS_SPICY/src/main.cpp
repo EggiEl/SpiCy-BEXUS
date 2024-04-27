@@ -1,4 +1,16 @@
 /*-------------Main programm coordinating the different sections-------------------*/
+/*
+ .-')       _ (`-.                                                 (`-.
+ ( OO ).    ( (OO  )                                              _(OO  )_
+(_)---\_)  _.`     \   ,-.-')     .-----.    ,--.   ,--.      ,--(_/   ,. \    .---.
+/    _ |  (__...--''   |  |OO)   '  .--./     \  `.'  /       \   \   /(__/   / .  |
+\  :` `.   |  /  | |   |  |  \   |  |('-.   .-')     /         \   \ /   /   / /|  |
+ '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \   /           \   '   /,  / / |  |_
+.-._)   \  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\_           \     /__)/  '-'    |
+\       /  |  |      (_|  |    (_'  '--'\   `-./  /.__)           \   /    `----|  |-'
+ `-----'   `--'        `--'       `-----'     `--'                 `-'          `--'
+*/
+
 #include "header.h"
 
 // https://arduino-pico.readthedocs.io/en/latest/index.html
@@ -25,10 +37,13 @@ void setup1()
   debugln("<<rebooted to bootloader after on hour>>");
   rp2040.rebootToBootloader();
 #endif
-  // debugln("----------Main is running-C1-------------------");
+  debugln("oi");
 }
 
-void loop1() {}
+void loop1()
+{
+  blinkLed();
+}
 
 void check_periodic_tasks()
 {
@@ -39,44 +54,43 @@ void check_periodic_tasks()
 void print_startup_message()
 {
 #if DEBUG == 1
+  Serial.setTimeout(1000);
   Serial.begin(460800);
   // Serial.begin(115200);
-  Serial.setTimeout(1000);
+
   while (!Serial)
   {
   }
   delay(50);
-  SET_COLOUR_GREEN
   TextSpicyv4();
-  SET_COLOUR_YELLOW
-  debugf("\n<<[MotherboardV4.ino] is running on Chip %i>>\n Core %i |Freq %.1f ", rp2040.getChipID(), rp2040.cpuid(), rp2040.f_cpu() / 1000000.0);
+
+  debugf_yellow("\n<<[MotherboardV4.ino] is running on Chip %i>>\n Core %i |Freq %.1f ", rp2040.getChipID(), rp2040.cpuid(), rp2040.f_cpu() / 1000000.0);
   if (watchdog_caused_reboot())
   {
-    debugln("MHz|Watchdog Reset");
+    debugf_yellow("MHz|Watchdog Reset>>\n");
   }
   else
   {
-    debugln("MHz");
+    debugf_yellow("MHz\n");
   }
-  debugln("\"/?\" for help\n");
+  debugf_yellow("\"/?\" for help\n");
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
   rp2040.enableDoubleResetBootloader();
-  SET_COLOUR_RESET
 #endif
 }
 
 /**
-*Serial.prints the SpiCy Logo.
-*source: https://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20
-*/
+ *Serial.prints the SpiCy Logo.
+ *source: https://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20
+ */
 void TextSpicyv4()
 {
 #if DEBUG == 1
   if (random(3) != 1)
   {
     // ghost
-    Serial.println(
+    debugf_green(
         "  .-')       _ (`-.                                                 (`-.\n"
         " ( OO ).    ( (OO  )                                              _(OO  )_\n"
         "(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.      ,--(_/   ,. \\    .---.\n"
@@ -90,12 +104,14 @@ void TextSpicyv4()
   else
   {
     // graphiti
+    SET_COLOUR_GREEN
     Serial.println(" _________        .__ _________                   _____  ");
     Serial.println("/   _____/______  |__|\\_   ___ \\ ___.__. ___  __ /  |  | ");
     Serial.println("\\_____  \\ \\____ \\ |  |/    \\  \\/<   |  | \\  \\/ //   |  |");
     Serial.println("/        \\|  |_> >|  |\\     \\____\\___  |  \\   //    ^   /");
     Serial.println("/_______  /|   __/ |__| \\______  // ____|   \\_/ \\____   | ");
     Serial.println("        \\/ |__|                \\/ \\/                 |__|");
+    SET_COLOUR_RESET
   }
 #endif
 }

@@ -138,11 +138,9 @@ void serial_commands()
       }
       case 's':
       {
+        debugf_yellow("<get Status>\n");
         uint32_t buffer_status = get_Status();
-        SET_COLOUR_YELLOW
-        debug("Status: ");
-        SET_COLOUR_RESET
-        debugln(buffer_status);
+        debugf_yellow("Status: %i\n", buffer_status);
         break;
       }
       case 'r':
@@ -253,12 +251,9 @@ void serial_commands()
       }
       case 'p':
       {
-        SET_COLOUR_YELLOW
-        debugln("<Sending a Test Packet with info \"testlö\".>");
-        SET_COLOUR_RESET
-        struct packet test = packet_create();
-        packet_writeinfo(test, "testlö");
-        send_TCP_packet(test);
+        debugf_yellow("<Sending a Test Packet>\n");
+        test_TCP_manually();
+        break;
       }
       case 'w':
       {
