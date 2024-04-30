@@ -1,5 +1,4 @@
 import pymongo
-from colored_terminal import * #I added some colors to the consol prints. Changed only print(). Fynn
 
 class MongoDB: 
     def __init__(self, uri) -> None:
@@ -10,7 +9,7 @@ class MongoDB:
         try:
             # Verbindung zur MongoDB-Datenbank herstellen
             self.client = pymongo.MongoClient(self.uri)
-            print_magenta("Verbunden mit der Datenbank\n")
+            print("Verbunden mit der Datenbank")
         except pymongo.errors.PyMongoError as e:
             print("Fehler beim Verbinden mit der DB:", e)
 
@@ -22,6 +21,6 @@ class MongoDB:
                 insert_result = mycol.insert_one(struct)
                 # print("Eingefügte ID:", insert_result.inserted_id)
             except pymongo.errors.PyMongoError as e:
-                print_red(f"Fehler beim Schreiben in die DB:{e}\n")
+                print("Fehler beim Schreiben in die DB:", e)
         else:
-            print_red("Keine Verbindung zur Datenbank vorhanden.\n")
+            print("Keine Verbindung zur Datenbank vorhanden.")

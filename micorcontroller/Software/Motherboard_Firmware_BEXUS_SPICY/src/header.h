@@ -6,15 +6,14 @@
 #include <Arduino.h>
 
 /*--------Settings-----------------------*/
-#define DEBUG 1
-#define COLOUR_SERIAL 1
-#define USB_ENABLE 1
-#define COLOUR_SERIAL 1
+#define DEBUG 1         /*actrivates debug Serial.print statements*/
+#define COLOUR_SERIAL 1 /*activates Serial.printing with color*/
+#define USB_ENABLE 1    /*enables single drive USB functions*/
 
 /*-------Debug Features-------------------*/
 #if DEBUG == 1
-#define debug(x) Serial.print(x)
-#define debugln(x) Serial.println(x)
+#define debug(...) Serial.print(__VA_ARGS__)
+#define debugln(...) Serial.println(__VA_ARGS__)
 #define debugf(...) Serial.printf(__VA_ARGS__)
 #define MESSURETIME_START        \
     unsigned long tb = 0;        \
@@ -25,15 +24,14 @@
     ta = tb - ta;        \
     debugf_magenta("Time: %.2fs|%.2fms|%ius\n", ta / 1000000.0, ta / 1000.0, ta);
 #else
-#define debug(x)
-#define debugln(x)
+#define debug(...)
+#define debugln(...)
 #define debugf(...)
 #define MESSURETIME_START
 #define MESSURETIME_STOP
 #endif
 
-
-/*-------Serial_printing_colours------------*/
+/*-------Serial printing colours------------*/
 #if COLOUR_SERIAL == 1
 #define debugf_yellow(...)      \
     Serial.print("\033[33m");   \
@@ -86,15 +84,14 @@
 #define SET_COLOUR_WHITE Serial.print("\033[37m");
 #define SET_COLOUR_RESET Serial.print("\033[0m");
 #else
-
-#define debugf_yellow(...)
-#define debugf_black(...)
-#define debugf_red(...)
-#define debugf_green(...)
-#define debugf_blue(...)
-#define debugf_magenta(...)
-#define debugf_cyan(...)
-#define debugf_white(...)
+#define debugf_yellow(...) debugf(__VA_ARGS__)
+#define debugf_black(...) debugf(__VA_ARGS__)
+#define debugf_red(...) debugf(__VA_ARGS__)
+#define debugf_green(...) debugf(__VA_ARGS__)
+#define debugf_blue(...) debugf(__VA_ARGS__)
+#define debugf_magenta(...) debugf(__VA_ARGS__)
+#define debugf_cyan(...) debugf(__VA_ARGS__)
+#define debugf_white(...) debugf(__VA_ARGS__)
 
 #define SET_COLOUR_BLACK
 #define SET_COLOUR_RED
@@ -108,15 +105,15 @@
 #endif
 
 /*----------------Pin mapping-------------*/
-// #define MISO_LAN 0 // 16
-// #define CS_LAN 1   // 17
-// #define SCK_LAN 2  // 18
-// #define MOSI_LAN 3 // 19
+// #define MISO_LAN 0
+// #define CS_LAN 1
+// #define SCK_LAN 2
+// #define MOSI_LAN 3
 
-#define MISO_LAN  16
-#define CS_LAN  17
-#define SCK_LAN  18
-#define MOSI_LAN  19
+#define MISO_LAN 16
+#define CS_LAN 17
+#define SCK_LAN 18
+#define MOSI_LAN 19
 
 #define MISO_SD 0
 #define MOSI_SD 3
@@ -140,8 +137,6 @@
 #define PIN_CURR A2
 
 /*struct_packet*/
-extern volatile unsigned long id_struct;
-
 struct packet
 { // struct_format L L 6L 6f 6f 6i i f 2i 80s
     unsigned long id = 0;
@@ -161,21 +156,23 @@ struct packet
     char info[80] = {0};
 };
 
-struct packet packet_create();
-char *packettochar(struct packet data);
-void packet_print(struct packet pkt);
-void packet_writeinfo(struct packet &data, const char *info);
+struct packet *packet_create();
+char *packettochar(struct packet *data);
+void packet_print(struct packet *pkt);
+void packet_writeinfo(struct packet *data, const char *info);
 
 /*i2c scan*/
 void scan_wire();
 
 /*tcp_client*/
 extern char TCP_init;
-void test_TCP_manually();
+void test_TCP_manually(int nPackets = 1, unsigned int nTries = 5);
 void setup_TCP_Client();
-void send_TCP(char *data, unsigned long int size);
+char send_TCP_packet(struct packet *data);
+char send_multible_TCP_packet(struct packet **data, unsigned int nPackets);
 void recieve_TCP_command();
-int send_TCP_packet(struct packet data);
+
+void send_TCP(char *data, unsigned long int size);
 uint8_t cabletest();
 void testServer();
 
@@ -188,12 +185,12 @@ bool readstruct(struct packet *data, const char filepath[], unsigned long positi
 bool printfile(const char filepath[]);
 
 /*thermal*/
-#define HEAT_FREQ 1000          // 5kmax for the facy Ics
-#define HEAT_HUNDERTPERCENT 100 // value where the heaters are fully turned on
-#define HEAT_CURRENT 317        // aproximation of the current of a single Heater in mA
+const unsigned int HEAT_FREQ = 1000;          // 5kmax for the facy Ics
+const unsigned int HEAT_HUNDERTPERCENT = 100; // value where the heaters are fully turned on
+const unsigned int HEAT_CURRENT = 317;        // aproximation of the current of a single Heater in mA
 
 extern char heat_init;
-void heat_initialize();
+void heat_setup();
 void heat_updateall(uint16_t *HeaterPWM);
 void heat_updateone(uint8_t PIN, uint16_t PWM);
 void heat_testmanual();
@@ -205,12 +202,13 @@ uint32_t get_Status();
 /*utilitly functions*/
 unsigned long get_batvoltage();
 unsigned long get_current();
-void serial_commands();
+void checkSerialInput();
 void StatusLedBlink();
 void blinkLed();
 void fadeLED();
 void heartbeat();
 void printMemoryUse();
+unsigned int free_Ram_left();
 
 /*single File USB*/
 extern char singleFileUsb_init;

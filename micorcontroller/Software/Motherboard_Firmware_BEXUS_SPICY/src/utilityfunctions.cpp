@@ -2,305 +2,218 @@
 #define R_SHUNT 1 // in mOhms
 #define nGPIOS 29
 
-// void printMemoryUse();
+const unsigned int AMOUNT_SRAM = 264000;
+
+void handleSerialCommand(char buffer_comand, float param1, float param2, float param3, float param4);
 static void printIO();
 static void short_detection();
 
-// returns the battery voltage at the moment in mV
-unsigned long get_batvoltage()
-{
-  pinMode(PIN_CURR, OUTPUT);
-  return analogRead(PIN_VOLT) * 1000 * 5;
-}
-
-// returns the current consumption at the moment of the PCB in mA
-unsigned long get_current()
-{
-  pinMode(PIN_CURR, OUTPUT);
-  float buf = analogRead(PIN_CURR) * (3.3 / 4.0950); // 4.0950 instead of 4095.0 because of the convertion of A to mA
-  return buf / (R_SHUNT * 2.5);
-}
-
-/*print current Stack/Heap use*/
-void printMemoryUse()
-{
-  int totalHeap = rp2040.getTotalHeap();
-  debug("-TotalHeap: ");
-  debug(rp2040.getTotalHeap() * 0.001);
-  debugln(" kbytes");
-
-  debug("-FreeHeap: ");
-  debug(rp2040.getFreeHeap() * 0.001);
-  debug(" kbytes| ");
-  debug((float)rp2040.getFreeHeap() / totalHeap);
-  debugln(" percent");
-
-  debug("-UsedHeap: ");
-  debug(rp2040.getUsedHeap() * 0.001);
-  debug(" kbytes| ");
-  debug((float)rp2040.getUsedHeap() / totalHeap);
-  debugln(" percent");
-}
-
-void printIO()
-{
-  Serial.println();
-  Serial.println("printio: ");
-  Serial.print("Pinnumb: ");
-  char *d = (char *)malloc(nGPIOS);
-  char *a = (char *)malloc(nGPIOS);
-  if (d == NULL)
-  {
-    Serial.println("Initializing of dynamic array d failed");
-  }
-  if (a == NULL)
-  {
-    Serial.println("Initializing of dynamic array a failed");
-  }
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    pinMode(i, INPUT);
-    d[i] = digitalRead(i);
-    a[i] = analogRead(i);
-  }
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    Serial.print(i);
-    if (i < 10)
-    {
-      Serial.print(" ");
-    }
-    Serial.print(" |");
-  }
-  Serial.println();
-  Serial.print("Digital: ");
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    Serial.print(d[i], BIN);
-    Serial.print(" ");
-    Serial.print(" |");
-  }
-  Serial.println();
-  Serial.print("Analog:  ");
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    Serial.print(a[i], DEC);
-    if (a[i] < 100)
-    {
-      Serial.print(" ");
-    }
-    Serial.print("|");
-  }
-}
-
-/*Reads Serial Commands wich start with "/". /? for help */
-void serial_commands()
+/**
+ * Reads Serial Commands wich start with "/".
+ * /? for help
+ *disabled if DEBUG == 0
+ */
+void checkSerialInput()
 {
 #if DEBUG == 1
-  if (Serial.available() > 0)
+  if (Serial.available())
   {
-    char buffer_comand = Serial.read();
-    if (buffer_comand == '/')
+    if (Serial.read() == '/')
     {
-      int buffer; // multipurpose buffer pirmarily for inputs after command
-      buffer_comand = Serial.read();
-      switch (buffer_comand)
+      char buffer_comand = Serial.read();
+      float param1 = -1;
+      float param2 = -1;
+      float param3 = -1;
+      float param4 = -1;
+      if (Serial.available())
       {
-      case '?':
+        param1 = Serial.parseFloat(SKIP_WHITESPACE);
+      }
+      if (Serial.available())
       {
-        SET_COLOUR_YELLOW
-        debug("<help>\n");
-        SET_COLOUR_RESET
-        debugln(
-          "please add to every numerical input one, it will be automaticly subtracted\n\
-/b|Returns Battery Voltage and current\n\
-/s|Read out Status\n\
-/l|Sets the controller in sleep for ... ms.\n\
-/r|Reboots. if followed by a 1 reboots in Boot Mode\n\
-/m|Read out Memory Info\n\
-/h x y| set heater pin x at prozent y . if pin_numb > 256 is given will set all heater to different numbers for testing.\n\
-/i|scans for i2c devices\n\
-/f|changes the analogWrite frequency. For heater run one heating command and change then.\n\
-/d|pin shorts detection\n\
-/p|sends a test packet over lan\n\
-/w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
-/u|single file usb update. /u 1 closes singlefileusb\n");
-        break;
+        param2 = Serial.parseFloat(SKIP_WHITESPACE);
       }
-      case 'b':
+      if (Serial.available())
       {
-        debug("BatteryVoltage: ");
-        debug(get_batvoltage() * 1000.0);
-        debug("V, Current: ");
-        debug(get_current() * 1000.0);
-        debugln("A");
-        break;
+        param3 = Serial.parseFloat(SKIP_WHITESPACE);
       }
-      case 's':
+      if (Serial.available())
       {
-        debugf_yellow("<get Status>\n");
-        uint32_t buffer_status = get_Status();
-        debugf_yellow("Status: %i\n", buffer_status);
-        break;
+        param4 = Serial.parseFloat(SKIP_WHITESPACE);
       }
-      case 'r':
-      {
-        SET_COLOUR_YELLOW
-        buffer = Serial.parseInt(SKIP_WHITESPACE);
-        if (buffer == 1)
-        {
-          debugln("-Reboot in Boot Mode-");
-          rp2040.rebootToBootloader();
-          break;
-        }
-        else
-        {
-          debugln("-Reboot-");
-          rp2040.reboot();
-          break;
-        }
-      }
-      case 'l':
-      {
-        rp2040.idleOtherCore();
-        buffer = Serial.parseInt(SKIP_WHITESPACE);
-        debug("RP2040 sleepy for ");
-        debug(buffer / 1000.0);
-        debugln("s.");
-
-        // // Calculate the number of microseconds to sleep
-        // uint64_t microseconds = (uint64_t)buffer * 1000;
-        // // Clear any existing alarm interrupts
-        // hw_clear_bits(&timer_hw->inte, TIMER_INTF_RESET);
-        // // Split the 64-bit value into two 32-bit parts and set the timer alarm
-        // uint32_t alarm_low = (uint32_t)microseconds;
-        // uint32_t alarm_high = (uint32_t)(microseconds >> 32);
-        // timer_hw->alarm = alarm_low;
-        // timer_hw->alarm_hi = alarm_high;
-        // // Enable the timer interrupt
-        // hw_set_bits(&timer_hw->inte, TIMER_INTF_ALARM);
-        // // Enter sleep mode (replace with appropriate Arduino sleep function if using Arduino)
-        // // sleep_cpu();
-        // // For Arduino, you can use delay() or other sleep functions provided by Arduino libraries
-        delay(buffer);
-        debugln("Awake Again");
-        rp2040.resumeOtherCore();
-        break;
-      }
-      case 'm':
-      {
-        printMemoryUse();
-        break;
-      }
-      case 'h':
-      {
-        int pin_numb = Serial.parseInt(SKIP_WHITESPACE);      // saves heater number in the buffer_command
-        uint16_t pwm_duty = Serial.parseInt(SKIP_WHITESPACE); // saves heater power  in the pwm_duty
-        if (pin_numb > 256)
-        {
-          heat_testmanual();
-          break;
-        }
-        SET_COLOUR_YELLOW
-        debug("Update Heater ");
-        SET_COLOUR_RESET
-        debug(pin_numb - 1);
-        debug(" to ");
-        debugln(pwm_duty - 1);
-        if (pin_numb && pwm_duty)
-        {
-          heat_updateone(pin_numb - 1, pwm_duty - 1);
-        }
-        else
-        {
-          SET_COLOUR_YELLOW
-          debugln("Please Numbers above 0.");
-          SET_COLOUR_RESET
-        }
-        break;
-      }
-      case 'i':
-      {
-        scan_wire();
-        break;
-      }
-      case 'f':
-      {
-        int freq = Serial.parseInt(SKIP_WHITESPACE);
-        if (freq)
-        {
-          debug("Set Freq of AnalogWrite to: ");
-          debugln(freq);
-          analogWriteFreq(freq);
-          analogWriteRange(HEAT_HUNDERTPERCENT);
-        }
-        else
-        {
-          debug("Numerical input >= 0");
-        }
-
-        break;
-      }
-      case 'd':
-      {
-        SET_COLOUR_YELLOW
-        debugln("<shorted_pin_detection>");
-        SET_COLOUR_RESET
-        short_detection();
-        break;
-      }
-      case 'p':
-      {
-        debugf_yellow("<Sending a Test Packet>\n");
-        test_TCP_manually();
-        break;
-      }
-      case 'w':
-      {
-        rp2040.wdt_reset();
-        unsigned int buffer_time = Serial.parseInt(SKIP_WHITESPACE);
-        if (buffer_time <= 8300)
-        {
-          rp2040.wdt_reset();
-          rp2040.wdt_begin(buffer_time);
-          SET_COLOUR_YELLOW
-          debug("Set watchdog to ");
-          debug(buffer_time / 1000.0);
-          debugln("s.");
-          SET_COLOUR_RESET
-        }
-        else
-        {
-          SET_COLOUR_RED
-          debugln("Watchdog value to high, 8.3 seconds are the maximum");
-          SET_COLOUR_RESET
-        }
-        break;
-      }
-      case 'u':
-      {
-        if (Serial.parseInt(SKIP_WHITESPACE) == 1)
-        {
-          singlefile_close();
-        }
-        else
-        {
-          usb_singlefile_update();
-        }
-
-        break;
-      }
-      default:
-      {
-        SET_COLOUR_RED
-        debugf("dafuck is \"/%c\" ?!?! try \"/?\".\n", buffer_comand);
-        SET_COLOUR_RESET
-        break;
-      }
-      }
+      handleSerialCommand(buffer_comand, param1, param2, param3, param4);
     }
   }
 #endif
+}
+
+/**
+ *
+ */
+void handleSerialCommand(char buffer_comand, float param1, float param2, float param3, float param4)
+{
+  switch (buffer_comand)
+  {
+  case '?':
+  {
+    debugf_yellow("<help>\n");
+    debugln(
+        "/b|Returns Battery Voltage and current\n\
+         /s|Read out Status\n\
+         /l|Sets the controller in sleep for ... ms.\n\
+         /r|Reboots. if followed by a 1 reboots in Boot Mode\n\
+         /m|Read out Memory Info\n\
+         /h x y| set heater pin x at prozent y . if x == -1 is given will set all heater to different numbers for testing.\n\
+         /i|scans for i2c devices\n\
+         /f|changes the analogWrite frequency. For heater run one heating command and change then.\n\
+         /d|pin shorts detection\n\
+         /p|sends a test packet over lan\n\
+         /w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
+         /u|single file usb update. /u 1 closes singlefileusb\n");
+    break;
+  }
+  case 'b':
+  {
+    debugf_yellow("BatteryVoltage: %.2f V| Current: %i mA, %.2f A", get_batvoltage() * 1000.0, get_current(), get_current() * 1000.0);
+    break;
+  }
+  case 's':
+  {
+    debugf_yellow("<get Status>\n");
+    debugf_green("Status: %i\n", get_Status());
+    break;
+  }
+  case 'r':
+  {
+    if (param1 == 1)
+    {
+      debugf_magenta("<Reboot in Boot Mode>\n");
+      rp2040.rebootToBootloader();
+      break;
+    }
+    else
+    {
+      debugf_magenta("<Reboot>\n");
+      rp2040.reboot();
+      break;
+    }
+  }
+  case 'l':
+  {
+    rp2040.idleOtherCore();
+    debugf_yellow("RP2040 sleepy for %.2fs.", param1 / 1000.0);
+    // uint64_t microseconds = (uint64_t)buffer * 1000;
+    // // Clear any existing alarm interrupts
+    // hw_clear_bits(&timer_hw->inte, TIMER_INTF_RESET);
+    // // Split the 64-bit value into two 32-bit parts and set the timer alarm
+    // uint32_t alarm_low = (uint32_t)microseconds;
+    // uint32_t alarm_high = (uint32_t)(microseconds >> 32);
+    // timer_hw->alarm = alarm_low;
+    // timer_hw->alarm_hi = alarm_high;
+    // // Enable the timer interrupt
+    // hw_set_bits(&timer_hw->inte, TIMER_INTF_ALARM);
+    // // Enter sleep mode (replace with appropriate Arduino sleep function if using Arduino)
+    // // sleep_cpu();
+    // // For Arduino, you can use delay() or other sleep functions provided by Arduino libraries
+    delay(param1);
+    debugln("Awake Again");
+    rp2040.resumeOtherCore();
+    break;
+  }
+  case 'm':
+  {
+    printMemoryUse();
+    break;
+  }
+  case 'h':
+  {
+    if (param1 == -1)
+    {
+      heat_testmanual();
+      break;
+    }
+    else
+    {
+      debugf_yellow("Update Heater Pin %i to %i\n", param1, param2);
+      heat_updateone(param1, param2);
+    }
+    break;
+  }
+  case 'i':
+  {
+    scan_wire();
+    break;
+  }
+  case 'f':
+  {
+    if (param1)
+    {
+      debug("Set Freq of AnalogWrite to: ");
+      debugln(param1);
+      analogWriteFreq(param1);
+      analogWriteRange(HEAT_HUNDERTPERCENT);
+    }
+    else
+    {
+      debug("Numerical input >= 0");
+    }
+    break;
+  }
+  case 'd':
+  {
+    debugf_yellow("<shorted_pin_detection>\n");
+    short_detection();
+    break;
+  }
+  case 'p':
+  {
+    if (param1)
+    {
+      debugf_yellow("<Sending %.f Test Packets>\n", param1);
+      test_TCP_manually(param1);
+    }
+    else
+    {
+      debugf_yellow("<Sending one Test Packet>\n");
+      test_TCP_manually(1);
+    }
+    break;
+  }
+  case 'w':
+  {
+    rp2040.wdt_reset();
+    if (param1 <= 8300)
+    {
+      rp2040.wdt_reset();
+      rp2040.wdt_begin(param1);
+      debugf_yellow("Set watchdog to %is\n", param1 / 1000.0);
+    }
+    else
+    {
+      debugf_yellow("Watchdog value to high, 8.3 seconds are the maximum\n");
+    }
+    break;
+  }
+  case 'u':
+  {
+#if USB_ENABLE == 1
+    if (param1 == 1)
+    {
+      singlefile_close();
+    }
+    else
+    {
+      usb_singlefile_update();
+    }
+#endif
+    break;
+  }
+  default:
+  {
+    debugf_red("dafuck is \"/%c\" ?!?! try \"/?\".\n", param1);
+    break;
+  }
+  }
 }
 
 void short_detection()
@@ -442,6 +355,84 @@ void heartbeat()
     delay(i ^ 2);                  // Wait
     analogWrite(LED_BUILTIN, 0);   // Turn the LED off
     delay(i ^ 2);                  // Wait
+  }
+}
+
+// returns the battery voltage at the moment in mV
+unsigned long get_batvoltage()
+{
+  pinMode(PIN_CURR, OUTPUT);
+  return analogRead(PIN_VOLT) * 1000 * 5;
+}
+
+// returns the current consumption at the moment of the PCB in mA
+unsigned long get_current()
+{
+  pinMode(PIN_CURR, OUTPUT);
+  float buf = analogRead(PIN_CURR) * (3.3 / 4.0950); // 4.0950 instead of 4095.0 because of the convertion of A to mA
+  return buf / (R_SHUNT * 2.5);
+}
+
+/*print current Stack/Heap use*/
+void printMemoryUse()
+{
+
+  unsigned int free_ram = rp2040.getFreeStack();
+  debugf("-usedStack: %.2f kbytes\n", (AMOUNT_SRAM - free_ram) * 0.001, (float)(AMOUNT_SRAM - free_ram) / AMOUNT_SRAM, AMOUNT_SRAM);
+
+  int totalHeap = rp2040.getTotalHeap();
+  debugf("-usedHeap: %.2f kbytes| %.2f percent of %.2f kbytes avaliable Heap\n", rp2040.getUsedHeap() * 0.001, (float)rp2040.getUsedHeap() / totalHeap, totalHeap * 0.001);
+}
+
+/*DIgital and Analog Reads all IO Pins*/
+void printIO()
+{
+  Serial.println();
+  Serial.println("printio: ");
+  Serial.print("Pinnumb: ");
+  char *d = (char *)malloc(nGPIOS);
+  char *a = (char *)malloc(nGPIOS);
+  if (d == NULL)
+  {
+    Serial.println("Initializing of dynamic array d failed");
+  }
+  if (a == NULL)
+  {
+    Serial.println("Initializing of dynamic array a failed");
+  }
+  for (int i = 0; i < nGPIOS; i++)
+  {
+    pinMode(i, INPUT);
+    d[i] = digitalRead(i);
+    a[i] = analogRead(i);
+  }
+  for (int i = 0; i < nGPIOS; i++)
+  {
+    Serial.print(i);
+    if (i < 10)
+    {
+      Serial.print(" ");
+    }
+    Serial.print(" |");
+  }
+  Serial.println();
+  Serial.print("Digital: ");
+  for (int i = 0; i < nGPIOS; i++)
+  {
+    Serial.print(d[i], BIN);
+    Serial.print(" ");
+    Serial.print(" |");
+  }
+  Serial.println();
+  Serial.print("Analog:  ");
+  for (int i = 0; i < nGPIOS; i++)
+  {
+    Serial.print(a[i], DEC);
+    if (a[i] < 100)
+    {
+      Serial.print(" ");
+    }
+    Serial.print("|");
   }
 }
 

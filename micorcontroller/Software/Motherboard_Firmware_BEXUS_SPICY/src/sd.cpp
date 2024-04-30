@@ -1,6 +1,7 @@
 #include "header.h"
 #include <SD.h>
 // if testing via breadboard make sure to just connect the SD Card and disconnecting the LAN
+
 static unsigned long int max_freq_sd();
 
 char SD_init = 0;
@@ -122,18 +123,17 @@ int sd_numpackets(const char filepath[])
 }
 
 // writes a packet to sd card
-bool writestruct(struct packet s_out, const char filepath[])
+bool writestruct(struct packet * s_out, const char filepath[])
 {
   debug("-{SD_writestru.id:");
-  debug(s_out.id);
+  debug(s_out->id);
   debug("-file:");
   debug(filepath);
   if (!SD_init)
   {
     init_SD();
   }
-  uint8_t *buffer = (uint8_t *)malloc(sizeof(struct packet));
-  memcpy(buffer, &s_out, sizeof(struct packet)); // converts struct in a char array
+  char *buffer = packettochar(s_out);
   File myFile = SD.open(filepath, FILE_WRITE);
   if (myFile)
   { // if the file opened okay, write to it:
@@ -246,15 +246,15 @@ void testSD()
   char filepath[] = "test.txt";
   SD.remove(filepath);
 
-  struct packet data = packet_create();
+  struct packet * data = packet_create();
   writestruct(data, filepath);
-  data.info[0] = 100;
-  debugln(data.timestampPacket);
+  data->info[0] = 100;
+  debugln(data->timestampPacket);
 
-  struct packet data1 = packet_create();
+  struct packet * data1 = packet_create();
   writestruct(data1, filepath);
-  data1.info[0] = 101;
-  debugln(data1.timestampPacket);
+  data1->info[0] = 101;
+  debugln(data1->timestampPacket);
 
   debugln(sd_numpackets(filepath));
 

@@ -4,8 +4,6 @@
 #include <Ethernet.h>
 
 char AUTOMATIC_IP_ALLOCATION = 0;
-
-#define SPI_FREQ_LAN 12MHz // not used and no need to change
 #define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 #define SERVERIP IPAddress(169, 254, 218, 4) //(169,254,218,4) (169, 254, 171, 44) (192, 168, 178, 23)// IP address of the PC
 // #define SERVERIP IPAddress(100, 81, 57, 236)
@@ -14,16 +12,10 @@ char AUTOMATIC_IP_ALLOCATION = 0;
 // #define GATEWAY IPAddress(192, 168, 1, 1)
 #define SUBNET IPAddress(255, 255, 0, 0)
 #define SERVERPORT 8888
-#define CONNECTIONTIMEOUT 10000
+#define CONNECTIONTIMEOUT 3000
 
 char TCP_init = 0;
-EthernetClient client;
-
-struct test
-{
-  int a = 5;
-  float b = 4.4;
-} testa;
+static EthernetClient client;
 
 /**
  *  sets the RP2040 as TCP Client for the given ip adress
@@ -31,9 +23,8 @@ struct test
  */
 void setup_TCP_Client()
 {
-  debugf_yellow("<setup_TCP_Client>\n");
-
   MESSURETIME_START
+  debugf_yellow("<setup_TCP_Client>\n");
 
   byte mac[] = MAC; // MAC address
   SPI.setRX(MISO_LAN);
@@ -65,37 +56,43 @@ void setup_TCP_Client()
   }
 
   //--------debugg prints--------------
-  debug("-ip_Server: ");
-  debugln(SERVERIP);
+  debugf("IP Address: %d.%d.%d.%d\n", SERVERIP[0], SERVERIP[1], SERVERIP[2], SERVERIP[3]);
+  // debug("-ip_Server: ");
+  // debugln(SERVERIP);
 
-  debug("-mac: ");
-  uint8_t *mac_address = (uint8_t *)malloc(8);
-  Ethernet.MACAddress(mac_address);
-  for (uint8_t i = 0; i < 6; i++)
-  {
-    if (DEBUG)
-    {
-      Serial.print(mac_address[i], HEX);
-    }
-    debug(" ");
-  }
-  free(mac_address);
-  debugln();
+  debugf("MAC Address: %02X:%02X:%02X:%02X:%02X:%02X\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+  // debug("-mac: ");
+  // uint8_t *mac_address = (uint8_t *)malloc(8);
+  // Ethernet.MACAddress(mac_address);
+  // for (uint8_t i = 0; i < 6; i++)
+  // {
+  //   if (DEBUG)
+  //   {
+  //     Serial.print(mac_address[i], HEX);
+  //   }
+  //   debug(" ");
+  // }
+  // free(mac_address);
+  // debugln();
 
-  debug("-ip_Client: ");
-  debugln(Ethernet.localIP());
+  debugf("-ip_Client: %d.%d.%d.%d\n", Ethernet.localIP()[0], Ethernet.localIP()[1], Ethernet.localIP()[2], Ethernet.localIP()[3]);
+  // debug("-ip_Client: ");
+  // debugln(Ethernet.localIP());
 
-  debug("-dns: ");
-  debugln(Ethernet.dnsServerIP());
+  debugf("-dns: %d.%d.%d.%d\n", Ethernet.dnsServerIP()[0], Ethernet.dnsServerIP()[1], Ethernet.dnsServerIP()[2], Ethernet.dnsServerIP()[3]);
+  // debug("-dns: ");
+  // debugln(Ethernet.dnsServerIP());
 
-  debug("-gatewayIP: ");
-  debugln(Ethernet.gatewayIP());
+  debugf("-gatewayIP: %d.%d.%d.%d\n", Ethernet.gatewayIP()[0], Ethernet.gatewayIP()[1], Ethernet.gatewayIP()[2], Ethernet.gatewayIP()[3]);
+  // debug("-gatewayIP: ");
+  // debugln(Ethernet.gatewayIP());
 
-  debug("-subnet: ");
-  debugln(Ethernet.subnetMask());
+  debugf("-subnet: %d.%d.%d.%d\n", Ethernet.subnetMask()[0], Ethernet.subnetMask()[1], Ethernet.subnetMask()[2], Ethernet.subnetMask()[3]);
+  // debug("-subnet: ");
+  // debugln(Ethernet.subnetMask());
 
   debug("-lanIc: ");
-  uint8_t hardwareStatus_buff = Ethernet.hardwareStatus();
+  char hardwareStatus_buff = Ethernet.hardwareStatus();
   switch (hardwareStatus_buff)
   {
   case 0:
@@ -113,9 +110,9 @@ void setup_TCP_Client()
   default:
     debugf_red("error in code. hardwareStatus() = %i\n", hardwareStatus_buff);
     break;
-}
+  }
 
-  uint8_t cabletest_buff = cabletest();
+  char cabletest_buff = cabletest();
   debug("-cabletest: ");
   switch (cabletest_buff)
   {
@@ -135,17 +132,18 @@ void setup_TCP_Client()
     break;
   }
 
-  // for (int i = 0; i < 1000; i++) { dosen´t work for some reason?!?!
-  //   if (client) {
-  //     TCP_init = 1;
-  //     break;
-  //   }
-  // }
+  debugf("-server:");
+  if (client.connect(SERVERIP, SERVERPORT))
+  {
+    debugf_green(" connected\n");
+  }
+  else
+  {
+    debugf_red(" not connected\n");
+  }
+
   if (hardwareStatus_buff && cabletest_buff)
   {
-    while (!client)
-    {
-    }
     TCP_init = 1;
     debugf_green("TCP_init_success\n");
   }
@@ -159,32 +157,43 @@ void setup_TCP_Client()
 
 /**
  *  Test function for the TCP Server via creating and sending a packet.
- * with "Dies ist der Test der des structs Packet" as info.
+ * "Dies ist der Test des Downlinks" is set as info.
  *  Tries for 5 times.
+ * @param nPackets: Amount of test packets to send.
+ * @param nTries amount of tries to send
  */
-void test_TCP_manually()
+void test_TCP_manually(int nPackets, unsigned int nTries)
 {
-  // packet send
-  struct packet data;
-  data = packet_create();
-  data.oxigen[2] = 200;
-  data.oxigen[1] = 100;
-  packet_writeinfo(data, "Dies ist der Test der des structs Packet");
-  // packet_print(data);
-  data.timestampPacket = millis();
-  int n = 5;
-  while (n > 0)
+  struct packet **packet_buf = (struct packet **)malloc(nPackets * sizeof(struct packet *));
+  if (!packet_buf)
   {
-    if (send_TCP_packet(data) == 1)
-    {
-      n = 0;
-    }
-    else
-    {
-      n--;
-    }
+    debugf_red("memory allocation failed\n");
+    return;
   }
-  // delay(500);
+
+  for (int i = 0; i < nPackets; i++)
+  {
+    struct packet *newPacket = packet_create();
+    packet_writeinfo(newPacket, "Dies ist der Test des Downlinks");
+    packet_buf[i] = newPacket;
+  }
+
+  char success = send_multible_TCP_packet(packet_buf, nPackets);
+
+  for (int i = 0; i < nPackets; i++)
+  {
+    free(packet_buf[i]);
+  }
+  free(packet_buf);
+
+  if (success)
+  {
+    debugf_green("sendmultible success\n");
+  }
+  else
+  {
+    debugf_green("sendmultible failure \n");
+  }
 }
 
 /**
@@ -216,13 +225,13 @@ void recieve_TCP_command()
   char *buffer = (char *)malloc(size + 1);
   for (int i = 0; i < size; i++)
   {
-    signed char data = client.read(); // Returns The next byte (or character), or -1 if none is available.
-    if (data == -1)
+    signed char packet = client.read(); // Returns The next byte (or character), or -1 if none is available.
+    if (packet == -1)
     {
       debug("-client.read()=-1-");
       break;
     }
-    buffer[i] = data;
+    buffer[i] = packet;
   }
   buffer[size + 1] = '\n';
   // reading out command
@@ -253,24 +262,50 @@ void recieve_TCP_command()
 }
 
 /**
- * Sends one
+ * Sends a array of struct packet via a tcp client
+ * remember to free it after!!
+ * @param packet pointer to a struct array
+ * @param nPackets Number of struct packets in that array
+ * @return 1 for success
  */
-int send_multible_TCP_packet(struct packet *data, unsigned int nPackets)
+char send_multible_TCP_packet(struct packet **packet_buff, unsigned int nPackets)
 {
+  if(!TCP_init){
+    setup_TCP_Client();
+    if (!TCP_init)
+    {
+      debugf_red("send_multible_packet|tcp_init failed\n");
+      return 0;
+    }
+  }
+
   for (unsigned int i = 0; i < nPackets; i++)
   {
+    for (int _try = 0; _try < 5; _try++)
+    {
+      char success = send_TCP_packet(packet_buff[i]);
+      if (success)
+      {
+        break;
+      }
+      else
+      {
+        debugf_red("send_multible_TCP couldn´t send package id %i\n", packet_buff[i]->id);
+      }
+    }
   }
-  return 0;
+  return 1;
 }
 
 /**
  *converts a  packet in a char array and sends this as bitstream to a TCP Server
- *@return 1 for success, -1 for timeout, -2 invalid server, .3 and -4 truncated
+ *@return 1 for success, -1 for timeout, -2 invalid server, -3 and -4 truncated, -5 memory allocation failed
  *and default case no response from server or hardware issue
  */
-int send_TCP_packet(struct packet data)
+char send_TCP_packet(struct packet *packet)
 {
-  debugf_yellow("<sendpacket-id:%i>", data.id);
+  debugf_yellow("<sendpacket-id:%i>", packet->id);
+  // packet_print(packet);
   MESSURETIME_START
 
   if (!TCP_init)
@@ -278,28 +313,35 @@ int send_TCP_packet(struct packet data)
     setup_TCP_Client();
   }
 
-  char *buffer = (char *)malloc(sizeof(struct packet)); // converts struct in a char array
-  memcpy(buffer, &data, sizeof(struct packet));
+  char *buffer = packettochar(packet);
+  if (buffer == NULL)
+  {
+    return -5;
+  }
 
-  int status = 1;
-  // needs work when sending is implemented
-  //  if (client.available()) { status = client.connect(SERVERIP, SERVERPORT); }
-
+  signed char  status = 1;
   if (!client.connected())
-  { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread data.
+  { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     debugf_yellow("-connecting_client-");
     status = client.connect(SERVERIP, SERVERPORT);
   }
 
-  switch (status)
-  { // client.connect returns different int values depending of the sucess of the operation
-  case 1:
-    client.write(buffer, sizeof(struct packet)); // Send data
+  switch (status) // client.connect returns different int values depending of the sucess of the operation
+  {
+  case 1: // Send packet
+    if (client.write(buffer, sizeof(struct packet)))
+    {
+      status = 1;
+      debugf_green("sendpacket success");
+    }
+    else
+    {
+      status = -6;
+      debugf_red("sendpacket failed");
+    }
     // client.flush();                               //waits till all is send //can be left out if TCP Server recives just 200bytes per package.unsave?
-    debugf_green("sendpacket success");
     break;
   case -1:
-
     debugf_red("-sendpacket TIMED_OUT");
     break;
   case -2:
@@ -312,18 +354,19 @@ int send_TCP_packet(struct packet data)
     debugf_red("-sendpacket TRUNCATED");
     break;
   default:
-    debug("Case: ");
-    debug(status);
-    if (cabletest()==2)
+    debugf_red("error %i: ", status);
+    if (cabletest() == 2)
     {
-      debugf_red("-sendpacket: cable disconnected");
+      debugf_red("cable disconnected");
     }
     else
     {
-      debugf_red("-sendpacket: no response from server");
+      debugf_red("prob no response from server");
     }
     break;
   }
+  
+  free(buffer);
   MESSURETIME_STOP
   return status;
 }
@@ -341,7 +384,7 @@ uint8_t cabletest()
 uint8_t ICMP_ping();
 
 // sends an dynamic char array as an TCP client
-void send_TCP(char *data, unsigned long int size)
+void send_TCP(char *packet, unsigned long int size)
 {
   if (size == 0)
   {
@@ -352,7 +395,7 @@ void send_TCP(char *data, unsigned long int size)
   {
     for (unsigned long int i = 0; i < size; i++)
     {
-      client.print(data[i]); // Send data
+      client.print(packet[i]); // Send packet
     }
     client.stop(); // Close the connection
   }
@@ -441,7 +484,7 @@ void testServer()
           }
         }
       }
-      // give the web browser time to receive the data
+      // give the web browser time to receive the packet
       delay(1);
       // close the connection:
       client.stop();

@@ -32,22 +32,17 @@ void loop()
 //-------------------------core2------------------------
 void setup1()
 {
-#if DEBUG == 1
-  delay(60 * 60 * 1000);
-  debugln("<<rebooted to bootloader after on hour>>");
-  rp2040.rebootToBootloader();
-#endif
-  debugln("oi");
+
 }
 
 void loop1()
 {
-  blinkLed();
+  void fadeLED();
 }
 
 void check_periodic_tasks()
 {
-  serial_commands();
+  checkSerialInput();
   rp2040.wdt_reset();
 }
 
