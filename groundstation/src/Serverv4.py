@@ -9,15 +9,8 @@ from colored_terminal import *
 # "ipconfig"
 # "netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
 
-IP_SERVER = (
-    "169.254.218.4"  # if of Ethernet-Adapter Ethernet 6 # ip_Desktop = '192.168.178.23'
-)
+IP_SERVER = "169.254.218.4" # if of Ethernet-Adapter Ethernet 6 # ip_Desktop = '192.168.178.23'
 PORT = 8888
-
-
-def millis():
-    return round(time.time() * 1000)
-
 
 def get_network_info():
     # Get host name and IP address
@@ -52,23 +45,14 @@ class TCP_SERVER:
         self.thread = threading.Thread(target=self.StartServer)
         self.thread.start()
 
-    def shutdown(self):
-        print_cyan("<shutdown of server>\n")
-        self.__isRunning = 0
-        self.datalog.shutdown()
-        time.sleep(0.5)
-        self.thread.join()
-        self.datalog.thread.join()
-        print_cyan("<Server down>\n")
-
     def StartServer(self):
         """startet eine TCP Server an den sich ein myclient verbinden kann"""
 
         print_cyan(
             f'<starting TCP server at "{self.ipadress}" | "{time.asctime(time.localtime())}>"\n'
         )
-
-        def connect_server_socket()->socket:
+        
+        def connect_server_socket() -> socket:
             while self.__isRunning:
                 try:
                     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -90,11 +74,14 @@ class TCP_SERVER:
                 except Exception as e:  # Handle other exceptions
                     print_red(f"Error:{e}\n")
 
-        def connect_client(server_socket:socket):
+        def connect_client(server_socket: socket):
             """wartet auf einen myclient und verbindet sich  mit demselben"""
-            server_socket.listen(1)  # Warten Sie auf eine eingehende Verbindung
+            try:
+                server_socket.listen(1)  # Wartet auf 1 eingehende Verbindung
+            except Exception as e:
+                print_red(f"Error:{e}\n")
+            counter = 0
 
-            counter = 0 
             while self.__isRunning:
                 try:
                     myclient, client_address = server_socket.accept()
@@ -103,7 +90,7 @@ class TCP_SERVER:
                     print_cyan(f" | Verbindung hergestellt von:{client_address}\n")
                     return myclient
                 except socket.timeout:
-                    match counter: #aestetics
+                    match counter:  # aestetics
                         case 0:
                             clear_console_line()
                             print_cyan("waiting for a connection")
@@ -129,7 +116,7 @@ class TCP_SERVER:
             """recieves data in binary form from the myclient"""
             counter_recieved = 0
             counter_corrupted = 0
-            timestamp_server = millis() - 1
+            timestamp_server = round(time.time() * 1000) - 1
             # -1 damit später be der packet/s berechnung kein 0 unterm bruch landen kann
             while self.__isRunning:
                 # recieve binary
@@ -169,15 +156,23 @@ class TCP_SERVER:
                 if counter_recieved < 1000 or counter_recieved % 100 == 0:
                     clear_console_line()
                     print_blue(
-                        f"- recieved_structs: {counter_recieved} | sizeof(latest_data): {len(received_data)} bytes | corrupted wip: {counter_corrupted} | packets/sec: {round(1000*counter_recieved/(millis()-timestamp_server),2)}\n"
+                        f"- recieved_structs: {counter_recieved} | sizeof(latest_data): {len(received_data)} bytes | corrupted wip: {counter_corrupted} | packets/sec: {round(1000*counter_recieved/(round(time.time() * 1000)-timestamp_server),2)}\n"
                     )
 
-        server_socket = connect_server_socket()()
+        server_socket = connect_server_socket()
         myclient = connect_client(server_socket)
         recieve_data(myclient)
 
         print_cyan("<closing socket>\n")
-        server_socket.close()  # schließt den Sockel wenn der Thread geschlossen wird
+        if server_socket:
+            server_socket.close()  # schließt den Sockel wenn der Thread geschlossen wird
+
+    def shutdown(self):
+        print_cyan("<shutdown of server>\n")
+        self.datalog.shutdown()
+        self.__isRunning = 0
+        self.thread.join()
+        print_cyan("<Server down>\n")
 
 
 class DATALOGGER:
@@ -241,6 +236,8 @@ class DATALOGGER:
     def shutdown(self):
         print_magenta("<shutting down Datalogger>\n")
         self.__isRunning = 0
+        self.thread.join()
+        print_magenta("<Datalogger down>\n")
 
 
 class INTERFACE:
@@ -250,11 +247,10 @@ class INTERFACE:
         self.loop()
 
     def loop(self):
-        print_yellow("\n<<Interface TCP Server>>\n")
-        print_yellow("/? for help\n")
+        print_yellow("\n<<Interface TCP Server>>\n/? for help\n")
         while self.isRunning:
             try:
-                self.Command(input("...\n"))
+                self.Command(input(".\n"))
             except Exception as e:
                 print(e)
                 break
@@ -263,34 +259,36 @@ class INTERFACE:
         if len(command) > 1 and command[0] == "/":
             match command[1:]:
                 case "?":
-                    print_yellow("<Help>")
+                    print_yellow("<Help>",indent_level = 1)
                     print(
                         """
-/r start server
-/s shutdown server
-/i get network info
-/q quit this file
+/start start server
+/stop shutdown server
+/info get network info
+/quit quit this file
 """
                     )
-                case "r":
-                    self.server = TCP_SERVER()
-                case "s":
+                case "start":
+                    if hasattr(self, "server") and self.server is not None:
+                        print_yellow("Server already running\n")
+                    else:
+                        self.server = TCP_SERVER()
+                case "stop":
                     if hasattr(self, "server") and self.server is not None:
                         self.server.shutdown()
                         del self.server
                     else:
                         print_yellow("No Server running to shut down\n")
-                case "i":
+                case "info":
                     get_network_info()
-                case "q":
+                case "quit":
                     print_yellow("<shuting down Interface>\n")
                     if hasattr(self, "server") and self.server is not None:
                         self.server.shutdown()
                         del self.server
                     self.isRunning = 0
                 case _:
-                    print_red(f"Unknown Command\n")
-
+                    print_red(f"Unknown Command {command[1:]}\n")
 
 if __name__ == "__main__":
     interface = INTERFACE()
