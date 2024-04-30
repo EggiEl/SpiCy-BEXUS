@@ -62,51 +62,48 @@ class TCP_SERVER:
         print_cyan("<Server down>\n")
 
     def StartServer(self):
-        """startet eine TCP Server an den sich ein Client verbinden kann"""
-        counter_recieved = 0
-        counter_corrupted = 0
-        client_socket = 0
+        """startet eine TCP Server an den sich ein myclient verbinden kann"""
 
         print_cyan(
             f'<starting TCP server at "{self.ipadress}" | "{time.asctime(time.localtime())}>"\n'
         )
 
-        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_socket.settimeout(2)
-
-        # tries to connect to sockel
-        while self.__isRunning:
-            try:
-                server_socket.bind((self.ipadress, self.port))
-                break
-
-            except OSError as e:
-                print_red("Error:", e)
-                if e.errno == 10048:  # WinError 10048: Address already in use
-                    print_cyan("Address already in use. Retrying in 2 seconds...")
-                    time.sleep(2)  # Wait for 1 seconds before retrying
-                elif e.errno == 10049:
-                    print_cyan("Probably cable not connected. Retrying in 2 seconds...")
-                    time.sleep(2)  # Wait for 1 seconds before retrying
-
-            except Exception as e:  # Handle other exceptions
-                print_red("Error:", e)
-
-        def ConnectClient():
-            """wartet auf einen Client und verbindet sich  mit demselben"""
-
-            server_socket.listen(1)  # Warten Sie auf eine eingehende Verbindung
-
-            counter = 0
+        def connect_server_socket()->socket:
             while self.__isRunning:
                 try:
-                    client_socket, client_address = server_socket.accept()
-                    client_socket.settimeout(2)
+                    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    server_socket.settimeout(2)
+                    server_socket.bind((self.ipadress, self.port))
+                    return server_socket
+
+                except OSError as e:
+                    print_red(f"Error:{e}\n")
+                    if e.errno == 10048:  # WinError 10048: Address already in use
+                        print_cyan("Address already in use. Retrying in 2 seconds...\n")
+                        time.sleep(2)  # Wait for 1 seconds before retrying
+                    elif e.errno == 10049:
+                        print_cyan(
+                            "Probably cable not connected. Retrying in 2 seconds...\n"
+                        )
+                        time.sleep(2)  # Wait for 1 seconds before retrying
+
+                except Exception as e:  # Handle other exceptions
+                    print_red(f"Error:{e}\n")
+
+        def connect_client(server_socket:socket):
+            """wartet auf einen myclient und verbindet sich  mit demselben"""
+            server_socket.listen(1)  # Warten Sie auf eine eingehende Verbindung
+
+            counter = 0 
+            while self.__isRunning:
+                try:
+                    myclient, client_address = server_socket.accept()
+                    myclient.settimeout(2)
                     clear_console_line()
-                    print_cyan( f" | Verbindung hergestellt von:{client_address}\n")
-                    return client_socket
+                    print_cyan(f" | Verbindung hergestellt von:{client_address}\n")
+                    return myclient
                 except socket.timeout:
-                    match counter:
+                    match counter: #aestetics
                         case 0:
                             clear_console_line()
                             print_cyan("waiting for a connection")
@@ -123,57 +120,61 @@ class TCP_SERVER:
                             clear_console_line()
                             print_cyan("waiting for a connection...")
                             counter = 0
-
                         case _:
                             pass
                 except Exception as e:  # Handle other exceptions
                     print_red("Error:", e)
 
-        # first connection with Client
-        client_socket = ConnectClient()
-        timestamp_server = (
-            millis() - 1
-        )  # -1 damit später be der packet/s berechnung kein 0 unterm bruch landen kann
+        def recieve_data(myclient):
+            """recieves data in binary form from the myclient"""
+            counter_recieved = 0
+            counter_corrupted = 0
+            timestamp_server = millis() - 1
+            # -1 damit später be der packet/s berechnung kein 0 unterm bruch landen kann
+            while self.__isRunning:
+                # recieve binary
+                try:
+                    timestamp = time.asctime(time.localtime())[::-1][::-1]
+                    received_data = myclient.recv(200)
+                    self.datalog.rawdata.append((timestamp, received_data))
+                    if not received_data:
+                        print_red("\n duno wtf this is")
+                        print_cyan(f"Length of Recieved Data: {len(received_data)}\n")
+                        print_cyan(f"data where error occured {received_data}\n")
+                        myclient.close()  # Schließen Sie die Verbindung zum myclient
+                        myclient = connect_client()
+                        continue
 
-        while self.__isRunning:
-
-            # recieve binary
-            try:
-                timestamp = time.asctime(time.localtime())[::-1][::-1]
-                received_data = client_socket.recv(200)
-                self.datalog.rawdata.append((timestamp, received_data))
-                if not received_data:
-                    print_red("\n duno wtf this is")
-                    print_cyan(f"Length of Recieved Data: {len(received_data)}\n")
-                    print_cyan(f"data where error occured {received_data}\n")
-                    client_socket = ConnectClient()
+                except socket.timeout:
+                    print_cyan("Datastream stopped. Socket timed out\n")
+                    myclient.close()  # Schließen Sie die Verbindung zum myclient
+                    myclient = connect_client()
                     continue
 
-            except socket.timeout:
-                print_cyan("Datastream stopped. Socket timed out\n")
-                client_socket.close()  # Schließen Sie die Verbindung zum Client
-                client_socket = ConnectClient()
-                continue
+                except ConnectionResetError:  # Handle connection reset by peer
+                    print_red("\nConnectionResetError aka Stecker gezogen / uC Reset\n")
+                    myclient.close()  # Schließen Sie die Verbindung zum myclient
+                    myclient = connect_client()
+                    continue
 
-            except ConnectionResetError:  # Handle connection reset by peer
-                print_red("\nConnectionResetError aka Stecker gezogen / uC Reset\n")
-                client_socket.close()  # Schließen Sie die Verbindung zum Client
-                client_socket = ConnectClient()
-                continue
+                except Exception as e:  # Handle other exceptions
+                    print_red(f"\nError:{e}\n")
+                    myclient.close()  # Schließen Sie die Verbindung zum myclient
+                    myclient = connect_client()
+                    continue
 
-            except Exception as e:  # Handle other exceptions
-                print_red(f"\nError:{e}\n")
-                client_socket.close()  # Schließen Sie die Verbindung zum Client
-                client_socket = ConnectClient()
-                continue
+                counter_recieved += 1
 
-            counter_recieved += 1
+                # refreshed terminal info ab 1000 recieved packages nur noch alle 100 recieved packages
+                if counter_recieved < 1000 or counter_recieved % 100 == 0:
+                    clear_console_line()
+                    print_blue(
+                        f"- recieved_structs: {counter_recieved} | sizeof(latest_data): {len(received_data)} bytes | corrupted wip: {counter_corrupted} | packets/sec: {round(1000*counter_recieved/(millis()-timestamp_server),2)}\n"
+                    )
 
-            # refreshed terminal info ab 1000 recieved packages nur noch alle 100 recieved packages
-            if counter_recieved < 1000 or counter_recieved % 100 == 0:
-                clear_console_line()
-                print_blue(f"- recieved_structs: {counter_recieved} | sizeof(latest_data): {len(received_data)} bytes | corrupted wip: {counter_corrupted} | packets/sec: {round(1000*counter_recieved/(millis()-timestamp_server),2)}\n")
-                
+        server_socket = connect_server_socket()()
+        myclient = connect_client(server_socket)
+        recieve_data(myclient)
 
         print_cyan("<closing socket>\n")
         server_socket.close()  # schließt den Sockel wenn der Thread geschlossen wird
@@ -241,6 +242,7 @@ class DATALOGGER:
         print_magenta("<shutting down Datalogger>\n")
         self.__isRunning = 0
 
+
 class INTERFACE:
     def __init__(self):
         self.isRunning = 1
@@ -258,7 +260,7 @@ class INTERFACE:
                 break
 
     def Command(self, command: str):
-        if len(command)>1 and command[0] == "/":
+        if len(command) > 1 and command[0] == "/":
             match command[1:]:
                 case "?":
                     print_yellow("<Help>")

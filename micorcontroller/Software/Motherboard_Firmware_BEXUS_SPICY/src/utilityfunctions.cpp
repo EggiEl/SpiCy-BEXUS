@@ -59,17 +59,19 @@ void handleSerialCommand(char buffer_comand, float param1, float param2, float p
     debugf_yellow("<help>\n");
     debugln(
         "/b|Returns Battery Voltage and current\n\
-         /s|Read out Status\n\
-         /l|Sets the controller in sleep for ... ms.\n\
-         /r|Reboots. if followed by a 1 reboots in Boot Mode\n\
-         /m|Read out Memory Info\n\
-         /h x y| set heater pin x at prozent y . if x == -1 is given will set all heater to different numbers for testing.\n\
-         /i|scans for i2c devices\n\
-         /f|changes the analogWrite frequency. For heater run one heating command and change then.\n\
-         /d|pin shorts detection\n\
-         /p|sends a test packet over lan\n\
-         /w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
-         /u|single file usb update. /u 1 closes singlefileusb\n");
+/s|Read out Status\n\
+/l|Sets the controller in sleep for ... ms.\n\
+/r|Reboots. if followed by a 1 reboots in Boot Mode\n\
+/m|Read out Memory Info\n\
+/h x y| set heater pin x at prozent y .if x == -1 is given\n\
+        will set all heater to different numbers for testing.\n\
+/i|scans for i2c devices\n\
+/f|changes the analogWrite frequency. \n\
+   For heater run one heating command and change then.\n\
+/d|pin shorts detection\n\
+/p|sends a test packet over lan\n\
+/w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
+/u|single file usb update. /u 1 closes singlefileusb\n");
     break;
   }
   case 'b':
