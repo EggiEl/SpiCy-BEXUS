@@ -24,6 +24,7 @@ static EthernetClient client;
 void setup_TCP_Client()
 {
   MESSURETIME_START
+
   debugf_yellow("<setup_TCP_Client>\n");
 
   byte mac[] = MAC; // MAC address
@@ -55,44 +56,36 @@ void setup_TCP_Client()
     // Ethernet.setLocalIP(CLIENTIP);
   }
 
-  //--------debugg prints--------------
+  TCP_print_info();
+
+  if (Ethernet.hardwareStatus() && cabletest())
+  {
+    TCP_init = 1;
+    debugf_green("TCP_init_success\n");
+  }
+  else
+  {
+    TCP_init = 0;
+    debugf_red("TCP_init_failed\n");
+  }
+
+  MESSURETIME_STOP
+}
+
+/*
+ *prints all usefull infos about the TCP client hardware and connection
+ */
+void TCP_print_info()
+{
+  byte mac[] = MAC;
   debugf("IP Address: %d.%d.%d.%d\n", SERVERIP[0], SERVERIP[1], SERVERIP[2], SERVERIP[3]);
-  // debug("-ip_Server: ");
-  // debugln(SERVERIP);
-
   debugf("MAC Address: %02X:%02X:%02X:%02X:%02X:%02X\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-  // debug("-mac: ");
-  // uint8_t *mac_address = (uint8_t *)malloc(8);
-  // Ethernet.MACAddress(mac_address);
-  // for (uint8_t i = 0; i < 6; i++)
-  // {
-  //   if (DEBUG)
-  //   {
-  //     Serial.print(mac_address[i], HEX);
-  //   }
-  //   debug(" ");
-  // }
-  // free(mac_address);
-  // debugln();
-
   debugf("-ip_Client: %d.%d.%d.%d\n", Ethernet.localIP()[0], Ethernet.localIP()[1], Ethernet.localIP()[2], Ethernet.localIP()[3]);
-  // debug("-ip_Client: ");
-  // debugln(Ethernet.localIP());
-
   debugf("-dns: %d.%d.%d.%d\n", Ethernet.dnsServerIP()[0], Ethernet.dnsServerIP()[1], Ethernet.dnsServerIP()[2], Ethernet.dnsServerIP()[3]);
-  // debug("-dns: ");
-  // debugln(Ethernet.dnsServerIP());
-
   debugf("-gatewayIP: %d.%d.%d.%d\n", Ethernet.gatewayIP()[0], Ethernet.gatewayIP()[1], Ethernet.gatewayIP()[2], Ethernet.gatewayIP()[3]);
-  // debug("-gatewayIP: ");
-  // debugln(Ethernet.gatewayIP());
-
   debugf("-subnet: %d.%d.%d.%d\n", Ethernet.subnetMask()[0], Ethernet.subnetMask()[1], Ethernet.subnetMask()[2], Ethernet.subnetMask()[3]);
-  // debug("-subnet: ");
-  // debugln(Ethernet.subnetMask());
-
   debug("-lanIc: ");
-  char hardwareStatus_buff = Ethernet.hardwareStatus();
+  uint8_t hardwareStatus_buff = Ethernet.hardwareStatus();
   switch (hardwareStatus_buff)
   {
   case 0:
@@ -111,8 +104,7 @@ void setup_TCP_Client()
     debugf_red("error in code. hardwareStatus() = %i\n", hardwareStatus_buff);
     break;
   }
-
-  char cabletest_buff = cabletest();
+  uint8_t cabletest_buff = cabletest();
   debug("-cabletest: ");
   switch (cabletest_buff)
   {
@@ -131,7 +123,6 @@ void setup_TCP_Client()
     cabletest_buff = 0;
     break;
   }
-
   debugf("-server:");
   if (client.connect(SERVERIP, SERVERPORT))
   {
@@ -141,18 +132,6 @@ void setup_TCP_Client()
   {
     debugf_red(" not connected\n");
   }
-
-  if (hardwareStatus_buff && cabletest_buff)
-  {
-    TCP_init = 1;
-    debugf_green("TCP_init_success\n");
-  }
-  else
-  {
-    TCP_init = 0;
-    debugf_red("TCP_init_failed\n");
-  }
-  MESSURETIME_STOP
 }
 
 /**
@@ -197,68 +176,77 @@ void test_TCP_manually(int nPackets, unsigned int nTries)
 }
 
 /**
- *  Reads in commands via the TCP Server connection.
+ *  Reads in a command out of the TCP Server buffer.
+ *  comand structure: [char Command]x3 | [float param1]x2 | [float param2]x2 | [float param3]x2 | [float param4]x2 | ["\n"] end character
+ * parameters can be missing, but command and \n must be there
  */
 void recieve_TCP_command()
 {
-  debug("-{recieve_TCPdTCPpacket-id:");
-
   if (!TCP_init)
   {
     setup_TCP_Client();
   }
-
   if (!client)
   {
     client.connect(SERVERIP, SERVERPORT);
   }
 
-  // reading out the TCP buffer
-  int size = client.available();
-
-  if (!size)
+  // checks whether  data is avaliable
+  unsigned int nAvalByte = client.available();
+  if (!nAvalByte)
   {
-    debugln("-noavaliable}-");
     return;
   }
 
-  char *buffer = (char *)malloc(size + 1);
-  for (int i = 0; i < size; i++)
+  // reads the TCP_incomming_bytes_buffer in union
+  union TCPMessageParser
   {
-    signed char packet = client.read(); // Returns The next byte (or character), or -1 if none is available.
-    if (packet == -1)
+    byte ByteStream[35];
+    struct
     {
-      debug("-client.read()=-1-");
-      break;
+      char comand[3];
+      float param[8];
+    };
+  } buffer;
+
+  byte *RawByteStream = (byte *)malloc(sizeof(TCPMessageParser));
+  if (!RawByteStream)
+  {
+    debugf_red("Malloc error tcp read RawByteStream\n");
+    return;
+  }
+
+  signed char status = client.readBytesUntil('\n', RawByteStream, sizeof(TCPMessageParser)); // Returns The next byte (or character), or -1 if none is available.
+  if (status == -1)
+  {
+    debugf_red("Some error parsing tcp readBytesUntil cmmand\n");
+    return;
+  }
+  memcpy(&buffer.ByteStream, RawByteStream, sizeof(TCPMessageParser));
+  free(RawByteStream);
+
+  // checks if command is corrupted
+  char success = 1;
+  if (!(buffer.comand[0] == buffer.comand[1] == buffer.comand[2]))
+  {
+    debugf_red("TCP Command corrputed\n");
+    success = 0;
+  }
+
+  // checks if parameter are corrupted
+  for (int i = 0; i < 4; i++)
+  {
+    if (buffer.param[i * 2] = !buffer.param[i * 2 + 1])
+    {
+      success = 0;
     }
-    buffer[i] = packet;
-  }
-  buffer[size + 1] = '\n';
-  // reading out command
-  int comand_str = buffer[0] + (buffer[1] << 8) + (buffer[2] << 16);
-
-  switch (comand_str)
-  {
-  case ('s' + ('r' << 8) + ('o' << 16)):
-  {
-    debugln("-command 'sro' recieved-");
-    uint32_t status_a = get_Status();
-    char buf[5]; // Array to hold the content of status
-    memcpy(buf, &status_a, sizeof(status_a));
-    buf[4] = '\0';
-    // packet_writeinfo(buf);
-    break;
-  }
-  default:
-  {
-    debug("-unknown command ");
-    debug(comand_str);
-    debugln("recieved-");
-    break;
-  }
   }
 
-  debugln("-end}-");
+  if (success)
+  {
+    debugf_green("-TCP command recieved\n");
+    handleCommand(buffer.comand[0], buffer.param[0], buffer.param[1], buffer.param[2], buffer.param[3]);
+  }
 }
 
 /**
@@ -270,7 +258,8 @@ void recieve_TCP_command()
  */
 char send_multible_TCP_packet(struct packet **packet_buff, unsigned int nPackets)
 {
-  if(!TCP_init){
+  if (!TCP_init)
+  {
     setup_TCP_Client();
     if (!TCP_init)
     {
@@ -319,7 +308,7 @@ char send_TCP_packet(struct packet *packet)
     return -5;
   }
 
-  signed char  status = 1;
+  signed char status = 1;
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     debugf_yellow("-connecting_client-");
@@ -365,7 +354,7 @@ char send_TCP_packet(struct packet *packet)
     }
     break;
   }
-  
+
   free(buffer);
   MESSURETIME_STOP
   return status;
@@ -382,24 +371,6 @@ uint8_t cabletest()
 
 /*Hadware test via a ICMP ping*/
 uint8_t ICMP_ping();
-
-// sends an dynamic char array as an TCP client
-void send_TCP(char *packet, unsigned long int size)
-{
-  if (size == 0)
-  {
-    Serial.println("Error: Invalid size. Size must be greater than 0.");
-    return;
-  }
-  if (client.connect(SERVERIP, 8888))
-  {
-    for (unsigned long int i = 0; i < size; i++)
-    {
-      client.print(packet[i]); // Send packet
-    }
-    client.stop(); // Close the connection
-  }
-}
 
 /*hosts a Server wich can be acessed via the Ip in local Networks.*/
 void testServer()

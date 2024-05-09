@@ -4,107 +4,13 @@
 #define HEADER_H
 
 #include <Arduino.h>
+#include "debug_in_color.h"
 
 /*--------Settings-----------------------*/
-#define DEBUG 1         /*actrivates debug Serial.print statements*/
-#define COLOUR_SERIAL 1 /*activates Serial.printing with color*/
-#define USB_ENABLE 1    /*enables single drive USB functions*/
-
-/*-------Debug Features-------------------*/
-#if DEBUG == 1
-#define debug(...) Serial.print(__VA_ARGS__)
-#define debugln(...) Serial.println(__VA_ARGS__)
-#define debugf(...) Serial.printf(__VA_ARGS__)
-#define MESSURETIME_START        \
-    unsigned long tb = 0;        \
-    unsigned long ta = micros(); \
-    debugf_magenta(".");
-#define MESSURETIME_STOP \
-    tb = micros();       \
-    ta = tb - ta;        \
-    debugf_magenta("Time: %.2fs|%.2fms|%ius\n", ta / 1000000.0, ta / 1000.0, ta);
-#else
-#define debug(...)
-#define debugln(...)
-#define debugf(...)
-#define MESSURETIME_START
-#define MESSURETIME_STOP
-#endif
-
-/*-------Serial printing colours------------*/
-#if COLOUR_SERIAL == 1
-#define debugf_yellow(...)      \
-    Serial.print("\033[33m");   \
-    Serial.printf(__VA_ARGS__); \
-    Serial.print("\033[0m");
-
-#define debugf_black(...)       \
-    Serial.print("\033[30m");   \
-    Serial.printf(__VA_ARGS__); \
-    Serial.print("\033[0m");
-
-#define debugf_red(...)         \
-    Serial.print("\033[31m");   \
-    Serial.printf(__VA_ARGS__); \
-    Serial.print("\033[0m");
-
-#define debugf_green(...)       \
-    Serial.print("\033[32m");   \
-    Serial.printf(__VA_ARGS__); \
-    Serial.print("\033[0m");
-
-#define debugf_blue(...)        \
-    Serial.print("\033[34m");   \
-    Serial.printf(__VA_ARGS__); \
-    Serial.print("\033[0m");
-
-#define debugf_magenta(...)     \
-    Serial.print("\033[35m");   \
-    Serial.printf(__VA_ARGS__); \
-    Serial.print("\033[0m");
-
-#define debugf_cyan(...)        \
-    Serial.print("\033[36m");   \
-    Serial.printf(__VA_ARGS__); \
-    Serial.print("\033[0m");
-
-#define debugf_white(...)       \
-    Serial.print("\033[37m");   \
-    Serial.printf(__VA_ARGS__); \
-    Serial.print("\033[0m");
-
-// You can keep the original definitions for color setting macros without changes.
-#define SET_COLOUR_BLACK Serial.print("\033[30m");
-#define SET_COLOUR_RED Serial.print("\033[31m");
-#define SET_COLOUR_GREEN Serial.print("\033[32m");
-#define SET_COLOUR_YELLOW Serial.print("\033[33m");
-#define SET_COLOUR_BLUE Serial.print("\033[34m");
-#define SET_COLOUR_MAGENTA Serial.print("\033[35m");
-#define SET_COLOUR_CYAN Serial.print("\033[36m");
-#define SET_COLOUR_WHITE Serial.print("\033[37m");
-#define SET_COLOUR_RESET Serial.print("\033[0m");
-#else
-#define debugf_yellow(...) debugf(__VA_ARGS__)
-#define debugf_black(...) debugf(__VA_ARGS__)
-#define debugf_red(...) debugf(__VA_ARGS__)
-#define debugf_green(...) debugf(__VA_ARGS__)
-#define debugf_blue(...) debugf(__VA_ARGS__)
-#define debugf_magenta(...) debugf(__VA_ARGS__)
-#define debugf_cyan(...) debugf(__VA_ARGS__)
-#define debugf_white(...) debugf(__VA_ARGS__)
-
-#define SET_COLOUR_BLACK
-#define SET_COLOUR_RED
-#define SET_COLOUR_GREEN
-#define SET_COLOUR_YELLOW
-#define SET_COLOUR_BLUE
-#define SET_COLOUR_MAGENTA
-#define SET_COLOUR_CYAN
-#define SET_COLOUR_WHITE
-#define SET_COLOUR_RESET
-#endif
+#define USB_ENABLE 1 /*enables single drive USB functions*/
 
 /*----------------Pin mapping-------------*/
+#if 1 // if statement to make code colapsable
 // #define MISO_LAN 0
 // #define CS_LAN 1
 // #define SCK_LAN 2
@@ -135,6 +41,7 @@
 
 #define PIN_VOLT A3
 #define PIN_CURR A2
+#endif
 
 /*struct_packet*/
 struct packet
@@ -171,8 +78,7 @@ void setup_TCP_Client();
 char send_TCP_packet(struct packet *data);
 char send_multible_TCP_packet(struct packet **data, unsigned int nPackets);
 void recieve_TCP_command();
-
-void send_TCP(char *data, unsigned long int size);
+void TCP_print_info();
 uint8_t cabletest();
 void testServer();
 
@@ -200,12 +106,13 @@ uint8_t heat_testauto();
 uint32_t get_Status();
 
 /*utilitly functions*/
+void handleCommand(char buffer_comand, float param1, float param2, float param3, float param4);
 unsigned long get_batvoltage();
 unsigned long get_current();
 void checkSerialInput();
 void StatusLedBlink();
-void blinkLed();
-void fadeLED();
+void blinkLed(uint8_t PIN);
+void fadeLED(uint8_t PIN);
 void heartbeat();
 void printMemoryUse();
 unsigned int free_Ram_left();

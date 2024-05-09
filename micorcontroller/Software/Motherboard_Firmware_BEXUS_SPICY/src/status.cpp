@@ -12,17 +12,9 @@ uint32_t get_Status()
   status |= ((uint32_t)0b00000001 << 31);
 
   // sd
-  init_SD();
   status |= ((uint32_t)SD_init << 30);
-  // char path[] = "startuptest";
-  // sd_numpackets(path);
-  // if (SD.exists(path))
-  // {
-  //   SD.remove(path);
-  // }
 
   // TCP connection
-  setup_TCP_Client();
   status |= ((uint32_t)TCP_init << 26);
 
   // Heater

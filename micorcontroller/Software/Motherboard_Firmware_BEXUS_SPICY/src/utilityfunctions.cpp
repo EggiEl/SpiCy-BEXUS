@@ -3,8 +3,6 @@
 #define nGPIOS 29
 
 const unsigned int AMOUNT_SRAM = 264000;
-
-void handleSerialCommand(char buffer_comand, float param1, float param2, float param3, float param4);
 static void printIO();
 static void short_detection();
 
@@ -20,28 +18,32 @@ void checkSerialInput()
   {
     if (Serial.read() == '/')
     {
+
       char buffer_comand = Serial.read();
       float param1 = -1;
       float param2 = -1;
       float param3 = -1;
       float param4 = -1;
-      if (Serial.available())
+      if (Serial.available() >= 4) //min. 4 bytes to get a float
       {
         param1 = Serial.parseFloat(SKIP_WHITESPACE);
+        if (Serial.available())
+        {
+          param2 = Serial.parseFloat(SKIP_WHITESPACE);
+
+          if (Serial.available() >= 4)
+          {
+            param3 = Serial.parseFloat(SKIP_WHITESPACE);
+
+            if (Serial.available() >= 4)
+            {
+              param4 = Serial.parseFloat(SKIP_WHITESPACE);
+            }
+          }
+        }
       }
-      if (Serial.available())
-      {
-        param2 = Serial.parseFloat(SKIP_WHITESPACE);
-      }
-      if (Serial.available())
-      {
-        param3 = Serial.parseFloat(SKIP_WHITESPACE);
-      }
-      if (Serial.available())
-      {
-        param4 = Serial.parseFloat(SKIP_WHITESPACE);
-      }
-      handleSerialCommand(buffer_comand, param1, param2, param3, param4);
+
+      handleCommand(buffer_comand, param1, param2, param3, param4);
     }
   }
 #endif
@@ -50,14 +52,14 @@ void checkSerialInput()
 /**
  *
  */
-void handleSerialCommand(char buffer_comand, float param1, float param2, float param3, float param4)
+void handleCommand(char buffer_comand, float param1, float param2, float param3, float param4)
 {
   switch (buffer_comand)
   {
   case '?':
   {
     debugf_yellow("<help>\n");
-    debugln(
+    debugln(F(
         "/b|Returns Battery Voltage and current\n\
 /s|Read out Status\n\
 /l|Sets the controller in sleep for ... ms.\n\
@@ -71,12 +73,12 @@ void handleSerialCommand(char buffer_comand, float param1, float param2, float p
 /d|pin shorts detection\n\
 /p|sends a test packet over lan\n\
 /w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
-/u|single file usb update. /u 1 closes singlefileusb\n");
+/u|single file usb update. /u 1 closes singlefileusb\n"));
     break;
   }
   case 'b':
   {
-    debugf_yellow("BatteryVoltage: %.2f V| Current: %i mA, %.2f A", get_batvoltage() * 1000.0, get_current(), get_current() * 1000.0);
+    debugf_yellow("BatteryVoltage: %.2f V| Current: %i mA, %.2f A\n", get_batvoltage() / 1000.0, get_current(), get_current() / 1000.0);
     break;
   }
   case 's':
@@ -188,7 +190,7 @@ void handleSerialCommand(char buffer_comand, float param1, float param2, float p
     {
       rp2040.wdt_reset();
       rp2040.wdt_begin(param1);
-      debugf_yellow("Set watchdog to %is\n", param1 / 1000.0);
+      debugf_yellow("Set watchdog to %.2fs\n", param1 / 1000.0);
     }
     else
     {
@@ -212,12 +214,13 @@ void handleSerialCommand(char buffer_comand, float param1, float param2, float p
   }
   default:
   {
-    debugf_red("dafuck is \"/%c\" ?!?! try \"/?\".\n", param1);
+    debugf_red("dafuck is \"/%c\" ?!?! try \"/?\".\n", buffer_comand);
     break;
   }
   }
 }
 
+/*needs rework to exclude Flash*/
 void short_detection()
 {
   char *pin_buffer = (char *)calloc(nGPIOS + 1, 1);
@@ -315,20 +318,20 @@ void StatusLedBlink()
   delay(200);
 }
 
-void blinkLed()
+void blinkLed(uint8_t PIN)
 {
   delay(200);
-  digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(PIN, 1);
   delay(200);
-  digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(PIN, 0);
 }
 
-void fadeLED()
+void fadeLED(uint8_t PIN)
 {
   analogWriteRange(10000);
   for (int brightness = 0; brightness < 5000; brightness++)
   {
-    analogWrite(LED_BUILTIN, brightness);
+    analogWrite(PIN, brightness);
     delay(1);
   }
 

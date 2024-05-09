@@ -32,12 +32,12 @@ void loop()
 //-------------------------core2------------------------
 void setup1()
 {
-
+  pinMode(LED_BUILTIN, 1);
 }
 
 void loop1()
 {
-  void fadeLED();
+  fadeLED(LED_BUILTIN);
 }
 
 void check_periodic_tasks()
@@ -50,13 +50,16 @@ void print_startup_message()
 {
 #if DEBUG == 1
   Serial.setTimeout(1000);
-  Serial.begin(460800);
-  // Serial.begin(115200);
-
-  while (!Serial)
+  Serial.begin();
+  for (unsigned int i = 0; i < 200; i++)
   {
+    delay(40);
+    if (Serial)
+    {
+      break;
+    }
   }
-  delay(50);
+
   TextSpicyv4();
 
   debugf_yellow("\n<<[MotherboardV4.ino] is running on Chip %i>>\n Core %i |Freq %.1f ", rp2040.getChipID(), rp2040.cpuid(), rp2040.f_cpu() / 1000000.0);
@@ -69,8 +72,8 @@ void print_startup_message()
     debugf_yellow("MHz\n");
   }
   debugf_yellow("\"/?\" for help\n");
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
+  pinMode(STATLED_R, OUTPUT);
+  digitalWrite(STATLED_R, HIGH);
   rp2040.enableDoubleResetBootloader();
 #endif
 }
@@ -86,15 +89,15 @@ void TextSpicyv4()
   {
     // ghost
     debugf_green(
-        "  .-')       _ (`-.                                                 (`-.\n"
-        " ( OO ).    ( (OO  )                                              _(OO  )_\n"
-        "(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.      ,--(_/   ,. \\    .---.\n"
-        "/    _ |  (__...--''   |  |OO)   '  .--./     \\  `.'  /       \\   \\   /(__/   / .  |\n"
-        "\\  :` `.   |  /  | |   |  |  \\   |  |('-.   .-')     /         \\   \\ /   /   / /|  |\n"
-        " '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /           \\   '   /,  / / |  |_\n"
-        ".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_           \\     /__)/  '-'    |\n"
-        "\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__)           \\   /    `----|  |-'\n"
-        " `-----'   `--'        `--'       `-----'     `--'                 `-'          `--'");
+        "  .-')       _ (`-.                                       \n"
+        " ( OO ).    ( (OO  )                                      \n"
+        "(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.\n"
+        "/    _ |  (__...--''   |  |OO)   '  .--./     \\  `.'  /  \n"
+        "\\  :` `.   |  /  | |   |  |  \\   |  |('-.   .-')     /  \n"
+        " '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /    \n"
+        ".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_  \n"
+        "\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__) \n"
+        " `-----'   `--'        `--'       `-----'     `--'        ");
   }
   else
   {
@@ -110,3 +113,4 @@ void TextSpicyv4()
   }
 #endif
 }
+
