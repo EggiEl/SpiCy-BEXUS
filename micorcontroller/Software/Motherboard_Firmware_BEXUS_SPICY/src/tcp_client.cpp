@@ -4,15 +4,15 @@
 #include <Ethernet.h>
 
 char AUTOMATIC_IP_ALLOCATION = 0;
-#define MAC {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-#define SERVERIP IPAddress(169, 254, 218, 4) //(169,254,218,4) (169, 254, 171, 44) (192, 168, 178, 23)// IP address of the PC
+static byte MAC[] =  {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
+static IPAddress SERVERIP(169, 254, 218, 4); //(169,254,218,4) (169, 254, 171, 44) (192, 168, 178, 23)// IP address of the PC
 // #define SERVERIP IPAddress(100, 81, 57, 236)
-#define CLIENTIP IPAddress(169, 254, 218, 100) // ip of this uC, leve blank for auto generation IPAddress(169, 168, 1, 100)
+static IPAddress CLIENTIP(169, 254, 218, 100); // ip of this uC, leve blank for auto generation IPAddress(169, 168, 1, 100)
 // #define DNS IPAddress(8, 8, 8, 8)             // DNS server (e.g., Google DNS)
 // #define GATEWAY IPAddress(192, 168, 1, 1)
-#define SUBNET IPAddress(255, 255, 0, 0)
-#define SERVERPORT 8888
-#define CONNECTIONTIMEOUT 3000
+static IPAddress  SUBNET(255, 255, 0, 0);
+static int  SERVERPORT = 8888;
+static unsigned int  CONNECTIONTIMEOUT = 3000;
 
 char TCP_init = 0;
 static EthernetClient client;
@@ -27,7 +27,6 @@ void setup_TCP_Client()
 
   debugf_yellow("<setup_TCP_Client>\n");
 
-  byte mac[] = MAC; // MAC address
   SPI.setRX(MISO_LAN);
   SPI.setTX(MOSI_LAN);
   SPI.setSCK(SCK_LAN);
@@ -41,7 +40,7 @@ void setup_TCP_Client()
   if (AUTOMATIC_IP_ALLOCATION)
   {
     //----automatic ip allocation : ----
-    if (!Ethernet.begin(mac))
+    if (!Ethernet.begin(MAC))
     {
       debug("DHCP configuration failed}-");
       debugln("-fail}-");
@@ -51,7 +50,7 @@ void setup_TCP_Client()
   else
   {
     //-----manual (static) ip--------------
-    Ethernet.begin(mac, CLIENTIP); // mac, CLIENTIP, DNS, GATEWAY, SUBNET
+    Ethernet.begin(MAC, CLIENTIP); // MAC, CLIENTIP, DNS, GATEWAY, SUBNET
     Ethernet.setSubnetMask(SUBNET);
     // Ethernet.setLocalIP(CLIENTIP);
   }
@@ -77,9 +76,8 @@ void setup_TCP_Client()
  */
 void TCP_print_info()
 {
-  byte mac[] = MAC;
   debugf("IP Address: %d.%d.%d.%d\n", SERVERIP[0], SERVERIP[1], SERVERIP[2], SERVERIP[3]);
-  debugf("MAC Address: %02X:%02X:%02X:%02X:%02X:%02X\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+  debugf("MAC Address: %02X:%02X:%02X:%02X:%02X:%02X\n", MAC[0], MAC[1], MAC[2], MAC[3], MAC[4], MAC[5]);
   debugf("-ip_Client: %d.%d.%d.%d\n", Ethernet.localIP()[0], Ethernet.localIP()[1], Ethernet.localIP()[2], Ethernet.localIP()[3]);
   debugf("-dns: %d.%d.%d.%d\n", Ethernet.dnsServerIP()[0], Ethernet.dnsServerIP()[1], Ethernet.dnsServerIP()[2], Ethernet.dnsServerIP()[3]);
   debugf("-gatewayIP: %d.%d.%d.%d\n", Ethernet.gatewayIP()[0], Ethernet.gatewayIP()[1], Ethernet.gatewayIP()[2], Ethernet.gatewayIP()[3]);
@@ -143,6 +141,7 @@ void TCP_print_info()
  */
 void test_TCP_manually(int nPackets, unsigned int nTries)
 {
+  MESSURETIME_START
   struct packet **packet_buf = (struct packet **)malloc(nPackets * sizeof(struct packet *));
   if (!packet_buf)
   {
@@ -173,6 +172,7 @@ void test_TCP_manually(int nPackets, unsigned int nTries)
   {
     debugf_green("sendmultible failure \n");
   }
+  MESSURETIME_STOP
 }
 
 /**
@@ -268,6 +268,8 @@ char send_multible_TCP_packet(struct packet **packet_buff, unsigned int nPackets
     }
   }
 
+  //check if client ready and cnnected
+  
   for (unsigned int i = 0; i < nPackets; i++)
   {
     for (int _try = 0; _try < 5; _try++)
@@ -295,7 +297,7 @@ char send_TCP_packet(struct packet *packet)
 {
   debugf_yellow("<sendpacket-id:%i>", packet->id);
   // packet_print(packet);
-  MESSURETIME_START
+  // MESSURETIME_START
 
   if (!TCP_init)
   {
@@ -321,42 +323,42 @@ char send_TCP_packet(struct packet *packet)
     if (client.write(buffer, sizeof(struct packet)))
     {
       status = 1;
-      debugf_green("sendpacket success");
+      debugf_green("sendpacket success\n");
     }
     else
     {
       status = -6;
-      debugf_red("sendpacket failed");
+      debugf_red("sendpacket failed\n");
     }
     // client.flush();                               //waits till all is send //can be left out if TCP Server recives just 200bytes per package.unsave?
     break;
   case -1:
-    debugf_red("-sendpacket TIMED_OUT");
+    debugf_red("-sendpacket TIMED_OUT\n");
     break;
   case -2:
-    debugf_red("-sendpacket INVALID_SERVER");
+    debugf_red("-sendpacket INVALID_SERVER\n");
     break;
   case -3:
-    debugf_red("-sendpacket TRUNCATED");
+    debugf_red("-sendpacket TRUNCATED\n");
     break;
   case -4:
-    debugf_red("-sendpacket TRUNCATED");
+    debugf_red("-sendpacket TRUNCATED\n");
     break;
   default:
     debugf_red("error %i: ", status);
     if (cabletest() == 2)
     {
-      debugf_red("cable disconnected");
+      debugf_red("cable disconnected\n");
     }
     else
     {
-      debugf_red("prob no response from server");
+      debugf_red("prob no response from server\n");
     }
     break;
   }
 
   free(buffer);
-  MESSURETIME_STOP
+  // MESSURETIME_STOP
   return status;
 }
 
@@ -386,8 +388,8 @@ void testServer()
   {
   }
   Serial.println("Ethernet WebServer Example");
-  byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-  Ethernet.begin(mac); // Ethernet.begin(mac,ip);
+  byte MAC[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
+  Ethernet.begin(MAC); // Ethernet.begin(MAC,ip);
   if (Ethernet.hardwareStatus() == EthernetNoHardware)
   {
     Serial.println("Ethernet shield was not found.  Sorry, can't run without hardware. :(");

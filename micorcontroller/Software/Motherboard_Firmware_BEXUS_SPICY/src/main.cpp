@@ -27,6 +27,7 @@ void setup()
 void loop()
 {
   check_periodic_tasks();
+  test_TCP_manually(5,2);
 }
 
 //-------------------------core2------------------------

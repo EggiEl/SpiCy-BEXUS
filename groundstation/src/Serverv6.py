@@ -49,9 +49,9 @@ class TCP_SERVER:
         self.thread.start()
 
     def StartServer(self):
-        """startet eine TCP Server an den sich ein myclient verbinden kann"""
+        """startet eine TCP Server an den sich ein client_socket verbinden kann"""
 
-        def connect_server_socket(timeout=2) -> socket:
+        def connect_server_socket(timeout=2):
             try:
                 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 server_socket.bind((self.ipadress, self.port))
@@ -69,54 +69,38 @@ class TCP_SERVER:
                 print_red(f"Error:{e}\n",indent=2)
                 return 0
 
-        def connect_client(server_socket: socket, timeout=2):
-            """wartet auf einen myclient und verbindet sich  mit demselben"""
+        def connect_client(server_socket: socket.socket, timeout=2,counter =3):
+            """wartet auf einen client_socket und verbindet sich  mit demselben"""
             try:
                 server_socket.listen(1)  # Wartet auf 1 eingehende Verbindung
             except Exception as e:
                 print_red(f"Error:{e}\n",indent=2)
                 return 0
-
-            counter = 0
             try:
-                myclient, client_address = server_socket.accept()
+                client_socket, client_address = server_socket.accept()
                 clear_console_line()
-                print_cyan(f" | Verbindung hergestellt von:{client_address}\n")
-                myclient.settimeout(timeout)
-                return myclient
+                print_cyan(f"Verbindung hergestellt von:{client_address}\n",indent=1)
+                client_socket.settimeout(timeout)
+                return client_socket
             except socket.timeout:
-                match counter:  # aestetics
-                    case 0:
-                        clear_console_line()
-                        print_cyan("waiting for a connection")
-                        counter += 1
-                    case 1:
-                        clear_console_line()
-                        print_cyan("waiting for a connection.")
-                        counter += 1
-                    case 2:
-                        clear_console_line()
-                        print_cyan("waiting for a connection..")
-                        counter += 1
-                    case 3:
-                        clear_console_line()
-                        print_cyan("waiting for a connection...")
-                        counter = 0
-                    case _:
-                        pass
+                clear_console_line()
+                print_cyan("waiting for a connection" + counter * ".")
                 return 0
             except Exception as e:  # Handle other exceptions
                 print_red("Error:", e)
+                while True:
+                    pass
                 return 0
 
-        def recieve_data(myclient):
-            """recieves data in binary form from the myclient"""
+        def recieve_data(client_socket):
+            """recieves data in binary form from the client_socket"""
             success = 0
             try:
                 timestamp = time.asctime(time.localtime())[::-1][::-1]
-                received_data = myclient.recv(200)
+                received_data = client_socket.recv(200)
                 self.datalog.rawdata.append((timestamp, received_data))
                 if received_data:
+                    print_green(f"packet {timestamp} recieved\n",indent=3)
                     success = 1
                 else:
                     print_red("duno wtf this is",indent=2)
@@ -134,27 +118,32 @@ class TCP_SERVER:
         print_cyan(
             f'<starting TCP server at "{self.ipadress}" | "{time.asctime(time.localtime())}>"\n'
         )
+
+        server_socket = 0
+        client_socket = 0
+        counter_recieved = 0
+        counter_points = 0
         while self.__isRunning:
-            server_socket = 0
-            myclient = 0
-            counter_recieved = 0
             if not server_socket:
-                print_white("Connnecting Socket...\n",indent=1)
+                print_blue("Connnecting Socket...\n",indent=1)
                 server_socket = connect_server_socket()
             else:
-                if not myclient:
-                    print_white("Connnecting Client...\n",indent=1)
-                    myclient = connect_client(server_socket)
+                if not client_socket:
+                    client_socket = connect_client(server_socket, counter=counter_points)
+                    counter_points += 1
+                    if counter_points > 3:
+                        counter_points = 0
                 else:
                     status = 1
                     while status:
-                        status = recieve_data(myclient)
+                        status = recieve_data(client_socket)
                         counter_recieved += 1
-                    myclient.close()  # TESTING
+                    client_socket.close()
+                    client_socket = 0
 
         # handling for the closing of the thread
-        if myclient:
-            myclient.close()
+        if client_socket:
+            client_socket.close()
         if server_socket:
             server_socket.close()
 
@@ -182,14 +171,14 @@ class DATALOGGER:
             if self.save_raw_csv():
                 print(f"saved {len(self.rawdata)} packages")
                 self.rawdata = []
+            time.sleep(1)
 
     def save_raw_mongo(self):
         sucess = 1
         for packet in self.rawdata:
             try:
-                self.mongodb.write_mongodb(
-                    {packet[0]: packet[1]}, "Probe", "Probecollect"
-                )
+                # self.mongodb.write_mongodb({packet[0]: packet[1]}, "Probe", "Probecollect")
+                pass
             except Exception as e:
                 print(e)
                 break
@@ -260,10 +249,11 @@ class INTERFACE:
                     print_yellow("<Help>")
                     print_yellow(
                         """
-/start start server
-/stop shutdown server
-/info get network info
-/quit quit this file
+/r /start start server
+/s /stop shutdown server
+/i /info get network info
+/t /threads get threads info
+/q /quit quit this file
 """
                     )
 
@@ -283,7 +273,11 @@ class INTERFACE:
                     print_yellow("<shuting down Interface>\n")
                     self.server_shutdown()
                     self.isRunning = 0
-                    print_yellow("<all down>\n,indent=1")
+                    print_yellow("<all down>\n",indent=1)
+                case "threads" | "t":
+                    print_yellow("Running threads:")
+                    for thread in threading.enumerate():
+                        print(thread.name)
                 case _:
                     print_red(f"Unknown Command {command[1:]}\n")
 

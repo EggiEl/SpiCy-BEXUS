@@ -1,12 +1,19 @@
 {
 	"folders": [
 		{
+			"name": "Motherboard_Firmware_BEXUS_SPICY",
 			"path": ".."
 		},
 		{
+			"name": "groundstation",
+			"path": "../../../../groundstation"
+		},
+		{
+			"name": "SpiCy-BEXUS",
 			"path": "../../../.."
 		},
 		{
+			"name": "D:",
 			"path": "D:/"
 		}
 	],
