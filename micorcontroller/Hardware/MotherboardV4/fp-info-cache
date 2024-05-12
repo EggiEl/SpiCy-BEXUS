@@ -1,4 +1,4 @@
-22942173401124073
+22949036605084204
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -62229,6 +62229,335 @@ solder jumper open
 0
 5
 3
+KiCad Symbols Footprints
+2169900003
+216990-0003-1
+Connector
+0
+16
+16
+KiCad Symbols Footprints
+560020-0420
+560020-0420
+Connector
+0
+6
+6
+KiCad Symbols Footprints
+21745072
+2174507-2-1
+Connector
+0
+11
+11
+KiCad Symbols Footprints
+65100516121
+65100516121-4
+Connector
+0
+9
+9
+KiCad Symbols Footprints
+5023520200
+5023520200
+Connector
+0
+4
+4
+KiCad Symbols Footprints
+5023520400
+502352-0400
+Connector
+0
+6
+6
+KiCad Symbols Footprints
+5023521210
+502352-1210-2
+Connector
+0
+14
+14
+KiCad Symbols Footprints
+61400416121
+61400416121
+Connector
+0
+6
+6
+KiCad Symbols Footprints
+74439346068
+74439346068-2
+Inductor
+0
+2
+2
+KiCad Symbols Footprints
+693072010801
+693072010801-2
+Connector
+0
+12
+12
+KiCad Symbols Footprints
+435441019830
+435441019830-1
+Switch
+0
+5
+5
+KiCad Symbols Footprints
+62100421021
+62100421021-4
+Connector
+0
+4
+4
+KiCad Symbols Footprints
+ABM8G
+ABM8G
+Crystal or Oscillator
+0
+4
+4
+KiCad Symbols Footprints
+BLM18SP221SN1B
+BLM18_3 L=1.6 W=0.8 T=0.8
+Ferrite Bead
+0
+2
+2
+KiCad Symbols Footprints
+DIOM5336X245N
+RBR2LB60BTBR1-9
+Schottky Diode
+0
+2
+2
+KiCad Symbols Footprints
+DIOM7959X262N
+SS34
+Schottky Diode
+0
+2
+2
+KiCad Symbols Footprints
+ECS250633B2CTPTR
+ECS-250-6-33B2-CTP-TR-1
+Crystal or Oscillator
+0
+4
+4
+KiCad Symbols Footprints
+FUSC1608X70N
+MF-FSML100/8
+Fuse
+0
+2
+2
+KiCad Symbols Footprints
+GSB1C41110SSHR
+GSB1C41110SSHR-1
+Connector
+0
+16
+16
+KiCad Symbols Footprints
+J1B1211CCD
+J1B1211CCD
+Connector
+0
+14
+14
+KiCad Symbols Footprints
+KTT0005B
+KTT0005B
+Integrated Circuit
+0
+8
+8
+KiCad Symbols Footprints
+LEDC2012X120N
+0805_2
+LED
+0
+2
+2
+KiCad Symbols Footprints
+LEDM2012X120N
+2.0x1.25mm SMD CHIP LED LAMP_1
+LED
+0
+2
+2
+KiCad Symbols Footprints
+LTRBR37G4R4S01250
+LTRBR37G-4R4S-0125-0-3
+LED (Multiple)
+0
+4
+4
+KiCad Symbols Footprints
+Logo
+
+
+0
+0
+0
+KiCad Symbols Footprints
+MPU6050
+MPU-6050-4
+Integrated Circuit
+0
+25
+25
+KiCad Symbols Footprints
+MS5637_1
+MS5637_1
+Integrated Circuit
+0
+4
+4
+KiCad Symbols Footprints
+MS561101BA03-50
+MS561101BA03-50
+Integrated Circuit
+0
+8
+8
+KiCad Symbols Footprints
+MS583730BA0150
+MS583730BA01-50
+Integrated Circuit
+0
+4
+4
+KiCad Symbols Footprints
+NE555DR
+D (R-PDSO-G8)
+Integrated Circuit
+0
+8
+8
+KiCad Symbols Footprints
+QFN40P700X700X90-57N-D
+RP2040 QFN-56
+Connector
+0
+57
+57
+KiCad Symbols Footprints
+QFP50P900X900X160-48N
+W5500(1.6mm)
+Integrated Circuit
+0
+48
+48
+KiCad Symbols Footprints
+RESC3216X90N
+PA1206   7w
+Resistor
+0
+2
+2
+KiCad Symbols Footprints
+SOIC127P600X170-9N
+DDA0008J
+Integrated Circuit
+0
+9
+9
+KiCad Symbols Footprints
+SOIC127P600X175-8N
+D0008A
+Integrated Circuit
+0
+8
+8
+KiCad Symbols Footprints
+SOIC127P790X216-8N
+8-Pin SOIC 208-mil (Package Code S)_1
+Integrated Circuit
+0
+8
+8
+KiCad Symbols Footprints
+SON50P300X200X100-9N-D
+MCP73831T-2ACI/MC-1
+Integrated Circuit
+0
+9
+9
+KiCad Symbols Footprints
+SOP65P640X120-16N
+TMUX1108PWR-1
+Integrated Circuit
+0
+16
+16
+KiCad Symbols Footprints
+SOP65P640X120-20N
+PW (R-PDSO-G20)
+Integrated Circuit
+0
+20
+20
+KiCad Symbols Footprints
+SOT95P237X112-3N
+SQ2310ES-T1_GE3
+MOSFET (N-Channel)
+0
+3
+3
+KiCad Symbols Footprints
+SOT95P251X112-3N
+SOT23_1+
+Integrated Circuit
+0
+3
+3
+KiCad Symbols Footprints
+SOT95P270X145-5N
+(OT) [SOT-23]
+Integrated Circuit
+0
+5
+5
+KiCad Symbols Footprints
+SOT230P700X170-4N
+SOT-223-4
+Integrated Circuit
+0
+4
+4
+KiCad Symbols Footprints
+SOT230P700X180-4N
+SOT-223 CASE 318H
+Integrated Circuit
+0
+4
+4
+KiCad Symbols Footprints
+SOTFL50P160X60-8N
+DRL0008A
+Integrated Circuit
+0
+8
+8
+KiCad Symbols Footprints
+THRMC1608X90N
+1608
+Thermistor
+0
+2
+2
+KiCad Symbols Footprints
+insta
+
+
+0
+0
+0
 LED_SMD
 LED-APA102-2020
 http://www.led-color.com/upload/201604/APA102-2020%20SMD%20LED.pdf
@@ -87065,321 +87394,20 @@ rotary encoder
 0
 7
 6
-SamacSys_Parts
-2169900003
-216990-0003-1
-Connector
-0
-16
-16
-SamacSys_Parts
-560020-0420
-560020-0420
-Connector
-0
-6
-6
-SamacSys_Parts
-21745072
-2174507-2-1
-Connector
-0
-11
-11
-SamacSys_Parts
-65100516121
-65100516121-4
-Connector
-0
-9
-9
-SamacSys_Parts
-5023520200
-5023520200
-Connector
-0
-4
-4
-SamacSys_Parts
-5023520400
-502352-0400
-Connector
-0
-6
-6
-SamacSys_Parts
-5023521210
-502352-1210-2
-Connector
-0
-14
-14
-SamacSys_Parts
-61400416121
-61400416121
-Connector
-0
-6
-6
-SamacSys_Parts
-74439346068
-74439346068-2
-Inductor
-0
-2
-2
-SamacSys_Parts
-693072010801
-693072010801-2
-Connector
-0
-12
-12
-SamacSys_Parts
-435441019830
-435441019830-1
-Switch
-0
-5
-5
-SamacSys_Parts
-ABM8G
-ABM8G
-Crystal or Oscillator
-0
-4
-4
-SamacSys_Parts
-BLM18SP221SN1B
-BLM18_3 L=1.6 W=0.8 T=0.8
-Ferrite Bead
-0
-2
-2
-SamacSys_Parts
-DIOM5336X245N
-RBR2LB60BTBR1-9
-Schottky Diode
-0
-2
-2
-SamacSys_Parts
-DIOM7959X262N
-SS34
-Schottky Diode
-0
-2
-2
-SamacSys_Parts
-ECS250633B2CTPTR
-ECS-250-6-33B2-CTP-TR-1
-Crystal or Oscillator
-0
-4
-4
-SamacSys_Parts
-FUSC1608X70N
-MF-FSML100/8
-Fuse
-0
-2
-2
-SamacSys_Parts
-GSB1C41110SSHR
-GSB1C41110SSHR-1
-Connector
-0
-16
-16
-SamacSys_Parts
-J1B1211CCD
-J1B1211CCD
-Connector
-0
-14
-14
-SamacSys_Parts
-KTT0005B
-KTT0005B
-Integrated Circuit
-0
-8
-8
-SamacSys_Parts
-LEDC2012X120N
-0805_2
-LED
-0
-2
-2
-SamacSys_Parts
-LEDM2012X120N
-2.0x1.25mm SMD CHIP LED LAMP_1
-LED
-0
-2
-2
-SamacSys_Parts
-LTRBR37G4R4S01250
-LTRBR37G-4R4S-0125-0-3
-LED (Multiple)
-0
-4
-4
-SamacSys_Parts
-Logo
-
-
-0
-0
-0
-SamacSys_Parts
-MPU6050
-MPU-6050-4
-Integrated Circuit
-0
-25
-25
-SamacSys_Parts
-MS5637_1
-MS5637_1
-Integrated Circuit
-0
-4
-4
-SamacSys_Parts
-MS561101BA03-50
-MS561101BA03-50
-Integrated Circuit
-0
-8
-8
-SamacSys_Parts
-MS583730BA0150
-MS583730BA01-50
-Integrated Circuit
-0
-4
-4
-SamacSys_Parts
+SamacSys_Parts_General
 NE555DR
 D (R-PDSO-G8)
 Integrated Circuit
 0
 8
 8
-SamacSys_Parts
-QFN40P700X700X90-57N-D
-RP2040 QFN-56
-Connector
-0
-57
-57
-SamacSys_Parts
-QFP50P900X900X160-48N
-W5500(1.6mm)
+SamacSys_Parts_General
+SOT95P251X112-3N
+SOT23_1+
 Integrated Circuit
-0
-48
-48
-SamacSys_Parts
-RESC3216X90N
-PA1206   7w
-Resistor
-0
-2
-2
-SamacSys_Parts
-SOIC127P600X170-9N
-DDA0008J
-Integrated Circuit
-0
-9
-9
-SamacSys_Parts
-SOIC127P600X175-8N
-D0008A
-Integrated Circuit
-0
-8
-8
-SamacSys_Parts
-SOIC127P790X216-8N
-8-Pin SOIC 208-mil (Package Code S)_1
-Integrated Circuit
-0
-8
-8
-SamacSys_Parts
-SON50P300X200X100-9N-D
-MCP73831T-2ACI/MC-1
-Integrated Circuit
-0
-9
-9
-SamacSys_Parts
-SOP65P640X120-16N
-TMUX1108PWR-1
-Integrated Circuit
-0
-16
-16
-SamacSys_Parts
-SOP65P640X120-20N
-PW (R-PDSO-G20)
-Integrated Circuit
-0
-20
-20
-SamacSys_Parts
-SOT95P237X112-3N
-SQ2310ES-T1_GE3
-MOSFET (N-Channel)
 0
 3
 3
-SamacSys_Parts
-SOT95P270X145-5N
-(OT) [SOT-23]
-Integrated Circuit
-0
-5
-5
-SamacSys_Parts
-SOT230P700X170-4N
-SOT-223-4
-Integrated Circuit
-0
-4
-4
-SamacSys_Parts
-SOT230P700X180-4N
-SOT-223 CASE 318H
-Integrated Circuit
-0
-4
-4
-SamacSys_Parts
-SOTFL50P160X60-8N
-DRL0008A
-Integrated Circuit
-0
-8
-8
-SamacSys_Parts
-THRMC1608X90N
-1608
-Thermistor
-0
-2
-2
-SamacSys_Parts
-insta
-
-
-0
-0
-0
 Sensor
 ASAIR_AM2302_P2.54mm_Lead2.75mm_TabDown
 Temperature and humidity module, http://akizukidenshi.com/download/ds/aosong/AM2302.pdf

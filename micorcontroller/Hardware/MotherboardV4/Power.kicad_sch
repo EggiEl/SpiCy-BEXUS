@@ -5,7 +5,603 @@
 	(uuid "d376d126-883d-43e6-a0ea-762163bf53da")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Connector:Conn_01x04_Socket"
+		(symbol "SymbolsBalloonv4:+28V"
+			(power)
+			(pin_numbers hide)
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+28V"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 6.35 1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 6.35 1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+28V\""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+28V_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+28V_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "SymbolsBalloonv4:Battery_Cell"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "BT"
+				(at 2.54 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "Battery_Cell"
+				(at 2.54 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 1.524 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 1.524 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Single-cell battery"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "battery cell"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Battery_Cell_0_1"
+				(rectangle
+					(start -2.286 1.778)
+					(end 2.286 1.524)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start -1.524 1.016)
+					(end 1.524 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0.762) (xy 0 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 1.778) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 3.048) (xy 1.778 3.048)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 3.556) (xy 1.27 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Battery_Cell_1_1"
+				(pin passive line
+					(at 0 5.08 270)
+					(length 2.54)
+					(name "+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 90)
+					(length 2.54)
+					(name "-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "SymbolsBalloonv4:C"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "SymbolsBalloonv4:Conn_01x03"
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x03"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x03_1_1"
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 3.81)
+					(end 1.27 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "SymbolsBalloonv4:Conn_01x04_Socket"
 			(pin_names
 				(offset 1.016) hide)
 			(exclude_from_sim no)
@@ -251,7 +847,7 @@
 				)
 			)
 		)
-		(symbol "Connector:DIN-4"
+		(symbol "SymbolsBalloonv4:DIN-4"
 			(pin_names
 				(offset 1.016)
 			)
@@ -547,483 +1143,7 @@
 				)
 			)
 		)
-		(symbol "Connector_Generic:Conn_01x03"
-			(pin_names
-				(offset 1.016) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "J"
-				(at 0 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Conn_01x03"
-				(at 0 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Generic connector, single row, 01x03, script generated (kicad-library-utils/schlib/autogen/connector/)"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "connector"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Connector*:*_1x??_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Conn_01x03_1_1"
-				(rectangle
-					(start -1.27 -2.413)
-					(end 0 -2.667)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 0.127)
-					(end 0 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 2.667)
-					(end 0 2.413)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 3.81)
-					(end 1.27 -3.81)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at -5.08 2.54 0)
-					(length 3.81)
-					(name "Pin_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 3.81)
-					(name "Pin_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -2.54 0)
-					(length 3.81)
-					(name "Pin_3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "Device:Battery_Cell"
-			(pin_numbers hide)
-			(pin_names
-				(offset 0) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "BT"
-				(at 2.54 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "Battery_Cell"
-				(at 2.54 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 1.524 90)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 1.524 90)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Single-cell battery"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "battery cell"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Battery_Cell_0_1"
-				(rectangle
-					(start -2.286 1.778)
-					(end 2.286 1.524)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(rectangle
-					(start -1.524 1.016)
-					(end 1.524 0.508)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0.762) (xy 0 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 1.778) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.762 3.048) (xy 1.778 3.048)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 3.556) (xy 1.27 2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "Battery_Cell_1_1"
-				(pin passive line
-					(at 0 5.08 270)
-					(length 2.54)
-					(name "+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -2.54 90)
-					(length 2.54)
-					(name "-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "Device:C"
-			(pin_numbers hide)
-			(pin_names
-				(offset 0.254)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "C"
-				(at 0.635 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "C"
-				(at 0.635 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at 0.9652 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Unpolarized capacitor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "cap capacitor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "C_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "C_0_1"
-				(polyline
-					(pts
-						(xy -2.032 -0.762) (xy 2.032 -0.762)
-					)
-					(stroke
-						(width 0.508)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.032 0.762) (xy 2.032 0.762)
-					)
-					(stroke
-						(width 0.508)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "C_1_1"
-				(pin passive line
-					(at 0 3.81 270)
-					(length 2.794)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -3.81 90)
-					(length 2.794)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "Device:D_Zener"
+		(symbol "SymbolsBalloonv4:D_Zener"
 			(pin_numbers hide)
 			(pin_names
 				(offset 1.016) hide)
@@ -1168,7 +1288,103 @@
 				)
 			)
 		)
-		(symbol "Device:LED"
+		(symbol "SymbolsBalloonv4:GND"
+			(power)
+			(pin_numbers hide)
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "SymbolsBalloonv4:LED"
 			(pin_numbers hide)
 			(pin_names
 				(offset 1.016) hide)
@@ -1337,7 +1553,7 @@
 				)
 			)
 		)
-		(symbol "Device:L_Small"
+		(symbol "SymbolsBalloonv4:L_Small"
 			(pin_numbers hide)
 			(pin_names
 				(offset 0.254) hide)
@@ -1496,7 +1712,384 @@
 				)
 			)
 		)
-		(symbol "Device:Opamp_Dual"
+		(symbol "SymbolsBalloonv4:MCP1826S-5002E_DB"
+			(pin_names
+				(offset 0.762)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "IC1"
+				(at 15.24 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MCP1826S-5002E_DB"
+				(at 15.24 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "SamacSys_Parts:SOT230P700X180-4N"
+				(at 26.67 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "http://ww1.microchip.com/downloads/en/DeviceDoc/22057B.pdf"
+				(at 26.67 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "MCP1826S-5002E/DB, Low Dropout Voltage Regulator, 1A, 5 V +/-2%, 2.3  6 Vin, 4-Pin SOT-223"
+				(at 26.67 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Height" "1.8"
+				(at 26.67 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "579-MCP1826S-5002EDB"
+				(at 26.67 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Microchip-Technology/MCP1826S-5002E-DB?qs=gsqZ4L1luKoAXFak4tFH3w%3D%3D"
+				(at 26.67 -10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Microchip"
+				(at 26.67 -12.7 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "MCP1826S-5002E/DB"
+				(at 26.67 -15.24 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(symbol "MCP1826S-5002E_DB_0_0"
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "VIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 11.43 -12.7 90)
+					(length 5.08)
+					(name "GND_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 26.67 0 180)
+					(length 5.08)
+					(name "VOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 13.97 -12.7 90)
+					(length 5.08)
+					(name "GND_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "MCP1826S-5002E_DB_0_1"
+				(polyline
+					(pts
+						(xy 5.08 2.54) (xy 21.59 2.54) (xy 21.59 -7.62) (xy 5.08 -7.62) (xy 5.08 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+		)
+		(symbol "SymbolsBalloonv4:NCP1117ST33T3G"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "IC12"
+				(at 14.986 10.668 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "NCP1117ST33T3G"
+				(at 14.986 8.128 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "SOT230P700X180-4N"
+				(at 41.91 -94.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "http://www.onsemi.com/pub/Collateral/NCP1117-D.PDF"
+				(at 41.91 -194.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "ON SEMICONDUCTOR - NCP1117ST33T3G - IC, LINEAR VOLTAGE REGULATOR"
+				(at 15.494 -11.43 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "1.8"
+				(at 41.91 -394.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "863-NCP1117ST33T3G"
+				(at 41.91 -494.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/NCP1117ST33T3G?qs=Gev%252BmEvV0iZb%2FE8ahUDx3w%3D%3D"
+				(at 41.91 -594.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "onsemi"
+				(at 41.91 -694.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "NCP1117ST33T3G"
+				(at 41.91 -794.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "NCP1117ST33T3G_1_1"
+				(rectangle
+					(start 6.35 5.08)
+					(end 24.13 -1.27)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 15.24 -6.35 90)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 29.21 2.54 180)
+					(length 5.08)
+					(name "OUT1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 1.27 2.54 0)
+					(length 5.08)
+					(name "INPUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 29.21 0 180)
+					(length 5.08)
+					(name "OUT2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "SymbolsBalloonv4:Opamp_Dual"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1782,506 +2375,7 @@
 				)
 			)
 		)
-		(symbol "Device:R_Small"
-			(pin_numbers hide)
-			(pin_names
-				(offset 0.254) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "R"
-				(at 0.762 0.508 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "R_Small"
-				(at 0.762 -1.016 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Resistor, small symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "R resistor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "R_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "R_Small_0_1"
-				(rectangle
-					(start -0.762 1.778)
-					(end 0.762 -1.778)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "R_Small_1_1"
-				(pin passive line
-					(at 0 2.54 270)
-					(length 0.762)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -2.54 90)
-					(length 0.762)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "SamacSys_Parts:MCP1826S-5002E_DB"
-			(pin_names
-				(offset 0.762)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "IC1"
-				(at 15.24 7.62 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "MCP1826S-5002E_DB"
-				(at 15.24 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "SamacSys_Parts:SOT230P700X180-4N"
-				(at 26.67 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "http://ww1.microchip.com/downloads/en/DeviceDoc/22057B.pdf"
-				(at 26.67 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Description" "MCP1826S-5002E/DB, Low Dropout Voltage Regulator, 1A, 5 V +/-2%, 2.3  6 Vin, 4-Pin SOT-223"
-				(at 26.67 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Height" "1.8"
-				(at 26.67 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Mouser Part Number" "579-MCP1826S-5002EDB"
-				(at 26.67 -7.62 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Microchip-Technology/MCP1826S-5002E-DB?qs=gsqZ4L1luKoAXFak4tFH3w%3D%3D"
-				(at 26.67 -10.16 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer_Name" "Microchip"
-				(at 26.67 -12.7 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer_Part_Number" "MCP1826S-5002E/DB"
-				(at 26.67 -15.24 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(symbol "MCP1826S-5002E_DB_0_0"
-				(pin passive line
-					(at 0 0 0)
-					(length 5.08)
-					(name "VIN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 11.43 -12.7 90)
-					(length 5.08)
-					(name "GND_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 26.67 0 180)
-					(length 5.08)
-					(name "VOUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 13.97 -12.7 90)
-					(length 5.08)
-					(name "GND_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "MCP1826S-5002E_DB_0_1"
-				(polyline
-					(pts
-						(xy 5.08 2.54) (xy 21.59 2.54) (xy 21.59 -7.62) (xy 5.08 -7.62) (xy 5.08 2.54)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-		)
-		(symbol "SamacSys_Parts:NCP1117ST33T3G"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "IC12"
-				(at 14.986 10.668 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "NCP1117ST33T3G"
-				(at 14.986 8.128 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "SOT230P700X180-4N"
-				(at 41.91 -94.92 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "http://www.onsemi.com/pub/Collateral/NCP1117-D.PDF"
-				(at 41.91 -194.92 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Description" "ON SEMICONDUCTOR - NCP1117ST33T3G - IC, LINEAR VOLTAGE REGULATOR"
-				(at 15.494 -11.43 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Height" "1.8"
-				(at 41.91 -394.92 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Mouser Part Number" "863-NCP1117ST33T3G"
-				(at 41.91 -494.92 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/NCP1117ST33T3G?qs=Gev%252BmEvV0iZb%2FE8ahUDx3w%3D%3D"
-				(at 41.91 -594.92 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer_Name" "onsemi"
-				(at 41.91 -694.92 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer_Part_Number" "NCP1117ST33T3G"
-				(at 41.91 -794.92 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-					(hide yes)
-				)
-			)
-			(symbol "NCP1117ST33T3G_1_1"
-				(rectangle
-					(start 6.35 5.08)
-					(end 24.13 -1.27)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at 15.24 -6.35 90)
-					(length 5.08)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 29.21 2.54 180)
-					(length 5.08)
-					(name "OUT1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 1.27 2.54 0)
-					(length 5.08)
-					(name "INPUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 29.21 0 180)
-					(length 5.08)
-					(name "OUT2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "SamacSys_Parts:PA1206FRE7W0R001Z"
+		(symbol "SymbolsBalloonv4:PA1206FRE7W0R001Z"
 			(pin_names hide)
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -2433,7 +2527,129 @@
 				)
 			)
 		)
-		(symbol "SamacSys_Parts:TPS62933DRLR"
+		(symbol "SymbolsBalloonv4:R_Small"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0.254) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 0.762 0.508 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "R_Small"
+				(at 0.762 -1.016 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Resistor, small symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "R resistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "R_Small_0_1"
+				(rectangle
+					(start -0.762 1.778)
+					(end 0.762 -1.778)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_Small_1_1"
+				(pin passive line
+					(at 0 2.54 270)
+					(length 0.762)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 90)
+					(length 0.762)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "SymbolsBalloonv4:TPS62933DRLR"
 			(pin_names
 				(offset 0.762)
 			)
@@ -2693,222 +2909,6 @@
 					)
 					(fill
 						(type none)
-					)
-				)
-			)
-		)
-		(symbol "power:+28V"
-			(power)
-			(pin_numbers hide)
-			(pin_names
-				(offset 0) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "+28V"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 6.35 1.27 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 6.35 1.27 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"+28V\""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+28V_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+28V_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "power:GND"
-			(power)
-			(pin_numbers hide)
-			(pin_names
-				(offset 0) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "GND"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "GND_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "GND_1_1"
-				(pin power_in line
-					(at 0 0 270)
-					(length 0)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
 					)
 				)
 			)
@@ -5878,7 +5878,7 @@
 		(uuid "fc48abbf-1c90-430b-a19f-14b0d4fcd2d5")
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 168.91 55.88 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -5947,7 +5947,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 200.66 96.52 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6016,7 +6016,7 @@
 		)
 	)
 	(symbol
-		(lib_id "SamacSys_Parts:TPS62933DRLR")
+		(lib_id "SymbolsBalloonv4:TPS62933DRLR")
 		(at 201.93 49.53 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6155,7 +6155,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 232.41 40.64 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6223,7 +6223,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 200.66 66.04 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6289,7 +6289,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 29.21 46.99 0)
 		(mirror x)
 		(unit 1)
@@ -6359,7 +6359,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 227.33 59.69 0)
 		(mirror y)
 		(unit 1)
@@ -6425,7 +6425,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 264.16 62.23 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6494,7 +6494,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:Opamp_Dual")
+		(lib_id "SymbolsBalloonv4:Opamp_Dual")
 		(at 229.87 121.92 0)
 		(unit 3)
 		(exclude_from_sim no)
@@ -6618,7 +6618,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x03")
+		(lib_id "SymbolsBalloonv4:Conn_01x03")
 		(at 134.62 41.91 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6689,7 +6689,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 233.68 119.38 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6759,7 +6759,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 50.8 168.91 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6824,7 +6824,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x03")
+		(lib_id "SymbolsBalloonv4:Conn_01x03")
 		(at 267.97 41.91 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6895,7 +6895,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+28V")
+		(lib_id "SymbolsBalloonv4:+28V")
 		(at 180.34 93.98 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6961,7 +6961,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 50.8 93.98 0)
 		(mirror y)
 		(unit 1)
@@ -7027,7 +7027,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 111.76 58.42 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7095,7 +7095,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 105.41 88.9 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7164,7 +7164,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 171.45 142.24 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7234,7 +7234,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 162.56 55.88 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7303,7 +7303,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+28V")
+		(lib_id "SymbolsBalloonv4:+28V")
 		(at 171.45 134.62 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7369,7 +7369,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:L_Small")
+		(lib_id "SymbolsBalloonv4:L_Small")
 		(at 243.84 52.07 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7487,7 +7487,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 57.15 46.99 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7556,7 +7556,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 264.16 71.12 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7621,7 +7621,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 162.56 104.14 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7691,7 +7691,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 238.76 45.72 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7760,7 +7760,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 162.56 115.57 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -7830,7 +7830,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 252.73 57.15 0)
 		(mirror y)
 		(unit 1)
@@ -7900,7 +7900,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:LED")
+		(lib_id "SymbolsBalloonv4:LED")
 		(at 99.06 100.33 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8018,7 +8018,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:LED")
+		(lib_id "SymbolsBalloonv4:LED")
 		(at 120.65 100.33 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8138,7 +8138,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 144.78 144.145 0)
 		(mirror y)
 		(unit 1)
@@ -8204,7 +8204,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 134.62 143.51 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8269,7 +8269,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_Zener")
+		(lib_id "SymbolsBalloonv4:D_Zener")
 		(at 119.38 53.34 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8390,7 +8390,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 55.88 123.19 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8459,7 +8459,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 247.65 69.85 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8524,7 +8524,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+28V")
+		(lib_id "SymbolsBalloonv4:+28V")
 		(at 144.78 127 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8590,7 +8590,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 175.26 63.5 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8655,7 +8655,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 64.77 161.29 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8725,7 +8725,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:Conn_01x04_Socket")
+		(lib_id "SymbolsBalloonv4:Conn_01x04_Socket")
 		(at 127 135.89 0)
 		(mirror y)
 		(unit 1)
@@ -8852,7 +8852,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:Opamp_Dual")
+		(lib_id "SymbolsBalloonv4:Opamp_Dual")
 		(at 200.66 107.95 0)
 		(mirror x)
 		(unit 1)
@@ -8974,7 +8974,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_Zener")
+		(lib_id "SymbolsBalloonv4:D_Zener")
 		(at 144.78 139.7 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9095,7 +9095,7 @@
 		)
 	)
 	(symbol
-		(lib_id "SamacSys_Parts:NCP1117ST33T3G")
+		(lib_id "SymbolsBalloonv4:NCP1117ST33T3G")
 		(at 35.56 82.55 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9220,7 +9220,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_Zener")
+		(lib_id "SymbolsBalloonv4:D_Zener")
 		(at 144.78 132.08 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9341,7 +9341,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 125.73 109.22 0)
 		(mirror y)
 		(unit 1)
@@ -9407,7 +9407,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 64.77 86.36 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9476,7 +9476,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 175.26 55.88 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9545,7 +9545,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 194.31 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9611,7 +9611,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 36.83 86.36 0)
 		(mirror x)
 		(unit 1)
@@ -9681,7 +9681,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 171.45 152.4 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9751,7 +9751,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 41.91 130.81 0)
 		(mirror y)
 		(unit 1)
@@ -9817,7 +9817,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 132.08 91.44 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9884,7 +9884,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 140.97 90.17 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -9951,7 +9951,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+28V")
+		(lib_id "SymbolsBalloonv4:+28V")
 		(at 175.26 46.99 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10016,7 +10016,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 151.13 90.17 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10083,7 +10083,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:LED")
+		(lib_id "SymbolsBalloonv4:LED")
 		(at 151.13 100.33 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10203,7 +10203,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 257.81 62.23 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10272,7 +10272,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:Opamp_Dual")
+		(lib_id "SymbolsBalloonv4:Opamp_Dual")
 		(at 190.5 143.51 0)
 		(mirror x)
 		(unit 2)
@@ -10394,7 +10394,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 271.78 62.23 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10463,7 +10463,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 120.65 91.44 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10530,7 +10530,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:LED")
+		(lib_id "SymbolsBalloonv4:LED")
 		(at 132.08 101.6 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10651,7 +10651,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 274.32 44.45 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10717,7 +10717,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 162.56 121.92 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10782,7 +10782,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 200.66 62.23 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10852,7 +10852,7 @@
 		)
 	)
 	(symbol
-		(lib_id "SamacSys_Parts:NCP1117ST33T3G")
+		(lib_id "SymbolsBalloonv4:NCP1117ST33T3G")
 		(at 26.67 119.38 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -10977,7 +10977,7 @@
 		)
 	)
 	(symbol
-		(lib_id "SamacSys_Parts:NCP1117ST33T3G")
+		(lib_id "SymbolsBalloonv4:NCP1117ST33T3G")
 		(at 27.94 43.18 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11102,7 +11102,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 185.42 96.52 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11171,7 +11171,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 247.65 57.15 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11240,7 +11240,7 @@
 		)
 	)
 	(symbol
-		(lib_id "SamacSys_Parts:PA1206FRE7W0R001Z")
+		(lib_id "SymbolsBalloonv4:PA1206FRE7W0R001Z")
 		(at 162.56 96.52 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11361,7 +11361,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+28V")
+		(lib_id "SymbolsBalloonv4:+28V")
 		(at 105.41 82.55 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11427,7 +11427,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 194.31 60.96 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11496,7 +11496,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:LED")
+		(lib_id "SymbolsBalloonv4:LED")
 		(at 110.49 100.33 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11617,7 +11617,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 27.94 123.19 0)
 		(mirror x)
 		(unit 1)
@@ -11687,7 +11687,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 166.37 152.4 0)
 		(mirror x)
 		(unit 1)
@@ -11757,7 +11757,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:LED")
+		(lib_id "SymbolsBalloonv4:LED")
 		(at 140.97 100.33 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11878,7 +11878,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 95.25 144.78 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11943,7 +11943,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+28V")
+		(lib_id "SymbolsBalloonv4:+28V")
 		(at 278.13 41.91 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12009,7 +12009,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 36.83 161.29 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12026,7 +12026,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "1u"
+		(property "Value" "4.7u"
 			(at 33.274 162.306 0)
 			(effects
 				(font
@@ -12078,7 +12078,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:Battery_Cell")
+		(lib_id "SymbolsBalloonv4:Battery_Cell")
 		(at 95.25 138.43 0)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -12150,7 +12150,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 121.92 144.78 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12215,7 +12215,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small")
+		(lib_id "SymbolsBalloonv4:R_Small")
 		(at 247.65 66.04 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12284,7 +12284,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:DIN-4")
+		(lib_id "SymbolsBalloonv4:DIN-4")
 		(at 110.49 137.16 270)
 		(unit 1)
 		(exclude_from_sim yes)
@@ -12368,7 +12368,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 227.33 130.81 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12433,7 +12433,7 @@
 		)
 	)
 	(symbol
-		(lib_id "SamacSys_Parts:MCP1826S-5002E_DB")
+		(lib_id "SymbolsBalloonv4:MCP1826S-5002E_DB")
 		(at 36.83 154.94 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12559,7 +12559,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
+		(lib_id "SymbolsBalloonv4:C")
 		(at 182.88 55.88 180)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12628,7 +12628,7 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
+		(lib_id "SymbolsBalloonv4:GND")
 		(at 43.18 54.61 0)
 		(mirror y)
 		(unit 1)

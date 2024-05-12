@@ -22,29 +22,39 @@ static void TextSpicyv4();
 void setup()
 {
   print_startup_message();
+  rp2040.wdt_begin(8000);
+  // pressure_setup();
 }
 
 void loop()
 {
+  // pressure_loop();
   check_periodic_tasks();
-  test_TCP_manually(5,2);
 }
 
 //-------------------------core2------------------------
 void setup1()
 {
   pinMode(LED_BUILTIN, 1);
+  pinMode(STATLED_R, OUTPUT);
+  pinMode(STATLED_G, OUTPUT);
+  pinMode(STATLED_B, OUTPUT);
+  digitalWrite(STATLED_R, 1);
+  digitalWrite(STATLED_G, 1);
+  digitalWrite(STATLED_B, 1);
 }
 
 void loop1()
 {
-  fadeLED(LED_BUILTIN);
+  StatusLedBlink(STATLED_B);
 }
 
 void check_periodic_tasks()
 {
   checkSerialInput();
+  TCP_check_command();
   rp2040.wdt_reset();
+  newState();
 }
 
 void print_startup_message()
@@ -114,4 +124,3 @@ void TextSpicyv4()
   }
 #endif
 }
-
