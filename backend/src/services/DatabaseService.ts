@@ -27,7 +27,8 @@ export const getAllData = async() => {
 
 
 
-export async function getNewerEntries(sensor: string, id: string): Promise<any[]> {
+export const  getNewerEntries = async(sensor: string, id: string) => {
+    
     try {
         let sensorModel;
         switch (sensor) {
@@ -49,15 +50,27 @@ export async function getNewerEntries(sensor: string, id: string): Promise<any[]
             case "Sensor6":
                 sensorModel = Sensor6;
                 break;
+
             default:
                 throw new Error("Invalid sensor type");
                 
         }
 
-        const newerEntries = await sensorModel.find({ _id: { $gt: id } }).lean().exec();
-        return newerEntries;
+        if (id === "0") { 
+            const first = await sensorModel.find().lean()
+            console.log("first entry")
+            return first;
+
+        }
+        else { 
+            const newerEntries = await sensorModel.find({ _id: { $gt: id } }).lean().exec();
+            console.log("newer entry")
+            return newerEntries;
+
+        }
     } catch (error) {
         console.error('Error retrieving newer entries:', error);
-        throw error;
+        return [] 
+        
     }
 }
