@@ -4,9 +4,16 @@ import threading
 import time
 from MongoDB import MongoDB 
 import netifaces
+# troubleshooting tools:
+#"ipconfig"
+#"netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
+
+IP_SERVER = '169.254.218.4' #of Ethernet-Adapter Ethernet 6
+# ip_Desktop = '192.168.178.23'
+PORT = 8888
+
 
 def get_network_info():
-    # Get host name and IP address
     hostname = socket.gethostname()
     ip_address = socket.gethostbyname(hostname)
 
@@ -26,19 +33,6 @@ def get_network_info():
                 print("  Broadcast Address:", addr_info.get('broadcast'))
         else:
             print("  No IPv4 address")
-# ip_uC = '192.168.178.23'
-
-# troubleshooting tools:
-#"ipconfig"
-#"netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
-    
-ip_Laptop = '169.254.218.4' #if of Ethernet-Adapter Ethernet 6
-# ip_Laptop =" 169.254.218.4"e
-# ip_Laptop ='169, 254, 171, 44'
-# ip_Laptop ='0,0,0,0'
-
-# ip_Desktop = '192.168.178.23'
-port = 8888
 
 def millis():
     return round(time.time() * 1000)
@@ -47,8 +41,8 @@ def millis():
 class TCP_SERVER:
     def __init__(self):
         self.datalog = DATALOGGER()
-        self.ipadress= ip_Laptop
-        self.port = 8888
+        self.ipadress= IP_SERVER
+        self.port = PORT
         self.__isRunning = 1
         self.thread = threading.Thread(target=self.StartServer)
         self.thread.start()
@@ -203,8 +197,7 @@ class DATALOGGER:
         else:
             sucess = 0
         return sucess
-        
-        
+
 
 
 if __name__ == "__main__":

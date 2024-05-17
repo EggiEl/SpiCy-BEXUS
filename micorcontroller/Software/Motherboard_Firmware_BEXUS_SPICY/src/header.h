@@ -1,48 +1,25 @@
+/*-----------Header file for global defines, objekts, variables and functions-----------*/
+
 #ifndef HEADER_H
 #define HEADER_H
 
 #include <Arduino.h>
+#include "debug_in_color.h"
 
-#define DEBUG 1
-#define USB_ENABLE 1
-#define MICROS 1
-
-#if DEBUG == 1
-#define debug(x) Serial.print(x)
-#define debugln(x) Serial.println(x)
-
-#if MICROS == 1
-#define MESSURETIME_START        \
-    unsigned long ta = micros(); \
-    unsigned long tb;
-#define MESSURETIME_STOP \
-    debug("-Time:");     \
-    tb = micros() - ta;  \
-    debug(tb);           \
-    debug("us");
-#else
-#define MESSURETIME_START        \
-    unsigned long ta = millis(); \
-    unsigned long tb;
-#define MESSURETIME_STOP \
-    debug("-Time:");     \
-    tb = millis() - ta;  \
-    debug(tb);           \
-    debug("ms");
-#endif
-
-#else
-#define debug(x)
-#define debugln(x)
-#define MESSURETIME_START
-#define MESSURETIME_STOP
-#endif
+/*--------Settings-----------------------*/
+#define USB_ENABLE 1 /*enables single drive USB functions*/
 
 /*----------------Pin mapping-------------*/
-#define MISO_LAN 0 // 16
-#define CS_LAN 1   // 17
-#define SCK_LAN 2  // 18
-#define MOSI_LAN 3 // 19
+#if 1 // if statement to make code colapsable
+// #define MISO_LAN 0
+// #define CS_LAN 1
+// #define SCK_LAN 2
+// #define MOSI_LAN 3
+
+#define MISO_LAN 16
+#define CS_LAN 17
+#define SCK_LAN 18
+#define MOSI_LAN 19
 
 #define MISO_SD 0
 #define MOSI_SD 3
@@ -64,10 +41,9 @@
 
 #define PIN_VOLT A3
 #define PIN_CURR A2
+#endif
 
 /*struct_packet*/
-extern volatile unsigned long id_struct;
-
 struct packet
 { // struct_format L L 6L 6f 6f 6i i f 2i 80s
     unsigned long id = 0;
@@ -87,21 +63,22 @@ struct packet
     char info[80] = {0};
 };
 
-struct packet packet_create();
-char *packettochar(struct packet data);
-void packet_print(struct packet pkt);
-void packet_writeinfo(struct packet &data, const char *info);
+struct packet *packet_create();
+char *packettochar(struct packet *data);
+void packet_print(struct packet *pkt);
+void packet_writeinfo(struct packet *data, const char *info);
 
 /*i2c scan*/
 void scan_wire();
 
 /*tcp_client*/
 extern char TCP_init;
-void test_TCP_manually();
+void test_TCP_manually(int nPackets = 1, unsigned int nTries = 5);
 void setup_TCP_Client();
-void send_TCP(char *data, unsigned long int size);
+char send_TCP_packet(struct packet *data);
+char send_multible_TCP_packet(struct packet **data, unsigned int nPackets);
 void recieve_TCP_command();
-int send_TCP_packet(struct packet data);
+void TCP_print_info();
 uint8_t cabletest();
 void testServer();
 
@@ -114,12 +91,12 @@ bool readstruct(struct packet *data, const char filepath[], unsigned long positi
 bool printfile(const char filepath[]);
 
 /*thermal*/
-#define HEAT_FREQ 1000          // 5kmax for the facy Ics
-#define HEAT_HUNDERTPERCENT 100 // value where the heaters are fully turned on
-#define HEAT_CURRENT 317        // aproximation of the current of a single Heater in mA
+const unsigned int HEAT_FREQ = 1000;          // 5kmax for the facy Ics
+const unsigned int HEAT_HUNDERTPERCENT = 100; // value where the heaters are fully turned on
+const unsigned int HEAT_CURRENT = 317;        // aproximation of the current of a single Heater in mA
 
 extern char heat_init;
-void heat_initialize();
+void heat_setup();
 void heat_updateall(uint16_t *HeaterPWM);
 void heat_updateone(uint8_t PIN, uint16_t PWM);
 void heat_testmanual();
@@ -129,13 +106,16 @@ uint8_t heat_testauto();
 uint32_t get_Status();
 
 /*utilitly functions*/
+void handleCommand(char buffer_comand, float param1, float param2, float param3, float param4);
 unsigned long get_batvoltage();
 unsigned long get_current();
-void serial_commands();
+void checkSerialInput();
 void StatusLedBlink();
-void blinkLed();
-void fadeLED();
+void blinkLed(uint8_t PIN);
+void fadeLED(uint8_t PIN);
 void heartbeat();
+void printMemoryUse();
+unsigned int free_Ram_left();
 
 /*single File USB*/
 extern char singleFileUsb_init;
@@ -146,4 +126,5 @@ void plug(uint32_t i);
 void unplug(uint32_t i);
 void deleteCSV(uint32_t i);
 void singlefile_close();
+
 #endif

@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../.."
+		},
+		{
+			"path": "D:/"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"cmath": "cpp",
+			"random": "cpp",
+			"*.tcc": "cpp",
+			"array": "cpp",
+			"string_view": "cpp"
+		}
+	}
+}

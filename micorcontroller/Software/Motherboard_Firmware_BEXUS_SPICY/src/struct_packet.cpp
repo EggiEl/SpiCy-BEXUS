@@ -1,118 +1,146 @@
 /*Coordination of the struct packet, wich is a container for downlink purposes*/
 #include "header.h"
-volatile unsigned long id_struct = 0;
-/*return a packet with a timestamp, id and a readout of the CpuTemp*/
-struct packet packet_create() {
-  struct packet a;
-  a.id = id_struct;
-  id_struct++;
-  a.timestampPacket = millis();
-  a.tempCpu = analogReadTemp(3.3f);
+
+static unsigned long id_struct = 0;
+
+/**
+ * @return a packet with a timestamp, id and a readout of the CpuTemp
+ * */
+struct packet *packet_create()
+{
+  struct packet *a = (struct packet *)calloc(1, sizeof(struct packet));
+  if (a != NULL)
+  {
+    a->id = id_struct;
+    id_struct++;
+    a->timestampPacket = millis();
+    a->tempCpu = analogReadTemp(3.3f);
+  }
   return a;
-};
+}
+
+/*frees a single packet*/
+void destroy_packet(struct packet *p)
+{
+  free(p);
+}
 
 /**
  *  writes a packet to a char* buffer
- * @param struct packet data to write to 
-* @return pointer to buffer
-*/
-char *packettochar(struct packet data) {
+ * remember to free!!
+ * @param struct packet data to write to
+ * @return pointer to buffer
+ */
+char *packettochar(struct packet *data)
+{
   char *buffer = (char *)malloc(sizeof(struct packet));
-  memcpy(buffer, &data, sizeof(struct packet));  //converts struct in a char array
+  if (!buffer)
+  {
+    debugf_red("packettochar Memory allocation failed\n");
+    return NULL;
+  }
+  memcpy(buffer, data, sizeof(struct packet)); // Copy struct data into buffer
   return buffer;
 }
 
-
 /*Prints all avaliable infos about a packet like pointers, size, values and memory*/
-void packet_print(struct packet pkt) {
-  Serial.println("-----infos about packet----------");
-  Serial.print("Size in uC Memory: ");
-  Serial.println(sizeof(struct packet));
+void packet_print(struct packet *pkt)
+{
 
-  Serial.print("id (address: ");
-  Serial.print((uintptr_t)&pkt.id, DEC);
-  Serial.print("): ");
-  Serial.println(pkt.id);
+  debugf_yellow("-----infos about packet----------\n");
 
-  Serial.print("timestampPacket (address: ");
-  Serial.print((uintptr_t)&pkt.timestampPacket, DEC);
-  Serial.print("): ");
-  Serial.println(pkt.timestampPacket);
+  debug("Size in uC Memory: ");
+  debugln(sizeof(struct packet));
 
-  Serial.print("timestampOxy (address: ");
-  Serial.print((uintptr_t)&pkt.timestampOxy, DEC);
-  Serial.print("): ");
-  for (int i = 0; i < 6; i++) {
-    Serial.print(pkt.timestampOxy[i]);
-    Serial.print(" ");
+  debug("id (address: ");
+  debug((uintptr_t)&pkt->id, DEC);
+  debug("): ");
+  debugln(pkt->id);
+
+  debug("timestampPacket (address: ");
+  debug((uintptr_t)&pkt->timestampPacket, DEC);
+  debug("): ");
+  debugln(pkt->timestampPacket);
+
+  debug("timestampOxy (address: ");
+  debug((uintptr_t)&pkt->timestampOxy, DEC);
+  debug("): ");
+  for (int i = 0; i < 6; i++)
+  {
+    debug(pkt->timestampOxy[i]);
+    debug(" ");
   }
-  Serial.println();
+  debugln();
 
-  Serial.print("oxigen (address: ");
-  Serial.print((uintptr_t)&pkt.oxigen, DEC);
-  Serial.print("): ");
-  for (int i = 0; i < 6; i++) {
-    Serial.print(pkt.oxigen[i]);
-    Serial.print(" ");
+  debug("oxigen (address: ");
+  debug((uintptr_t)&pkt->oxigen, DEC);
+  debug("): ");
+  for (int i = 0; i < 6; i++)
+  {
+    debug(pkt->oxigen[i]);
+    debug(" ");
   }
-  Serial.println();
+  debugln();
 
-  Serial.print("tempTube (address: ");
-  Serial.print((uintptr_t)&pkt.tempTube, DEC);
-  Serial.print("): ");
-  for (int i = 0; i < 6; i++) {
-    Serial.print(pkt.tempTube[i]);
-    Serial.print(" ");
+  debug("tempTube (address: ");
+  debug((uintptr_t)&pkt->tempTube, DEC);
+  debug("): ");
+  for (int i = 0; i < 6; i++)
+  {
+    debug(pkt->tempTube[i]);
+    debug(" ");
   }
-  Serial.println();
+  debugln();
 
-  Serial.print("heaterPWM (address: ");
-  Serial.print((uintptr_t)&pkt.heaterPWM, DEC);
-  Serial.print("): ");
-  for (int i = 0; i < 6; i++) {
-    Serial.print(pkt.heaterPWM[i]);
-    Serial.print(" ");
+  debug("heaterPWM (address: ");
+  debug((uintptr_t)&pkt->heaterPWM, DEC);
+  debug("): ");
+  for (int i = 0; i < 6; i++)
+  {
+    debug(pkt->heaterPWM[i]);
+    debug(" ");
   }
-  Serial.println();
+  debugln();
 
-  Serial.print("error (address: ");
-  Serial.print((uintptr_t)&pkt.error, DEC);
-  Serial.print("): ");
-  Serial.println(pkt.error);
+  debug("error (address: ");
+  debug((uintptr_t)&pkt->error, DEC);
+  debug("): ");
+  debugln(pkt->error);
 
+  debug("tempCpu (address: ");
+  debug((uintptr_t)&pkt->tempCpu, DEC);
+  debug("): ");
+  debugln(pkt->tempCpu);
 
-  Serial.print("tempCpu (address: ");
-  Serial.print((uintptr_t)&pkt.tempCpu, DEC);
-  Serial.print("): ");
-  Serial.println(pkt.tempCpu);
+  debug("power (address: ");
+  debug((uintptr_t)&pkt->power, DEC);
+  debug("): ");
+  debug(pkt->power[0]);
+  debug(" ");
+  debugln(pkt->power[1]);
 
-  Serial.print("power (address: ");
-  Serial.print((uintptr_t)&pkt.power, DEC);
-  Serial.print("): ");
-  Serial.print(pkt.power[0]);
-  Serial.print(" ");
-  Serial.println(pkt.power[1]);
-
-  Serial.print("info (address: ");
-  Serial.print((uintptr_t)&pkt.info, DEC);
-  Serial.print("): ");
-  for (int i = 0; i < 80; i++) {
-    Serial.print(pkt.info[i]);
+  debug("info (address: ");
+  debug((uintptr_t)&pkt->info, DEC);
+  debug("): ");
+  for (int i = 0; i < 80; i++)
+  {
+    debug(pkt->info[i]);
   }
-  Serial.println();
+  debugln();
 }
 
 /**
  *  writes a char array in the info of an packet
  * @param char* info pointer to a string with carrige return!!!
-*/
-void packet_writeinfo(struct packet &data, const char *info) {
-  unsigned int len = strnlen(info,sizeof(data.info)+1);
-  if (len >= sizeof(data.info)) {
-    Serial.print("This char was too big for struct packet info: ");
-    Serial.println(info);
+ */
+void packet_writeinfo(struct packet *packet, const char *info)
+{
+  size_t len = strnlen(info, sizeof(packet->info));
+  if (len >= sizeof(packet->info))
+  {
+    debugf_red("This char was too big for struct packet info: %s\n", info);
     return;
   }
-  strncpy(data.info, info, sizeof(data.info));
-  data.info[sizeof(data.info) - 1] = '\0';  // Ensure null-termination
+  strncpy(packet->info, info, len);
+  packet->info[len] = '\0'; // Ensure null-termination
 }

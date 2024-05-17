@@ -1,8 +1,10 @@
 #include "header.h"
 char heat_init = 0;
+
 /*initializes the pins, freq and range of the heating elements*/
-void heat_initialize()
+void heat_setup()
 {
+  debugf_yellow("<heat_setup>\n");
   analogWriteFreq(HEAT_FREQ); // 100Hz to 1MHz
   analogWriteRange(HEAT_HUNDERTPERCENT);
   pinMode(PIN_H0, OUTPUT);
@@ -12,6 +14,7 @@ void heat_initialize()
   pinMode(PIN_H4, OUTPUT);
   pinMode(PIN_H5, OUTPUT);
   heat_init = 1;
+  debugf_green("heat_setup success\n");
 }
 
 /**
@@ -22,7 +25,7 @@ void heat_updateall(uint16_t *HeaterPWM)
 {
   if (!heat_init)
   {
-    heat_initialize();
+    void thermal_setup();
   }
   // analogWriteResolution
   heat_updateone(PIN_H0, HeaterPWM[0]);
@@ -42,13 +45,9 @@ void heat_updateone(uint8_t PIN, uint16_t PWM)
 {
   if (!heat_init)
   {
-    heat_initialize();
+    void thermal_setup();
   }
-
-  if (PWM != 1)
-  {
-    analogWrite(PIN, PWM);
-  }
+  analogWrite(PIN, PWM);
 }
 
 /**
@@ -56,15 +55,14 @@ void heat_updateone(uint8_t PIN, uint16_t PWM)
  */
 void heat_testmanual()
 {
-  debugln("<Manual Heater Test>");
+  debugf_yellow("<Manual Heater Test>");
   debugln("sets heater 1 to 10%, 2 to 20% and so on");
-  debug("first Heater Pin: ");
-  debugln(PIN_H0);
+  debugf("first Heater Pin: %i\n", PIN_H0);
   if (!heat_init)
   {
-    heat_initialize();
+    void thermal_setup();
   }
-  uint16_t buf[] = {10, 20, 30, 40, 50, 60,70,80};
+  uint16_t buf[] = {10, 20, 30, 40, 50, 60, 70, 80};
   heat_updateall(buf);
 }
 
@@ -77,8 +75,8 @@ uint8_t heat_testauto()
 
   uint8_t results = 0;
   unsigned long cur_alloff = get_current(); // current with all heater off
-  unsigned long cur_one;
 
+  unsigned long cur_one;
   for (uint8_t i = 0; i < 6; i++)
   {
     buf[i] = HEAT_HUNDERTPERCENT;
@@ -91,9 +89,4 @@ uint8_t heat_testauto()
     buf[i] = 0;
   }
   return results;
-}
-
-void updatePID()
-{
-  // float p,i,d;
 }
