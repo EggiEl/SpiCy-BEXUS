@@ -5,12 +5,11 @@ import MyResponsiveChart from '../components/plot_temp';
 import { get_latest_data } from '../functions/get_latest_data';
 
 export interface ComponentProps { 
-    plotdata: any[], 
-    plotlimit: number, 
-    sensorname: string, 
-    lastdataID: any , 
-    upperlimit : number , 
-    lowerlimit : number 
+  plotdata: any[], 
+  plotlimit: number, 
+  sensorname: string, 
+  upperlimit: number,
+  lowerlimit: number
 }
 
 export default function FullPlot({ plotdata, plotlimit, sensorname, upperlimit, lowerlimit }: ComponentProps) {
