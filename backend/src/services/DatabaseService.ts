@@ -17,6 +17,7 @@ export const getAllData = async() => {
         const Sensor5Data = await Sensor5.find().lean()
         const Sensor6Data = await Sensor6.find().lean()
         const allData = [Sensor1Data, Sensor2Data, Sensor3Data, Sensor4Data, Sensor5Data, Sensor6Data]
+        console.log(allData)
         return allData
     } 
     catch (error) {
