@@ -14,9 +14,9 @@ export const GetNewerEntries = async (request: Request, response: Response) => {
     console.log("ConstrollerHitNewerEntries")
     const sensor = request.params.sensor;
     const id = request.params.id;
+    
     const dataResp = await getNewerEntries(sensor, id);
-    if (dataResp.length > 0) {
-    response.send(dataResp);
-    }
-    else response.send([])
+    
+
+    response.send(dataResp)
   }

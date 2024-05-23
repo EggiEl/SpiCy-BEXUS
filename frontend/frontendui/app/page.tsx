@@ -1,63 +1,30 @@
-"use client"
+import { get_all_data } from '@/functions/get_all_data';
+import {get_latest_data} from "@/functions/get_latest_data"
+import FullPlot from "@/components/FullPlotComponent" ; 
 
-import { useState, useEffect } from 'react';
-import MyResponsiveChart from '../components/plot_temp';
-import {get_latest_data} from '../functions/get_latest_data';
-import {get_all_data} from '../functions/get_all_data';
+export const dynamic = 'force-dynamic';
 
-export default function LandingPage() {
-  const [data, setData] = useState<any[]>([]);
-  const [limit, setLimit] = useState(100); // Neuer Zustand für das Limit
+const LandingPage = async () => {
+  let mountingdata = await get_all_data();
+  console.log(mountingdata)
+  let dataSensor1 = mountingdata[0] ; 
+  let dataSensor2 = mountingdata[1] ;  
+  const dataSensor3  = mountingdata[2] ; 
+  const dataSensor4 = mountingdata[3] 
+  console.log(dataSensor1);
 
-  const fetchNewData = async () => {
-    if (data.length > 0) {
-      const lastData = data[data.length - 1];
-      if (lastData && lastData._id) {
-        const newData = await get_latest_data(lastData._id, "Sensor1");
-        console.log(newData);
-        setData((prevData: any[]) => [...prevData, ...newData]);
-      }
-    }
-  }
 
-  const fetchAllData = async () => {
-    const allData = await get_all_data();
-    console.log(allData);
-    setData(allData[0]);
-  }
-
-  const increaseLimit = () => setLimit(prevLimit => prevLimit + 1); // Funktion zum Erhöhen des Limits
-  const decreaseLimit = () => setLimit(prevLimit => Math.max(prevLimit - 1, 1)); // Funktion zum Verringern des Limits
-
-  useEffect(() => {
-    fetchAllData();
-  }, []);
-
-  useEffect(() => {
-    const intervalId = setInterval(fetchNewData, 1000); // Fetch new data every second
-    return () => clearInterval(intervalId); // Clean up on component unmount
-  }, [data]); // Add data as a dependency
-
-  return(
+  console.log(mountingdata);
+  
+  
+  return (
     <div>
-      <h1>
-        Hallo Welt
-      </h1>
-      <button onClick={fetchNewData}>
-        Daten abrufen
-      </button>
-      <button onClick={fetchAllData}>
-        Alle Daten
-      </button>
-      <button onClick={increaseLimit}>
-        Limit erhöhen
-      </button>
-      <button onClick={decreaseLimit}>
-        Limit verringern
-      </button>
-      <div style={{ height: '500px' }}>
-        <MyResponsiveChart datalist={data} limit={limit}/>
-      </div>
+      <h1>Mountingdata</h1>
+      <FullPlot  plotdata={dataSensor1} plotlimit={100} sensorname='Sensor1' upperlimit={25} lowerlimit={24} />
+      <FullPlot  plotdata={dataSensor2} plotlimit={100} sensorname='Sensor2' upperlimit={25} lowerlimit={24} />
+
     </div>
-  )
+  );
 }
+
+export default LandingPage;
