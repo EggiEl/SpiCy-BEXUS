@@ -92,8 +92,8 @@
 
 //     Serial.println("Adafruit TinyUSB Mass Storage SD Card example");
 
-//     Serial.print("\nInitializing SD card ... ");
-//     Serial.print("CS = ");
+//     debug("\nInitializing SD card ... ");
+//     debug("CS = ");
 //     Serial.println(chipSelect);
 
 //     if (!sd.begin(chipSelect, SD_SCK_MHZ(50)))
@@ -113,7 +113,7 @@
 //     uint32_t block_count = sd.card()->cardSize();
 // #endif
 
-//     Serial.print("Volume size (MB):  ");
+//     debug("Volume size (MB):  ");
 //     Serial.println((block_count / 2) / 1024);
 
 //     // Set disk size, SD block size is always 512

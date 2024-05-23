@@ -2915,12 +2915,6 @@
 		)
 	)
 	(junction
-		(at 227.33 129.54)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "0c7ea5f9-32df-4c2f-a4d7-f2df1a1a6748")
-	)
-	(junction
 		(at 110.49 125.73)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3029,12 +3023,6 @@
 		(uuid "5b8e81d5-fd05-4198-bf2f-521e25b539c9")
 	)
 	(junction
-		(at 227.33 111.76)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5ea75ce3-7fc4-4742-b023-c34050bdb811")
-	)
-	(junction
 		(at 48.26 167.64)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3089,6 +3077,12 @@
 		(uuid "7e3e0e2c-fdfa-4a98-bf29-ce47ddd0989a")
 	)
 	(junction
+		(at 231.14 111.76)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "81579e0a-51d7-4d34-bddf-0a1a6b9a8caf")
+	)
+	(junction
 		(at 50.8 167.64)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3135,6 +3129,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d069137b-ec3c-4cc5-b0cf-4cf08ccc3ccc")
+	)
+	(junction
+		(at 231.14 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d77cfc6c-815d-45d6-9733-74e25c2caee2")
 	)
 	(junction
 		(at 134.62 138.43)
@@ -3674,7 +3674,7 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 130.81) (xy 227.33 129.54)
+			(xy 231.14 130.81) (xy 231.14 129.54)
 		)
 		(stroke
 			(width 0)
@@ -3814,7 +3814,7 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 111.76) (xy 233.68 111.76)
+			(xy 231.14 111.76) (xy 237.49 111.76)
 		)
 		(stroke
 			(width 0)
@@ -4124,7 +4124,7 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 111.76) (xy 227.33 114.3)
+			(xy 231.14 111.76) (xy 231.14 113.03)
 		)
 		(stroke
 			(width 0)
@@ -4334,7 +4334,7 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 109.22) (xy 227.33 111.76)
+			(xy 231.14 109.22) (xy 231.14 111.76)
 		)
 		(stroke
 			(width 0)
@@ -4484,6 +4484,16 @@
 	)
 	(wire
 		(pts
+			(xy 231.14 128.27) (xy 231.14 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b4b5021b-0621-4256-95f2-a11329c8ef59")
+	)
+	(wire
+		(pts
 			(xy 105.41 82.55) (xy 105.41 86.36)
 		)
 		(stroke
@@ -4544,7 +4554,7 @@
 	)
 	(wire
 		(pts
-			(xy 233.68 123.19) (xy 233.68 129.54)
+			(xy 237.49 123.19) (xy 237.49 129.54)
 		)
 		(stroke
 			(width 0)
@@ -4564,7 +4574,7 @@
 	)
 	(wire
 		(pts
-			(xy 233.68 111.76) (xy 233.68 115.57)
+			(xy 237.49 111.76) (xy 237.49 115.57)
 		)
 		(stroke
 			(width 0)
@@ -4634,7 +4644,7 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 129.54) (xy 233.68 129.54)
+			(xy 231.14 129.54) (xy 237.49 129.54)
 		)
 		(stroke
 			(width 0)
@@ -4894,7 +4904,7 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 118.11) (xy 162.56 121.92)
+			(xy 162.56 118.11) (xy 162.56 119.38)
 		)
 		(stroke
 			(width 0)
@@ -5281,9 +5291,9 @@
 		)
 		(uuid "1c7efb00-d18b-4743-9553-9409d79ea243")
 	)
-	(text "Differenzverstärker:\nVo = I * Rs * R10/R9\nif R7 = R9 and R8 = R10\nImax = ca. 3.3A, Rs = 1mOhm; V0max = 3V3; \nR10/R9 = V0/(Imax*Rs) = 1k\n\n->I = Vo/(Rs*2,5k)\n"
+	(text "Differenzverstärker:\nVo =  (v_bat- 28V) * R10/R9 = I * Rs * R10/R9\nif R7 = R9 and R8 = R10\nImax = ca. 3.3A, Rs = 1mOhm; V0max = 3V3; \nR10/R9 = V0/(Imax*Rs) = 1k\n\n->I = Vo/(Rs*2,5k)\n"
 		(exclude_from_sim no)
-		(at 177.038 130.81 0)
+		(at 177.038 131.826 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5759,7 +5769,7 @@
 	)
 	(hierarchical_label "3V3_rest"
 		(shape output)
-		(at 227.33 109.22 90)
+		(at 231.14 109.22 90)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6495,7 +6505,7 @@
 	)
 	(symbol
 		(lib_id "SymbolsBalloonv4:Opamp_Dual")
-		(at 229.87 121.92 0)
+		(at 233.68 120.65 0)
 		(unit 3)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -6503,7 +6513,7 @@
 		(dnp no)
 		(uuid "17621490-dd90-49fb-a480-d279c1bcdf04")
 		(property "Reference" "OP0"
-			(at 224.028 119.126 0)
+			(at 227.838 117.856 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6512,7 +6522,7 @@
 			)
 		)
 		(property "Value" "LM2904AVQDRQ1"
-			(at 224.028 121.666 0)
+			(at 227.838 120.396 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6522,7 +6532,7 @@
 			)
 		)
 		(property "Footprint" "SamacSys_Parts:SOIC127P600X175-8N"
-			(at 229.87 121.92 0)
+			(at 233.68 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6531,7 +6541,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 229.87 121.92 0)
+			(at 233.68 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6540,7 +6550,7 @@
 			)
 		)
 		(property "Description" "Dual operational amplifier"
-			(at 229.87 121.92 0)
+			(at 233.68 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6549,7 +6559,7 @@
 			)
 		)
 		(property "Sim.Library" "${KICAD7_SYMBOL_DIR}/Simulation_SPICE.sp"
-			(at 229.87 121.92 0)
+			(at 233.68 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6558,7 +6568,7 @@
 			)
 		)
 		(property "Sim.Name" "kicad_builtin_opamp_dual"
-			(at 229.87 121.92 0)
+			(at 233.68 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6567,7 +6577,7 @@
 			)
 		)
 		(property "Sim.Device" "SUBCKT"
-			(at 229.87 121.92 0)
+			(at 233.68 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6576,7 +6586,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=out1 2=in1- 3=in1+ 4=vee 5=in2+ 6=in2- 7=out2 8=vcc"
-			(at 229.87 121.92 0)
+			(at 233.68 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6690,7 +6700,7 @@
 	)
 	(symbol
 		(lib_id "SymbolsBalloonv4:C")
-		(at 233.68 119.38 180)
+		(at 237.49 119.38 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -6699,7 +6709,7 @@
 		(fields_autoplaced yes)
 		(uuid "1bcfbd5f-3cb5-4382-bae1-93cacdb79eb6")
 		(property "Reference" "C14"
-			(at 237.49 118.1099 0)
+			(at 241.3 118.1099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6708,7 +6718,7 @@
 			)
 		)
 		(property "Value" "0.1u"
-			(at 237.49 120.6499 0)
+			(at 241.3 120.6499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6717,7 +6727,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
-			(at 232.7148 115.57 0)
+			(at 236.5248 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6726,7 +6736,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 233.68 119.38 0)
+			(at 237.49 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6735,7 +6745,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 233.68 119.38 0)
+			(at 237.49 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10718,7 +10728,7 @@
 	)
 	(symbol
 		(lib_id "SymbolsBalloonv4:GND")
-		(at 162.56 121.92 0)
+		(at 162.56 119.38 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -10726,7 +10736,7 @@
 		(dnp no)
 		(uuid "bb50e763-ef24-4305-afc7-d6e4f6c13dfb")
 		(property "Reference" "#PWR013"
-			(at 162.56 128.27 0)
+			(at 162.56 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10735,7 +10745,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 162.687 126.3142 0)
+			(at 162.687 123.7742 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10743,7 +10753,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 162.56 121.92 0)
+			(at 162.56 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10752,7 +10762,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 162.56 121.92 0)
+			(at 162.56 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10761,7 +10771,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 162.56 121.92 0)
+			(at 162.56 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12369,7 +12379,7 @@
 	)
 	(symbol
 		(lib_id "SymbolsBalloonv4:GND")
-		(at 227.33 130.81 0)
+		(at 231.14 130.81 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -12377,7 +12387,7 @@
 		(dnp no)
 		(uuid "f5d2c75e-550f-4753-a63f-364a8ad99bb0")
 		(property "Reference" "#PWR021"
-			(at 227.33 137.16 0)
+			(at 231.14 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12386,7 +12396,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 227.457 135.2042 0)
+			(at 231.267 135.2042 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12394,7 +12404,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 227.33 130.81 0)
+			(at 231.14 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12403,7 +12413,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 227.33 130.81 0)
+			(at 231.14 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12412,7 +12422,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 227.33 130.81 0)
+			(at 231.14 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)

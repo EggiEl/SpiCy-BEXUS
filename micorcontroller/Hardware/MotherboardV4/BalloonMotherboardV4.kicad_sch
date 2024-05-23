@@ -1173,6 +1173,18 @@
 		)
 		(uuid ffc1e380-cf14-41e9-b286-c623b25b0519)
 	)
+	(text "Bekannte Designfehler\n- Input Rush von Buck Converter Condesnsatoren \n		     von Heater Condensatoren\n	nicht begrenzt (induktor?)\n- Pulldown Resistoren bei Voltageshifter zwischen OE und GND\n  und NTCs allgemein fehlen\n- keine seperate Analog/HF Groundplanes\n- BAttery Voltage MEasurement befor shunt"
+		(exclude_from_sim no)
+		(at 185.674 77.724 0)
+		(effects
+			(font
+				(size 2 2)
+				(color 255 255 255 1)
+			)
+			(justify left top)
+		)
+		(uuid "b2d90c85-5400-4f99-8d8c-08d5be1dfd0d")
+	)
 	(text "Connections"
 		(exclude_from_sim no)
 		(at 22.606 26.416 0)

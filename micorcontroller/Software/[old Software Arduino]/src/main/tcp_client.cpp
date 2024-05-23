@@ -50,7 +50,7 @@ void test_TCP_manually()
   //    if (buffer) {
   //      int a = 0;
   //      while (buffer[a] != '\n') {
-  //        Serial.print(buffer[a]);
+  //        debug(buffer[a]);
   //        a++;
   //      }
   //      Serial.println();
@@ -103,7 +103,7 @@ void setup_TCP_Client()
   {
     if (DEBUG)
     {
-      Serial.print(mac_address[i], HEX);
+      debug(mac_address[i], HEX);
     }
     debug(" ");
   }
@@ -341,7 +341,7 @@ void testServer() {
     Serial.println("Ethernet cable is not connected.");
   }
   server.begin();
-  Serial.print("server is at ");
+  debug("server is at ");
   Serial.println(Ethernet.localIP());
   while (1) {  // listen for incoming clients
     EthernetClient client = server.available();

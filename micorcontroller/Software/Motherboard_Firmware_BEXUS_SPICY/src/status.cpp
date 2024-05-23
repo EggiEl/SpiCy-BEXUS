@@ -16,7 +16,7 @@ uint32_t get_Status()
   status |= ((uint32_t)sd_init << 30);
 
   // TCP connection
-  TCP_setup_client();
+  tcp_setup_client();
   status |= ((uint32_t)TCP_init << 26);
 
   // Heater

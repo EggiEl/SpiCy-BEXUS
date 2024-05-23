@@ -71,7 +71,7 @@ void setup() {
   // start listening for clients
   server.begin();
 
-  Serial.print("Chat server address:");
+  debug("Chat server address:");
   Serial.println(Ethernet.localIP());
 }
 
@@ -81,7 +81,7 @@ void loop() {
   if (newClient) {
     for (byte i=0; i < 8; i++) {
       if (!clients[i]) {
-        Serial.print("We have a new client #");
+        debug("We have a new client #");
         Serial.println(i);
         newClient.print("Hello, client number: ");
         newClient.println(i);
@@ -111,7 +111,7 @@ void loop() {
   // stop any clients which disconnect
   for (byte i=0; i < 8; i++) {
     if (clients[i] && !clients[i].connected()) {
-      Serial.print("disconnect client #");
+      debug("disconnect client #");
       Serial.println(i);
       clients[i].stop();
     }

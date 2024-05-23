@@ -1,0 +1,13 @@
+@startuml
+[*] -down-> START
+START -> CREATE_PACKET : initialize / packet_dl=null
+CREATE_PACKET -right-> READ_TEMP : packet was created
+CREATE_PACKET -right-> START : packet creation failed
+READ_TEMP -down-> READ_OXY : stored temperature data
+READ_OXY -down-> READ_LIGHT : stored oxygen data
+READ_LIGHT -down-> SAVESENDPACKET : proceed after light data
+SAVESENDPACKET -> START : packet saved/sent
+SAVESENDPACKET -left-> ERROR : send failed / cleanup
+ERROR -right-> START : cleanup / reset
+START -> ERROR : default / error
+@enduml

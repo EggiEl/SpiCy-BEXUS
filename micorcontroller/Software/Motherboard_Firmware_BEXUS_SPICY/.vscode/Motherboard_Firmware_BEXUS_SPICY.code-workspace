@@ -23,7 +23,23 @@
 			"random": "cpp",
 			"*.tcc": "cpp",
 			"array": "cpp",
-			"string_view": "cpp"
+			"string_view": "cpp",
+			"deque": "cpp",
+			"format": "cpp",
+			"initializer_list": "cpp",
+			"list": "cpp",
+			"ranges": "cpp",
+			"span": "cpp",
+			"vector": "cpp",
+			"xhash": "cpp",
+			"xstring": "cpp",
+			"xtree": "cpp",
+			"xutility": "cpp",
+			"string": "cpp",
+			"unordered_map": "cpp",
+			"ostream": "cpp",
+			"queue": "cpp",
+			"utility": "cpp"
 		}
 	}
 }

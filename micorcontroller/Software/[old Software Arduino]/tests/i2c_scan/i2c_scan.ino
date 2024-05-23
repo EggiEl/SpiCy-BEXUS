@@ -36,7 +36,7 @@ void scanI2C(long frequency)
     bool error = true;
     bool addressFound = false;
 
-    Serial.print("Scanne im ");
+    debug("Scanne im ");
     switch (frequency)
     {
     case 100000:
@@ -67,7 +67,7 @@ void scanI2C(long frequency)
         if (error == 0)
         {
             addressFound = true;
-            Serial.print("0x");
+            debug("0x");
             Serial.println(i, HEX);
         }
     }

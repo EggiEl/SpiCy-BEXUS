@@ -6,7 +6,7 @@
 #define MICROS 1
 
 #if DEBUG == 1
-#define debug(x) Serial.print(x)
+#define debug(x) debug(x)
 #define debugln(x) Serial.println(x)
 
 #if MICROS == 1

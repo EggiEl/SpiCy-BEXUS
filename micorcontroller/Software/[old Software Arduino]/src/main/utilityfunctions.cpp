@@ -46,7 +46,7 @@ void printIO()
 {
   Serial.println();
   Serial.println("printio: ");
-  Serial.print("Pinnumb: ");
+  debug("Pinnumb: ");
   char *d = (char *)malloc(nGPIOS);
   char *a = (char *)malloc(nGPIOS);
   if (d == NULL)
@@ -65,31 +65,31 @@ void printIO()
   }
   for (int i = 0; i < nGPIOS; i++)
   {
-    Serial.print(i);
+    debug(i);
     if (i < 10)
     {
-      Serial.print(" ");
+      debug(" ");
     }
-    Serial.print(" |");
+    debug(" |");
   }
   Serial.println();
-  Serial.print("Digital: ");
+  debug("Digital: ");
   for (int i = 0; i < nGPIOS; i++)
   {
-    Serial.print(d[i], BIN);
-    Serial.print(" ");
-    Serial.print(" |");
+    debug(d[i], BIN);
+    debug(" ");
+    debug(" |");
   }
   Serial.println();
-  Serial.print("Analog:  ");
+  debug("Analog:  ");
   for (int i = 0; i < nGPIOS; i++)
   {
-    Serial.print(a[i], DEC);
+    debug(a[i], DEC);
     if (a[i] < 100)
     {
-      Serial.print(" ");
+      debug(" ");
     }
-    Serial.print("|");
+    debug("|");
   }
 }
 

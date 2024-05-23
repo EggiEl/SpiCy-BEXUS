@@ -148,7 +148,7 @@ bool test_writetofile() {
   if (!SD_init) { init_SD(); }
   File myFile = SD.open("test.txt", FILE_WRITE);
   if (myFile) {  // if the file opened okay, write to it:
-    Serial.print("Writing to test.txt...");
+    debug("Writing to test.txt...");
     myFile.println("testing 1, 2, 3.");
     myFile.close();
     Serial.println("done.");

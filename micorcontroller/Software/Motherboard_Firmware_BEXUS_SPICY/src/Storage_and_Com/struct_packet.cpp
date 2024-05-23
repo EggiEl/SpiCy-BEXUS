@@ -1,3 +1,4 @@
+
 /*Coordination of the struct packet, wich is a container for downlink purposes*/
 #include "header.h"
 
@@ -36,7 +37,7 @@ char *packettochar(struct packet *data)
   char *buffer = (char *)malloc(sizeof(struct packet));
   if (!buffer)
   {
-    debugf_red("packettochar Memory allocation failed\n");
+    debugf_error("packettochar Memory allocation failed\n");
     return NULL;
   }
   memcpy(buffer, data, sizeof(struct packet)); // Copy struct data into buffer
@@ -47,7 +48,7 @@ char *packettochar(struct packet *data)
 void packet_print(struct packet *pkt)
 {
 
-  debugf_yellow("-----infos about packet----------\n");
+  debugf_status("-----infos about packet----------\n");
 
   debug("Size in uC Memory: ");
   debugln(sizeof(struct packet));
@@ -138,7 +139,7 @@ void packet_writeinfo(struct packet *packet, const char *info)
   size_t len = strnlen(info, sizeof(packet->info));
   if (len >= sizeof(packet->info))
   {
-    debugf_red("This char was too big for struct packet info: %s\n", info);
+    debugf_error("This char was too big for struct packet info: %s\n", info);
     return;
   }
   strncpy(packet->info, info, len);

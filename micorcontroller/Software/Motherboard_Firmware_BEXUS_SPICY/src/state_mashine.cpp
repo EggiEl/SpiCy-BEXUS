@@ -15,7 +15,7 @@ struct packet *packet_dl; /*Pointer to the packet wich will be the next downlink
 /*
  * Changes the current state to the next one
  */
-void newState()
+void nextState()
 {
     switch (state)
     {
@@ -40,22 +40,23 @@ void newState()
     }
     case READ_TEMP:
     {
-        state = READ_OXY;
-        float *Temp_buf = readThermistors();
+        float *Temp_buf = temp_read_cable();
         for (uint8_t i = 0; i < 6; i++)
         {
             packet_dl->tempTube[i] = Temp_buf[i];
         }
-        packet_dl->tempCpu = Temp_buf[6];
+        free(Temp_buf);
+        state = READ_OXY;
         break;
     }
     case READ_OXY:
     {
-        float *Oxy_buf = oxygen_readall();
+        float *Oxy_buf = oxy_readall();
         for (uint8_t i = 0; i < 6; i++)
         {
             packet_dl->oxigen[i] = Oxy_buf[i];
         }
+        free(Oxy_buf);
         state = READ_LIGHT;
         break;
     }
@@ -66,8 +67,9 @@ void newState()
     }
     case SAVESENDPACKET:
     {
-        sd_writestruct(packet_dl, "oi");
-        TCP_send_packet(packet_dl);
+        // sd_writestruct(packet_dl, "oi");
+        char success = tcp_send_packet(packet_dl);
+        free(packet_dl);
         state = START;
         break;
     }
@@ -75,6 +77,7 @@ void newState()
     {
         TCP_init = 0;
     	sd_init = 0;
+        free(packet_dl);
         state = START;
     }
     default:

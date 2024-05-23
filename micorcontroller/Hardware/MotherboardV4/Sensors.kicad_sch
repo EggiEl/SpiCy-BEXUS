@@ -4067,15 +4067,15 @@
 		(uuid "eca48e67-1304-4300-a7d1-ae14bd7c167f")
 	)
 	(no_connect
-		(at 132.08 140.97)
+		(at 125.73 135.89)
 		(uuid "01e35f41-a638-4ee4-be2e-405864e995dc")
 	)
 	(no_connect
-		(at 147.32 143.51)
+		(at 140.97 138.43)
 		(uuid "7abfe37d-26c8-4e82-b5b8-c8a3923c0436")
 	)
 	(no_connect
-		(at 132.08 146.05)
+		(at 125.73 140.97)
 		(uuid "9ef8244b-a85c-40ed-bd09-23875f759524")
 	)
 	(no_connect
@@ -4708,7 +4708,7 @@
 	)
 	(wire
 		(pts
-			(xy 44.45 156.21) (xy 44.45 157.48)
+			(xy 48.26 157.48) (xy 48.26 158.75)
 		)
 		(stroke
 			(width 0)
@@ -8438,7 +8438,7 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 118.11) (xy 163.83 116.84)
+			(xy 217.17 119.38) (xy 217.17 118.11)
 		)
 		(stroke
 			(width 0)
@@ -11378,7 +11378,7 @@
 	)
 	(wire
 		(pts
-			(xy 44.45 176.53) (xy 44.45 175.26)
+			(xy 48.26 177.8) (xy 48.26 176.53)
 		)
 		(stroke
 			(width 0)
@@ -11708,7 +11708,7 @@
 	)
 	(wire
 		(pts
-			(xy 44.45 165.1) (xy 44.45 167.64)
+			(xy 48.26 166.37) (xy 48.26 168.91)
 		)
 		(stroke
 			(width 0)
@@ -15213,9 +15213,9 @@
 		(uuid 2d6f82d5-4a0b-4ed7-9fb2-46a942c17baf)
 	)
 	(arc
-		(start 81.2439 132.6404)
-		(mid 81.244 132.6596)
-		(end 81.2369 132.6487)
+		(start 81.2369 132.6487)
+		(mid 81.2388 132.6431)
+		(end 81.2439 132.6404)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -22749,9 +22749,9 @@
 		(uuid 8e8d1022-ace6-4b9c-83e5-d8d81c215913)
 	)
 	(arc
-		(start 95.35 138.0726)
-		(mid 95.3708 138.0738)
-		(end 95.3605 138.0844)
+		(start 95.3605 138.0844)
+		(mid 95.3514 138.0815)
+		(end 95.35 138.0726)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -23125,9 +23125,9 @@
 		(uuid 9446ba42-9dab-4041-983e-eed3e020d4e8)
 	)
 	(arc
-		(start 85.0546 136.1217)
-		(mid 85.0391 136.1162)
-		(end 85.0477 136.107)
+		(start 85.0477 136.107)
+		(mid 85.0601 136.1115)
+		(end 85.0546 136.1217)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -23684,9 +23684,9 @@
 		(uuid 9ce58555-af73-48e1-87d5-43a7d6617a85)
 	)
 	(arc
-		(start 82.4029 136.7281)
-		(mid 82.4004 136.7249)
-		(end 82.4032 136.7206)
+		(start 82.4032 136.7206)
+		(mid 82.4025 136.7221)
+		(end 82.4029 136.7281)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -29677,9 +29677,9 @@
 		(uuid f1f01831-99e6-48f9-9d56-cd1baea1713b)
 	)
 	(arc
-		(start 94.281 135.9581)
-		(mid 94.2805 135.9581)
-		(end 94.28 135.9518)
+		(start 94.28 135.9518)
+		(mid 94.2839 135.9543)
+		(end 94.281 135.9581)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -31133,7 +31133,7 @@
 		(uuid "c867eead-e28c-4854-b119-56012cabd849")
 	)
 	(label "ntc+"
-		(at 44.45 166.37 0)
+		(at 48.26 167.64 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -31375,7 +31375,7 @@
 	)
 	(hierarchical_label "3V3uC"
 		(shape input)
-		(at 44.45 156.21 90)
+		(at 48.26 157.48 90)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -31435,7 +31435,7 @@
 	)
 	(hierarchical_label "3V3uC"
 		(shape input)
-		(at 163.83 109.22 90)
+		(at 217.17 110.49 90)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -33562,16 +33562,15 @@
 	)
 	(symbol
 		(lib_id "SymbolsBalloonv4:Opamp_Dual")
-		(at 139.7 143.51 0)
+		(at 133.35 138.43 0)
 		(unit 2)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "3c6500b6-1067-4353-aefb-f134f921aecc")
 		(property "Reference" "OP1"
-			(at 139.7 133.35 0)
+			(at 134.112 132.334 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33579,15 +33578,16 @@
 			)
 		)
 		(property "Value" "TLV9002QDRQ1"
-			(at 139.7 135.89 0)
+			(at 133.35 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" "SamacSys_Parts:SOIC127P600X175-8N"
-			(at 139.7 143.51 0)
+			(at 133.35 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33596,7 +33596,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 139.7 143.51 0)
+			(at 133.35 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33605,7 +33605,7 @@
 			)
 		)
 		(property "Description" "Dual operational amplifier"
-			(at 139.7 143.51 0)
+			(at 133.35 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33614,7 +33614,7 @@
 			)
 		)
 		(property "Sim.Library" "${KICAD7_SYMBOL_DIR}/Simulation_SPICE.sp"
-			(at 139.7 143.51 0)
+			(at 133.35 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33623,7 +33623,7 @@
 			)
 		)
 		(property "Sim.Name" "kicad_builtin_opamp_dual"
-			(at 139.7 143.51 0)
+			(at 133.35 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33632,7 +33632,7 @@
 			)
 		)
 		(property "Sim.Device" "SUBCKT"
-			(at 139.7 143.51 0)
+			(at 133.35 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33641,7 +33641,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=out1 2=in1- 3=in1+ 4=vee 5=in2+ 6=in2- 7=out2 8=vcc"
-			(at 139.7 143.51 0)
+			(at 133.35 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33754,7 +33754,7 @@
 	)
 	(symbol
 		(lib_id "SymbolsBalloonv4:GND")
-		(at 44.45 176.53 0)
+		(at 48.26 177.8 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -33762,7 +33762,7 @@
 		(dnp no)
 		(uuid "4286da6d-d9c3-4498-99c8-2b6b5fc30c60")
 		(property "Reference" "#PWR065"
-			(at 44.45 182.88 0)
+			(at 48.26 184.15 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33771,7 +33771,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 44.577 180.9242 0)
+			(at 48.387 182.1942 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33779,7 +33779,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 44.45 176.53 0)
+			(at 48.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33788,7 +33788,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 44.45 176.53 0)
+			(at 48.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -33797,7 +33797,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 44.45 176.53 0)
+			(at 48.26 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35380,7 +35380,7 @@
 	)
 	(symbol
 		(lib_id "SymbolsBalloonv4:GND")
-		(at 163.83 118.11 0)
+		(at 217.17 119.38 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -35388,7 +35388,7 @@
 		(dnp no)
 		(uuid "a4ffa8d8-5793-422a-bf90-e4efb48e4fbe")
 		(property "Reference" "#PWR073"
-			(at 163.83 124.46 0)
+			(at 217.17 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35397,7 +35397,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 163.83 122.174 0)
+			(at 217.17 123.444 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35405,7 +35405,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 163.83 118.11 0)
+			(at 217.17 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35414,7 +35414,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 163.83 118.11 0)
+			(at 217.17 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35423,7 +35423,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 163.83 118.11 0)
+			(at 217.17 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -35691,6 +35691,7 @@
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
 		(property "Footprint" "SamacSys_Parts:SOIC127P600X175-8N"
@@ -36998,7 +36999,7 @@
 	)
 	(symbol
 		(lib_id "SymbolsBalloonv4:D_Zener")
-		(at 44.45 171.45 270)
+		(at 48.26 172.72 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -37006,7 +37007,7 @@
 		(dnp no)
 		(uuid "f09ac12f-a1f1-4996-be67-bdc3caebfdd9")
 		(property "Reference" "Vref1"
-			(at 41.148 170.434 90)
+			(at 44.958 171.704 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37015,7 +37016,7 @@
 			)
 		)
 		(property "Value" "LM4040BIM3-3.0_NOPB"
-			(at 41.148 172.974 90)
+			(at 44.958 174.244 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37024,7 +37025,7 @@
 			)
 		)
 		(property "Footprint" "SamacSys_Parts:SOT95P237X112-3N"
-			(at 47.752 172.212 0)
+			(at 51.562 173.482 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37033,7 +37034,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 44.45 171.45 0)
+			(at 48.26 172.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37042,7 +37043,7 @@
 			)
 		)
 		(property "Description" "Zener diode"
-			(at 40.64 181.61 0)
+			(at 44.45 182.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37051,7 +37052,7 @@
 			)
 		)
 		(property "Height" "1.12"
-			(at 39.37 190.5 0)
+			(at 43.18 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37061,7 +37062,7 @@
 			)
 		)
 		(property "Mouser Part Number" "926-LM4040BIM330NOPB"
-			(at 36.83 190.5 0)
+			(at 40.64 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37071,7 +37072,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/LM4040BIM3-3.0-NOPB?qs=QbsRYf82W3FThDimo07Imw%3D%3D"
-			(at 34.29 190.5 0)
+			(at 38.1 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37081,7 +37082,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Texas Instruments"
-			(at 31.75 190.5 0)
+			(at 35.56 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37091,7 +37092,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "LM4040BIM3-3.0/NOPB"
-			(at 29.21 190.5 0)
+			(at 33.02 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37186,7 +37187,7 @@
 	)
 	(symbol
 		(lib_id "SymbolsBalloonv4:R")
-		(at 44.45 161.29 0)
+		(at 48.26 162.56 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -37194,7 +37195,7 @@
 		(dnp no)
 		(uuid "f40619dd-54e7-4eea-8af4-1eaecc78e40f")
 		(property "Reference" "R37"
-			(at 38.608 161.29 90)
+			(at 42.418 162.56 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37202,7 +37203,7 @@
 			)
 		)
 		(property "Value" "270"
-			(at 40.64 161.798 90)
+			(at 44.45 163.068 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37210,7 +37211,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 42.672 161.29 90)
+			(at 46.482 162.56 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37219,7 +37220,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 44.45 161.29 0)
+			(at 48.26 162.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37228,7 +37229,7 @@
 			)
 		)
 		(property "Description" "Zdiode Cur limiter"
-			(at 28.448 161.798 0)
+			(at 32.258 163.068 0)
 			(show_name yes)
 			(effects
 				(font
@@ -37254,7 +37255,7 @@
 	)
 	(symbol
 		(lib_id "SymbolsBalloonv4:C")
-		(at 163.83 113.03 0)
+		(at 217.17 114.3 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -37262,7 +37263,7 @@
 		(dnp no)
 		(uuid "f56d478f-4623-4d43-849e-6ab08ca13d9e")
 		(property "Reference" "C44"
-			(at 166.751 111.8616 0)
+			(at 220.091 113.1316 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37271,7 +37272,7 @@
 			)
 		)
 		(property "Value" "10u"
-			(at 166.751 114.173 0)
+			(at 220.091 115.443 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37280,7 +37281,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 164.7952 116.84 0)
+			(at 218.1352 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37289,7 +37290,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 163.83 113.03 0)
+			(at 217.17 114.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -37298,7 +37299,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 163.83 113.03 0)
+			(at 217.17 114.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)

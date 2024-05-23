@@ -1,4 +1,7 @@
 #include "header.h"
+#include "pico/stdlib.h"
+#include "hardware/adc.h"
+#include "hardware/pwm.h"
 #define R_SHUNT 1 // in mOhms
 #define nGPIOS 29
 
@@ -26,7 +29,7 @@ void checkSerialInput()
       float param2 = -1;
       float param3 = -1;
       float param4 = -1;
-      if (Serial.available() >= 4) //min. 4 bytes to get a float
+      if (Serial.available() >= 4) // min. 4 bytes to get a float
       {
         param1 = Serial.parseFloat(SKIP_WHITESPACE);
         if (Serial.available() >= 4)
@@ -60,7 +63,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   {
   case '?':
   {
-    debugf_yellow("<help>\n");
+    debugf_status("<help>\n");
     debugln(F(
         "/b|Returns Battery Voltage and current\n\
 /s|Read out Status\n\
@@ -75,18 +78,20 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
 /d|pin shorts detection\n\
 /p|sends a test packet over lan\n\
 /w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
-/u|single file usb update. /u 1 closes singlefileusb\n"));
+/u|single file usb update. /u 1 closes singlefileusb\n\
+/t|returns temperature value. 0-6 for external probes, 7 for uC one, -1 for all of them\n\
+/x|prints barometer temperature and pressure\n"));
     break;
   }
   case 'b':
   {
-    debugf_yellow("BatteryVoltage: %i V| Current: %i mA, %.2f A\n", get_batvoltage(), get_current(), get_current() / 1000.0);
+    debugf_status("BatteryVoltage: %.2f V| Current: %.2f mA, %.2f A\n", get_batvoltage(), get_current()*1000, get_current());
     break;
   }
   case 's':
   {
-    debugf_yellow("<get Status>\n");
-    debugf_green("Status: %i\n", get_Status());
+    debugf_status("<get Status>\n");
+    debugf_sucess("Status: %i\n", get_Status());
     break;
   }
   case 'r':
@@ -107,7 +112,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   case 'l':
   {
     rp2040.idleOtherCore();
-    debugf_yellow("RP2040 sleepy for %.2fs.", param1 / 1000.0);
+    debugf_status("RP2040 sleepy for %.2fs.", param1 / 1000.0);
     // uint64_t microseconds = (uint64_t)buffer * 1000;
     // // Clear any existing alarm interrupts
     // hw_clear_bits(&timer_hw->inte, TIMER_INTF_RESET);
@@ -140,8 +145,8 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
     }
     else
     {
-      debugf_yellow("Update Heater Pin %i to %i\n", param1, param2);
-      heat_updateone(param1, param2);
+      debugf_status("Update Heater Pin %i to %i\n", (int)param1, (int)param2);
+      heat_updateone((int)param1, (int)param2);
     }
     break;
   }
@@ -167,7 +172,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   }
   case 'd':
   {
-    debugf_yellow("<shorted_pin_detection>\n");
+    debugf_status("<shorted_pin_detection>\n");
     short_detection();
     break;
   }
@@ -175,13 +180,13 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   {
     if (param1)
     {
-      debugf_yellow("<Sending %.f Test Packets>\n", param1);
-      TCP_test_manually(param1);
+      debugf_status("<Sending %.f Test Packets>\n", param1);
+      tpc_testmanually(param1);
     }
     else
     {
-      debugf_yellow("<Sending one Test Packet>\n");
-      TCP_test_manually(1);
+      debugf_status("<Sending one Test Packet>\n");
+      tpc_testmanually(1);
     }
     break;
   }
@@ -192,11 +197,11 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
     {
       rp2040.wdt_reset();
       rp2040.wdt_begin(param1);
-      debugf_yellow("Set watchdog to %.2fs\n", param1 / 1000.0);
+      debugf_status("Set watchdog to %.2fs\n", param1 / 1000.0);
     }
     else
     {
-      debugf_yellow("Watchdog value to high, 8.3 seconds are the maximum\n");
+      debugf_status("Watchdog value to high, 8.3 seconds are the maximum\n");
     }
     break;
   }
@@ -212,13 +217,34 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
       usb_singlefile_update();
     }
 #else
-debugf_yellow("Single file Usb disabled\n");
+    debugf_status("Single file Usb disabled\n");
 #endif
     break;
   }
+  case 't':
+  {
+    debugf_status("<Reading out Thermistors>\n");
+
+    float *buf = temp_read_cable();
+    for (int i = 0; i < 6; i++)
+    {
+      debugf_info("Probe Nr:%i|%.2f°C\n", i, buf[i]);
+    }
+    debugf_info("Probe SMD|%.2f°C\n", buf[6]);
+    debugf_info("Probe Check|%.2f°C [should be 25°C]\n", buf[7]);
+    free(buf);
+    break;
+  }
+  case 'x':
+  {
+    debugf_status("<Reads out Barometer>\n");
+    // pressure_read();
+    pressure_example();
+     break;
+  }
   default:
   {
-    debugf_red("dafuck is \"/%c\" ?!?! try \"/?\".\n", buffer_comand);
+    debugf_error("dafuck is \"/%c\" ?!?! try \"/?\".\n", buffer_comand);
     break;
   }
   }
@@ -304,71 +330,41 @@ void short_detection()
 
 void StatusLedBlink(uint8_t LED)
 {
-  // analogWriteRange(100);
-  // analogWrite(LED, 99);
-  // delay(20);
-  // digitalWrite(LED, 0);
-  // delay(2000);
-}
-
-void blinkLed(uint8_t PIN)
-{
+  analogWrite(LED, 250);
+  delay(2000);
+  digitalWrite(LED, 1);
   delay(200);
-  digitalWrite(PIN, 1);
-  delay(200);
-  digitalWrite(PIN, 0);
 }
 
-void fadeLED(uint8_t PIN)
+void StatusLed_Downlink()
 {
-  analogWriteRange(10000);
-  for (int brightness = 0; brightness < 5000; brightness++)
+  if (TCP_init)
   {
-    analogWrite(PIN, brightness);
-    delay(1);
+    StatusLedBlink(STATLED_G);
   }
-
-  // Fade out
-  for (int brightness = 2500; brightness >= 0; brightness--)
+  else
   {
-    analogWrite(LED_BUILTIN, brightness);
-    delay(1);
+    StatusLedBlink(STATLED_R);
   }
 }
 
-void heartbeat()
+const float BAT_VOLTAG_DIV = 11.034390; /*Votage Divider from wich the battery volage can be calculated*/
+// returns the battery voltage at the moment in V
+float get_batvoltage()
 {
-  for (int i = 100; i >= 10; i -= 10)
-  {
-    analogWrite(LED_BUILTIN, 255); // Turn the LED on
-    delay(i ^ 2);                  // Wait
-    analogWrite(LED_BUILTIN, 0);   // Turn the LED off
-    delay(i ^ 2);                  // Wait
-  }
-
-  // Slowly decrease the heartbeat rate
-  for (int i = 10; i <= 100; i += 10)
-  {
-    analogWrite(LED_BUILTIN, 255); // Turn the LED on
-    delay(i ^ 2);                  // Wait
-    analogWrite(LED_BUILTIN, 0);   // Turn the LED off
-    delay(i ^ 2);                  // Wait
-  }
+  analogReadResolution(ADC_RES);
+  pinMode(PIN_VOLT, INPUT);
+  float adc_volt = analogRead(PIN_VOLT) * (3 / ADC_MAX);
+  return adc_volt * BAT_VOLTAG_DIV;
 }
 
-// returns the battery voltage at the moment in mV
-unsigned long get_batvoltage()
+// returns the current consumption at the moment of the PCB in A
+float get_current()
 {
-  pinMode(PIN_VOLT, OUTPUT);
-  return analogRead(PIN_VOLT); // * (3.3 / 4095.0)
-}
-
-// returns the current consumption at the moment of the PCB in mA
-unsigned long get_current()
-{
-  pinMode(PIN_CURR, OUTPUT);
-  float buf = analogRead(PIN_CURR) * (3.3 / 4.0950); // 4.0950 instead of 4095.0 because of the convertion of A to mA
-  return buf / (R_SHUNT * 2.5);
+  analogReadResolution(ADC_RES);
+  pinMode(PIN_CURR, INPUT);
+  float adc_volt = analogRead(PIN_CURR) * (3 / ADC_MAX);
+  return adc_volt / (R_SHUNT * 2.5);
 }
 
 /*print current Stack/Heap use*/
@@ -376,10 +372,10 @@ void printMemoryUse()
 {
 
   unsigned int free_ram = rp2040.getFreeStack();
-  debugf("-usedStack: %.2f kbytes\n", (AMOUNT_SRAM - free_ram) * 0.001, (float)(AMOUNT_SRAM - free_ram) / AMOUNT_SRAM, AMOUNT_SRAM);
+  debugf_info("-usedStack: %.2f kbytes\n", (AMOUNT_SRAM - free_ram) * 0.001, (float)(AMOUNT_SRAM - free_ram) / AMOUNT_SRAM, AMOUNT_SRAM);
 
   int totalHeap = rp2040.getTotalHeap();
-  debugf("-usedHeap: %.2f kbytes| %.2f percent of %.2f kbytes avaliable Heap\n", rp2040.getUsedHeap() * 0.001, (float)rp2040.getUsedHeap() / totalHeap, totalHeap * 0.001);
+  debugf_info("-usedHeap: %.2f kbytes| %.2f percent of %.2f kbytes avaliable Heap\n", rp2040.getUsedHeap() * 0.001, (float)rp2040.getUsedHeap() / totalHeap, totalHeap * 0.001);
 }
 
 /*DIgital and Analog Reads all IO Pins*/
@@ -387,7 +383,7 @@ void printIO()
 {
   Serial.println();
   Serial.println("printio: ");
-  Serial.print("Pinnumb: ");
+  debug("Pinnumb: ");
   char *d = (char *)malloc(nGPIOS);
   char *a = (char *)malloc(nGPIOS);
   if (d == NULL)
@@ -406,31 +402,31 @@ void printIO()
   }
   for (int i = 0; i < nGPIOS; i++)
   {
-    Serial.print(i);
+    debug(i);
     if (i < 10)
     {
-      Serial.print(" ");
+      debug(" ");
     }
-    Serial.print(" |");
+    debug(" |");
   }
   Serial.println();
-  Serial.print("Digital: ");
+  debug("Digital: ");
   for (int i = 0; i < nGPIOS; i++)
   {
-    Serial.print(d[i], BIN);
-    Serial.print(" ");
-    Serial.print(" |");
+    debug(d[i], BIN);
+    debug(" ");
+    debug(" |");
   }
   Serial.println();
-  Serial.print("Analog:  ");
+  debug("Analog:  ");
   for (int i = 0; i < nGPIOS; i++)
   {
-    Serial.print(a[i], DEC);
+    debug(a[i], DEC);
     if (a[i] < 100)
     {
-      Serial.print(" ");
+      debug(" ");
     }
-    Serial.print("|");
+    debug("|");
   }
 }
 

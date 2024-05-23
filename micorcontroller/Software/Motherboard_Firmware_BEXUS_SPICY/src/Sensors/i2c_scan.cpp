@@ -54,7 +54,7 @@ void scan_wire_single(unsigned int pinsda, unsigned int pinscl, char Wire_select
 
         if (error == 0)
         {
-            debugf("adr: %i| sda: %i| scl: %i| wire: %i|freq: %i\n", address, pinsda, pinscl, Wire_select,freq);
+            debugf_info("adr: %i| sda: %i| scl: %i| wire: %i|freq: %i\n", address, pinsda, pinscl, Wire_select,freq);
             nDevices++;
         }
         else if (error == 4)

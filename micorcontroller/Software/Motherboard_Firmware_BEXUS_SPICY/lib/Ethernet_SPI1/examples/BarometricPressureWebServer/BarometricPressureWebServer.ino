@@ -143,10 +143,10 @@ void getData() {
   //combine the two parts into one 19-bit number:
   pressure = ((pressureDataHigh << 16) | pressureDataLow) / 4;
 
-  Serial.print("Temperature: ");
-  Serial.print(temperature);
+  debug("Temperature: ");
+  debug(temperature);
   Serial.println(" degrees C");
-  Serial.print("Pressure: " + String(pressure));
+  debug("Pressure: " + String(pressure));
   Serial.println(" Pa");
 }
 

@@ -26,78 +26,78 @@ char *packettochar(struct packet data) {
 /*Prints all avaliable infos about a packet like pointers, size, values and memory*/
 void packet_print(struct packet pkt) {
   Serial.println("-----infos about packet----------");
-  Serial.print("Size in uC Memory: ");
+  debug("Size in uC Memory: ");
   Serial.println(sizeof(struct packet));
 
-  Serial.print("id (address: ");
-  Serial.print((uintptr_t)&pkt.id, DEC);
-  Serial.print("): ");
+  debug("id (address: ");
+  debug((uintptr_t)&pkt.id, DEC);
+  debug("): ");
   Serial.println(pkt.id);
 
-  Serial.print("timestampPacket (address: ");
-  Serial.print((uintptr_t)&pkt.timestampPacket, DEC);
-  Serial.print("): ");
+  debug("timestampPacket (address: ");
+  debug((uintptr_t)&pkt.timestampPacket, DEC);
+  debug("): ");
   Serial.println(pkt.timestampPacket);
 
-  Serial.print("timestampOxy (address: ");
-  Serial.print((uintptr_t)&pkt.timestampOxy, DEC);
-  Serial.print("): ");
+  debug("timestampOxy (address: ");
+  debug((uintptr_t)&pkt.timestampOxy, DEC);
+  debug("): ");
   for (int i = 0; i < 6; i++) {
-    Serial.print(pkt.timestampOxy[i]);
-    Serial.print(" ");
+    debug(pkt.timestampOxy[i]);
+    debug(" ");
   }
   Serial.println();
 
-  Serial.print("oxigen (address: ");
-  Serial.print((uintptr_t)&pkt.oxigen, DEC);
-  Serial.print("): ");
+  debug("oxigen (address: ");
+  debug((uintptr_t)&pkt.oxigen, DEC);
+  debug("): ");
   for (int i = 0; i < 6; i++) {
-    Serial.print(pkt.oxigen[i]);
-    Serial.print(" ");
+    debug(pkt.oxigen[i]);
+    debug(" ");
   }
   Serial.println();
 
-  Serial.print("tempTube (address: ");
-  Serial.print((uintptr_t)&pkt.tempTube, DEC);
-  Serial.print("): ");
+  debug("tempTube (address: ");
+  debug((uintptr_t)&pkt.tempTube, DEC);
+  debug("): ");
   for (int i = 0; i < 6; i++) {
-    Serial.print(pkt.tempTube[i]);
-    Serial.print(" ");
+    debug(pkt.tempTube[i]);
+    debug(" ");
   }
   Serial.println();
 
-  Serial.print("heaterPWM (address: ");
-  Serial.print((uintptr_t)&pkt.heaterPWM, DEC);
-  Serial.print("): ");
+  debug("heaterPWM (address: ");
+  debug((uintptr_t)&pkt.heaterPWM, DEC);
+  debug("): ");
   for (int i = 0; i < 6; i++) {
-    Serial.print(pkt.heaterPWM[i]);
-    Serial.print(" ");
+    debug(pkt.heaterPWM[i]);
+    debug(" ");
   }
   Serial.println();
 
-  Serial.print("error (address: ");
-  Serial.print((uintptr_t)&pkt.error, DEC);
-  Serial.print("): ");
+  debug("error (address: ");
+  debug((uintptr_t)&pkt.error, DEC);
+  debug("): ");
   Serial.println(pkt.error);
 
 
-  Serial.print("tempCpu (address: ");
-  Serial.print((uintptr_t)&pkt.tempCpu, DEC);
-  Serial.print("): ");
+  debug("tempCpu (address: ");
+  debug((uintptr_t)&pkt.tempCpu, DEC);
+  debug("): ");
   Serial.println(pkt.tempCpu);
 
-  Serial.print("power (address: ");
-  Serial.print((uintptr_t)&pkt.power, DEC);
-  Serial.print("): ");
-  Serial.print(pkt.power[0]);
-  Serial.print(" ");
+  debug("power (address: ");
+  debug((uintptr_t)&pkt.power, DEC);
+  debug("): ");
+  debug(pkt.power[0]);
+  debug(" ");
   Serial.println(pkt.power[1]);
 
-  Serial.print("info (address: ");
-  Serial.print((uintptr_t)&pkt.info, DEC);
-  Serial.print("): ");
+  debug("info (address: ");
+  debug((uintptr_t)&pkt.info, DEC);
+  debug("): ");
   for (int i = 0; i < 80; i++) {
-    Serial.print(pkt.info[i]);
+    debug(pkt.info[i]);
   }
   Serial.println();
 }
@@ -109,7 +109,7 @@ void packet_print(struct packet pkt) {
 void packet_writeinfo(struct packet &data, const char *info) {
   unsigned int len = strnlen(info,sizeof(data.info)+1);
   if (len >= sizeof(data.info)) {
-    Serial.print("This char was too big for struct packet info: ");
+    debug("This char was too big for struct packet info: ");
     Serial.println(info);
     return;
   }

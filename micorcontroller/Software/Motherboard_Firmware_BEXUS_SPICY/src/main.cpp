@@ -21,14 +21,14 @@ static void TextSpicyv4();
 //------------------------core1--------------------------------
 void setup()
 {
+  heat_setup();
   print_startup_message();
   rp2040.wdt_begin(8000);
-  // pressure_setup();
 }
 
 void loop()
 {
-  // pressure_loop();
+  nextState();
   check_periodic_tasks();
 }
 
@@ -46,17 +46,18 @@ void setup1()
 
 void loop1()
 {
-  StatusLedBlink(STATLED_B);
+  StatusLed_Downlink();
 }
 
+/*all things that should get checkt every loop of CPU0*/
 void check_periodic_tasks()
 {
   checkSerialInput();
-  TCP_check_command();
+  // tcp_check_command();
   rp2040.wdt_reset();
-  newState();
 }
 
+/* Prints a message with facts about the MPU like frequency and weather a watchdog restarted it*/
 void print_startup_message()
 {
 #if DEBUG == 1
@@ -73,16 +74,16 @@ void print_startup_message()
 
   TextSpicyv4();
 
-  debugf_yellow("\n<<[MotherboardV4.ino] is running on Chip %i>>\n Core %i |Freq %.1f ", rp2040.getChipID(), rp2040.cpuid(), rp2040.f_cpu() / 1000000.0);
+  debugf_status("\n<<[MotherboardV4.ino] is running on Chip %i>>\n Core %i |Freq %.1f ", rp2040.getChipID(), rp2040.cpuid(), rp2040.f_cpu() / 1000000.0);
   if (watchdog_caused_reboot())
   {
-    debugf_yellow("MHz|Watchdog Reset>>\n");
+    debugf_status("MHz|Watchdog Reset>>\n");
   }
   else
   {
-    debugf_yellow("MHz\n");
+    debugf_status("MHz\n");
   }
-  debugf_yellow("\"/?\" for help\n");
+  debugf_status("\"/?\" for help\n");
   pinMode(STATLED_R, OUTPUT);
   digitalWrite(STATLED_R, HIGH);
   rp2040.enableDoubleResetBootloader();
@@ -96,31 +97,26 @@ void print_startup_message()
 void TextSpicyv4()
 {
 #if DEBUG == 1
-  if (random(3) != 1)
-  {
-    // ghost
-    debugf_green(
-        "  .-')       _ (`-.                                       \n"
-        " ( OO ).    ( (OO  )                                      \n"
-        "(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.\n"
-        "/    _ |  (__...--''   |  |OO)   '  .--./     \\  `.'  /  \n"
-        "\\  :` `.   |  /  | |   |  |  \\   |  |('-.   .-')     /  \n"
-        " '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /    \n"
-        ".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_  \n"
-        "\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__) \n"
-        " `-----'   `--'        `--'       `-----'     `--'        ");
-  }
-  else
-  {
-    // graphiti
-    SET_COLOUR_GREEN
-    Serial.println(" _________        .__ _________                   _____  ");
-    Serial.println("/   _____/______  |__|\\_   ___ \\ ___.__. ___  __ /  |  | ");
-    Serial.println("\\_____  \\ \\____ \\ |  |/    \\  \\/<   |  | \\  \\/ //   |  |");
-    Serial.println("/        \\|  |_> >|  |\\     \\____\\___  |  \\   //    ^   /");
-    Serial.println("/_______  /|   __/ |__| \\______  // ____|   \\_/ \\____   | ");
-    Serial.println("        \\/ |__|                \\/ \\/                 |__|");
-    SET_COLOUR_RESET
-  }
+  // ghost
+  debugf_green(
+      "  .-')       _ (`-.                                       \n"
+      " ( OO ).    ( (OO  )                                      \n"
+      "(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.\n"
+      "/    _ |  (__...--''   |  |OO)   '  .--./     \\  `.'  /  \n"
+      "\\  :` `.   |  /  | |   |  |  \\   |  |('-.   .-')     /  \n"
+      " '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /    \n"
+      ".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_  \n"
+      "\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__) \n"
+      " `-----'   `--'        `--'       `-----'     `--'        ");
+  // graphiti
+  // SET_COLOUR_GREEN
+  // Serial.println(" _________        .__ _________                   _____  ");
+  // Serial.println("/   _____/______  |__|\\_   ___ \\ ___.__. ___  __ /  |  | ");
+  // Serial.println("\\_____  \\ \\____ \\ |  |/    \\  \\/<   |  | \\  \\/ //   |  |");
+  // Serial.println("/        \\|  |_> >|  |\\     \\____\\___  |  \\   //    ^   /");
+  // Serial.println("/_______  /|   __/ |__| \\______  // ____|   \\_/ \\____   | ");
+  // Serial.println("        \\/ |__|                \\/ \\/                 |__|");
+  // SET_COLOUR_RESET
+
 #endif
 }

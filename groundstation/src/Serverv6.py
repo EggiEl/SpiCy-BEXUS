@@ -1,4 +1,5 @@
 import socket
+import struct
 import threading
 import time
 from MongoDB import MongoDB
@@ -12,6 +13,7 @@ from colored_terminal import *
 IP_SERVER = ("169.254.218.4") # if of Ethernet-Adapter Ethernet 6 # ip_Desktop = '192.168.178.23'
 PORT = 8888
 
+TIMEOUT_SERVER = 2
 
 def sleep_till_stop(stop_flag,time_s:float):
     """sleeps till time runs out or stop_flag is 0"""
@@ -52,11 +54,11 @@ class TCP_SERVER:
         self.port = _port
         self.__isRunning = 1
         self.command = {
-            "command": str,
-            "param1": int,
-            "param2": int,
-            "param3": int,
-            "param4": int,
+            "command": '0',
+            "param1": 0,
+            "param2": 0,
+            "param3": 0,
+            "param4": 0,
         }
         self.thread = threading.Thread(target=self.StartServer)
         self.thread.start()
@@ -64,7 +66,7 @@ class TCP_SERVER:
     def StartServer(self):
         """startet eine TCP Server an den sich ein client_socket verbinden kann"""
 
-        def connect_server_socket(timeout=2):
+        def connect_server_socket(timeout=TIMEOUT_SERVER):
             try:
                 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 server_socket.bind((self.ipadress, self.port))
@@ -82,7 +84,7 @@ class TCP_SERVER:
                 print_red(f"Error:{e}\n", indent=2)
                 return 0
 
-        def connect_client(server_socket: socket.socket, timeout=2, counter=3):
+        def connect_client(server_socket: socket.socket, timeout=TIMEOUT_SERVER, counter=3):
             """wartet auf einen client_socket und verbindet sich  mit demselben"""
             try:
                 server_socket.listen(1)  # Wartet auf 1 eingehende Verbindung
@@ -133,27 +135,27 @@ class TCP_SERVER:
         def senddata(client_socket: socket.socket):
             try:
                 # sends command
-                print_cyan(f"Sending Command:{self.command["command"]} \
-                           {self.command["param1"]} {self.command["param2"]} \
-                           {self.command["param3"]} {self.command["param4"]}\n")
-                
-                uploadbuffer = b""
-                uploadbuffer += self.command["command"].encode() * 3
-                uploadbuffer += self.command["param1"] * 2
-                uploadbuffer += self.command["param2"] * 2
-                uploadbuffer += self.command["param3"] * 2
-                uploadbuffer += self.command["param4"] * 2
-                client_socket.send(uploadbuffer)
+                print_cyan(f"Sending Command:{self.command["command"]} {self.command["param1"]} {self.command["param2"]} {self.command["param3"]} {self.command["param4"]}\n")
+                uploadbuffer = []
+                uploadbuffer += [self.command["command"].encode('ascii')] *3
+                uploadbuffer += [struct.pack('f', self.command["param1"])] * 2
+                uploadbuffer += [struct.pack('f', self.command["param2"])] * 2
+                uploadbuffer += [struct.pack('f', self.command["param3"])] * 2
+                uploadbuffer += [struct.pack('f', self.command["param4"])] * 2
+                print(uploadbuffer,flush =True)
+                uploadbuffer = b''.join(uploadbuffer)
+                client_socket.sendall(uploadbuffer)
                 # deletes command from buffer of server
-                for k, el in self.command:
+                for k in self.command.keys():
                     self.command[k] = 0
+                self.command["command"] = '0'
             except Exception as e:
                 print_red(f"Error:{e}\n", indent=2)
 
         server_socket = 0
         client_socket = 0
         counter_recieved = 0 #to keep track how mutch packets were recieved
-        counter_points = 0 #for thoes waiting for client[...] points
+        counter_points = 0 #for thoes "waiting for client[...]" points
 
         print_cyan(
             f'<starting TCP server at "{self.ipadress}" | \
@@ -161,12 +163,14 @@ class TCP_SERVER:
         )
 
         while self.__isRunning:
+            #connecting Server
             if not server_socket:
                 print_blue("Connnecting Socket...\n", indent=1)
                 server_socket = connect_server_socket()
                 if server_socket == 0:
                     sleep_till_stop(stop_flag=self.__isRunning,time_s=3)
             else:
+                #connecting Client
                 if not client_socket:
                     client_socket = connect_client(
                         server_socket, counter=counter_points
@@ -175,13 +179,20 @@ class TCP_SERVER:
                     if counter_points > 3:
                         counter_points = 0
                 else:
+                    #up link
+                    if self.command["command"] != '0':
+                        senddata(client_socket)
+                    
+                    #down link
                     status = 1
                     while status:
                         status = recieve_data(client_socket)
                         counter_recieved += 1
-                    senddata(client_socket)
+
                     client_socket.close()  # geht ohne??
-                    client_socket = 0
+                    client_socket = 0 
+
+            time.sleep(0.01) #delay to conserve performance
 
         # handling for the closing of the thread
         if client_socket:
@@ -214,7 +225,8 @@ class DATALOGGER:
                     print(f"saved {len(self.rawdata)} packages")
                     self.rawdata = []
             else:
-                sleep_till_stop(1,self.__isRunning)
+                # sleep_till_stop(1,self.__isRunning)
+                time.sleep(0.01) #delay to conserve performance
 
     def save_raw_mongo(self):
         sucess = 1
@@ -258,7 +270,7 @@ class DATALOGGER:
     def shutdown(self):
         print_magenta("<shutting down Datalogger>\n")
         self.__isRunning = 0
-        self.save_raw_csv():
+        self.save_raw_csv()
         self.thread.join()
         print_magenta("<Datalogger down>\n", indent=1)
 
@@ -272,6 +284,7 @@ class INTERFACE:
     def loop(self):
         print_yellow("\n<<Interface TCP Server>>\n/? for help\n")
         while self.isRunning:
+            time.sleep(0.01) #delay to conserve performance
             try:
                 self.Command(input(".\n"))
             except Exception as e:
@@ -288,7 +301,7 @@ class INTERFACE:
 
     def Command(self, command: str):
         if len(command) > 1 and command[0] == "/":
-            match command[1:]:
+            match command[1:2]:
                 case "?":
                     print_yellow("<Help>")
                     print_yellow(
@@ -328,19 +341,20 @@ class INTERFACE:
                         print_red("No Server connected\n")
                     else:
                         print_yellow("Sending Command: ")
-                        Termianlinput = input()
-                        if Termianlinput[0] == "/":
-                            command_uplink = Termianlinput[1:].split()
+                        try:
+                            command_uplink = (command[2:] + " 0 "*6).split()[:6] #filling missed spaces with 0
+                            print(command_uplink)
                             command_buff = {
                                 "command": command_uplink[0],
-                                "param1": command_uplink[1],
-                                "param2": command_uplink[2],
-                                "param3": command_uplink[3],
-                                "param4": command_uplink[4],
+                                "param1": float(command_uplink[1]),
+                                "param2": float(command_uplink[2]),
+                                "param3": float(command_uplink[3]),
+                                "param4": float(command_uplink[4]),
                             }
                             self.server.command = command_buff
-                        else:
-                            print_red("Command starts with /\n")
+                        except Exception as e:
+                            print(e)
+
 
                 case _:
                     print_red(f"Unknown Command {command[1:]}\n")
