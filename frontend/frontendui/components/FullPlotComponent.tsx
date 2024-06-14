@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import MyResponsiveChart from '../components/plot_temp';
 import { get_latest_data } from '../functions/get_latest_data';
+import Slider from './sliderComp';
 
 export interface ComponentProps { 
   plotdata: any[], 
@@ -24,21 +25,21 @@ export default function FullPlot({ plotdata, plotlimit, sensorname, upperlimit, 
         console.log(newData);
         setData((prevData: any[]) => [...prevData, ...newData]);
       }
-  
     }
-    if( data.length === 0 ) {
+    if (data.length === 0) {
       const firstData = await get_latest_data("0", sensorname);
       console.log(firstData)
       setData(firstData)
     }
-  }
+  };
 
-  
-
+  const handleLimitChange = (newLimit: number) => {
+    setLimit(newLimit);
+  };
 
   const increaseLimit = () => setLimit(prevLimit => prevLimit + 50); // Funktion zum Erhöhen des Limits
   const decreaseLimit = () => setLimit(prevLimit => Math.max(prevLimit - 50, 50)); // Funktion zum Verringern des Limits
-  const zoomout = () => setLimit(data.length)
+  const zoomout = () => setLimit(data.length);
 
   useEffect(() => {
     const intervalId = setInterval(fetchNewData, 1000); // Fetch new data every second
@@ -48,16 +49,18 @@ export default function FullPlot({ plotdata, plotlimit, sensorname, upperlimit, 
   return (
     <div>
       <h1>Hallo Welt</h1>
+      <Slider upperlimit={plotdata.length} lowerlimit={lowerlimit} onLimitChange={handleLimitChange} />
+
       <button onClick={fetchNewData}>Daten abrufen</button>
       <button onClick={zoomout}>Zoom out</button>
       <button onClick={increaseLimit}>Limit erhöhen</button>
       <button onClick={decreaseLimit}>Limit verringern</button>
       {data.length !== 0 ? (
         <div style={{ height: '500px' }}>
-          <MyResponsiveChart datalist={data} limit={limit} upperlimit={upperlimit} lowerlimit={lowerlimit}/>
+          <MyResponsiveChart datalist={data} limit={limit} upperlimit={upperlimit} lowerlimit={lowerlimit} />
         </div>
       ) : (
-        <h1> Suche nach Daten für Sensor {sensorname} </h1>
+        <h1>Suche nach Daten für Sensor {sensorname}</h1>
       )}
     </div>
   );
