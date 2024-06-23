@@ -1,6 +1,14 @@
 import axios from 'axios';
 
-export async function get_latest_data(lastid : string , sensorname : string): Promise<any[]> {
+
+interface SensorData { 
+  _id: string;
+  temperature: number;
+  time: string;
+  eintragsnummer: number;
+}
+
+export async function get_latest_data(lastid : string , sensorname : string): Promise<[SensorData]> {
   try {
     const response = await axios.get(`http://localhost:8000/storedData_latest/${sensorname}/${lastid}`);
     

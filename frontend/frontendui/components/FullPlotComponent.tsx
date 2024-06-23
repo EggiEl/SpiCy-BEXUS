@@ -13,6 +13,14 @@ export interface ComponentProps {
   lowerlimit: number
 }
 
+interface SensorData { 
+  _id: string;
+  temperature: number;
+  time: string;
+  eintragsnummer: number;
+}
+
+
 export default function FullPlot({ plotdata, plotlimit, sensorname, upperlimit, lowerlimit }: ComponentProps) {
   const [data, setData] = useState(plotdata);
   const [limit, setLimit] = useState(plotlimit); // Neuer Zustand für das Limit
@@ -21,9 +29,10 @@ export default function FullPlot({ plotdata, plotlimit, sensorname, upperlimit, 
     if (data.length > 0) {
       const lastData = data[data.length - 1];
       if (lastData && lastData._id) {
-        const newData = await get_latest_data(lastData._id, sensorname);
+        const newData  : [SensorData] = await get_latest_data(lastData._id, sensorname);
         console.log(newData);
         setData((prevData: any[]) => [...prevData, ...newData]);
+        console.log(newData)
       }
     }
     if (data.length === 0) {
