@@ -4,8 +4,7 @@
 
 char temp_init = 0;
 
-
-
+void temp_setup()
 {
     pinMode(PIN_TEMPADC, INPUT);
     pinMode(PIN_PROBEMUX_0, OUTPUT);
