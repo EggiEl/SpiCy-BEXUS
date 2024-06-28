@@ -1,5 +1,0 @@
-Fynn,4,beatemup
-Elias,4,Heia
-Eva,4,jihaaa
-
-timestamp save;id;timestampPacket;timestampOxy0;timestampOxy1;timestampOxy2;timestampOxy3;timestampOxy4;timestampOxy5;oxigen0;oxigen1;oxigen2;oxigen3;oxigen4;oxigen5;tempTube0;tempTube1;tempTube2;tempTube3;tempTube4;tempTube5;heaterPWM0;heaterPWM1;heaterPWM2;heaterPWM3;heaterPWM4;heaterPWM5;info;tempCpu;Voltage;Current;error;
