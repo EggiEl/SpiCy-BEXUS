@@ -47,10 +47,11 @@ void check_periodic_tasks()
   // rp2040.wdt_reset();
   // nextState();
   // rp2040.wdt_reset();
-  struct packet * a = packet_create();
-  tcp_send_packet(a);
-  destroy_packet(a);
-  sd_writetofile("test","oi\n");
+  
+  // struct packet * a = packet_create();
+  // tcp_send_packet(a);
+  // destroy_packet(a);
+  // sd_writetofile("test","oi\n");
 }
 
 //-------------------------core2------------------------

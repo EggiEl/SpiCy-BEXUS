@@ -7,7 +7,7 @@
 #include "debug_in_color.h"
 
 /*--------Settings-----------------------*/
-#define DEBUG 2         /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
+#define DEBUG 1         /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
 #define COLOUR_SERIAL 1 /*activates/deactivates Serial.printing with color*/
 #define USB_ENABLE 0    /*enables single drive USB functions*/
 #define ADC_REF 3.0
