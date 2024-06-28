@@ -33,9 +33,9 @@ void tcp_setup_client()
   // SPI.setTX(MOSI_SPI0);
   // SPI.setSCK(SCK_SPI0);
 
-  SPI1.setRX(MISO_SPI0);
-  SPI1.setTX(MOSI_SPI0);
-  SPI1.setSCK(SCK_SPI0);
+  SPI1.setRX(LAN_MISO);
+  SPI1.setTX(LAN_MOSI);
+  SPI1.setSCK(LAN_SCK);
 
   Ethernet.setRetransmissionCount(3);
   Ethernet.setRetransmissionTimeout(20); // miliseconds

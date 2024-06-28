@@ -1,9 +1,10 @@
 #include "header.h"
 
-void state_print(int Status);
+void state_print(unsigned int Status);
 void resetState();
 
-static enum states {
+enum states
+{
     START,
     CREATE_PACKET,
     READ_TEMP,
@@ -11,7 +12,9 @@ static enum states {
     READ_LIGHT,
     SAVESENDPACKET,
     ERROR
-} state;
+};
+
+enum states state = START;
 
 struct packet *packet_dl = NULL; /*Pointer to the packet wich will be the next downlink*/
 /*
@@ -19,6 +22,8 @@ struct packet *packet_dl = NULL; /*Pointer to the packet wich will be the next d
  */
 void nextState()
 {
+    const char sd_filepath[] = "data.bin";
+    static float buffer[20];
     switch (state)
     {
     case START:
@@ -46,11 +51,10 @@ void nextState()
     case READ_TEMP:
     {
         state_print(READ_TEMP);
-        float Temp_buf[8];
-        temp_read_all(Temp_buf);
+        temp_read_all(buffer);
         for (uint8_t i = 0; i < 6; i++)
         {
-            packet_dl->thermistor[i] = Temp_buf[i];
+            packet_dl->thermistor[i] = buffer[i];
         }
         state = READ_OXY;
         break;
@@ -58,29 +62,30 @@ void nextState()
     case READ_OXY:
     {
         state_print(READ_OXY);
-        float *Oxy_buf = oxy_read_all();
+        // oxy_read_all(buffer);
         for (uint8_t i = 0; i < 6; i++)
         {
-            packet_dl->pyro_temp[i] = Oxy_buf[i];
+            packet_dl->pyro_temp[i] = buffer[i];
         }
-        free(Oxy_buf);
         state = READ_LIGHT;
         break;
     }
     case READ_LIGHT:
     {
         state_print(READ_LIGHT);
-        float buffer[7];
-        light_read(buffer, 0);
+        // light_read(buffer);
+        for (uint8_t i = 0; i < 6; i++)
+        {
+            packet_dl->light[i] = buffer[i];
+        }
         state = SAVESENDPACKET;
         break;
     }
     case SAVESENDPACKET:
     {
         state_print(SAVESENDPACKET);
-        // sd_writestruct(packet_dl, "oi");
+        sd_writestruct(packet_dl, sd_filepath);
         char success = tcp_send_packet(packet_dl);
-        destroy_packet(packet_dl);
         state = CREATE_PACKET;
         break;
     }
@@ -103,13 +108,17 @@ void resetState()
     state = START;
 }
 
-void state_print(int Status)
+void state_print(unsigned int Status)
 {
     switch (Status)
     {
     case START:
         debugf_status("<current state: START>\n");
         break;
+    case CREATE_PACKET:
+        debugf_status("<current state: CREATE_PACKET>\n");
+        break;
+
     case READ_LIGHT:
         debugf_status("<current state: READ_LIGHT>\n");
         break;
@@ -120,7 +129,7 @@ void state_print(int Status)
         debugf_status("<current state: READ_TEMP>\n");
         break;
     case SAVESENDPACKET:
-        debugf_error("<current state: SAVESENDPACKET>\n");
+        debugf_status("<current state: SAVESENDPACKET>\n");
         break;
     case ERROR:
         debugf_error("<current state: ERROR>\n");

@@ -39,10 +39,11 @@ void check_periodic_tasks()
 {
   checkSerialInput();
   rp2040.wdt_reset();
+  
   // tcp_check_command();
   // rp2040.wdt_reset();
-  // nextState();
-  // rp2040.wdt_reset();
+  nextState();
+  rp2040.wdt_reset();
 }
 
 //-------------------------core2------------------------
@@ -53,7 +54,7 @@ void setup1()
 
 void loop1()
 {
-  pid_update_all();
+  // pid_update_all();
 }
 
 /* Prints a message with facts about the MPU like frequency and weather a watchdog restarted it*/

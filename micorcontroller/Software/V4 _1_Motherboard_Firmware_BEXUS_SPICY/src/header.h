@@ -1,5 +1,4 @@
 /*-----------Header file for global defines, objekts, variables and functions-----------*/
-
 #ifndef HEADER_H
 #define HEADER_H
 
@@ -25,11 +24,25 @@ const unsigned int ADC_FREQ_WRITE = 300;
 #define SCL1 5
 
 // Lan and SD ic are connected both on SPI0 Bus
-#define CS_LAN 17
-#define CS_SD 16
-#define MISO_SPI0 20
-#define SCK_SPI0 18
-#define MOSI_SPI0 19
+// #define CS_LAN 17
+// #define CS_SD 16
+// #define MISO_SPI0 20
+// #define SCK_SPI0 18
+// #define MOSI_SPI0 19
+
+// #define LAN_MISO MISO_SPI0
+// #define LAN_MOSI MOSI_SPI0
+// #define LAN_SCK SCK_SPI0
+
+/*V4.0 pins :*/
+#define MISO_SPI0 0
+#define CS_SD 1
+#define SCK_SPI0 2
+#define MOSI_SPI0 3
+#define LAN_MISO 8
+#define CS_LAN 9
+#define LAN_MOSI 11
+#define LAN_SCK 10
 
 #define PIN_H0 8
 #define PIN_H1 9
@@ -188,7 +201,7 @@ void temp_print_ntc(uint8_t Pin);
 extern char oxy_init;
 void oxy_setup(const uint8_t rx = PIN_OX_RX, const uint8_t tx = PIN_OX_TX);
 void oxy_console();
-float *oxy_read_all();
+bool oxy_read_all(float * buffer);
 char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_MAX);
 
 /*light spectrometers*/
