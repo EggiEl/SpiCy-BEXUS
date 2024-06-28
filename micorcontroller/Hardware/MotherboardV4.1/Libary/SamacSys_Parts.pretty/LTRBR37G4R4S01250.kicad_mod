@@ -1,0 +1,237 @@
+(footprint "LTRBR37G4R4S01250"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(descr "LTRBR37G-4R4S-0125-0-3")
+	(tags "LED (Multiple)")
+	(property "Reference" "LED**"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "0977b1b2-19e9-4c08-aa00-3e45fd0f07cc")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Value" "LTRBR37G4R4S01250"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "6eba0297-4036-4711-b507-560150d5d446")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "43c2f440-a931-4bd3-9402-5f8dd5ceb9de")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d6e657e2-e8e9-47ad-9d2e-d63d9c7a1089")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fb9ffbe0-e424-4e9d-9138-eac6c7879ba8")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start 0.4 -1.2)
+		(end 0.4 -1.2)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "011022c2-fa01-4b0a-b073-b6c84e2e24fe")
+	)
+	(fp_line
+		(start 0.4 -1.1)
+		(end 0.4 -1.1)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "2a8213fa-bce6-4206-8b71-f71c24f8e01e")
+	)
+	(fp_arc
+		(start 0.4 -1.2)
+		(mid 0.45 -1.15)
+		(end 0.4 -1.1)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "cc479f88-23b6-4823-89dd-7a4d4fdb01d1")
+	)
+	(fp_arc
+		(start 0.4 -1.1)
+		(mid 0.35 -1.15)
+		(end 0.4 -1.2)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "445d77b8-2972-4dbd-b018-07bb0f2f9d24")
+	)
+	(fp_line
+		(start -1.6 -1.6)
+		(end 1.6 -1.6)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "1af1d7e8-58d3-475e-83ac-271ca70dd9db")
+	)
+	(fp_line
+		(start -1.6 1.6)
+		(end -1.6 -1.6)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "5fc9dfcd-4b59-497b-a9bf-d4cdfa7ff2eb")
+	)
+	(fp_line
+		(start 1.6 -1.6)
+		(end 1.6 1.6)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "fb10846d-47fd-4b7b-a9e0-dc307acdb3e3")
+	)
+	(fp_line
+		(start 1.6 1.6)
+		(end -1.6 1.6)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "e9a940c6-5702-485d-8d5b-ac144c190198")
+	)
+	(fp_line
+		(start -0.5 -0.5)
+		(end 0.5 -0.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "6bc414ca-7e51-409c-b9b5-d6c2d4a354dc")
+	)
+	(fp_line
+		(start -0.5 0.5)
+		(end -0.5 -0.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "d8337f6b-123a-4df1-9a60-d51726a81a30")
+	)
+	(fp_line
+		(start 0.5 -0.5)
+		(end 0.5 0.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "9d865d54-6aae-48c5-b8d9-3cdf625c676b")
+	)
+	(fp_line
+		(start 0.5 0.5)
+		(end -0.5 0.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "e01d7c1d-91a3-4be5-a82d-e1668a8805c9")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "6230e81e-40a2-422e-925e-6939594acc94")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at 0.4 -0.4 90)
+		(size 0.4 0.4)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(uuid "b422268a-5c7d-4a35-93da-17700bd82f2f")
+	)
+	(pad "2" smd rect
+		(at 0.4 0.4 90)
+		(size 0.4 0.4)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(uuid "2be320c7-c595-41ad-a5c3-36d45df0c8ac")
+	)
+	(pad "3" smd rect
+		(at -0.4 0.4 90)
+		(size 0.4 0.4)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(uuid "514aca71-4a7f-4f49-9bab-1022403e6cb3")
+	)
+	(pad "4" smd rect
+		(at -0.4 -0.4 90)
+		(size 0.4 0.4)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(uuid "06e8ddb9-b930-4073-98e2-d36dca3cffea")
+	)
+	(model "${KIPRJMOD}/Libary/SamacSys_Parts.3dshapes/LTRBR37G-4R4S-0125-0.stp"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 0 0)
+		)
+	)
+)

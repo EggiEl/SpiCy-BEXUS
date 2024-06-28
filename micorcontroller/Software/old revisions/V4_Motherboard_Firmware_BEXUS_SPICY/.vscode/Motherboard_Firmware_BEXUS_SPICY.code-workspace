@@ -1,0 +1,59 @@
+{
+	"folders": [
+		{
+			"name": "Motherboard_Firmware_BEXUS_SPICY",
+			"path": ".."
+		},
+		{
+			"name": "groundstation",
+			"path": "../../../../groundstation"
+		},
+		{
+			"name": "SpiCy-BEXUS",
+			"path": "../../../.."
+		},
+		{
+			"name": "D:",
+			"path": "D:/"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"cmath": "cpp",
+			"random": "cpp",
+			"*.tcc": "cpp",
+			"array": "cpp",
+			"string_view": "cpp",
+			"deque": "cpp",
+			"format": "cpp",
+			"initializer_list": "cpp",
+			"list": "cpp",
+			"ranges": "cpp",
+			"span": "cpp",
+			"vector": "cpp",
+			"xhash": "cpp",
+			"xstring": "cpp",
+			"xtree": "cpp",
+			"xutility": "cpp",
+			"string": "cpp",
+			"unordered_map": "cpp",
+			"ostream": "cpp",
+			"queue": "cpp",
+			"utility": "cpp",
+			"algorithm": "cpp",
+			"functional": "cpp",
+			"optional": "cpp",
+			"system_error": "cpp",
+			"type_traits": "cpp",
+			"xlocmon": "cpp",
+			"xtr1common": "cpp",
+			"tuple": "cpp",
+			"locale": "cpp",
+			"xlocale": "cpp",
+			"xlocmes": "cpp",
+			"xlocnum": "cpp",
+			"xloctime": "cpp",
+			"xmemory": "cpp"
+		}
+	}
+}
