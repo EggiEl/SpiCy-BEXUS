@@ -169,11 +169,16 @@ void heat_updateone(uint8_t PIN, uint16_t PWM);
 void heat_testmanual();
 uint8_t heat_testauto();
 
+/*Pid*/
+extern char pid_init;
+void pid_setup();
+void pid_update_all();
+
 /*Thermistors*/
 extern char temp_init;
 void temp_setup();
 float temp_read_one(uint8_t Number);
-float *temp_read_cable();
+void temp_read_all(float *buffer);
 void temp_print_ntc(uint8_t Pin);
 
 /*Oxygen Sensors*/
@@ -183,13 +188,13 @@ void temp_print_ntc(uint8_t Pin);
 extern char oxy_init;
 void oxy_setup(const uint8_t rx = PIN_OX_RX, const uint8_t tx = PIN_OX_TX);
 void oxy_console();
-float *oxy_readall();
+float *oxy_read_all();
 char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_MAX);
 
 /*light spectrometers*/
 extern char light_init;
 void light_setup();
-void read_light(bool with_flash = 1);
+void light_read(float *buffer, bool with_flash = 0);
 
 /*single File USB*/
 extern char singleFileUsb_init;

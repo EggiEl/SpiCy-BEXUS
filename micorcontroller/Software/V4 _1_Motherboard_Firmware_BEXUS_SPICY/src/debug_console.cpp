@@ -227,15 +227,14 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
     if (param1 == -1)
     {
       debugf_status("<Reading out Thermistors>\n");
-
-      float *buf = temp_read_cable();
+      float buf[8];
+      temp_read_all(buf);
       for (int i = 0; i < 6; i++)
       {
         debugf_info("Probe Nr:%i|%.2f°C\n", i, buf[i]);
       }
       debugf_info("Probe SMD|%.2f°C\n", buf[6]);
       debugf_info("Probe Check|%.2f°C [should be 25°C]\n", buf[7]);
-      free(buf);
     }
     else
     {
@@ -257,7 +256,8 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   }
   case 'a':
   {
-    read_light();
+    float buffer[7];
+    light_read(buffer,0);
     break;
   }
   default:

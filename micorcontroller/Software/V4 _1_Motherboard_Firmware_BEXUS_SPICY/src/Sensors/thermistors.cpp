@@ -15,26 +15,18 @@ void temp_setup()
 
 /**
  * Reads out every Thermistor.
- * @return pointer to an array with 8 floats, NULL if memory allocation failed
+ * @param buffer pointer to an array with 8 floats
  **/
-float *temp_read_cable()
+void temp_read_all(float *buffer)
 {
-    float *buf = (float *)malloc(nNTC * sizeof(float));
-    if (!buf)
-    {
-        debugf_red("temp_read_cable memory allocation failed\n");
-        return NULL;
-    }
-    buf[0] = temp_read_one(NTC_0);
-    buf[1] = temp_read_one(NTC_1);
-    buf[2] = temp_read_one(NTC_2);
-    buf[3] = temp_read_one(NTC_3);
-    buf[4] = temp_read_one(NTC_4);
-    buf[5] = temp_read_one(NTC_5);
-    buf[6] = temp_read_one(NTC_SMD);
-    buf[7] = temp_read_one(NTC_10kfix);
-
-    return buf;
+    buffer[0] = temp_read_one(NTC_0);
+    buffer[1] = temp_read_one(NTC_1);
+    buffer[2] = temp_read_one(NTC_2);
+    buffer[3] = temp_read_one(NTC_3);
+    buffer[4] = temp_read_one(NTC_4);
+    buffer[5] = temp_read_one(NTC_5);
+    buffer[6] = temp_read_one(NTC_SMD);
+    buffer[7] = temp_read_one(NTC_10kfix);
 }
 
 /*circuit design*/

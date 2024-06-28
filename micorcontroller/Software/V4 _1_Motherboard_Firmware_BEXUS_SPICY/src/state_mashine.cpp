@@ -38,26 +38,27 @@ void nextState()
         }
         else
         {
-            state = START;
+            debugf_error("state malloc nex packages failed");
+            state = ERROR;
         }
         break;
     }
     case READ_TEMP:
     {
         state_print(READ_TEMP);
-        float *Temp_buf = temp_read_cable();
+        float Temp_buf[8];
+        temp_read_all(Temp_buf);
         for (uint8_t i = 0; i < 6; i++)
         {
             packet_dl->thermistor[i] = Temp_buf[i];
         }
-        free(Temp_buf);
         state = READ_OXY;
         break;
     }
     case READ_OXY:
     {
         state_print(READ_OXY);
-        float *Oxy_buf = oxy_readall();
+        float *Oxy_buf = oxy_read_all();
         for (uint8_t i = 0; i < 6; i++)
         {
             packet_dl->pyro_temp[i] = Oxy_buf[i];
@@ -69,6 +70,8 @@ void nextState()
     case READ_LIGHT:
     {
         state_print(READ_LIGHT);
+        float buffer[7];
+        light_read(buffer, 0);
         state = SAVESENDPACKET;
         break;
     }

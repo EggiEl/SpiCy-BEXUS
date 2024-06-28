@@ -25,7 +25,11 @@ void light_setup()
     light_init = 1;
 }
 
-void read_light(bool with_flash)
+/**
+ * returns light values. make the buffer 7 flaots long
+ * 6x values and 1x temperature
+ */
+void light_read(float *buffer, bool with_flash)
 {
     if (!light_init)
     {
@@ -57,6 +61,12 @@ void read_light(bool with_flash)
         debugf_info("485nm: %.2f µW/cm²\n", light_spectro.getCalibratedYellow());
         debugf_info("510nm: %.2f µW/cm²\n", light_spectro.getCalibratedOrange());
         debugf_info("560nm: %.2f µW/cm²\n", light_spectro.getCalibratedRed());
+        buffer[0] = light_spectro.getCalibratedViolet();
+        buffer[1] = light_spectro.getCalibratedBlue();
+        buffer[2] = light_spectro.getCalibratedGreen();
+        buffer[3] = light_spectro.getCalibratedYellow();
+        buffer[4] = light_spectro.getCalibratedOrange();
+        buffer[5] = light_spectro.getCalibratedRed();
     }
     else if (light_spectro.getVersion() == SENSORTYPE_AS7263)
     {
@@ -67,7 +77,13 @@ void read_light(bool with_flash)
         debugf_info("730nm: %.2f µW/cm²\n", light_spectro.getCalibratedU());
         debugf_info("760nm: %.2f µW/cm²\n", light_spectro.getCalibratedV());
         debugf_info("860nm: %.2f µW/cm²\n", light_spectro.getCalibratedW());
-    }
+        buffer[0] = light_spectro.getCalibratedR();
+        buffer[1] = light_spectro.getCalibratedS();
+        buffer[2] = light_spectro.getCalibratedT();
+        buffer[3] = light_spectro.getCalibratedU();
+        buffer[4] = light_spectro.getCalibratedV();
+        buffer[5] = light_spectro.getCalibratedW();
 
-    debugf_info("Temperature: %u°C\n", light_spectro.getTemperature());
+        debugf_info("Temperature: %u°C\n", light_spectro.getTemperature());
+    }
 }

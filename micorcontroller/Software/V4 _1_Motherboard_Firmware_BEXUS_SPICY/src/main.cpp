@@ -25,17 +25,13 @@ static void TextSpicyv4();
 //------------------------core1--------------------------------
 void setup()
 {
-  heat_setup();
   print_startup_message();
   rp2040.wdt_begin(8000);
-
-  heat_updateone(22, 100);
 }
 
 void loop()
 {
   check_periodic_tasks();
-  // delay(500);
 }
 
 /*all things that should get checkt every loop of CPU0*/
@@ -52,11 +48,12 @@ void check_periodic_tasks()
 //-------------------------core2------------------------
 void setup1()
 {
+  
 }
 
 void loop1()
 {
-  // Dico();
+  pid_update_all();
 }
 
 /* Prints a message with facts about the MPU like frequency and weather a watchdog restarted it*/
