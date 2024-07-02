@@ -1,5 +1,0 @@
-(sym_lib_table
-  (version 7)
-  (lib (name "SymbolsBalloonv4")(type "KiCad")(uri "${KIPRJMOD}/KiCad Symbols Footprints/SymbolsBalloonv4.kicad_sym")(options "")(descr ""))
-  (lib (name "SamacSys_Parts")(type "KiCad")(uri "${KIPRJMOD}/KiCad Symbols Footprints/SamacSys_Parts.kicad_sym")(options "")(descr ""))
-)
