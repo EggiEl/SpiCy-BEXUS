@@ -6,7 +6,6 @@
 #include <Ethernet_spi1.h> /*The stock Etherent.h libary only supports spi0, i changed that to spi1*/
 
 char AUTOMATIC_IP_ALLOCATION = 0;            /*0 means static ip allocation | 1 means dynamic*/
-static unsigned int CONNECTIONTIMEOUT = 20;  /*Conntection Timeout of the tcp client*/
 static IPAddress SERVERIP(169, 254, 218, 4); // IP address of the Groundstation
 // #define SERVERIP IPAddress(100, 81, 57, 236)
 static IPAddress CLIENTIP(169, 254, 218, 100); // ip of this uC. Used ony in fixed IP allocation
@@ -160,6 +159,7 @@ void tcp_check_command()
   if (!client.connected())
   {
     client.connect(SERVERIP, SERVERPORT);
+    client.setConnectionTimeout(CONNECTIONTIMEOUT);
   }
 
   // checks whether  data is avaliable
@@ -254,6 +254,7 @@ char tcp_send_packet(struct packet *packet)
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     debugf_status("-connecting_client-");
     status = client.connect(SERVERIP, SERVERPORT);
+    client.setConnectionTimeout(CONNECTIONTIMEOUT);
   }
 
   switch (status) // client.connect returns different int values depending of the sucess of the operation

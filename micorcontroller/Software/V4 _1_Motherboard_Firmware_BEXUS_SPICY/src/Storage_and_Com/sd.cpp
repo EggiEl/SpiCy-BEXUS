@@ -81,14 +81,15 @@ bool sd_writestruct(struct packet *s_out, const char filepath[])
   if (myFile)
   { // if the file opened okay, write to it:
     myFile.write(buffer, sizeof(struct packet));
-    free(buffer);
     myFile.close();
     debugln("-sucess}-");
+     free(buffer);
     return 1;
   }
   else
   {
     debugln("-error:opening-failed}-");
+     free(buffer);
     return 0;
   }
 }

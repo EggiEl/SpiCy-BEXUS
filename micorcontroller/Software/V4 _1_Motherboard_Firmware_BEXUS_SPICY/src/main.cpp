@@ -26,7 +26,7 @@ static void TextSpicyv4();
 void setup()
 {
   print_startup_message();
-  rp2040.wdt_begin(8000);
+  rp2040.wdt_begin(WATCHDOG_TIMEOUT);
 }
 
 void loop()

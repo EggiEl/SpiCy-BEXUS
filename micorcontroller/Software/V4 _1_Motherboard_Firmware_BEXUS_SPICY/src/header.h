@@ -11,6 +11,10 @@
 #define ADC_REF 3.0
 #define ADC_RES 12 // ADC Resolution in Bit
 #define ADC_MAX_READ (pow(2, ADC_RES) - 1)
+
+#define WATCHDOG_TIMEOUT 8000 // neds to be 8000ms max i think
+#define CONNECTIONTIMEOUT 20  /*Conntection Timeout of the tcp client*/
+
 const unsigned int ADC_MAX_WRITE = 100; //  Value where analogRrite = 100% duty cycle
 const unsigned int ADC_FREQ_WRITE = 300;
 /*----------------Pin mapping-------------*/
@@ -201,7 +205,7 @@ void temp_print_ntc(uint8_t Pin);
 extern char oxy_init;
 void oxy_setup(const uint8_t rx = PIN_OX_RX, const uint8_t tx = PIN_OX_TX);
 void oxy_console();
-bool oxy_read_all(float * buffer);
+bool oxy_read_all(float *buffer);
 char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_MAX);
 
 /*light spectrometers*/

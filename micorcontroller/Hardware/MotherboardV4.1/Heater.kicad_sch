@@ -6200,7 +6200,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "220"
 			(at 84.074 161.544 90)
 			(effects
 				(font
@@ -7662,7 +7662,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "220"
 			(at 40.894 161.544 90)
 			(effects
 				(font
@@ -8428,7 +8428,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "220"
 			(at 226.314 114.554 90)
 			(effects
 				(font
@@ -8996,7 +8996,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "220"
 			(at 133.604 110.744 90)
 			(effects
 				(font
@@ -11429,7 +11429,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "220"
 			(at 273.304 114.554 90)
 			(effects
 				(font
@@ -11815,7 +11815,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "220"
 			(at 87.884 110.744 90)
 			(effects
 				(font
@@ -12021,7 +12021,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "220"
 			(at 181.864 113.284 90)
 			(effects
 				(font
@@ -12088,7 +12088,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "220"
 			(at 39.624 110.744 90)
 			(effects
 				(font

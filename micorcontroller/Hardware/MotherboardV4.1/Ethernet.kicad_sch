@@ -8861,7 +8861,7 @@
 				)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "510"
 			(at 227.33 126.365 90)
 			(effects
 				(font
@@ -11463,7 +11463,7 @@
 				)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "510"
 			(at 228.6 136.525 90)
 			(effects
 				(font

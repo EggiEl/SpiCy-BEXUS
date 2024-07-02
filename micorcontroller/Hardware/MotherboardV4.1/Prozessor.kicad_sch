@@ -8639,7 +8639,7 @@
 				)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "5.1k 1%"
 			(at 53.848 94.996 90)
 			(effects
 				(font
@@ -9042,7 +9042,7 @@
 				)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "5.1k 1%"
 			(at 46.228 96.266 90)
 			(effects
 				(font
@@ -9243,7 +9243,7 @@
 				)
 			)
 		)
-		(property "Value" "500"
+		(property "Value" "510"
 			(at 255.27 110.49 90)
 			(effects
 				(font
@@ -11931,7 +11931,7 @@
 				)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "5.1k 1%"
 			(at 57.658 136.906 90)
 			(effects
 				(font
@@ -13391,7 +13391,7 @@
 				)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "5.1k 1%"
 			(at 50.038 138.176 90)
 			(effects
 				(font
