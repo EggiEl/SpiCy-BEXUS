@@ -1064,9 +1064,9 @@
 		)
 		(uuid ffc1e380-cf14-41e9-b286-c623b25b0519)
 	)
-	(text "optional Upgrades\n- MUX Serial communication for Oxygen Sensors\n- USB-PD\n- dedicated current sense amplifier\n- Battery Voltage Measurement before shunt\n- replace LDOs with low noise buck converter\n"
+	(text "optional Upgrades\n- USB-PD\n- replace LDOs with low noise buck converter\n"
 		(exclude_from_sim no)
-		(at 185.42 123.952 0)
+		(at 185.42 98.298 0)
 		(effects
 			(font
 				(size 2 2)
@@ -1076,7 +1076,7 @@
 		)
 		(uuid "57cd276e-9962-4c14-ab0e-e680344059ea")
 	)
-	(text "Bekannte Designfehler\n- Input Rush von Buck Converter Condesnsatoren \n		     von Heater Condensatoren\n	nicht begrenzt (induktor?)\n- Voltageshifter OE uC controlled + pulldown resistor\n- keine seperate Analog/HF Groundplanes\n- no ESD Protection\n- Rework OPamp choice\n- change current sensing to lowside and add capasitance"
+	(text "Bekannte Designfehler\n- keine seperate Analog/HF Groundplanes\n- no ESD Protection"
 		(exclude_from_sim no)
 		(at 185.674 77.724 0)
 		(effects

@@ -12147,9 +12147,9 @@
 		(uuid 2d6f82d5-4a0b-4ed7-9fb2-46a942c17baf)
 	)
 	(arc
-		(start 90.1269 103.4387)
-		(mid 90.1288 103.4331)
-		(end 90.1339 103.4304)
+		(start 90.1339 103.4304)
+		(mid 90.134 103.4496)
+		(end 90.1269 103.4387)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -19659,9 +19659,9 @@
 		(uuid 8e8d1022-ace6-4b9c-83e5-d8d81c215913)
 	)
 	(arc
-		(start 104.2505 108.8744)
-		(mid 104.2414 108.8715)
-		(end 104.24 108.8626)
+		(start 104.24 108.8626)
+		(mid 104.2608 108.8638)
+		(end 104.2505 108.8744)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -20035,9 +20035,9 @@
 		(uuid 9446ba42-9dab-4041-983e-eed3e020d4e8)
 	)
 	(arc
-		(start 93.9377 106.897)
-		(mid 93.9501 106.9015)
-		(end 93.9446 106.9117)
+		(start 93.9446 106.9117)
+		(mid 93.9291 106.9062)
+		(end 93.9377 106.897)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -20594,9 +20594,9 @@
 		(uuid 9ce58555-af73-48e1-87d5-43a7d6617a85)
 	)
 	(arc
-		(start 91.2932 107.5106)
-		(mid 91.2925 107.5121)
-		(end 91.2929 107.5181)
+		(start 91.2929 107.5181)
+		(mid 91.2904 107.5149)
+		(end 91.2932 107.5106)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -26587,9 +26587,9 @@
 		(uuid f1f01831-99e6-48f9-9d56-cd1baea1713b)
 	)
 	(arc
-		(start 103.17 106.7418)
-		(mid 103.1741 106.7445)
-		(end 103.171 106.7481)
+		(start 103.171 106.7481)
+		(mid 103.1705 106.7481)
+		(end 103.17 106.7418)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -28194,7 +28194,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "TLV9002QDRQ1"
+		(property "Value" "OPA2377AID"
 			(at 155.702 138.684 0)
 			(effects
 				(font
@@ -29597,7 +29597,7 @@
 				)
 			)
 		)
-		(property "Value" "TLV9002QDRQ1"
+		(property "Value" "OPA2377AID"
 			(at 142.24 101.6 0)
 			(effects
 				(font
@@ -31040,7 +31040,7 @@
 				)
 			)
 		)
-		(property "Value" "TLV9002QDRQ1"
+		(property "Value" "OPA2377AID"
 			(at 116.84 144.78 0)
 			(effects
 				(font
