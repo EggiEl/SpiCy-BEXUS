@@ -12147,9 +12147,9 @@
 		(uuid 2d6f82d5-4a0b-4ed7-9fb2-46a942c17baf)
 	)
 	(arc
-		(start 90.1339 103.4304)
-		(mid 90.134 103.4496)
-		(end 90.1269 103.4387)
+		(start 90.1269 103.4387)
+		(mid 90.1288 103.4331)
+		(end 90.1339 103.4304)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -19659,9 +19659,9 @@
 		(uuid 8e8d1022-ace6-4b9c-83e5-d8d81c215913)
 	)
 	(arc
-		(start 104.24 108.8626)
-		(mid 104.2608 108.8638)
-		(end 104.2505 108.8744)
+		(start 104.2505 108.8744)
+		(mid 104.2414 108.8715)
+		(end 104.24 108.8626)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -20035,9 +20035,9 @@
 		(uuid 9446ba42-9dab-4041-983e-eed3e020d4e8)
 	)
 	(arc
-		(start 93.9446 106.9117)
-		(mid 93.9291 106.9062)
-		(end 93.9377 106.897)
+		(start 93.9377 106.897)
+		(mid 93.9501 106.9015)
+		(end 93.9446 106.9117)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -20594,9 +20594,9 @@
 		(uuid 9ce58555-af73-48e1-87d5-43a7d6617a85)
 	)
 	(arc
-		(start 91.2929 107.5181)
-		(mid 91.2904 107.5149)
-		(end 91.2932 107.5106)
+		(start 91.2932 107.5106)
+		(mid 91.2925 107.5121)
+		(end 91.2929 107.5181)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -26587,9 +26587,9 @@
 		(uuid f1f01831-99e6-48f9-9d56-cd1baea1713b)
 	)
 	(arc
-		(start 103.171 106.7481)
-		(mid 103.1705 106.7481)
-		(end 103.17 106.7418)
+		(start 103.17 106.7418)
+		(mid 103.1741 106.7445)
+		(end 103.171 106.7481)
 		(stroke
 			(width 0.08)
 			(type default)
@@ -29843,7 +29843,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "50546f84-c57a-4b22-ab5e-60c048517bfa")
-		(property "Reference" "R414"
+		(property "Reference" "J5"
 			(at 104.14 132.334 90)
 			(effects
 				(font
@@ -29852,7 +29852,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "1k"
+		(property "Value" "0"
 			(at 104.394 136.398 90)
 			(effects
 				(font
@@ -29897,7 +29897,7 @@
 		(instances
 			(project "BalloonMotherboardV4.1"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/5e9e7f42-9819-4074-87ce-68c089720394"
-					(reference "R414")
+					(reference "J5")
 					(unit 1)
 				)
 			)
@@ -31154,7 +31154,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c5b9e12f-9faa-4826-b37a-dda007140c27")
-		(property "Reference" "R416"
+		(property "Reference" "J6"
 			(at 104.394 137.922 90)
 			(effects
 				(font
@@ -31163,7 +31163,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "1k"
+		(property "Value" "0"
 			(at 104.394 141.732 90)
 			(effects
 				(font
@@ -31208,7 +31208,7 @@
 		(instances
 			(project "BalloonMotherboardV4.1"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/5e9e7f42-9819-4074-87ce-68c089720394"
-					(reference "R416")
+					(reference "J6")
 					(unit 1)
 				)
 			)
@@ -31223,7 +31223,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "cb086e9e-132c-438b-96eb-fb2e24de4d68")
-		(property "Reference" "R415"
+		(property "Reference" "J7"
 			(at 132.334 135.382 90)
 			(effects
 				(font
@@ -31232,7 +31232,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "1k"
+		(property "Value" "0"
 			(at 132.334 139.192 90)
 			(effects
 				(font
@@ -31277,7 +31277,7 @@
 		(instances
 			(project "BalloonMotherboardV4.1"
 				(path "/a70d325c-f83f-4714-a2b6-4ef8919d016e/5e9e7f42-9819-4074-87ce-68c089720394"
-					(reference "R415")
+					(reference "J7")
 					(unit 1)
 				)
 			)
@@ -31354,9 +31354,9 @@
 		(at 85.09 144.78 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
-		(dnp yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d696cf30-bda3-48ec-92be-a47cdfe5e871")
 		(property "Reference" "C404"
@@ -31368,7 +31368,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "DNP"
+		(property "Value" "10n"
 			(at 88.9 146.0499 0)
 			(effects
 				(font

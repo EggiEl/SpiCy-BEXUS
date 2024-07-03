@@ -11074,7 +11074,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "http://www.ti.com/lit/gpn/lm4040-n"
 			(at 243.84 68.58 0)
 			(effects
 				(font
