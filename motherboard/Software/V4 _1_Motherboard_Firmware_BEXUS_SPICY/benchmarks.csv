@@ -1,0 +1,3 @@
+benchmark;description;time
+single_packet_transfer;sends one packet via tcp;300us i think?
+single_oxy_readout;reads oxygen from one probe;1s
