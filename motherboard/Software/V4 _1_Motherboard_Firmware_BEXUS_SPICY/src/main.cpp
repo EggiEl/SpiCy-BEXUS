@@ -27,6 +27,7 @@ void setup()
 {
   print_startup_message();
   rp2040.wdt_begin(WATCHDOG_TIMEOUT);
+  get_Status();
 }
 
 void loop()
@@ -39,7 +40,8 @@ void check_periodic_tasks()
 {
   checkSerialInput();
   rp2040.wdt_reset();
-  
+  StatusLedBlink(PIN_LED);
+
   // tcp_check_command();
   // rp2040.wdt_reset();
   nextState();

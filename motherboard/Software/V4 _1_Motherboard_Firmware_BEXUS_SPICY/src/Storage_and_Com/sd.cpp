@@ -83,13 +83,13 @@ bool sd_writestruct(struct packet *s_out, const char filepath[])
     myFile.write(buffer, sizeof(struct packet));
     myFile.close();
     debugln("-sucess}-");
-     free(buffer);
+    free_ifnotnull(buffer);
     return 1;
   }
   else
   {
     debugln("-error:opening-failed}-");
-     free(buffer);
+    free_ifnotnull(buffer);
     return 0;
   }
 }
@@ -118,12 +118,12 @@ bool sd_readstruct(struct packet *data, const char filepath[], unsigned long pos
     if (!myFile.seek(position * sizeof(struct packet)))
     {
       debugln("-error:SDpositioning failed}-");
-      free(buffer);
+      free_ifnotnull(buffer);
       return 0;
     }
     myFile.read(buffer, sizeof(struct packet));
     memcpy(data, buffer, sizeof(struct packet));
-    free(buffer);
+    free_ifnotnull(buffer);
     myFile.close();
     debugln("-sucess}-");
     return 1;

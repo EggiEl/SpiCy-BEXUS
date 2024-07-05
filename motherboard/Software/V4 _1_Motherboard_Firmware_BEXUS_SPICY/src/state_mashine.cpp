@@ -17,6 +17,7 @@ enum states
 enum states state = START;
 
 struct packet *packet_dl = NULL; /*Pointer to the packet wich will be the next downlink*/
+struct oxy_mesure oxy_mesure_buff;
 /*
  * Changes the current state to the next one
  */
@@ -51,22 +52,28 @@ void nextState()
     case READ_TEMP:
     {
         state_print(READ_TEMP);
+
         temp_read_all(buffer);
-        for (uint8_t i = 0; i < 6; i++)
+        for (uint8_t i = 0; i < 8; i++)
         {
             packet_dl->thermistor[i] = buffer[i];
         }
+        packet_dl->thermistor[9] = analogReadTemp(ADC_REF);
+
         state = READ_OXY;
         break;
     }
     case READ_OXY:
     {
         state_print(READ_OXY);
-        // oxy_read_all(buffer);
+        oxy_read_all(&oxy_mesure_buff);
         for (uint8_t i = 0; i < 6; i++)
         {
-            packet_dl->pyro_temp[i] = buffer[i];
+            packet_dl->pyro_temp[i] = oxy_mesure_buff.pyro_temp[i];
+            packet_dl->pyro_pressure[i] = oxy_mesure_buff.pyro_pressure[i];
+            packet_dl->pyro_oxy[i] = oxy_mesure_buff.pyro_oxy[i];
         }
+
         state = READ_LIGHT;
         break;
     }
@@ -85,7 +92,7 @@ void nextState()
     {
         state_print(SAVESENDPACKET);
         sd_writestruct(packet_dl, sd_filepath);
-        char success = tcp_send_packet(packet_dl);
+        tcp_send_packet(packet_dl);
         state = CREATE_PACKET;
         break;
     }

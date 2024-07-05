@@ -87,45 +87,25 @@ const unsigned int ADC_FREQ_WRITE = 300;
 #define PIN_LIGHT_SCL SCL0 // yellow
 #endif
 
-/*struct_packet*/
-struct packetold
-{ // struct_format L L 6L 6f 6f 6i i f 2i 80s
-    unsigned long id = 0;
-    unsigned long timestampPacket = 0;
-
-    unsigned long timestampOxy[6] = {0};
-
-    float oxigen[6] = {0.0f};
-    float tempTube[6] = {0.0f};
-
-    int heaterPWM[6] = {0};
-    int error = 0;
-
-    float tempCpu = analogReadTemp(3.3f);
-    unsigned long power[2] = {0};
-
-    char info[80] = {0};
-};
-
-/**
- * packet used for downlink.
+/** packet used for downlink.
  * please use packet_create() and packet_destroy() for good memory management
+ * 2L 2f 6L 6I 6I 6I 8I 6I 18f 20s
  * */
-struct packet                         // 2L 2f 6L 6I 6I 6I 8I 6I 18f 20s
+struct packet
 {                                     // struct_format L L 6L 6f 6f 6i i f 2i 80s
     unsigned int id = 0;              // each packet has a unique id
     unsigned int timestampPacket = 0; // in ms
     float power[2] = {0};             // battery voltage in mV and current consumption in mA
 
     unsigned int pyro_timestamp[6] = {0}; //
-    unsigned int pyro_temp[6] = {0};      // temp on the sensor pcb in °C * 100
-    unsigned int pyro_oxy[6] = {0};       // Oxygenvalue
-    unsigned int pyro_pressure[6] = {0};  // pressure?
+    s32_t pyro_temp[6] = {0};             // temp on the sensor pcb in °C * 100
+    s32_t pyro_oxy[6] = {0};              // Oxygenvalue
+    s32_t pyro_pressure[6] = {0};         // pressure?
     float light[12] = {0.0f};
 
     /**temperature from thermistors:
      *0-5 NTC cable
-     *6 Nlog regelnTC SMD
+     *6 NTC SMD
      *7 fix reference value
      *8 cpu temp*/
     unsigned int thermistor[9] = {0};
@@ -150,6 +130,7 @@ char tcp_send_multible_packets(struct packet **data, unsigned int nPackets);
 void tcp_check_command();
 void tcp_print_info();
 void tpc_send_error(unsigned char error);
+unsigned char tcp_link_status();
 
 /*sd*/
 extern char sd_init;
@@ -202,10 +183,16 @@ void temp_print_ntc(uint8_t Pin);
 #define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
 #define RETURN_LENGTH_MAX 100  // how long a return string can possibly be
 #define OXY_BAUD 19200
+struct oxy_mesure
+{
+    s32_t pyro_temp[6] = {0};     // temp on the sensor pcb in °C * 100
+    s32_t pyro_oxy[6] = {0};      // Oxygenvalue
+    s32_t pyro_pressure[6] = {0}; // pressure?
+};
 extern char oxy_init;
 void oxy_setup(const uint8_t rx = PIN_OX_RX, const uint8_t tx = PIN_OX_TX);
 void oxy_console();
-bool oxy_read_all(float *buffer);
+bool oxy_read_all(struct oxy_mesure *mesure_buffer);
 char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_MAX);
 
 /*light spectrometers*/

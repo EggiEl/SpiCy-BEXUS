@@ -3,11 +3,8 @@
 #include "hardware/adc.h"
 #include "hardware/pwm.h"
 #define nGPIOS 29
-
-const unsigned int AMOUNT_SRAM = 264000;
 static void printIO();
 static void short_detection();
-static void printMemoryUse();
 void printMemoryUse();
 
 /**
@@ -257,7 +254,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   case 'a':
   {
     float buffer[7];
-    light_read(buffer,0);
+    light_read(buffer, 0);
     break;
   }
   default:
@@ -268,90 +265,22 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   }
 }
 
-/*needs rework to exclude Flash*/
-void short_detection()
-{
-  char *pin_buffer = (char *)calloc(nGPIOS + 1, 1);
-
-  // shorts to ground detection
-  for (int i = 0; i < nGPIOS + 1; i++)
-  {
-    pinMode(i, INPUT_PULLUP);
-  }
-  for (int i = 0; i < nGPIOS + 1; i++)
-  {
-    if (digitalRead(i) == 0)
-    {
-      debug("Pin ");
-      debug(i);
-      debug(" is connected to ground.\n");
-    }
-  }
-
-  // shorts to VCC detection
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    pinMode(i, INPUT_PULLDOWN);
-  }
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    if (digitalRead(i) == 1)
-    {
-      debug("Pin ");
-      debug(i);
-      debug(" is connected to VCC. I2C?.\n");
-      pin_buffer[i] = 1;
-    }
-  }
-
-  // pin shorting each other
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    pinMode(i, INPUT_PULLDOWN);
-  }
-
-  for (int Pin_now = 0; Pin_now < nGPIOS; Pin_now++)
-  {
-    if (pin_buffer[Pin_now] == 1)
-    {
-    }
-    else
-    {
-      // sets all pins to 0
-      for (int i = 0; i < nGPIOS; i++)
-      {
-        digitalWrite(i, 0);
-      }
-
-      // tests for a short by individually setting each pin high
-      for (int i = 0; i < nGPIOS; i++)
-      {
-
-        if (i != Pin_now)
-        {
-          digitalWrite(i, HIGH);
-          if (digitalRead(Pin_now) == 1)
-          {
-            debug("Pin ");
-            debug(Pin_now);
-            debug(" is shorted to ");
-            debugln(i);
-          }
-          digitalWrite(i, LOW);
-        }
-      }
-    }
-  }
-  free(pin_buffer);
-  debugln("Short detection done.");
-}
-
+/*swtiches LED*/
 void StatusLedBlink(uint8_t LED)
 {
-  analogWrite(LED, 0);
-  delay(2000);
-  digitalWrite(LED, 1);
-  delay(200);
+  // static unsigned int T_ms = 1;
+  // static unsigned long timestamp = millis() + T_ms;
+  // if (millis() > timestamp)
+  // {
+  if (digitalRead(LED))
+  {
+    digitalWrite(LED, 0);
+  }
+  else
+  {
+    digitalWrite(LED, 1);
+  }
+  // }
 }
 
 // const float R8 = 100000.0;
@@ -438,6 +367,84 @@ void printIO()
   }
 }
 
+/*needs rework to exclude Flash*/
+void short_detection()
+{
+  char *pin_buffer = (char *)calloc(nGPIOS + 1, 1);
+
+  // shorts to ground detection
+  for (int i = 0; i < nGPIOS + 1; i++)
+  {
+    pinMode(i, INPUT_PULLUP);
+  }
+  for (int i = 0; i < nGPIOS + 1; i++)
+  {
+    if (digitalRead(i) == 0)
+    {
+      debug("Pin ");
+      debug(i);
+      debug(" is connected to ground.\n");
+    }
+  }
+
+  // shorts to VCC detection
+  for (int i = 0; i < nGPIOS; i++)
+  {
+    pinMode(i, INPUT_PULLDOWN);
+  }
+  for (int i = 0; i < nGPIOS; i++)
+  {
+    if (digitalRead(i) == 1)
+    {
+      debug("Pin ");
+      debug(i);
+      debug(" is connected to VCC. I2C?.\n");
+      pin_buffer[i] = 1;
+    }
+  }
+
+  // pin shorting each other
+  for (int i = 0; i < nGPIOS; i++)
+  {
+    pinMode(i, INPUT_PULLDOWN);
+  }
+
+  for (int Pin_now = 0; Pin_now < nGPIOS; Pin_now++)
+  {
+    if (pin_buffer[Pin_now] == 1)
+    {
+    }
+    else
+    {
+      // sets all pins to 0
+      for (int i = 0; i < nGPIOS; i++)
+      {
+        digitalWrite(i, 0);
+      }
+
+      // tests for a short by individually setting each pin high
+      for (int i = 0; i < nGPIOS; i++)
+      {
+
+        if (i != Pin_now)
+        {
+          digitalWrite(i, HIGH);
+          if (digitalRead(Pin_now) == 1)
+          {
+            debug("Pin ");
+            debug(Pin_now);
+            debug(" is shorted to ");
+            debugln(i);
+          }
+          digitalWrite(i, LOW);
+        }
+      }
+    }
+  }
+  free_ifnotnull(pin_buffer);
+  debugln("Short detection done.");
+}
+
 /*frees given pointer it it isnt NULL, then sets it to NULL.
  If it is NULL, throws error*/
 void free_ifnotnull(void *pointer)
@@ -452,6 +459,44 @@ void free_ifnotnull(void *pointer)
     debugf_warn("Tried to free pointer wich was freed bevore\n");
   }
 }
+
+/**
+ * returns a status value wich can be decoded to get infos about the parts of the module
+ *  @return uint32_t status bitwise encoded as:
+ *  | default 1 | sd init | cableTest  | TCP init | Heater init | Oxy init | Light init |
+ *        0         1          2           3             4           5             6
+ */
+uint32_t get_Status()
+{
+  uint32_t status = 0;
+  status = 1;
+
+  // sd
+  sd_setup();
+  status |= ((uint32_t)sd_init << 1);
+
+  // TCP connection
+  status |= ((uint32_t)tcp_link_status() << 2);
+
+  tcp_setup_client();
+  status |= ((uint32_t)TCP_init << 3);
+
+  // Heater
+  heat_setup();
+  status |= ((uint32_t)heat_init << 4);
+
+  // Oxygen Sensors
+  oxy_setup();
+  status |= ((uint32_t)oxy_init << 5);
+
+  // Light
+  light_setup();
+  status |= ((uint32_t)light_init << 6);
+
+  // memory
+  return status;
+}
+
 /*
 void sleep_goto_sleep_until(datetime_t *t, rtc_callback_t callback)
 {

@@ -13,13 +13,13 @@ struct packet *packet_create()
   struct packet *a = (struct packet *)calloc(1, sizeof(struct packet));
   if (a != NULL)
   {
-    if (id_struct < 4294967296) // if y send something starting down with a 4294967296, its a error. So to not loose data, there can#t be a packet with that id.
+    if (id_struct == 4294967296) // if y send something starting down with a 4294967296, its a error. So to not loose data, there can#t be a packet with that id.
     {
+      id_struct = 0;
       a->id = id_struct;
     }
     else
     {
-      id_struct = 0;
       a->id = id_struct;
     }
 
@@ -43,8 +43,7 @@ void destroy_packet(struct packet *p)
 {
   if (p != NULL)
   {
-    free(p);
-    p = NULL;
+    free_ifnotnull(p);
   }
   else
   {

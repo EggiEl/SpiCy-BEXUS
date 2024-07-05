@@ -16,7 +16,7 @@ static int SERVERPORT = 8888;
 static byte MAC[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 
 char TCP_init = 0; /*If true the Ethernet Ic is connected and fuctional*/
-static EthernetClient client;
+EthernetClient client;
 
 /**
  *  sets the RP2040 as TCP Client for the given ip adress
@@ -180,6 +180,25 @@ void tcp_check_command()
     };
   } buffer;
 
+  int status = client.readBytesUntil('\n', buffer.ByteStream, sizeof(TCPMessageParser)); // Returns The next byte (or character), or -1 if none is available.
+  if (status == -1)
+  {
+    debugf_error("Some error parsing tcp readBytesUntil cmmand\n");
+    return;
+  }
+
+/*old kinda working code:
+// reads the TCP_incomming_bytes_buffer in union
+  union TCPMessageParser
+  {
+    byte ByteStream[35];
+    struct
+    {
+      char comand[3];
+      float param[8];
+    };
+  } buffer;
+
   byte *RawByteStream = (byte *)malloc(sizeof(TCPMessageParser));
   if (!RawByteStream)
   {
@@ -191,11 +210,11 @@ void tcp_check_command()
   if (status == -1)
   {
     debugf_error("Some error parsing tcp readBytesUntil cmmand\n");
-    free(RawByteStream);
+    free_ifnotnull(RawByteStream);
     return;
   }
   memcpy(&buffer.ByteStream, RawByteStream, sizeof(TCPMessageParser));
-  free(RawByteStream);
+  free_ifnotnull(RawByteStream);*/
 
   // checks if command is corrupted
   char success = 1;
@@ -214,9 +233,9 @@ void tcp_check_command()
   // checks if parameter are corrupted
   for (int i = 0; i < 4; i++)
   {
-    if (buffer.param[i * 2] = !buffer.param[i * 2 + 1])
+    if (buffer.param[i * 2] != buffer.param[i * 2 + 1])
     {
-      // success = 0;
+      success = 0;
     }
   }
 
@@ -297,7 +316,7 @@ char tcp_send_packet(struct packet *packet)
     break;
   }
 
-  free(buffer);
+  free_ifnotnull(buffer);
   // MESSURETIME_STOP
   return status;
 }
@@ -386,7 +405,7 @@ void tpc_send_error(unsigned char error)
     debugf_info("faliue\n");
   }
 
-  free(buffer);
+  free_ifnotnull(buffer);
 }
 
 /**
@@ -419,7 +438,7 @@ void tpc_testmanually(int nPackets, unsigned int nTries)
   {
     destroy_packet(packet_buf[i]);
   }
-  free(packet_buf);
+  free_ifnotnull(packet_buf);
 
   if (success)
   {
@@ -430,4 +449,9 @@ void tpc_testmanually(int nPackets, unsigned int nTries)
     debugf_sucess("sendmultible failure \n");
   }
   MESSURETIME_STOP
+}
+
+unsigned char tcp_link_status()
+{
+  return Ethernet.linkStatus();
 }

@@ -1,7 +1,6 @@
 #include "header.h"
 #include "SoftwareSerial.h"
 
-
 SoftwareSerial oxySerial(PIN_OX_RX, PIN_OX_TX); // https://arduino-pico.readthedocs.io/en/latest/serial.html
 
 char oxy_init = 0;
@@ -79,18 +78,18 @@ void oxy_setup(const uint8_t rx, const uint8_t tx)
     {
         // char *Device_id = oxy_commandhandler("#IDNR",30);
         // debugf_info("(ID NumbeR) %s connected\n", Device_id);
-        // free(Device_id);
+        // free_ifnotnull(Device_id);
 
         oxy_init = 1;
         debugf_sucess("setup was succesfull\n");
     }
 
-    free(buffer);
+    free_ifnotnull(buffer);
 }
 
 /**
  * changes the SoftwareSerial Pins for the Oxygen Sensor
-*/
+ */
 void oxy_change_pins(const uint8_t new_rx, const uint8_t new_tx)
 {
     /*deletes old SoftwareSerial and replaces it with new one*/
@@ -139,8 +138,8 @@ void oxy_console()
             {
                 break;
             }
-            oxy_commandhandler(buffer,RETURN_LENGTH_MAX);
-            free(buffer);
+            oxy_commandhandler(buffer, RETURN_LENGTH_MAX);
+            free_ifnotnull(buffer);
         }
 
         /*resets Watchdog*/
@@ -309,15 +308,15 @@ void oxy_decode_general_error(const char errorCode_buff[])
 }
 
 /**/
-float *oxy_readall()
+bool oxy_read_all(struct oxy_mesure *mesure_buffer)
 {
-    float *Oxy_buf = (float *)malloc(6 * sizeof(float));
     for (uint8_t i = 0; i < 6; i++)
     {
-        Oxy_buf[i] = i * 100;
+        mesure_buffer->pyro_oxy[i] = i;
+        mesure_buffer->pyro_temp[i] = i*2;
+        mesure_buffer->pyro_pressure[i] = i*3;
     }
-    delay(2000);
-    return Oxy_buf;
+    return 1;
 }
 
 const s32_t OXY_OPTICALCHANNEL = 1;
@@ -367,7 +366,7 @@ float oxy_meassure(uint8_t number)
 
     oxy_decode_mesurement_errors(OxyReadout.error); // if theres an error this will print a debug statement
 
-    free(buf_return);
+    free_ifnotnull(buf_return);
     return 1.0;
 }
 
@@ -431,7 +430,7 @@ void oxy_calibrate_probe(const uint8_t channel, const s32_t temp, const s32_t pr
     // char buffer[COMMAND_LENGTH_MAX];
     // snprintf(buffer, COMMAND_LENGTH_MAX, "WTM %s %s %s", OXY_OPTICALCHANNEL, SETTINGS_REGISTER, START_REGISTER, temp);
     // char *buf_return = oxy_commandhandler(buffer);
-    // free(buf_return);
+    // free_ifnotnull(buf_return);
 
     // save calibration with SVG
 }
@@ -447,7 +446,7 @@ T=4: AnalogOutput registe
  * @param nValues Number of registers to write.
  * @param  buffer_values buffer of Register values to be written
  **/
-void oxy_write_register(const s32_t register_block,const s32_t first_register,const s32_t nValues, const s32_t buffer_values[])
+void oxy_write_register(const s32_t register_block, const s32_t first_register, const s32_t nValues, const s32_t buffer_values[])
 {
     char buffer[COMMAND_LENGTH_MAX];
     /*write command string*/
@@ -468,9 +467,9 @@ void oxy_write_register(const s32_t register_block,const s32_t first_register,co
     }
 
     /*send ready string to sensor*/
-    debugf_status("oxy_write_register:%s",buffer);
+    debugf_status("oxy_write_register:%s", buffer);
     char *buf_return = oxy_commandhandler(buffer);
-    free(buf_return);
+    free_ifnotnull(buf_return);
 }
 
 /**
@@ -487,7 +486,7 @@ void oxy_calibrateOxy_air(const uint8_t channel, const uint temp, const uint pre
     char buffer[COMMAND_LENGTH_MAX];
     snprintf(buffer, COMMAND_LENGTH_MAX, "CHI %u %u %u", temp, pressure, humidity);
     char *buf_return = oxy_commandhandler(buffer);
-    free(buf_return);
+    free_ifnotnull(buf_return);
 
     // save calibration with SVG
 }
@@ -502,7 +501,7 @@ void oxy_calibrateOxy_zero(const uint8_t channel, const uint temp)
     char buffer[COMMAND_LENGTH_MAX];
     snprintf(buffer, COMMAND_LENGTH_MAX, "CLO %u", temp);
     char *buf_return = oxy_commandhandler(buffer);
-    free(buf_return);
+    free_ifnotnull(buf_return);
 
     // save calibration with SVG
 }
@@ -519,5 +518,5 @@ void oxy_info(const int8_t channel)
     char *buf_return = oxy_commandhandler("VERS");
     /*recieve info*/
     debugf_info("Device info:\n Device_Id nOpticalChannels FirmwareVersion SensorTypes FirmwareBuildNumber Features\n %s", buf_return);
-    free(buf_return);
+    free_ifnotnull(buf_return);
 }

@@ -97,7 +97,6 @@ uint8_t heat_testauto()
     {
       results |= (1 << i);
     }
-    buf[i] = 0;
   }
   return results;
 }

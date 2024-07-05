@@ -140,14 +140,13 @@ class TCP_SERVER:
             try:
                 # sends command
                 print_cyan(f"Sending Command:{self.command["command"]} {self.command["param1"]} {self.command["param2"]} {self.command["param3"]} {self.command["param4"]}\n")
-                uploadbuffer = []
-                uploadbuffer += [self.command["command"].encode('ascii')] *3
-                uploadbuffer += [struct.pack('f', self.command["param1"])] * 2
-                uploadbuffer += [struct.pack('f', self.command["param2"])] * 2
-                uploadbuffer += [struct.pack('f', self.command["param3"])] * 2
-                uploadbuffer += [struct.pack('f', self.command["param4"])] * 2
-                print(uploadbuffer)
-                uploadbuffer = b''.join(uploadbuffer)
+                comand = self.command["command"]
+                param1 = self.command["param1"]
+                param2 = self.command["param2"]
+                param3 = self.command["param3"]
+                param4 = self.command["param4"]
+                uploadbuffer = comand.encode("utf-8")*2 + struct.pack("ffffffff", param1,param1,param2,param2,param3,param3,param4,param4)
+                print(f'sending command: {uploadbuffer}')
                 client_socket.sendall(uploadbuffer)
                 # deletes command from buffer of server
                 for k in self.command.keys():
