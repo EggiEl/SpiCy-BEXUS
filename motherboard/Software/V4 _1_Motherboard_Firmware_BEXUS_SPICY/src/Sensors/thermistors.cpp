@@ -129,12 +129,15 @@ void temp_print_ntc(uint8_t Pin)
     sd_writetofile(buffer, "log_thermal.csv");
 }
 
-void temp_record_temp(uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms)
+/**
+ * Saves temperature Readings in regular intervalls to the sd
+ */
+void temp_record_temp(const char path[],uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms)
 {
     static uint8_t init = 0;
     if (!init)
     {
-        sd_writetofile("timestamp[ms];temp_probe[°C];temp_ambient[°C]", "ESA_2W5_cooled.csv");
+        sd_writetofile("timestamp[ms];temp_probe[°C];temp_ambient[°C]", path);
         init = 1;
     }
 
@@ -144,6 +147,6 @@ void temp_record_temp(uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_ne
         timestamp = millis() + t_nextmeas_ms;
         char string[200];
         snprintf(string, sizeof(string), "%u;%.2f;%.2f;", millis(), temp_read_one(NTC_Probe), temp_read_one(NTC_Ambient));
-        sd_writetofile(string, "ESA_2W5_cooled.csv");
+        sd_writetofile(string, path);
     }
 }

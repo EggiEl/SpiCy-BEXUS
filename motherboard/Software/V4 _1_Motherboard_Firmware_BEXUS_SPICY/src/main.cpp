@@ -37,8 +37,8 @@ void loop()
   // Serial.println();
   // delay(100);
 
-  temp_record_temp(NTC_0, NTC_2, 1000 * 60);
-  
+  temp_record_temp("temp_reading.csv",NTC_0, NTC_2, 1000 * 60);
+
   if (temp_read_one(NTC_0) > 30.0)
   {
     heat_updateone(PIN_H0, 0);

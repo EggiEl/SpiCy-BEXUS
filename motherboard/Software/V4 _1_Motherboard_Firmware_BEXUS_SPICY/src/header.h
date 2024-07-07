@@ -182,7 +182,7 @@ void temp_setup();
 float temp_read_one(uint8_t Number,uint8_t nTimtes = 100);
 void temp_read_all(float *buffer);
 void temp_print_ntc(uint8_t Pin);
-void temp_record_temp(uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
+void temp_record_temp(const char path[],uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
 
 /*Oxygen Sensors*/
 #define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be

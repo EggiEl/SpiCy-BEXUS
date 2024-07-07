@@ -1064,7 +1064,7 @@
 		)
 		(uuid ffc1e380-cf14-41e9-b286-c623b25b0519)
 	)
-	(text "optional Upgrades\n- USB-PD\n- replace LDOs with low noise buck converter\n- Rshunt betwenn +VCC and 3V3 Opamp, \n  Ground unused Opamp Inputs,\n  extra opamp LDO\n"
+	(text "optional Upgrades\n- USB-PD\n- replace LDOs with low noise buck converter\n- Rshunt betwenn +VCC and 3V3 Opamp, \n  Ground unused Opamp Inputs,\n  extra opamp LDO\n- EMF Capasitor Switcher\n"
 		(exclude_from_sim no)
 		(at 185.42 98.298 0)
 		(effects
