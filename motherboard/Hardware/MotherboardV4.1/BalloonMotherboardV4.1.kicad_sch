@@ -1076,7 +1076,7 @@
 		)
 		(uuid "57cd276e-9962-4c14-ab0e-e680344059ea")
 	)
-	(text "Bekannte Designfehler\n- keine seperate Analog/HF Groundplanes\n- no ESD Protection"
+	(text "Bekannte Designfehler\n- keine seperate Analog/HF Groundplanes\n- no ESD Protection\n- Buck Heat Condensators won't decharge if heater off\n- Inrush current limiting Resistor has to handle way to mutch power"
 		(exclude_from_sim no)
 		(at 185.674 77.724 0)
 		(effects

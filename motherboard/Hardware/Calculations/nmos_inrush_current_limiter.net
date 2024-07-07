@@ -1,0 +1,18 @@
+* C:\Users\fgewi\Documents\Fynn\Projekte\Balloon\GitHub\SpiCy-BEXUS\motherboard\Hardware\Calculations\nmos_inrush_current_limiter.asc
+V1 N001 0 30V
+C1 BuckCap N004 10.1µ
+R§ESR1 N002 BuckCap 2m
+Rbat N001 N002 1p
+R§ESR2 N002 N003 2m
+C2 N003 N004 10.1µ
+C3 gate 0 10µ
+R1 N002 gate 51k
+R2 gate 0 100k
+M1 N004 gate 0 0 IRLHS6342
+R3 N002 N004 1k
+.model NMOS NMOS
+.model PMOS PMOS
+.lib C:\Users\fgewi\Documents\LTspiceXVII\lib\cmp\standard.mos
+.tran 1 startup
+.backanno
+.end

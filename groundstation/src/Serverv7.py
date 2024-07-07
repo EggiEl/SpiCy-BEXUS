@@ -146,7 +146,7 @@ class TCP_SERVER:
                 param3 = self.command["param3"]
                 param4 = self.command["param4"]
                 uploadbuffer = comand.encode("utf-8")*2 + struct.pack("ffffffff", param1,param1,param2,param2,param3,param3,param4,param4)
-                print(f'sending command: {uploadbuffer}')
+                print(f'sending command: {comand}|{param1}|{param2}|{param3}|{param4}|\nin bytes: {uploadbuffer}')
                 client_socket.sendall(uploadbuffer)
                 # deletes command from buffer of server
                 for k in self.command.keys():

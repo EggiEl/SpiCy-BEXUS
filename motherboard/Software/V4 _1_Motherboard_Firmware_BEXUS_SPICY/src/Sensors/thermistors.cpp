@@ -10,6 +10,8 @@ void temp_setup()
     pinMode(PIN_PROBEMUX_0, OUTPUT);
     pinMode(PIN_PROBEMUX_1, OUTPUT);
     pinMode(PIN_PROBEMUX_2, OUTPUT);
+    pinMode(PIN_MUX_OXY_DISABLE, OUTPUT);
+    digitalWrite(PIN_MUX_OXY_DISABLE, 0);
     temp_init = 1;
 }
 
@@ -49,7 +51,7 @@ const float NTC_R0 = 10000.0; // Resistance at reference temperature (10kΩ)
  * @param Number Output Number of the MUX selecting the NTC
  * @return temperature value or -1000000 if NTC is not connected/vaulty
  */
-float temp_read_one(uint8_t Number)
+float temp_read_one(uint8_t Number, uint8_t nTimes)
 {
     static const float R43_paral_R41 = R41 * R43 / (R41 + R43);
     static const float gain = 1.0 / (R43_paral_R41 / (R43_paral_R41 + R53));
@@ -60,7 +62,7 @@ float temp_read_one(uint8_t Number)
     {
         temp_setup();
     }
-    analogReadResolution(ADC_RES);
+
     /*Connect the right one*/
     uint8_t A0 = (Number - 1) & 0b00000001;
     uint8_t A1 = ((Number - 1) & 0b00000010) >> 1;
@@ -72,7 +74,13 @@ float temp_read_one(uint8_t Number)
     // debugf_info("Select S%u|A0:%u|A1:%u|A2:%u\n", Number, A0, A1, A2);
 
     /*Read out ADC*/
-    float voltage_adc = (float)(analogRead(PIN_TEMPADC) / ADC_MAX_READ) * VCC_NTC;
+    analogReadResolution(ADC_RES);
+    float voltage_adc = 0;
+    for (int i = 0; i < nTimes; i++)
+    {
+        voltage_adc += (float)(analogRead(PIN_TEMPADC) / ADC_MAX_READ) * VCC_NTC;
+    }
+    voltage_adc = voltage_adc / nTimes;
 
     if (voltage_adc < 0.02)
     {
@@ -85,8 +93,8 @@ float temp_read_one(uint8_t Number)
     float resistance = (float)R_SERIES * (((float)VCC_NTC / volt_ntc) - 1);
 
     // Calculate the temperature in Kelvin using the Steinhart–Hart  equation
-    float NTC_B = 0;
-    switch (Number) //selects the right NTC_B value for each NTC type
+    float NTC_B = NTC_B_AMPHENOL;
+    switch (Number) // selects the right NTC_B value for each NTC type
     {
     case NTC_SMD:
         NTC_B = NTC_B_SMD;
@@ -102,7 +110,7 @@ float temp_read_one(uint8_t Number)
 
     // Convert temperature from Kelvin to Celsius
     float tempC = tempK - 273.15;
-    debugf_info("VADC:%.2f VNTC:%.2f R:%.2f T:%.2f\n", voltage_adc, volt_ntc, resistance, tempC);
+    // debugf_info("VADC:%.2f VNTC:%.2f R:%.2f T:%.2f\n", voltage_adc, volt_ntc, resistance, tempC);
     return tempC;
 }
 
@@ -119,4 +127,23 @@ void temp_print_ntc(uint8_t Pin)
     char buffer[32];
     snprintf(buffer, sizeof(buffer), "%u;%f", millis(), temp);
     sd_writetofile(buffer, "log_thermal.csv");
+}
+
+void temp_record_temp(uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms)
+{
+    static uint8_t init = 0;
+    if (!init)
+    {
+        sd_writetofile("timestamp[ms];temp_probe[°C];temp_ambient[°C]", "ESA_2W5_cooled.csv");
+        init = 1;
+    }
+
+    static unsigned long timestamp = millis() + t_nextmeas_ms;
+    if (millis() > timestamp)
+    {
+        timestamp = millis() + t_nextmeas_ms;
+        char string[200];
+        snprintf(string, sizeof(string), "%u;%.2f;%.2f;", millis(), temp_read_one(NTC_Probe), temp_read_one(NTC_Ambient));
+        sd_writetofile(string, "ESA_2W5_cooled.csv");
+    }
 }

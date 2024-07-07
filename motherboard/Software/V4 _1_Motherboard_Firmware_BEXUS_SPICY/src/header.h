@@ -11,12 +11,12 @@
 #define ADC_REF 3.0
 #define ADC_RES 12 // ADC Resolution in Bit
 #define ADC_MAX_READ (pow(2, ADC_RES) - 1)
+const unsigned int ADC_MAX_WRITE = 100; //  Value where analogRrite = 100% duty cycle
+const unsigned int ADC_FREQ_WRITE = 30000;
 
 #define WATCHDOG_TIMEOUT 8000 // neds to be 8000ms max i think
 #define CONNECTIONTIMEOUT 20  /*Conntection Timeout of the tcp client*/
 
-const unsigned int ADC_MAX_WRITE = 100; //  Value where analogRrite = 100% duty cycle
-const unsigned int ADC_FREQ_WRITE = 300;
 /*----------------Pin mapping-------------*/
 #if 1 // if statement to make code colapsable
 
@@ -28,25 +28,25 @@ const unsigned int ADC_FREQ_WRITE = 300;
 #define SCL1 5
 
 // Lan and SD ic are connected both on SPI0 Bus
-// #define CS_LAN 17
-// #define CS_SD 16
-// #define MISO_SPI0 20
-// #define SCK_SPI0 18
-// #define MOSI_SPI0 19
+#define CS_LAN 17
+#define CS_SD 16
+#define MISO_SPI0 20
+#define SCK_SPI0 18
+#define MOSI_SPI0 19
 
-// #define LAN_MISO MISO_SPI0
-// #define LAN_MOSI MOSI_SPI0
-// #define LAN_SCK SCK_SPI0
+#define LAN_MISO MISO_SPI0
+#define LAN_MOSI MOSI_SPI0
+#define LAN_SCK SCK_SPI0
 
 /*V4.0 pins :*/
-#define MISO_SPI0 0
-#define CS_SD 1
-#define SCK_SPI0 2
-#define MOSI_SPI0 3
-#define LAN_MISO 8
-#define CS_LAN 9
-#define LAN_MOSI 11
-#define LAN_SCK 10
+// #define MISO_SPI0 0
+// #define CS_SD 1
+// #define SCK_SPI0 2
+// #define MOSI_SPI0 3
+// #define LAN_MISO 8
+// #define CS_LAN 9
+// #define LAN_MOSI 11
+// #define LAN_SCK 10
 
 #define PIN_H0 8
 #define PIN_H1 9
@@ -61,6 +61,7 @@ const unsigned int ADC_FREQ_WRITE = 300;
 #define PIN_PROBEMUX_0 26
 #define PIN_PROBEMUX_1 25
 #define PIN_PROBEMUX_2 24
+#define PIN_MUX_OXY_DISABLE 21
 
 #define PIN_TEMPADC A3
 #define nNTC 8
@@ -100,7 +101,7 @@ struct packet
     unsigned int pyro_timestamp[6] = {0}; //
     s32_t pyro_temp[6] = {0};             // temp on the sensor pcb in °C * 100
     s32_t pyro_oxy[6] = {0};              // Oxygenvalue
-    s32_t pyro_pressure[6] = {0};         // pressure?
+    s32_t pyro_pressure[6] = {0};         // pressure
     float light[12] = {0.0f};
 
     /**temperature from thermistors:
@@ -110,12 +111,12 @@ struct packet
      *8 cpu temp*/
     unsigned int thermistor[9] = {0};
     unsigned int heaterPWM[6] = {0}; // power going to heating
-    float pid[6 * 3] = {0};
+    float pid[3] = {0};
 };
 
 struct packet *packet_create();
 char *packettochar(struct packet *data);
-void packet_print(struct packetold *pkt);
+// void packet_print(struct packetold *pkt);
 void destroy_packet(struct packet *p);
 
 /*state mashine*/
@@ -162,22 +163,26 @@ const unsigned int HEAT_CURRENT = (uint)(((float)HEAT_VOLTAGE * 1000.0 / HEAT_RE
 
 extern char heat_init;
 void heat_setup();
-void heat_updateall(uint16_t *HeaterPWM);
-void heat_updateone(uint8_t PIN, uint16_t PWM);
+void heat_updateall(float *HeaterPWM);
+void heat_updateone(uint8_t PIN, float duty);
 void heat_testmanual();
 uint8_t heat_testauto();
 
 /*Pid*/
 extern char pid_init;
+extern float kp;
+extern float ki;
+extern float kd;
 void pid_setup();
 void pid_update_all();
 
 /*Thermistors*/
 extern char temp_init;
 void temp_setup();
-float temp_read_one(uint8_t Number);
+float temp_read_one(uint8_t Number,uint8_t nTimtes = 100);
 void temp_read_all(float *buffer);
 void temp_print_ntc(uint8_t Pin);
+void temp_record_temp(uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
 
 /*Oxygen Sensors*/
 #define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
@@ -190,10 +195,11 @@ struct oxy_mesure
     s32_t pyro_pressure[6] = {0}; // pressure?
 };
 extern char oxy_init;
-void oxy_setup(const uint8_t rx = PIN_OX_RX, const uint8_t tx = PIN_OX_TX);
+void oxy_setup();
 void oxy_console();
 bool oxy_read_all(struct oxy_mesure *mesure_buffer);
 char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_MAX);
+bool oxy_isconnected();
 
 /*light spectrometers*/
 extern char light_init;

@@ -3,7 +3,8 @@
 
 #include "header.h"
 #include <SPI.h>
-#include <Ethernet_spi1.h> /*The stock Etherent.h libary only supports spi0, i changed that to spi1*/
+// #include <Ethernet_spi1.h> /*The stock Etherent.h libary only supports spi0, i changed that to spi1*/
+#include <Ethernet.h>
 
 char AUTOMATIC_IP_ALLOCATION = 0;            /*0 means static ip allocation | 1 means dynamic*/
 static IPAddress SERVERIP(169, 254, 218, 4); // IP address of the Groundstation
@@ -32,9 +33,9 @@ void tcp_setup_client()
   // SPI.setTX(MOSI_SPI0);
   // SPI.setSCK(SCK_SPI0);
 
-  SPI1.setRX(LAN_MISO);
-  SPI1.setTX(LAN_MOSI);
-  SPI1.setSCK(LAN_SCK);
+  SPI.setRX(LAN_MISO);
+  SPI.setTX(LAN_MOSI);
+  SPI.setSCK(LAN_SCK);
 
   Ethernet.setRetransmissionCount(3);
   Ethernet.setRetransmissionTimeout(20); // miliseconds

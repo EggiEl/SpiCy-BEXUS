@@ -26,13 +26,27 @@ static void TextSpicyv4();
 void setup()
 {
   print_startup_message();
-  rp2040.wdt_begin(WATCHDOG_TIMEOUT);
-  get_Status();
+  // rp2040.wdt_begin(WATCHDOG_TIMEOUT);
+  // oxy_setup();
 }
 
 void loop()
 {
   check_periodic_tasks();
+  // Serial.print(oxy_isconnected());
+  // Serial.println();
+  // delay(100);
+
+  temp_record_temp(NTC_0, NTC_2, 1000 * 60);
+  
+  if (temp_read_one(NTC_0) > 30.0)
+  {
+    heat_updateone(PIN_H0, 0);
+  }
+  else
+  {
+    heat_updateone(PIN_H0, 100.0);
+  }
 }
 
 /*all things that should get checkt every loop of CPU0*/
@@ -40,18 +54,16 @@ void check_periodic_tasks()
 {
   checkSerialInput();
   rp2040.wdt_reset();
-  StatusLedBlink(PIN_LED);
-
+  StatusLedBlink(STATLED);
   // tcp_check_command();
   // rp2040.wdt_reset();
-  nextState();
+  // nextState();
   rp2040.wdt_reset();
 }
 
 //-------------------------core2------------------------
 void setup1()
 {
-  
 }
 
 void loop1()

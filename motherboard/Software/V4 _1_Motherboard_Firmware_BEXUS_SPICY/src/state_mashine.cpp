@@ -58,7 +58,7 @@ void nextState()
         {
             packet_dl->thermistor[i] = buffer[i];
         }
-        packet_dl->thermistor[9] = analogReadTemp(ADC_REF);
+        packet_dl->thermistor[8] = analogReadTemp(ADC_REF);
 
         state = READ_OXY;
         break;

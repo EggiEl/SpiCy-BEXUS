@@ -1,8 +1,8 @@
 #include "header.h"
 #include "SoftwareSerial.h"
 
-SoftwareSerial oxySerial(PIN_OX_RX, PIN_OX_TX); // https://arduino-pico.readthedocs.io/en/latest/serial.html
-
+SoftwareSerial Oxy_SoftwareSerial(PIN_OX_RX, PIN_OX_TX); // https://arduino-pico.readthedocs.io/en/latest/serial.html
+#define oxySerial Serial1
 char oxy_init = 0;
 char oxy_calib = 0;
 
@@ -26,82 +26,58 @@ struct OxygenReadout
 };
 
 /*setups the SoftwareSerial Connection to the oxygen sensor*/
-void oxy_setup(const uint8_t rx, const uint8_t tx)
+void oxy_setup()
 {
-    char success = 1;
-    char *buffer = (char *)calloc(7, sizeof(char));
-    if (!buffer)
-    {
-        debugf_error("oxy setup memory allocation fail\n");
-        success = 0;
-    }
-
     debugf_status("<oxy_setup>\n");
-    pinMode(rx, OUTPUT);
-    pinMode(tx, OUTPUT);
-    oxySerial.begin(OXY_BAUD);
-
     if (millis() < (3 * 60 * 1000))
     {
         debugf_warn("Oxygen Sensors warnuptime of 3min isnt fullfilled yet\n");
     }
+    // enable USART 0
+    pinMode(PIN_PROBEMUX_0, OUTPUT);
+    pinMode(PIN_PROBEMUX_1, OUTPUT);
+    pinMode(PIN_PROBEMUX_2, OUTPUT);
+    pinMode(PIN_MUX_OXY_DISABLE, OUTPUT);
 
-    /*writes Test*/
-    const char buffer_logo[] = "#LOGO\r";
-    oxySerial.write(buffer_logo);
-    oxySerial.readBytesUntil('\r', buffer, COMMAND_LENGTH_MAX);
-    oxySerial.write(buffer_logo);
+    digitalWrite(PIN_MUX_OXY_DISABLE, 0);
+    digitalWrite(PIN_PROBEMUX_0, 0);
+    digitalWrite(PIN_PROBEMUX_1, 0);
+    digitalWrite(PIN_PROBEMUX_2, 0);
 
-    /*reads out return values*/
-    oxySerial.readBytesUntil('\r', buffer, COMMAND_LENGTH_MAX);
-
-    /*checks weather test was successfull*/
-    if (buffer[0] == '#' && buffer[1] == 'L' && buffer[2] == 'O' && buffer[3] == 'G' && buffer[4] == 'O')
-    {
-        success = 1;
-    }
-    else
-    {
-        success = 0; // TODO
-        success = 1;
-        debugf_warn("Return for testing command #LOGO:\"%s\"\n", buffer);
-        oxy_decode_general_error(buffer);
-    }
-
-    if (!success)
-    {
-        oxy_init = 0;
-        debugf_error("setup was not succesfull\n");
-        oxySerial.end();
-    }
-    else
-    {
-        // char *Device_id = oxy_commandhandler("#IDNR",30);
-        // debugf_info("(ID NumbeR) %s connected\n", Device_id);
-        // free_ifnotnull(Device_id);
-
-        oxy_init = 1;
-        debugf_sucess("setup was succesfull\n");
-    }
-
-    free_ifnotnull(buffer);
-}
-
-/**
- * changes the SoftwareSerial Pins for the Oxygen Sensor
- */
-void oxy_change_pins(const uint8_t new_rx, const uint8_t new_tx)
-{
-    /*deletes old SoftwareSerial and replaces it with new one*/
-    oxySerial.end();
-
-    oxySerial.~SoftwareSerial(); // Manually call the destructor on the old object
-    new (&oxySerial) SoftwareSerial(new_rx, new_tx);
-
-    pinMode(new_rx, OUTPUT);
-    pinMode(new_tx, OUTPUT);
+#if oxySerial == Serial1
+    oxySerial.setTX(PIN_OX_TX);
+    oxySerial.setRX(PIN_OX_RX);
+// oxySerial.setPollingMode(true);
+// oxySerial.setFIFOSize(128);
+#endif
 
     oxySerial.begin(OXY_BAUD);
+
+    oxySerial.write("#LOGO\r", 6);
+    oxySerial.flush();
+    char buffer[20];
+    oxySerial.readBytesUntil('\r', buffer, sizeof(buffer));
+
+    debugf_sucess("setup was succesfull\n");
+}
+
+bool oxy_isconnected()
+{
+    char buffer[20];
+    oxySerial.write("#LOGO\r", 6);
+    oxySerial.flush();
+    /*reads out return values*/
+    oxySerial.readBytesUntil('\r', buffer, sizeof(buffer));
+    if (buffer[0] == '#' && buffer[1] == 'L' && buffer[2] == 'O' && buffer[3] == 'G' && buffer[4] == 'O')
+    {
+        return 1;
+    }
+    else
+    {
+        debugf_warn("Return for testing command #LOGO:\"%s\"\n", buffer);
+        oxy_decode_general_error(buffer);
+        return 0;
+    }
 }
 
 /*Starts Console for talk with fd-odem module*/
@@ -114,7 +90,7 @@ void oxy_console()
     {
         oxy_setup();
     }
-    oxySerial.listen();
+    // oxySerial.listen();
 
     oxy_meassure(1);
     // oxy_commandhandler("#LOGO");
@@ -158,29 +134,6 @@ void oxy_console()
  */
 char *oxy_commandhandler(const char command[], uint8_t nReturn)
 {
-    unsigned int command_length = strlen(command);
-
-    /*Sending Command*/
-    debugf_status("sending oxy_command:%s\n", command);
-
-    // for (int i = 0; i < command_length; i++)
-    // {
-    //     debugf_info("%c", command[i]);
-    // }
-    // debugf_info("\n");
-
-    if (command[command_length - 1] == '\r') // makes sure that the command is terminated
-    {
-        oxySerial.write(command, command_length);
-    }
-    else
-    {
-        oxySerial.write(command, command_length);
-        oxySerial.write('\r');
-    }
-
-    /*waits for return values*/
-    oxySerial.listen();
 
     /*creates return buffer*/
     if (nReturn == 0)
@@ -193,6 +146,22 @@ char *oxy_commandhandler(const char command[], uint8_t nReturn)
         debugf_error("oxy commandhandler memory allocation fail\n");
         return NULL;
     }
+
+    /*Sending Command*/
+    debugf_status("sending oxy_command:%s\n", command);
+    unsigned int command_length = strlen(command);
+    if (command[command_length - 1] == '\r') // makes sure that the command is terminated
+    {
+        oxySerial.write(command, command_length);
+    }
+    else
+    {
+        oxySerial.write(command, command_length);
+        oxySerial.write('\r');
+    }
+
+    /*flushes output*/
+    oxySerial.flush();
 
     /*reads out return values*/
     unsigned int recievedbytes = oxySerial.readBytesUntil('\r', buffer, nReturn);
@@ -245,7 +214,7 @@ void oxy_decode_general_error(const char errorCode_buff[])
     switch (errorCode)
     {
     case 0:
-        debugf_error("Error in error code function (seufts).\n");
+        debugf_error("Error in error code function (seufts). Pretty sure no connect\n");
         break;
     case -1:
         debugf_error("General: A non-specific error occurred.\n");
@@ -313,8 +282,8 @@ bool oxy_read_all(struct oxy_mesure *mesure_buffer)
     for (uint8_t i = 0; i < 6; i++)
     {
         mesure_buffer->pyro_oxy[i] = i;
-        mesure_buffer->pyro_temp[i] = i*2;
-        mesure_buffer->pyro_pressure[i] = i*3;
+        mesure_buffer->pyro_temp[i] = i * 2;
+        mesure_buffer->pyro_pressure[i] = i * 3;
     }
     return 1;
 }

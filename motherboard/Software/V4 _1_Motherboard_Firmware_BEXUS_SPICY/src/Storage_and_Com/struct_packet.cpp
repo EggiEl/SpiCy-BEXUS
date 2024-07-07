@@ -70,91 +70,91 @@ char *packettochar(struct packet *data)
   return buffer;
 }
 
-/*Prints all avaliable infos about a packet like pointers, size, values and memory*/
-void packet_print(struct packetold *pkt)
-{
+// /*Prints all avaliable infos about a packet like pointers, size, values and memory*/
+// void packet_print(struct packetold *pkt)
+// {
 
-  debugf_status("-----infos about packet----------\n");
+//   debugf_status("-----infos about packet----------\n");
 
-  debug("Size in uC Memory: ");
-  debugln(sizeof(struct packet));
+//   debug("Size in uC Memory: ");
+//   debugln(sizeof(struct packet));
 
-  debug("id (address: ");
-  debug((uintptr_t)&pkt->id, DEC);
-  debug("): ");
-  debugln(pkt->id);
+//   debug("id (address: ");
+//   debug((uintptr_t)&pkt->id, DEC);
+//   debug("): ");
+//   debugln(pkt->id);
 
-  debug("timestampPacket (address: ");
-  debug((uintptr_t)&pkt->timestampPacket, DEC);
-  debug("): ");
-  debugln(pkt->timestampPacket);
+//   debug("timestampPacket (address: ");
+//   debug((uintptr_t)&pkt->timestampPacket, DEC);
+//   debug("): ");
+//   debugln(pkt->timestampPacket);
 
-  debug("timestampOxy (address: ");
-  debug((uintptr_t)&pkt->timestampOxy, DEC);
-  debug("): ");
-  for (int i = 0; i < 6; i++)
-  {
-    debug(pkt->timestampOxy[i]);
-    debug(" ");
-  }
-  debugln();
+//   debug("timestampOxy (address: ");
+//   debug((uintptr_t)&pkt->timestampOxy, DEC);
+//   debug("): ");
+//   for (int i = 0; i < 6; i++)
+//   {
+//     debug(pkt->timestampOxy[i]);
+//     debug(" ");
+//   }
+//   debugln();
 
-  debug("oxigen (address: ");
-  debug((uintptr_t)&pkt->oxigen, DEC);
-  debug("): ");
-  for (int i = 0; i < 6; i++)
-  {
-    debug(pkt->oxigen[i]);
-    debug(" ");
-  }
-  debugln();
+//   debug("oxigen (address: ");
+//   debug((uintptr_t)&pkt->oxigen, DEC);
+//   debug("): ");
+//   for (int i = 0; i < 6; i++)
+//   {
+//     debug(pkt->oxigen[i]);
+//     debug(" ");
+//   }
+//   debugln();
 
-  debug("tempTube (address: ");
-  debug((uintptr_t)&pkt->tempTube, DEC);
-  debug("): ");
-  for (int i = 0; i < 6; i++)
-  {
-    debug(pkt->tempTube[i]);
-    debug(" ");
-  }
-  debugln();
+//   debug("tempTube (address: ");
+//   debug((uintptr_t)&pkt->tempTube, DEC);
+//   debug("): ");
+//   for (int i = 0; i < 6; i++)
+//   {
+//     debug(pkt->tempTube[i]);
+//     debug(" ");
+//   }
+//   debugln();
 
-  debug("heaterPWM (address: ");
-  debug((uintptr_t)&pkt->heaterPWM, DEC);
-  debug("): ");
-  for (int i = 0; i < 6; i++)
-  {
-    debug(pkt->heaterPWM[i]);
-    debug(" ");
-  }
-  debugln();
+//   debug("heaterPWM (address: ");
+//   debug((uintptr_t)&pkt->heaterPWM, DEC);
+//   debug("): ");
+//   for (int i = 0; i < 6; i++)
+//   {
+//     debug(pkt->heaterPWM[i]);
+//     debug(" ");
+//   }
+//   debugln();
 
-  debug("error (address: ");
-  debug((uintptr_t)&pkt->error, DEC);
-  debug("): ");
-  debugln(pkt->error);
+//   debug("error (address: ");
+//   debug((uintptr_t)&pkt->error, DEC);
+//   debug("): ");
+//   debugln(pkt->error);
 
-  debug("tempCpu (address: ");
-  debug((uintptr_t)&pkt->tempCpu, DEC);
-  debug("): ");
-  debugln(pkt->tempCpu);
+//   debug("tempCpu (address: ");
+//   debug((uintptr_t)&pkt->tempCpu, DEC);
+//   debug("): ");
+//   debugln(pkt->tempCpu);
 
-  debug("power (address: ");
-  debug((uintptr_t)&pkt->power, DEC);
-  debug("): ");
-  debug(pkt->power[0]);
-  debug(" ");
-  debugln(pkt->power[1]);
+//   debug("power (address: ");
+//   debug((uintptr_t)&pkt->power, DEC);
+//   debug("): ");
+//   debug(pkt->power[0]);
+//   debug(" ");
+//   debugln(pkt->power[1]);
 
-  debug("info (address: ");
-  debug((uintptr_t)&pkt->info, DEC);
-  debug("): ");
-  for (int i = 0; i < 80; i++)
-  {
-    debug(pkt->info[i]);
-  }
-  debugln();
-}
+//   debug("info (address: ");
+//   debug((uintptr_t)&pkt->info, DEC);
+//   debug("): ");
+//   for (int i = 0; i < 80; i++)
+//   {
+//     debug(pkt->info[i]);
+//   }
+//   debugln();
+// }
 
 /**
  *  writes a char array in the info of an packet

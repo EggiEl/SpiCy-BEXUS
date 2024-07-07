@@ -62,7 +62,7 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
         debugf_error("pid got negative values. Set to 0.\n");
         pid = 0;
     }
-    uint16_t heat = (int)(ADC_MAX_WRITE * pid / PID_MAX);
+    float heat = (ADC_MAX_WRITE * pid / PID_MAX);
     debugf_info("heater:%u thermistor:%u setpoint:%.2f currentTemp:%.2f p:%.2f i:%.2f heat:%u", heater, thermistor, desired_temp, measured_temp, p, i, heat);
     heat_updateone(heater, heat);
 }

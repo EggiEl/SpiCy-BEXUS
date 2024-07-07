@@ -143,8 +143,44 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
     }
     else
     {
-      debugf_status("Update Heater Pin %i to %i%\n", (int)param1, (int)param2);
-      heat_updateone((int)param1, (int)param2);
+      switch ((uint)param1)
+      {
+      case 0:
+        debugf_status("Update Heater %u to %.2f %\n", (uint)param1, param2);
+        heat_updateone(PIN_H0, param2);
+        break;
+      case 1:
+        debugf_status("Update Heater %u to %.2f %\n", (uint)param1, param2);
+        heat_updateone(PIN_H1, param2);
+        break;
+      case 2:
+        debugf_status("Update Heater %u to %.2f %\n", (uint)param1, param2);
+        heat_updateone(PIN_H2, param2);
+        break;
+      case 3:
+        debugf_status("Update Heater %u to %.2f %\n", (uint)param1, param2);
+        heat_updateone(PIN_H3, param2);
+        break;
+      case 4:
+        debugf_status("Update Heater %u to %.2f %\n", (uint)param1, param2);
+        heat_updateone(PIN_H4, param2);
+        break;
+      case 5:
+        debugf_status("Update Heater %u to %.2f %\n", (uint)param1, param2);
+        heat_updateone(PIN_H5, param2);
+        break;
+      case 6:
+        debugf_status("Update Heater %u to %.2f %\n", (uint)param1, param2);
+        heat_updateone(PIN_H6, param2);
+        break;
+      case 7:
+        debugf_status("Update Heater %u to %.2f %\n", (uint)param1, param2);
+        heat_updateone(PIN_H7, param2);
+        break;
+      default:
+        debugf_status("Invalid Heater ID: %i\n", (uint)param1);
+        break;
+      }
     }
     break;
   }
@@ -265,22 +301,27 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   }
 }
 
-/*swtiches LED*/
+/*swtiches LED in fixed frequency. Non blocking*/
 void StatusLedBlink(uint8_t LED)
 {
-  // static unsigned int T_ms = 1;
-  // static unsigned long timestamp = millis() + T_ms;
-  // if (millis() > timestamp)
-  // {
-  if (digitalRead(LED))
+  static unsigned int T_ms = 100;
+  static unsigned long timestamp = millis() + T_ms;
+  if (millis() > timestamp)
   {
-    digitalWrite(LED, 0);
+    timestamp = millis() + T_ms;
+    static uint8_t status = 0;
+    pinMode(LED, OUTPUT);
+    if (status)
+    {
+      status = 0;
+      digitalWrite(LED, 1);
+    }
+    else
+    {
+      status = 1;
+      digitalWrite(LED, 0);
+    }
   }
-  else
-  {
-    digitalWrite(LED, 1);
-  }
-  // }
 }
 
 // const float R8 = 100000.0;
@@ -292,20 +333,37 @@ float get_batvoltage()
 {
   analogReadResolution(ADC_RES);
   pinMode(PIN_VOLT, INPUT);
-  float adc_volt = (float)(analogRead(PIN_VOLT) / ADC_MAX_READ) * ADC_REF;
+  float analog_read_buffer = 0;
+  for (int i = 0; i < 50; i++)
+  {
+    analog_read_buffer += analogRead(PIN_VOLT);
+  }
+  analog_read_buffer = analog_read_buffer / 50;
+
+  float adc_volt = (float)(analog_read_buffer / ADC_MAX_READ) * ADC_REF;
   // debugf_info("batmes_adc_volt:%.4f\n", adc_volt);
   return adc_volt / BAT_VOLTAG_DIV;
 }
 
-const float R_SHUNT = 1.0; // in mOhms
 /*returns the current consumption at the moment of the PCB in A*/
 float get_current()
 {
+  const float R_SHUNT = 0.01; // in Ohms
+  const float Gain = 100;     // in Ohms
+
   analogReadResolution(ADC_RES);
   pinMode(PIN_CURR, INPUT);
-  float adc_volt = (float)(analogRead(PIN_CURR) / ADC_MAX_READ) * ADC_REF;
+
+  float analog_read_buffer = 0;
+  for (int i = 0; i < 50; i++)
+  {
+    analog_read_buffer += analogRead(PIN_CURR);
+  }
+  analog_read_buffer = analog_read_buffer / 50;
+
+  float adc_volt = (float)(analog_read_buffer / ADC_MAX_READ) * ADC_REF;
   // debugf_info("batmes_adc_curr:%.4f\n", adc_volt);
-  return adc_volt / (R_SHUNT * 2.5);
+  return adc_volt / (R_SHUNT * Gain);
 }
 
 /*print current Stack/Heap use*/
@@ -463,8 +521,8 @@ void free_ifnotnull(void *pointer)
 /**
  * returns a status value wich can be decoded to get infos about the parts of the module
  *  @return uint32_t status bitwise encoded as:
- *  | default 1 | sd init | cableTest  | TCP init | Heater init | Oxy init | Light init |
- *        0         1          2           3             4           5             6
+ *  | sd init | cableTest  | TCP init | Heater init | Oxy init | Light init | default 0  | Ki   |  Kd   |  Kp   |
+ *        0         1          2           3             4           5          6 - 7      8-15   16-23  24-32
  */
 uint32_t get_Status()
 {
@@ -473,25 +531,34 @@ uint32_t get_Status()
 
   // sd
   sd_setup();
-  status |= ((uint32_t)sd_init << 1);
+  status |= ((uint32_t)sd_init << 0);
 
   // TCP connection
-  status |= ((uint32_t)tcp_link_status() << 2);
+  status |= ((uint32_t)tcp_link_status() << 1);
 
   tcp_setup_client();
-  status |= ((uint32_t)TCP_init << 3);
+  status |= ((uint32_t)TCP_init << 2);
 
   // Heater
   heat_setup();
-  status |= ((uint32_t)heat_init << 4);
+  status |= ((uint32_t)heat_init << 3);
 
   // Oxygen Sensors
   oxy_setup();
-  status |= ((uint32_t)oxy_init << 5);
+  status |= ((uint32_t)oxy_init << 4);
 
   // Light
   light_setup();
+  status |= ((uint32_t)light_init << 5);
+
+  // default 0
   status |= ((uint32_t)light_init << 6);
+  status |= ((uint32_t)light_init << 7);
+
+  // PID
+  status |= ((uint8_t)ki << 8);
+  status |= ((uint8_t)ki << 8);
+  status |= ((uint8_t)ki << 8);
 
   // memory
   return status;

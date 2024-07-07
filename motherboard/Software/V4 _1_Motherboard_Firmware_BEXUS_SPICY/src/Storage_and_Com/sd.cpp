@@ -13,7 +13,7 @@ char sd_init = 0;
 void sd_setup()
 {
   debugf_status("<sd_init>\n");
-  if (MISO_SPI0 == 0 || MISO_SPI0 == 4 || MISO_SPI0 == 16)
+  if (MISO_SPI0 == 0 || MISO_SPI0 == 4 || MISO_SPI0 == 16 || MISO_SPI0 == 20)
   {
     SPI.setRX(MISO_SPI0);
     SPI.setTX(MOSI_SPI0);
@@ -43,7 +43,6 @@ void sd_setup()
     sd_printinfo();
     debugf_sucess("SD init succesfulll\n");
   }
-
 }
 
 /*returns number of saved packets in a file*/
@@ -114,7 +113,7 @@ bool sd_readstruct(struct packet *data, const char filepath[], unsigned long pos
       return 0;
     }
     uint8_t *buffer = (uint8_t *)malloc(sizeof(struct packet));
-   char success = 1;
+    char success = 1;
     if (!myFile.seek(position * sizeof(struct packet)))
     {
       debugln("-error:SDpositioning failed}-");
@@ -136,7 +135,7 @@ bool sd_readstruct(struct packet *data, const char filepath[], unsigned long pos
 }
 
 /*Writes in the file test.txt the String "testing 1, 2, 3."*/
-bool sd_writetofile(const char * buffer_text,const char * filename)
+bool sd_writetofile(const char *buffer_text, const char *filename)
 {
   if (!sd_init)
   {
@@ -151,7 +150,7 @@ bool sd_writetofile(const char * buffer_text,const char * filename)
   }
   else
   {
-    debugf_info("error opening %s \n",filename); // if the file didn't open, print an error:
+    debugf_info("error opening %s \n", filename); // if the file didn't open, print an error:
     sd_init = 0;
   }
   return 0;
