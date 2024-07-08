@@ -137,7 +137,7 @@ void temp_record_temp(const char path[],uint8_t NTC_Probe, uint8_t NTC_Ambient, 
     static uint8_t init = 0;
     if (!init)
     {
-        sd_writetofile("timestamp[ms];temp_probe[°C];temp_ambient[°C]", path);
+        sd_writetofile("timestamp[ms];temp_probe[°C];temp_ambient[°C];Voltage[V];Current[A]\n", path);
         init = 1;
     }
 
@@ -146,7 +146,7 @@ void temp_record_temp(const char path[],uint8_t NTC_Probe, uint8_t NTC_Ambient, 
     {
         timestamp = millis() + t_nextmeas_ms;
         char string[200];
-        snprintf(string, sizeof(string), "%u;%.2f;%.2f;", millis(), temp_read_one(NTC_Probe), temp_read_one(NTC_Ambient));
+        snprintf(string, sizeof(string), "%u;%.2f;%.2f;%.5f;%.7f", millis(), temp_read_one(NTC_Probe), temp_read_one(NTC_Ambient),get_batvoltage(), get_current());
         sd_writetofile(string, path);
     }
 }
