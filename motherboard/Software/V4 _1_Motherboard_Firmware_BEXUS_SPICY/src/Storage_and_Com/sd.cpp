@@ -3,7 +3,6 @@
 #include <SPI.h>
 // if testing via breadboard make sure to just connect the SD Card and disconnecting the LAN
 
-static unsigned long int max_freq_sd();
 void printDirectory(File dir, int numTabs);
 void sd_printinfo();
 
@@ -75,20 +74,21 @@ bool sd_writestruct(struct packet *s_out, const char filepath[])
   {
     sd_setup();
   }
-  char *buffer = packettochar(s_out);
+
+  char buffer[sizeof(struct packet)];
+  packettochar(s_out,buffer);
+
   File myFile = SD.open(filepath, FILE_WRITE);
   if (myFile)
   { // if the file opened okay, write to it:
     myFile.write(buffer, sizeof(struct packet));
     myFile.close();
     debugln("-sucess}-");
-    free_ifnotnull(buffer);
     return 1;
   }
   else
   {
     debugln("-error:opening-failed}-");
-    free_ifnotnull(buffer);
     return 0;
   }
 }
@@ -242,36 +242,3 @@ void sd_printinfo()
   root = SD.open("/");
   printDirectory(root, 0);
 }
-
-/*Tests the SD. Work in Progress*/
-/**
-void testSD()
-{
-  while (!Serial)
-  {
-  }
-
-  sd_setup();
-  char filepath[] = "test.txt";
-  SD.remove(filepath);
-
-  struct packet *data = packet_create();
-  sd_writestruct(data, filepath);
-  data->errors[0] = 100;
-  debugln(data->timestampPacket);
-
-  struct packet *data1 = packet_create();
-  sd_writestruct(data1, filepath);
-  data1->errors[0] = 101;
-  debugln(data1->timestampPacket);
-
-  debugln(sd_numpackets(filepath));
-
-  struct packet i;
-  sd_readstruct(&i, filepath, 0);
-  debugf_info("%i", i.timestampPacket);
-
-  sd_readstruct(&i, filepath, 1);
-  debugf_info("%i", i.timestampPacket);
-}
-*/

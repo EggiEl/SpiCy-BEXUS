@@ -58,16 +58,9 @@ void destroy_packet(struct packet *p)
  * @param struct packet data to write to
  * @return pointer to buffer
  */
-char *packettochar(struct packet *data)
+void packettochar(struct packet *data,char buffer[])
 {
-  char *buffer = (char *)malloc(sizeof(struct packet));
-  if (!buffer)
-  {
-    debugf_error("packettochar Memory allocation failed\n");
-    return NULL;
-  }
   memcpy(buffer, data, sizeof(struct packet)); // Copy struct data into buffer
-  return buffer;
 }
 
 // /*Prints all avaliable infos about a packet like pointers, size, values and memory*/

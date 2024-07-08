@@ -70,6 +70,7 @@ void tcp_setup_client()
   else
   {
     TCP_init = 0;
+    error_handler(ERROR_TCP_INI);
     debugf_error("TCP_init_failed\n");
   }
 
@@ -188,34 +189,34 @@ void tcp_check_command()
     return;
   }
 
-/*old kinda working code:
-// reads the TCP_incomming_bytes_buffer in union
-  union TCPMessageParser
-  {
-    byte ByteStream[35];
-    struct
+  /*old kinda working code:
+  // reads the TCP_incomming_bytes_buffer in union
+    union TCPMessageParser
     {
-      char comand[3];
-      float param[8];
-    };
-  } buffer;
+      byte ByteStream[35];
+      struct
+      {
+        char comand[3];
+        float param[8];
+      };
+    } buffer;
 
-  byte *RawByteStream = (byte *)malloc(sizeof(TCPMessageParser));
-  if (!RawByteStream)
-  {
-    debugf_error("Malloc error tcp read RawByteStream\n");
-    return;
-  }
+    byte *RawByteStream = (byte *)malloc(sizeof(TCPMessageParser));
+    if (!RawByteStream)
+    {
+      debugf_error("Malloc error tcp read RawByteStream\n");
+      return;
+    }
 
-  int status = client.readBytesUntil('\n', RawByteStream, sizeof(TCPMessageParser)); // Returns The next byte (or character), or -1 if none is available.
-  if (status == -1)
-  {
-    debugf_error("Some error parsing tcp readBytesUntil cmmand\n");
-    free_ifnotnull(RawByteStream);
-    return;
-  }
-  memcpy(&buffer.ByteStream, RawByteStream, sizeof(TCPMessageParser));
-  free_ifnotnull(RawByteStream);*/
+    int status = client.readBytesUntil('\n', RawByteStream, sizeof(TCPMessageParser)); // Returns The next byte (or character), or -1 if none is available.
+    if (status == -1)
+    {
+      debugf_error("Some error parsing tcp readBytesUntil cmmand\n");
+      free_ifnotnull(RawByteStream);
+      return;
+    }
+    memcpy(&buffer.ByteStream, RawByteStream, sizeof(TCPMessageParser));
+    free_ifnotnull(RawByteStream);*/
 
   // checks if command is corrupted
   char success = 1;
@@ -262,12 +263,8 @@ char tcp_send_packet(struct packet *packet)
   {
     tcp_setup_client();
   }
-
-  char *buffer = packettochar(packet);
-  if (buffer == NULL)
-  {
-    return -5;
-  }
+  char buffer[sizeof(struct packet)];
+  packettochar(packet,buffer);
 
   signed char status = 1;
   if (!client.connected())
@@ -317,7 +314,6 @@ char tcp_send_packet(struct packet *packet)
     break;
   }
 
-  free_ifnotnull(buffer);
   // MESSURETIME_STOP
   return status;
 }

@@ -19,12 +19,14 @@
 
 //  https://arduino-pico.readthedocs.io/en/latest/index.html
 void print_startup_message();
-void check_periodic_tasks();
 static void TextSpicyv4();
+void update_nResets();
+void check_periodic_tasks();
 
 //------------------------core1--------------------------------
 void setup()
 {
+  update_nResets();
   print_startup_message();
   // rp2040.wdt_begin(WATCHDOG_TIMEOUT);
   // oxy_setup();
@@ -33,11 +35,9 @@ void setup()
 void loop()
 {
   check_periodic_tasks();
-  // Serial.print(oxy_isconnected());
-  // Serial.println();
-  // delay(100);
 
-  temp_record_temp("Temp_2W5_cooled.csv",NTC_0, NTC_2, 100);
+  temp_record_temp("Temp_2W5_cooled.csv", NTC_0, NTC_2, 100);
+
 
   if (temp_read_one(NTC_0) > 30.0)
   {
@@ -90,11 +90,11 @@ void print_startup_message()
 
   if (watchdog_caused_reboot())
   {
-    debugf_status(">[MotherboardV4.ino] is running on Chip %i Core %i |Freq %.1f MHz|Watchdog Reset<<\n", rp2040.getChipID(), rp2040.cpuid(), rp2040.f_cpu() / 1000000.0);
+    debugf_status(">[MotherboardV4.ino] is running on Chip %i Core %i |Freq %.1f MHz|nResets %u |Watchdog Reset<<\n", rp2040.getChipID(), rp2040.cpuid(), rp2040.f_cpu() / 1000000.0, N_RESETS);
   }
   else
   {
-    debugf_status(">[MotherboardV4.ino] is running on Chip %i Core %i |Freq %.1f MHz<<\n", rp2040.getChipID(), rp2040.cpuid(), rp2040.f_cpu() / 1000000.0);
+    debugf_status(">[MotherboardV4.ino] is running on Chip %i Core %i |Freq %.1f MHz|nResets %u <<\n", rp2040.getChipID(), rp2040.cpuid(), rp2040.f_cpu() / 1000000.0, N_RESETS);
   }
 
   debugf_info("\"/?\" for help\n");
@@ -131,4 +131,38 @@ void TextSpicyv4()
   // SET_COLOUR_RESET
 
 #endif
+}
+
+#include <EEPROM.h>
+// this function adds one to the N_RESETS counter in th flash
+void update_nResets()
+{
+  const uint8_t ADRES_NRESETS = 0;
+
+  EEPROM.begin(256);
+  union int_to_byte
+  {
+    int integer;
+    byte bytearray[sizeof(int)];
+  } buffer;
+
+  // reads a N_RESETS from EEPROM
+  for (int i = 0; i < sizeof(int); i++)
+  {
+    buffer.bytearray[i] = EEPROM.read(ADRES_NRESETS + i);
+  }
+
+  // new reset -> +1
+  buffer.integer += 1;
+
+  N_RESETS = buffer.integer;
+
+  // writes the one increased N_RESETS back to flash
+  for (int i = 0; i < sizeof(int); i++)
+  {
+    EEPROM.write(ADRES_NRESETS + i, buffer.bytearray[i]);
+  }
+
+  EEPROM.commit();
+  EEPROM.end();
 }

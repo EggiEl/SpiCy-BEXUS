@@ -17,6 +17,7 @@ const unsigned int ADC_FREQ_WRITE = 30000;
 #define WATCHDOG_TIMEOUT 8000 // neds to be 8000ms max i think
 #define CONNECTIONTIMEOUT 20  /*Conntection Timeout of the tcp client*/
 
+unsigned long N_RESETS = 0; // this number is stored in the flash and increses with every reset of th uC
 /*----------------Pin mapping-------------*/
 #if 1 // if statement to make code colapsable
 
@@ -115,8 +116,7 @@ struct packet
 };
 
 struct packet *packet_create();
-char *packettochar(struct packet *data);
-// void packet_print(struct packetold *pkt);
+void packettochar(struct packet *data, char buffer[]);
 void destroy_packet(struct packet *p);
 
 /*state mashine*/
@@ -179,10 +179,10 @@ void pid_update_all();
 /*Thermistors*/
 extern char temp_init;
 void temp_setup();
-float temp_read_one(uint8_t Number,uint8_t nTimtes = 100);
+float temp_read_one(uint8_t Number, uint8_t nTimtes = 100);
 void temp_read_all(float *buffer);
 void temp_print_ntc(uint8_t Pin);
-void temp_record_temp(const char path[],uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
+void temp_record_temp(const char path[], uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
 
 /*Oxygen Sensors*/
 #define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
@@ -219,7 +219,11 @@ void singlefile_close();
 /*error handeling*/
 enum
 {
-    ERROR_SD_INI
+    ERROR_SD_INI,
+    ERROR_TCP_INI,
+    ERROR_HEAT_INI,
+    ERROR_LIGHT_INI,
+    ERROR_OXY_INI
 };
 
 void error_handler(unsigned int ErrorCode);

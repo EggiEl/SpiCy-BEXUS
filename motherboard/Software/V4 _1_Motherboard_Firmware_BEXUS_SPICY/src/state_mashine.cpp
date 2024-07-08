@@ -25,17 +25,16 @@ void nextState()
 {
     const char sd_filepath[] = "data.bin";
     static float buffer[20];
+    state_print(state);
     switch (state)
     {
     case START:
     {
-        state_print(START);
         state = CREATE_PACKET;
         break;
     }
     case CREATE_PACKET:
     {
-        state_print(CREATE_PACKET);
         destroy_packet(packet_dl);
         packet_dl = packet_create();
         if (packet_dl)
@@ -51,8 +50,6 @@ void nextState()
     }
     case READ_TEMP:
     {
-        state_print(READ_TEMP);
-
         temp_read_all(buffer);
         for (uint8_t i = 0; i < 8; i++)
         {
@@ -65,22 +62,19 @@ void nextState()
     }
     case READ_OXY:
     {
-        state_print(READ_OXY);
-        oxy_read_all(&oxy_mesure_buff);
-        for (uint8_t i = 0; i < 6; i++)
-        {
-            packet_dl->pyro_temp[i] = oxy_mesure_buff.pyro_temp[i];
-            packet_dl->pyro_pressure[i] = oxy_mesure_buff.pyro_pressure[i];
-            packet_dl->pyro_oxy[i] = oxy_mesure_buff.pyro_oxy[i];
-        }
-
+        // oxy_read_all(&oxy_mesure_buff);
+        // for (uint8_t i = 0; i < 6; i++)
+        // {
+        //     packet_dl->pyro_temp[i] = oxy_mesure_buff.pyro_temp[i];
+        //     packet_dl->pyro_pressure[i] = oxy_mesure_buff.pyro_pressure[i];
+        //     packet_dl->pyro_oxy[i] = oxy_mesure_buff.pyro_oxy[i];
+        // }
         state = READ_LIGHT;
         break;
     }
     case READ_LIGHT:
     {
-        state_print(READ_LIGHT);
-        // light_read(buffer);
+        light_read(buffer,0);
         for (uint8_t i = 0; i < 6; i++)
         {
             packet_dl->light[i] = buffer[i];
@@ -90,15 +84,13 @@ void nextState()
     }
     case SAVESENDPACKET:
     {
-        state_print(SAVESENDPACKET);
         sd_writestruct(packet_dl, sd_filepath);
-        tcp_send_packet(packet_dl);
+        // tcp_send_packet(packet_dl);
         state = CREATE_PACKET;
         break;
     }
     case ERROR:
     {
-        state_print(ERROR);
         resetState();
     }
     default:
@@ -112,6 +104,9 @@ void resetState()
     destroy_packet(packet_dl);
     TCP_init = 0;
     sd_init = 0;
+    light_init = 0;
+    heat_init = 0;
+
     state = START;
 }
 
@@ -125,7 +120,6 @@ void state_print(unsigned int Status)
     case CREATE_PACKET:
         debugf_status("<current state: CREATE_PACKET>\n");
         break;
-
     case READ_LIGHT:
         debugf_status("<current state: READ_LIGHT>\n");
         break;
