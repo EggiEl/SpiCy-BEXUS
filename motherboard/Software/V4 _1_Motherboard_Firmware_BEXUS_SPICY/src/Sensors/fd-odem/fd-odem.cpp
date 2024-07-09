@@ -12,18 +12,18 @@ void oxy_decode_general_error(const char errorCode_buff[]);
 
 struct OxygenReadout
 {
-    s32_t error = 0;
-    s32_t dphi = 0;
-    s32_t umolar = 0;
-    s32_t mbar = 0;
-    s32_t airSat = 0;
-    s32_t tempSample = 0;
-    s32_t tempCase = 0;
-    s32_t signalIntensity = 0;
-    s32_t ambientLight = 0;
-    s32_t pressure = 0;
-    s32_t resistorTemp = 0;
-    s32_t percentOtwo = 0;
+    int32_t error = 0;
+    int32_t dphi = 0;
+    int32_t umolar = 0;
+    int32_t mbar = 0;
+    int32_t airSat = 0;
+    int32_t tempSample = 0;
+    int32_t tempCase = 0;
+    int32_t signalIntensity = 0;
+    int32_t ambientLight = 0;
+    int32_t pressure = 0;
+    int32_t resistorTemp = 0;
+    int32_t percentOtwo = 0;
 };
 
 /*setups the SoftwareSerial Connection to the oxygen sensor*/
@@ -227,7 +227,7 @@ char *oxy_commandhandler(const char command[], uint8_t nReturn)
  */
 void oxy_decode_general_error(const char errorCode_buff[])
 {
-    s32_t errorCode = 0;
+    int32_t errorCode = 0;
     sscanf(errorCode_buff, "%*c %*c %*c %*c %*c %i", &errorCode);
     switch (errorCode)
     {
@@ -306,8 +306,8 @@ bool oxy_read_all(struct oxy_mesure *mesure_buffer)
     return 1;
 }
 
-const s32_t OXY_OPTICALCHANNEL = 1;
-const s32_t OXY_SENSORSENABLED = 47; // This parameter defines the enabled sensor types bit for bit
+const int32_t OXY_OPTICALCHANNEL = 1;
+const int32_t OXY_SENSORSENABLED = 47; // This parameter defines the enabled sensor types bit for bit
 float oxy_meassure(uint8_t Probe_Number)
 {
     /*chooses right oxygen Sensor*/
@@ -478,7 +478,7 @@ T=4: AnalogOutput registe
  * @param nValues Number of registers to write.
  * @param  buffer_values buffer of Register values to be written
  **/
-void oxy_write_register(const s32_t register_block, const s32_t first_register, const s32_t nValues, const s32_t buffer_values[])
+void oxy_write_register(const int32_t register_block, const int32_t first_register, const int32_t nValues, const int32_t buffer_values[])
 {
     char buffer[COMMAND_LENGTH_MAX];
     /*write command string*/

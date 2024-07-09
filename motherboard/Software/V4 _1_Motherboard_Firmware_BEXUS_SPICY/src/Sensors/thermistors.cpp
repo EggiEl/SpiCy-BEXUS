@@ -94,7 +94,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
 
     if (voltage_adc < 0.02)
     {
-        error_handler(ERROR_NO_NTC_CONNECTED);
+        // error_handler(ERROR_NO_NTC_CONNECTED);
         return -1000000;
     }
     /*Converts the adc voltage after the opamp circuit to the voltage on the ntc*/

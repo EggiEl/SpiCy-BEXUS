@@ -34,8 +34,21 @@ void setup()
 
 void loop()
 {
-  check_periodic_tasks();
+  // check_periodic_tasks();
+  // rp2040.wdt_reset();
+
+  if (temp_read_one(NTC_PROBE_0) > 30.0)
+  {
+    heat_updateone(PIN_H0, 0);
+  }
+  else
+  {
+    heat_updateone(PIN_H0, 100.0);
+  }
+
   nextState();
+ 
+  rp2040.wdt_reset();
 }
 
 /*all things that should get checkt every loop of CPU0*/
@@ -45,26 +58,16 @@ void check_periodic_tasks()
   rp2040.wdt_reset();
   StatusLedBlink(STATLED);
   // tcp_check_command();
-  rp2040.wdt_reset();
 }
 
 //-------------------------core2------------------------
 /*controlls heating*/
 void setup1()
 {
-
 }
 
 void loop1()
 {
-  if (temp_read_one(NTC_PROBE_0) > 30.0)
-  {
-    heat_updateone(PIN_H0, 0);
-  }
-  else
-  {
-    heat_updateone(PIN_H0, 100.0);
-  }
 }
 
 unsigned long nMOTHERBOARD_BOOTUPS = 0;
@@ -99,7 +102,6 @@ void update_nResets()
   {
     EEPROM.write(ADRES_NRESETS + i, buffer.bytearray[i]);
   }
-
   EEPROM.commit();
   EEPROM.end();
 }

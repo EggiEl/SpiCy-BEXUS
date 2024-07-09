@@ -36,15 +36,15 @@ void nextState()
     {
         state = READ_TEMP;
         struct packet *new_packet = packet_create();
-        memcpy(new_packet, &packet_dl, sizeof(struct packet));
+        memcpy(&packet_dl, new_packet, sizeof(struct packet));
         free_ifnotnull(new_packet);
         break;
     }
     case READ_TEMP:
     {
-        rp2040.idleOtherCore();
+        // rp2040.idleOtherCore();
         temp_read_all(buffer);
-        rp2040.resumeOtherCore();
+        // rp2040.restartCore1();
         for (uint8_t i = 0; i < 8; i++)
         {
             packet_dl.thermistor[i] = buffer[i];

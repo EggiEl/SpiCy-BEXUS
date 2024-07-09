@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #include "debug_in_color.h"
 /*--------Settings-----------------------*/
-#define DEBUG 1         /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
+#define DEBUG 0         /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
 #define COLOUR_SERIAL 1 /*activates/deactivates Serial.printing with color*/
 #define USB_ENABLE 0    /*enables single drive USB functions*/
 #define ADC_REF 3.0
@@ -14,7 +14,7 @@
 const unsigned int ADC_MAX_WRITE = 100; //  Value where analogRrite = 100% duty cycle
 const unsigned int ADC_FREQ_WRITE = 30000;
 
-#define WATCHDOG_TIMEOUT 8000 // neds to be 8000ms max i think
+#define WATCHDOG_TIMEOUT 2000 // neds to be 8000ms max i think
 #define CONNECTIONTIMEOUT 20  /*Conntection Timeout of the tcp client*/
 
 extern unsigned long nMOTHERBOARD_BOOTUPS; // this number is stored in the flash and increses with every reset of th uC
@@ -155,9 +155,9 @@ struct packet
     float power[2] = {0};             // battery voltage in mV and current consumption in mA
 
     unsigned int pyro_timestamp[6] = {0}; //
-    s32_t pyro_temp[6] = {0};             // temp on the sensor pcb in °C * 100
-    s32_t pyro_oxy[6] = {0};              // Oxygenvalue
-    s32_t pyro_pressure[6] = {0};         // pressure
+    int32_t pyro_temp[6] = {0};           // temp on the sensor pcb in °C * 100
+    int32_t pyro_oxy[6] = {0};            // Oxygenvalue
+    int32_t pyro_pressure[6] = {0};       // pressure
     float light[12] = {0.0f};
 
     /**temperature from thermistors:
@@ -165,8 +165,8 @@ struct packet
      *6 NTC SMD
      *7 fix reference value
      *8 cpu temp*/
-    unsigned int thermistor[9] = {0};
-    unsigned int heaterPWM[6] = {0}; // power going to heating
+    float thermistor[9] = {0};
+    float heaterPWM[6] = {0}; // power going to heating
     float pid[3] = {0};
 };
 
@@ -247,9 +247,9 @@ uint8_t temp_isconnected(uint8_t NTC = 255);
 #define OXY_BAUD 19200
 struct oxy_mesure
 {
-    s32_t pyro_temp[6] = {0};     // temp on the sensor pcb in °C * 100
-    s32_t pyro_oxy[6] = {0};      // Oxygenvalue
-    s32_t pyro_pressure[6] = {0}; // pressure?
+    int32_t pyro_temp[6] = {0};     // temp on the sensor pcb in °C * 100
+    int32_t pyro_oxy[6] = {0};      // Oxygenvalue
+    int32_t pyro_pressure[6] = {0}; // pressure?
 };
 extern char oxy_init;
 void oxy_setup();

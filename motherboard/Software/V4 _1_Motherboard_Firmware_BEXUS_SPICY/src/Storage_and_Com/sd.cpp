@@ -68,10 +68,7 @@ int sd_numpackets(const char filepath[])
 // writes a packet to sd card
 bool sd_writestruct(struct packet *s_out, const char filepath[])
 {
-  debug("-{SD_writestru.id:");
-  debug(s_out->id);
-  debug("-file:");
-  debug(filepath);
+  debugf_status("SD_writestru.id: %u file: %s", s_out->id, filepath);
   if (!sd_init)
   {
     sd_setup();
@@ -85,13 +82,12 @@ bool sd_writestruct(struct packet *s_out, const char filepath[])
   { // if the file opened okay, write to it:
     myFile.write(buffer, sizeof(struct packet));
     myFile.close();
-    debugln("-sucess}-");
     return 1;
   }
   else
   {
     error_handler(ERROR_WR_STR);
-    debugln("-error:opening-failed}-");
+    debugln("-error:opening-failed-");
     return 0;
   }
 }

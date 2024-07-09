@@ -3,9 +3,9 @@
 
 #define LENGTHARRAY(array) ((sizeof(array)) / (sizeof(array[0])))
 
-#ifndef DEBUG
-#define DEBUG 1 /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
-#endif
+// #ifndef DEBUG
+// #define DEBUG 1 /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
+// #endif
 
 #ifndef COLOUR_SERIAL
 #define COLOUR_SERIAL 1 /*activates Serial.printing with color*/
