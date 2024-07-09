@@ -6,7 +6,7 @@ SoftwareSerial Oxy_SoftwareSerial(PIN_OX_RX, PIN_OX_TX); // https://arduino-pico
 char oxy_init = 0;
 char oxy_calib = 0;
 
-float oxy_meassure(const uint8_t number);
+float oxy_meassure(const uint8_t Probe_Number);
 void oxy_decode_mesurement_errors(const u32_t R0);
 void oxy_decode_general_error(const char errorCode_buff[]);
 
@@ -47,6 +47,11 @@ void oxy_setup()
     // digitalWrite(PIN_OX_TX,1);
     // delay(2);
     /* first data out is always corrupted, after that it works. why that is, is beyond me*/
+
+    // Transmit a dummy byte to synchronize
+    // oxySerial.write(0x00);
+    // oxySerial.flush();
+
     oxySerial.write("#LOGO\r", 6);
     oxySerial.flush();
     char buffer[20];
@@ -355,48 +360,60 @@ float oxy_meassure(uint8_t Probe_Number)
 /*decodes the R0 Error bit of the MEA Messurement command and prints debug statement*/
 void oxy_decode_mesurement_errors(const u32_t R0)
 {
+
     if (R0 & (1 << 0))
     {
+        error_handler(ERROR_OXY_AUTO_AMP);
         debugf_error("WARNING - automatic amplification level active\n");
     }
     if (R0 & (1 << 1))
     {
+        error_handler(ERROR_OXY_SIGNAL_INT_LOW);
         debugf_error("WARNING - sensor signal intensity low\n");
     }
     if (R0 & (1 << 2))
     {
+        error_handler(ERROR_OXY_OPTICAL_DETECTOR_SATURATED);
         debugf_error("ERROR - optical detector saturated\n");
     }
     if (R0 & (1 << 3))
     {
+        error_handler(ERROR_OXY_REF_SIGNAL_LOW);
         debugf_error("WARNING - reference signal intensity too low\n");
     }
     if (R0 & (1 << 4))
     {
+        error_handler(ERROR_OXY_REF_SIGNAL_HIGH);
         debugf_error("ERROR - reference signal too high\n");
     }
     if (R0 & (1 << 5))
     {
+        error_handler(ERROR_OXY_SAMPLE_TEMP_SENSOR);
         debugf_error("ERROR - failure of sample temperature sensor (e.g. Pt100)\n");
     }
     if (R0 & (1 << 6))
     {
+        error_handler(ERROR_OXY_RESERVED);
         debugf_error("reserved\n");
     }
     if (R0 & (1 << 7))
     {
-        debugf_error("WARNING high humidity (>90%%RH) within the module\n");
+        error_handler(ERROR_OXY_HIGH_HUMIDITY);
+        debugf_error("WARNING - high humidity (>90\%\%RH) within the module\n");
     }
     if (R0 & (1 << 8))
     {
+        error_handler(ERROR_OXY_CASE_TEMP_SENSOR);
         debugf_error("ERROR - failure of case temperature sensor\n");
     }
     if (R0 & (1 << 9))
     {
+        error_handler(ERROR_OXY_PRESSURE_SENSOR);
         debugf_error("ERROR - failure of pressure sensor\n");
     }
     if (R0 & (1 << 10))
     {
+        error_handler(ERROR_OXY_HUMIDITY_SENSOR);
         debugf_error("ERROR - failure of humidity sensor\n");
     }
 }

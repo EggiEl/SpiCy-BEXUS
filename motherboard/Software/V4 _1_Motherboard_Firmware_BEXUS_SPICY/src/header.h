@@ -182,8 +182,8 @@ void select_probe_or_NTC(const uint8_t ProbeorNTC);
 extern char TCP_init;
 void tcp_setup_client();
 void tpc_testmanually(int nPackets = 1, unsigned int nTries = 5);
-char tcp_send_packet(struct packet *data);
-char tcp_send_multible_packets(struct packet **data, unsigned int nPackets);
+char tcp_send_packet(struct packet *packet);
+char tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPackets);
 void tcp_check_command();
 void tcp_print_info();
 void tpc_send_error(unsigned char error);
@@ -214,9 +214,9 @@ void free_ifnotnull(void *pointer);
 void scan_wire();
 
 /*Heating*/
-const float HEAT_VOLTAGE = 5;                                                               // in V
-const float HEAT_RESISTANCE = 10;                                                           // in Ohm
-const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE;                                  // current of a single Heater in A
+const float HEAT_VOLTAGE = 5;                              // in V
+const float HEAT_RESISTANCE = 10;                          // in Ohm
+const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE; // current of a single Heater in A
 
 extern char heat_init;
 void heat_setup();
@@ -236,7 +236,7 @@ void pid_update_all();
 #define nNTC 8 // Number of NTC probes
 extern char temp_init;
 void temp_setup();
-float temp_read_one(uint8_t Number, uint8_t nTimtes = 100);
+float temp_read_one(uint8_t NTC, uint8_t nTimes = 100);
 void temp_read_all(float *buffer);
 void temp_log(const char path[], uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
 uint8_t temp_isconnected(uint8_t NTC = 255);
@@ -277,12 +277,51 @@ void singlefile_close();
 enum
 {
     ERROR_SD_INI,
+    ERROR_SD_COUNT,
+    ERROR_WR_STR,
+    ERROR_SD_WRITE_OPEN,
+    ERROR_SD_PINMAP,
+
     ERROR_TCP_INI,
+    ERROR_TCP_COMMAND_PARSING,
+    ERROR_TCP_PARAM_CORRUPT,
+    ERROR_TCP_COMMAND_CORRUPT,
+    ERROR_TCP_SEND_FAILED,
+    ERROR_TCP_SEND_TIMEOUT,
+    ERROR_TCP_SERVER_INVALID,
+    ERROR_TCP_TRUNCATED,
+    ERROR_TCP_TRUNCATED_2,
+    ERROR_TCP_CABLE_DISCO,
+    ERROR_TCP_NO_RESPONSE,
+
     ERROR_HEAT_INI,
+
     ERROR_LIGHT_INI,
-    ERROR_OXY_INI
+
+    ERROR_NO_NTC_CONNECTED,
+
+    ERROR_STATE,
+
+    ERROR_PACK_ID_OV,
+    ERROR_PACK_MEM_AL,
+    ERROR_PACKAGE_FREE_TWICE,
+
+    ERROR_OXY_INI,
+    ERROR_OXY_AUTO_AMP,
+    ERROR_OXY_SIGNAL_INT_LOW,
+    ERROR_OXY_OPTICAL_DETECTOR_SATURATED,
+    ERROR_OXY_REF_SIGNAL_LOW,
+    ERROR_OXY_REF_SIGNAL_HIGH,
+    ERROR_OXY_SAMPLE_TEMP_SENSOR,
+    ERROR_OXY_RESERVED,
+    ERROR_OXY_HIGH_HUMIDITY,
+    ERROR_OXY_CASE_TEMP_SENSOR,
+    ERROR_OXY_PRESSURE_SENSOR,
+    ERROR_OXY_HUMIDITY_SENSOR
 };
 
-void error_handler(unsigned int ErrorCode);
-
+void error_handler(const unsigned int ErrorCode, const uint8_t destination = 0);
+extern const uint8_t ERROR_DESTINATION_NO_TCP;
+extern const uint8_t ERROR_DESTINATION_NO_SD;
+extern const uint8_t ERROR_DESTINATION_NO_TCP_SD;
 #endif

@@ -28,13 +28,14 @@ void sd_setup()
   }
   else
   {
+    error_handler(ERROR_SD_PINMAP, ERROR_DESTINATION_NO_SD);
     debugf_error("ERROR: Unknown Sd SPI Configuration\n");
     return;
   }
 
   if (!sd_init)
   {
-    error_handler(ERROR_SD_INI);
+    error_handler(ERROR_SD_INI, ERROR_DESTINATION_NO_SD);
     return;
   }
   else
@@ -58,6 +59,7 @@ int sd_numpackets(const char filepath[])
   }
   else
   {
+    error_handler(ERROR_SD_COUNT);
     debugf_error("counting SD packets in \"\\%s\" failed\n", filepath);
     return -1;
   }
@@ -76,7 +78,7 @@ bool sd_writestruct(struct packet *s_out, const char filepath[])
   }
 
   char buffer[sizeof(struct packet)];
-  packettochar(s_out,buffer);
+  packettochar(s_out, buffer);
 
   File myFile = SD.open(filepath, FILE_WRITE);
   if (myFile)
@@ -88,6 +90,7 @@ bool sd_writestruct(struct packet *s_out, const char filepath[])
   }
   else
   {
+    error_handler(ERROR_WR_STR);
     debugln("-error:opening-failed}-");
     return 0;
   }
@@ -113,7 +116,7 @@ bool sd_readstruct(struct packet *data, const char filepath[], unsigned long pos
       return 0;
     }
     uint8_t *buffer = (uint8_t *)malloc(sizeof(struct packet));
-    char success = 1;
+
     if (!myFile.seek(position * sizeof(struct packet)))
     {
       debugln("-error:SDpositioning failed}-");
@@ -150,6 +153,7 @@ bool sd_writetofile(const char *buffer_text, const char *filename)
   }
   else
   {
+    error_handler(ERROR_SD_WRITE_OPEN, ERROR_DESTINATION_NO_SD);
     debugf_info("error opening %s \n", filename); // if the file didn't open, print an error:
     sd_init = 0;
   }
@@ -175,6 +179,7 @@ bool sd_printfile(const char filepath[])
   }
   else
   {
+
     debugf_info("error opening test.txt"); // if the file didn't open, print an error:
   }
   return 1;
@@ -189,7 +194,8 @@ void printDirectory(File dir, int numTabs)
     {
       break; // no more files
     }
-    for (uint8_t i = 0; i < numTabs; i++)
+
+    for (uint8_t a = 0; a < numTabs; a++)
     {
       debugf_info("\t");
     }

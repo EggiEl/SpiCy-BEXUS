@@ -17,7 +17,9 @@
 			"ostream": "cpp",
 			"streambuf": "cpp",
 			"ios": "cpp",
-			"cmath": "cpp"
+			"cmath": "cpp",
+			"xlocale": "cpp",
+			"functional": "cpp"
 		}
 	}
 }

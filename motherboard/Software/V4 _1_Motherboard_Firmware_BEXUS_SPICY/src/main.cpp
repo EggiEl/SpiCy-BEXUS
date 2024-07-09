@@ -30,19 +30,12 @@ void setup()
   rp2040.wdt_begin(WATCHDOG_TIMEOUT);
   update_nResets();
   print_startup_message();
-  debugln(oxy_isconnected(NTC_PROBE_0));
-  debugln(oxy_isconnected(NTC_PROBE_0));
-  // oxy_setup();
 }
 
 void loop()
 {
   check_periodic_tasks();
-  // temp_log("Temp_2W5_cooled.csv", NTC_PROBE_0, NTC_PROBE_2, 100);
-
-  //  debugln(oxy_isconnected(NTC_PROBE_1));
-   delay(500);
-     debugln(oxy_isconnected(NTC_PROBE_0));
+  nextState();
 }
 
 /*all things that should get checkt every loop of CPU0*/
@@ -52,8 +45,6 @@ void check_periodic_tasks()
   rp2040.wdt_reset();
   StatusLedBlink(STATLED);
   // tcp_check_command();
-  // rp2040.wdt_reset();
-  // nextState();
   rp2040.wdt_reset();
 }
 
@@ -61,18 +52,19 @@ void check_periodic_tasks()
 /*controlls heating*/
 void setup1()
 {
+
 }
 
 void loop1()
 {
-  // if (temp_read_one(NTC_PROBE_0) > 30.0)
-  // {
-  //   heat_updateone(PIN_H0, 0);
-  // }
-  // else
-  // {
-  //   heat_updateone(PIN_H0, 100.0);
-  // }
+  if (temp_read_one(NTC_PROBE_0) > 30.0)
+  {
+    heat_updateone(PIN_H0, 0);
+  }
+  else
+  {
+    heat_updateone(PIN_H0, 100.0);
+  }
 }
 
 unsigned long nMOTHERBOARD_BOOTUPS = 0;

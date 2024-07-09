@@ -70,7 +70,7 @@ void tcp_setup_client()
   else
   {
     TCP_init = 0;
-    error_handler(ERROR_TCP_INI);
+    error_handler(ERROR_TCP_INI,ERROR_DESTINATION_NO_TCP);
     debugf_error("TCP_init_failed\n");
   }
 
@@ -185,6 +185,7 @@ void tcp_check_command()
   int status = client.readBytesUntil('\n', buffer.ByteStream, sizeof(TCPMessageParser)); // Returns The next byte (or character), or -1 if none is available.
   if (status == -1)
   {
+    error_handler(ERROR_TCP_COMMAND_PARSING);
     debugf_error("Some error parsing tcp readBytesUntil cmmand\n");
     return;
   }
@@ -222,6 +223,7 @@ void tcp_check_command()
   char success = 1;
   if (!(buffer.comand[0] == buffer.comand[1] && buffer.comand[1] == buffer.comand[2]))
   {
+    error_handler(ERROR_TCP_COMMAND_CORRUPT);
     debugf_error("TCP Command corrputed\n");
     debugf_error("Command:\n%c\n%c\n%c\n", buffer.comand[0], buffer.comand[1], buffer.comand[2]);
     for (uint8_t i = 0; i < 4; i++)
@@ -237,6 +239,7 @@ void tcp_check_command()
   {
     if (buffer.param[i * 2] != buffer.param[i * 2 + 1])
     {
+      error_handler(ERROR_TCP_PARAM_CORRUPT);
       success = 0;
     }
   }
@@ -264,7 +267,7 @@ char tcp_send_packet(struct packet *packet)
     tcp_setup_client();
   }
   char buffer[sizeof(struct packet)];
-  packettochar(packet,buffer);
+  packettochar(packet, buffer);
 
   signed char status = 1;
   if (!client.connected())
@@ -285,30 +288,37 @@ char tcp_send_packet(struct packet *packet)
     else
     {
       status = -6;
+      error_handler(ERROR_TCP_SEND_FAILED,ERROR_DESTINATION_NO_TCP);
       debugf_error("sendpacket failed\n");
     }
     // client.flush();                               //waits till all is send //can be left out if TCP Server recives just 200bytes per package.unsave?
     break;
   case -1:
+    error_handler(ERROR_TCP_SEND_TIMEOUT,ERROR_DESTINATION_NO_TCP);
     debugf_error("-sendpacket TIMED_OUT\n");
     break;
   case -2:
+  error_handler(ERROR_TCP_SERVER_INVALID,ERROR_DESTINATION_NO_TCP);
     debugf_error("-sendpacket INVALID_SERVER\n");
     break;
   case -3:
+  error_handler(ERROR_TCP_TRUNCATED,ERROR_DESTINATION_NO_TCP);
     debugf_error("-sendpacket TRUNCATED\n");
     break;
   case -4:
+  error_handler(ERROR_TCP_TRUNCATED_2,ERROR_DESTINATION_NO_TCP);
     debugf_error("-sendpacket TRUNCATED\n");
     break;
   default:
     debugf_error("error %i: ", status);
     if (Ethernet.linkStatus() == 2)
     {
+      error_handler(ERROR_TCP_CABLE_DISCO,ERROR_DESTINATION_NO_TCP);
       debugf_error("cable disconnected\n");
     }
     else
     {
+      error_handler(ERROR_TCP_NO_RESPONSE,ERROR_DESTINATION_NO_TCP);
       debugf_error("prob no response from server\n");
     }
     break;

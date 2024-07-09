@@ -19,7 +19,7 @@ enum states
 void nextState()
 {
     static enum states state = START;
-    static struct packet packet_dl = {0}; /*Pointer to the packet wich will be the next downlink*/
+    static struct packet packet_dl = {0}; /*packet wich will be the next downlink*/
     static struct oxy_mesure oxy_mesure_buff;
 
     const char sd_filepath[] = "data.bin";
@@ -35,7 +35,6 @@ void nextState()
     case CLEAR_PACKET:
     {
         state = READ_TEMP;
-        // memset(&packet_dl, 0, sizeof(packet_dl));
         struct packet *new_packet = packet_create();
         memcpy(new_packet, &packet_dl, sizeof(struct packet));
         free_ifnotnull(new_packet);
@@ -43,7 +42,9 @@ void nextState()
     }
     case READ_TEMP:
     {
+        rp2040.idleOtherCore();
         temp_read_all(buffer);
+        rp2040.resumeOtherCore();
         for (uint8_t i = 0; i < 8; i++)
         {
             packet_dl.thermistor[i] = buffer[i];
@@ -55,25 +56,25 @@ void nextState()
     }
     case READ_OXY:
     {
-        rp2040.idleOtherCore();
-        oxy_read_all(&oxy_mesure_buff);
-        for (uint8_t i = 0; i < 6; i++)
-        {
-            packet_dl.pyro_temp[i] = oxy_mesure_buff.pyro_temp[i];
-            packet_dl.pyro_pressure[i] = oxy_mesure_buff.pyro_pressure[i];
-            packet_dl.pyro_oxy[i] = oxy_mesure_buff.pyro_oxy[i];
-        }
-        rp2040.resumeOtherCore();
+        // rp2040.idleOtherCore();
+        // oxy_read_all(&oxy_mesure_buff);
+        //  rp2040.resumeOtherCore();
+        // for (uint8_t i = 0; i < 6; i++)
+        // {
+        //     packet_dl.pyro_temp[i] = oxy_mesure_buff.pyro_temp[i];
+        //     packet_dl.pyro_pressure[i] = oxy_mesure_buff.pyro_pressure[i];
+        //     packet_dl.pyro_oxy[i] = oxy_mesure_buff.pyro_oxy[i];
+        // }
         state = READ_LIGHT;
         break;
     }
     case READ_LIGHT:
     {
-        light_read(buffer, 0);
-        for (uint8_t i = 0; i < 6; i++)
-        {
-            packet_dl.light[i] = buffer[i];
-        }
+        // light_read(buffer, 0);
+        // for (uint8_t i = 0; i < 6; i++)
+        // {
+        //     packet_dl.light[i] = buffer[i];
+        // }
         state = SAVESENDPACKET;
         break;
     }
@@ -126,6 +127,7 @@ void state_print(unsigned int Status)
         break;
 
     default:
+        error_handler(ERROR_STATE);
         debugf_error("State out of bounds\n");
         break;
     }
