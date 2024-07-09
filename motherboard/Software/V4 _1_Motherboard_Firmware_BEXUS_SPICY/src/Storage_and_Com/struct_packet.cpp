@@ -25,6 +25,8 @@ struct packet *packet_create()
 
     id_struct++;
     a->timestampPacket = millis();
+    a->power[0] = get_batvoltage();
+    a->power[1] = get_current();
   }
   else
   {

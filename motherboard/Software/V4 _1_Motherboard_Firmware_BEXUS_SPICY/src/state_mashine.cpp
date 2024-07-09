@@ -1,12 +1,11 @@
 #include "header.h"
 
 void state_print(unsigned int Status);
-void resetState();
 
 enum states
 {
     START,
-    CREATE_PACKET,
+    CLEAR_PACKET,
     READ_TEMP,
     READ_OXY,
     READ_LIGHT,
@@ -14,15 +13,15 @@ enum states
     ERROR
 };
 
-enum states state = START;
-
-struct packet *packet_dl = NULL; /*Pointer to the packet wich will be the next downlink*/
-struct oxy_mesure oxy_mesure_buff;
 /*
  * Changes the current state to the next one
  */
 void nextState()
 {
+    static enum states state = START;
+    static struct packet packet_dl = {0}; /*Pointer to the packet wich will be the next downlink*/
+    static struct oxy_mesure oxy_mesure_buff;
+
     const char sd_filepath[] = "data.bin";
     static float buffer[20];
     state_print(state);
@@ -30,22 +29,16 @@ void nextState()
     {
     case START:
     {
-        state = CREATE_PACKET;
+        state = CLEAR_PACKET;
         break;
     }
-    case CREATE_PACKET:
+    case CLEAR_PACKET:
     {
-        destroy_packet(packet_dl);
-        packet_dl = packet_create();
-        if (packet_dl)
-        {
-            state = READ_TEMP;
-        }
-        else
-        {
-            debugf_error("state malloc nex packages failed");
-            state = ERROR;
-        }
+        state = READ_TEMP;
+        // memset(&packet_dl, 0, sizeof(packet_dl));
+        struct packet *new_packet = packet_create();
+        memcpy(new_packet, &packet_dl, sizeof(struct packet));
+        free_ifnotnull(new_packet);
         break;
     }
     case READ_TEMP:
@@ -53,45 +46,51 @@ void nextState()
         temp_read_all(buffer);
         for (uint8_t i = 0; i < 8; i++)
         {
-            packet_dl->thermistor[i] = buffer[i];
+            packet_dl.thermistor[i] = buffer[i];
         }
-        packet_dl->thermistor[8] = analogReadTemp(ADC_REF);
+        packet_dl.thermistor[8] = analogReadTemp(ADC_REF);
 
         state = READ_OXY;
         break;
     }
     case READ_OXY:
     {
-        // oxy_read_all(&oxy_mesure_buff);
-        // for (uint8_t i = 0; i < 6; i++)
-        // {
-        //     packet_dl->pyro_temp[i] = oxy_mesure_buff.pyro_temp[i];
-        //     packet_dl->pyro_pressure[i] = oxy_mesure_buff.pyro_pressure[i];
-        //     packet_dl->pyro_oxy[i] = oxy_mesure_buff.pyro_oxy[i];
-        // }
+        rp2040.idleOtherCore();
+        oxy_read_all(&oxy_mesure_buff);
+        for (uint8_t i = 0; i < 6; i++)
+        {
+            packet_dl.pyro_temp[i] = oxy_mesure_buff.pyro_temp[i];
+            packet_dl.pyro_pressure[i] = oxy_mesure_buff.pyro_pressure[i];
+            packet_dl.pyro_oxy[i] = oxy_mesure_buff.pyro_oxy[i];
+        }
+        rp2040.resumeOtherCore();
         state = READ_LIGHT;
         break;
     }
     case READ_LIGHT:
     {
-        light_read(buffer,0);
+        light_read(buffer, 0);
         for (uint8_t i = 0; i < 6; i++)
         {
-            packet_dl->light[i] = buffer[i];
+            packet_dl.light[i] = buffer[i];
         }
         state = SAVESENDPACKET;
         break;
     }
     case SAVESENDPACKET:
     {
-        sd_writestruct(packet_dl, sd_filepath);
+        sd_writestruct(&packet_dl, sd_filepath);
         // tcp_send_packet(packet_dl);
-        state = CREATE_PACKET;
+        state = CLEAR_PACKET;
         break;
     }
     case ERROR:
     {
-        resetState();
+        state = START;
+        TCP_init = 0;
+        sd_init = 0;
+        light_init = 0;
+        heat_init = 0;
     }
     default:
         state = ERROR;
@@ -99,26 +98,16 @@ void nextState()
     }
 }
 
-void resetState()
-{
-    destroy_packet(packet_dl);
-    TCP_init = 0;
-    sd_init = 0;
-    light_init = 0;
-    heat_init = 0;
-
-    state = START;
-}
-
 void state_print(unsigned int Status)
+
 {
     switch (Status)
     {
     case START:
         debugf_status("<current state: START>\n");
         break;
-    case CREATE_PACKET:
-        debugf_status("<current state: CREATE_PACKET>\n");
+    case CLEAR_PACKET:
+        debugf_status("<current state: CLEAR_PACKET>\n");
         break;
     case READ_LIGHT:
         debugf_status("<current state: READ_LIGHT>\n");
@@ -140,4 +129,28 @@ void state_print(unsigned int Status)
         debugf_error("State out of bounds\n");
         break;
     }
+}
+
+void select_probe_or_NTC(const uint8_t ProbeorNTC)
+{
+    // debugf_status("select probe\n");
+    static uint8_t init = 0;
+    if (!init)
+    {
+        pinMode(PIN_PROBEMUX_0, OUTPUT);
+        pinMode(PIN_PROBEMUX_1, OUTPUT);
+        pinMode(PIN_PROBEMUX_2, OUTPUT);
+        pinMode(PIN_MUX_OXY_DISABLE, OUTPUT);
+        digitalWrite(PIN_MUX_OXY_DISABLE, 0);
+        init = 1;
+    }
+
+    uint8_t A0 = (ProbeorNTC - 1) & 0b00000001;
+    uint8_t A1 = ((ProbeorNTC - 1) & 0b00000010) >> 1;
+    uint8_t A2 = ((ProbeorNTC - 1) & 0b00000100) >> 2;
+
+    digitalWrite(PIN_PROBEMUX_0, A0);
+    digitalWrite(PIN_PROBEMUX_1, A1);
+    digitalWrite(PIN_PROBEMUX_2, A2);
+    // debugf_info("Select S%u|A0:%u|A1:%u|A2:%u\n", ProbeorNTC, A0, A1, A2);
 }

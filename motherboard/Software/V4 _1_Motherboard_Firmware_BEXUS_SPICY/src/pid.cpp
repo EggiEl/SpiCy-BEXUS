@@ -14,7 +14,6 @@ char pid_init = 0;
 void pid_setup()
 {
     heat_setup();
-    heat_testauto();
     pid_init = 1;
 }
 
@@ -27,12 +26,12 @@ void pid_update_all()
     static long TimeStampPid = millis();
     if (TimeStampPid < (1.0 / PID_FREQ))
     {
-        pid_update_one(SET_TEMP, PIN_H0, NTC_0);
-        pid_update_one(SET_TEMP, PIN_H1, NTC_1);
-        pid_update_one(SET_TEMP, PIN_H2, NTC_2);
-        pid_update_one(SET_TEMP, PIN_H3, NTC_3);
-        pid_update_one(SET_TEMP, PIN_H4, NTC_4);
-        pid_update_one(SET_TEMP, PIN_H5, NTC_5);
+        pid_update_one(SET_TEMP, PIN_H0, NTC_PROBE_0);
+        pid_update_one(SET_TEMP, PIN_H1, NTC_PROBE_1);
+        pid_update_one(SET_TEMP, PIN_H2, NTC_PROBE_2);
+        pid_update_one(SET_TEMP, PIN_H3, NTC_PROBE_3);
+        pid_update_one(SET_TEMP, PIN_H4, NTC_PROBE_4);
+        pid_update_one(SET_TEMP, PIN_H5, NTC_PROBE_5);
     }
 }
 

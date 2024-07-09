@@ -17,77 +17,132 @@ const unsigned int ADC_FREQ_WRITE = 30000;
 #define WATCHDOG_TIMEOUT 8000 // neds to be 8000ms max i think
 #define CONNECTIONTIMEOUT 20  /*Conntection Timeout of the tcp client*/
 
-unsigned long N_RESETS = 0; // this number is stored in the flash and increses with every reset of th uC
+extern unsigned long nMOTHERBOARD_BOOTUPS; // this number is stored in the flash and increses with every reset of th uC
 /*----------------Pin mapping-------------*/
-#if 1 // if statement to make code colapsable
+typedef enum
+{
+    // GPIO extension buses
+    SDA0 = 2, // I2C Data Line 0
+    SCL0 = 3, // I2C Clock Line 0
 
-// 2 busses of the GPIO extentions
-#define SDA0 2
-#define SCL0 3
+    SDA1 = 4, // I2C Data Line 1
+    SCL1 = 5, // I2C Clock Line 1
 
-#define SDA1 4
-#define SCL1 5
+    // LAN and SD card connected on SPI0 Bus
+    CS_LAN = 17,    // Chip Select for LAN
+    CS_SD = 16,     // Chip Select for SD Card
+    MISO_SPI0 = 20, // Master In Slave Out for SPI0
+    SCK_SPI0 = 18,  // Serial Clock for SPI0
+    MOSI_SPI0 = 19, // Master Out Slave In for SPI0
 
-// Lan and SD ic are connected both on SPI0 Bus
-#define CS_LAN 17
-#define CS_SD 16
-#define MISO_SPI0 20
-#define SCK_SPI0 18
-#define MOSI_SPI0 19
+    LAN_MISO = MISO_SPI0, // Alias for LAN MISO
+    LAN_MOSI = MOSI_SPI0, // Alias for LAN MOSI
+    LAN_SCK = SCK_SPI0,   // Alias for LAN SCK
 
-#define LAN_MISO MISO_SPI0
-#define LAN_MOSI MOSI_SPI0
-#define LAN_SCK SCK_SPI0
+    // V4.0 pins (commented out)
+    // MISO_SPI0 = 0,
+    // CS_SD = 1,
+    // SCK_SPI0 = 2,
+    // MOSI_SPI0 = 3,
+    // LAN_MISO = 8,
+    // CS_LAN = 9,
+    // LAN_MOSI = 11,
+    // LAN_SCK = 10,
 
-/*V4.0 pins :*/
-// #define MISO_SPI0 0
-// #define CS_SD 1
-// #define SCK_SPI0 2
-// #define MOSI_SPI0 3
-// #define LAN_MISO 8
-// #define CS_LAN 9
-// #define LAN_MOSI 11
-// #define LAN_SCK 10
+    // High pins
+    PIN_H0 = 8,
+    PIN_H1 = 9,
+    PIN_H2 = 10,
+    PIN_H3 = 11,
+    PIN_H4 = 12,
+    PIN_H5 = 13,
+    PIN_H6 = 14,
+    PIN_H7 = 15,
 
-#define PIN_H0 8
-#define PIN_H1 9
-#define PIN_H2 10
-#define PIN_H3 11
-#define PIN_H4 12
-#define PIN_H5 13
-#define PIN_H6 14
-#define PIN_H7 15
+    // Multiplexer lines for temperature probes and oxygen sensors
+    PIN_PROBEMUX_0 = 26,      // Multiplexer Select Line 0
+    PIN_PROBEMUX_1 = 25,      // Multiplexer Select Line 1
+    PIN_PROBEMUX_2 = 24,      // Multiplexer Select Line 2
+    PIN_MUX_OXY_DISABLE = 21, // Multiplexer Oxygen Disable
 
-// the temp probes and the oxygen sensors are connected to the same multiplexerlines axa if temp 0 is selected so is oxy0
-#define PIN_PROBEMUX_0 26
-#define PIN_PROBEMUX_1 25
-#define PIN_PROBEMUX_2 24
-#define PIN_MUX_OXY_DISABLE 21
+    PIN_TEMPADC = A3, // Analog-to-Digital Converter for temperature
 
-#define PIN_TEMPADC A3
-#define nNTC 8
-#define NTC_0 1      // S1 of MUX
-#define NTC_1 2      // S2 of MUX
-#define NTC_2 3      // S3 of MUX
-#define NTC_3 4      // S4 of MUX
-#define NTC_4 8      // S8 of MUX
-#define NTC_5 7      // S7 of MUX
-#define NTC_SMD 5    // S5 of MUX
-#define NTC_10kfix 6 // S6 of MUX
+    NTC_PROBE_0 = 1,      // S1 of MUX
+    NTC_PROBE_1 = 2,      // S2 of MUX
+    NTC_PROBE_2 = 3,      // S3 of MUX
+    NTC_PROBE_3 = 4,      // S4 of MUX
+    NTC_PROBE_4 = 8,      // S8 of MUX
+    NTC_PROBE_5 = 7,      // S7 of MUX
+    NTC_SMD = 5,          // S5 of MUX
+    NTC_PROBE_10kfix = 6, // S6 of MUX
 
-#define PIN_OX_RX 1
-#define PIN_OX_TX 0
-#define PIN_OXY_ENABLE 21
+    PIN_OX_RX = 1, // Oxygen Sensor RX
+    PIN_OX_TX = 0, // Oxygen Sensor TX
 
-#define STATLED 23 // Status LED
+    STATLED = 23, // Status LED
 
-#define PIN_VOLT A2
-#define PIN_CURR A1
+    PIN_VOLT = A2, // Voltage Pin
+    PIN_CURR = A1, // Current Pin
 
-// COnnection of the Light Sensor
-#define PIN_LIGHT_SDA SDA0 // blue
-#define PIN_LIGHT_SCL SCL0 // yellow
-#endif
+    // Connection of the Light Sensor
+    PIN_LIGHT_SDA = SDA0, // I2C Data Line for Light Sensor
+    PIN_LIGHT_SCL = SCL0  // I2C Clock Line for Light Sensor
+} PIN_MAPPING;
+// // 2 busses of the GPIO extentions
+// #define SDA0 2
+// #define SCL0 3
+// #define SDA1 4
+// #define SCL1 5
+// // Lan and SD ic are connected both on SPI0 Bus
+// #define CS_LAN 17
+// #define CS_SD 16
+// #define MISO_SPI0 20
+// #define SCK_SPI0 18
+// #define MOSI_SPI0 19
+// #define LAN_MISO MISO_SPI0
+// #define LAN_MOSI MOSI_SPI0
+// #define LAN_SCK SCK_SPI0
+// /*V4.0 pins :*/
+// // #define MISO_SPI0 0
+// // #define CS_SD 1
+// // #define SCK_SPI0 2
+// // #define MOSI_SPI0 3
+// // #define LAN_MISO 8
+// // #define CS_LAN 9
+// // #define LAN_MOSI 11
+// // #define LAN_SCK 10
+// #define PIN_H0 8
+// #define PIN_H1 9
+// #define PIN_H2 10
+// #define PIN_H3 11
+// #define PIN_H4 12
+// #define PIN_H5 13
+// #define PIN_H6 14
+// #define PIN_H7 15
+// // the temp probes and the oxygen sensors are connected to the same multiplexerlines axa if temp 0 is selected so is oxy0
+// #define PIN_PROBEMUX_0 26
+// #define PIN_PROBEMUX_1 25
+// #define PIN_PROBEMUX_2 24
+// #define PIN_MUX_OXY_DISABLE 21
+// #define PIN_TEMPADC A3
+// #define nNTC 8
+// #define NTC_PROBE_0 1      // S1 of MUX
+// #define NTC_PROBE_1 2      // S2 of MUX
+// #define NTC_PROBE_2 3      // S3 of MUX
+// #define NTC_PROBE_3 4      // S4 of MUX
+// #define NTC_PROBE_4 8      // S8 of MUX
+// #define NTC_PROBE_5 7      // S7 of MUX
+// #define NTC_SMD 5          // S5 of MUX
+// #define NTC_PROBE_10kfix 6 // S6 of MUX
+// #define PIN_OX_RX 1
+// #define PIN_OX_TX 0
+// #define PIN_OXY_ENABLE 21
+// #define STATLED 23 // Status LED
+// #define PIN_VOLT A2
+// #define PIN_CURR A1
+// // COnnection of the Light Sensor
+// #define PIN_LIGHT_SDA SDA0 // blue
+// #define PIN_LIGHT_SCL SCL0 // yellow
 
 /** packet used for downlink.
  * please use packet_create() and packet_destroy() for good memory management
@@ -121,6 +176,7 @@ void destroy_packet(struct packet *p);
 
 /*state mashine*/
 void nextState();
+void select_probe_or_NTC(const uint8_t ProbeorNTC);
 
 /*tcp_client*/
 extern char TCP_init;
@@ -143,6 +199,7 @@ bool sd_printfile(const char filepath[]);
 bool sd_writetofile(const char *buffer_text, const char *filename);
 
 /*status*/
+extern unsigned long nMOTHERBOARD_BOOTUPS; // keep tracks of how often the Motherboard did boot up
 uint32_t get_Status();
 
 /*debug console*/
@@ -157,16 +214,15 @@ void free_ifnotnull(void *pointer);
 void scan_wire();
 
 /*Heating*/
-const float HEAT_VOLTAGE = 30.01;                                                           // in V
+const float HEAT_VOLTAGE = 5;                                                               // in V
 const float HEAT_RESISTANCE = 10;                                                           // in Ohm
-const unsigned int HEAT_CURRENT = (uint)(((float)HEAT_VOLTAGE * 1000.0 / HEAT_RESISTANCE)); // current of a single Heater in mA
+const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE;                                  // current of a single Heater in A
 
 extern char heat_init;
 void heat_setup();
-void heat_updateall(float *HeaterPWM);
-void heat_updateone(uint8_t PIN, float duty);
+void heat_updateall(const float HeaterPWM[]);
+void heat_updateone(const uint8_t PIN, const float duty);
 void heat_testmanual();
-uint8_t heat_testauto();
 
 /*Pid*/
 extern char pid_init;
@@ -177,12 +233,13 @@ void pid_setup();
 void pid_update_all();
 
 /*Thermistors*/
+#define nNTC 8 // Number of NTC probes
 extern char temp_init;
 void temp_setup();
 float temp_read_one(uint8_t Number, uint8_t nTimtes = 100);
 void temp_read_all(float *buffer);
-void temp_print_ntc(uint8_t Pin);
-void temp_record_temp(const char path[], uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
+void temp_log(const char path[], uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
+uint8_t temp_isconnected(uint8_t NTC = 255);
 
 /*Oxygen Sensors*/
 #define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
@@ -199,7 +256,7 @@ void oxy_setup();
 void oxy_console();
 bool oxy_read_all(struct oxy_mesure *mesure_buffer);
 char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_MAX);
-bool oxy_isconnected();
+uint8_t oxy_isconnected(const uint8_t PROBE = 255);
 
 /*light spectrometers*/
 extern char light_init;

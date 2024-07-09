@@ -16,7 +16,8 @@
 			"new": "cpp",
 			"ostream": "cpp",
 			"streambuf": "cpp",
-			"ios": "cpp"
+			"ios": "cpp",
+			"cmath": "cpp"
 		}
 	}
 }

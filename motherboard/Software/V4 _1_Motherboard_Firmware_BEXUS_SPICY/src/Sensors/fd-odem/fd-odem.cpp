@@ -9,6 +9,7 @@ char oxy_calib = 0;
 float oxy_meassure(const uint8_t number);
 void oxy_decode_mesurement_errors(const u32_t R0);
 void oxy_decode_general_error(const char errorCode_buff[]);
+
 struct OxygenReadout
 {
     s32_t error = 0;
@@ -33,41 +34,50 @@ void oxy_setup()
     {
         debugf_warn("Oxygen Sensors warnuptime of 3min isnt fullfilled yet\n");
     }
-    // enable USART 0
-    pinMode(PIN_PROBEMUX_0, OUTPUT);
-    pinMode(PIN_PROBEMUX_1, OUTPUT);
-    pinMode(PIN_PROBEMUX_2, OUTPUT);
-    pinMode(PIN_MUX_OXY_DISABLE, OUTPUT);
-
-    digitalWrite(PIN_MUX_OXY_DISABLE, 0);
-    digitalWrite(PIN_PROBEMUX_0, 0);
-    digitalWrite(PIN_PROBEMUX_1, 0);
-    digitalWrite(PIN_PROBEMUX_2, 0);
 
 #if oxySerial == Serial1
     oxySerial.setTX(PIN_OX_TX);
     oxySerial.setRX(PIN_OX_RX);
-// oxySerial.setPollingMode(true);
-// oxySerial.setFIFOSize(128);
+    oxySerial.setTimeout(250);
+    // oxySerial.setPollingMode(true);
+    oxySerial.setFIFOSize(128);
 #endif
-
     oxySerial.begin(OXY_BAUD);
-
+    // delay(1000);
+    // digitalWrite(PIN_OX_TX,1);
+    // delay(2);
+    /* first data out is always corrupted, after that it works. why that is, is beyond me*/
     oxySerial.write("#LOGO\r", 6);
     oxySerial.flush();
     char buffer[20];
     oxySerial.readBytesUntil('\r', buffer, sizeof(buffer));
 
     debugf_sucess("setup was succesfull\n");
+    oxy_init = 1;
 }
 
-bool oxy_isconnected()
+/**
+ * tests weather a oxygen sensor is connected
+ * @param PROBE specify here wich Probe y wanna check. dont specify anything or set to 255 checks the currently connected one
+ */
+uint8_t oxy_isconnected(const uint8_t PROBE)
 {
-    char buffer[20];
+    if (!oxy_init)
+    {
+        oxy_setup();
+    }
+
+    // if (PROBE != 255)
+    // {
+
+    select_probe_or_NTC(PROBE);
+
+    /*reads out return values*/
+    char buffer[100];
     oxySerial.write("#LOGO\r", 6);
     oxySerial.flush();
-    /*reads out return values*/
     oxySerial.readBytesUntil('\r', buffer, sizeof(buffer));
+
     if (buffer[0] == '#' && buffer[1] == 'L' && buffer[2] == 'O' && buffer[3] == 'G' && buffer[4] == 'O')
     {
         return 1;
@@ -91,7 +101,7 @@ void oxy_console()
         oxy_setup();
     }
     // oxySerial.listen();
-
+    // select_probe_or_NTC(NTC_PROBE_0);
     oxy_meassure(1);
     // oxy_commandhandler("#LOGO");
 
@@ -134,7 +144,10 @@ void oxy_console()
  */
 char *oxy_commandhandler(const char command[], uint8_t nReturn)
 {
-
+    if (!oxy_init)
+    {
+        oxy_setup();
+    }
     /*creates return buffer*/
     if (nReturn == 0)
     {
@@ -290,7 +303,7 @@ bool oxy_read_all(struct oxy_mesure *mesure_buffer)
 
 const s32_t OXY_OPTICALCHANNEL = 1;
 const s32_t OXY_SENSORSENABLED = 47; // This parameter defines the enabled sensor types bit for bit
-float oxy_meassure(uint8_t number)
+float oxy_meassure(uint8_t Probe_Number)
 {
     /*chooses right oxygen Sensor*/
 
@@ -389,59 +402,6 @@ void oxy_decode_mesurement_errors(const u32_t R0)
 }
 
 /**
- * Sets Temperature, pressure and salinity(salzgehalt) of probe.
- * Required for correct oxygen messurement.
- *@param channel Optical channel number. Set C=1
- *@param temp Temperature of the calibration standard in C
- **/
-void oxy_calibrate_probe(const uint8_t channel, const s32_t temp, const s32_t pressure, const s32_t salinity)
-{
-    // char buffer[COMMAND_LENGTH_MAX];
-    // snprintf(buffer, COMMAND_LENGTH_MAX, "WTM %s %s %s", OXY_OPTICALCHANNEL, SETTINGS_REGISTER, START_REGISTER, temp);
-    // char *buf_return = oxy_commandhandler(buffer);
-    // free_ifnotnull(buf_return);
-
-    // save calibration with SVG
-}
-
-/**
- * Writes to registers on the oxygen sensor
- * @param register_block Register block number.
-T=0: Settings registers
-T=1: Calibration registers
-T=3: Results registers
-T=4: AnalogOutput registe
- * @param frist_registerStart starting register number (R=0 for starting with the first register)
- * @param nValues Number of registers to write.
- * @param  buffer_values buffer of Register values to be written
- **/
-void oxy_write_register(const s32_t register_block, const s32_t first_register, const s32_t nValues, const s32_t buffer_values[])
-{
-    char buffer[COMMAND_LENGTH_MAX];
-    /*write command string*/
-    snprintf(buffer, COMMAND_LENGTH_MAX, "WTM %i %i %i ", OXY_OPTICALCHANNEL, register_block, first_register);
-
-    /*add values(parameters) to command string*/
-    char temp_buffer[COMMAND_LENGTH_MAX];
-
-    for (size_t i = 0; i < nValues; i++) // Loop through the buffer_values array and convert each number to a string
-    {
-        sprintf(temp_buffer, "%d", buffer_values[i]); // Use sprintf to format the integer into temp_buffer
-        strcat(buffer, temp_buffer);
-
-        if (i < (nValues - 1))
-        {
-            strcat(buffer, " ");
-        }
-    }
-
-    /*send ready string to sensor*/
-    debugf_status("oxy_write_register:%s", buffer);
-    char *buf_return = oxy_commandhandler(buffer);
-    free_ifnotnull(buf_return);
-}
-
-/**
  * Calibrate oxygen Sensor at ambient air
 *@param channel Optical channel number. Set C=1
 *@param temp Temperature of the calibration standard in 100 * C
@@ -487,5 +447,42 @@ void oxy_info(const int8_t channel)
     char *buf_return = oxy_commandhandler("VERS");
     /*recieve info*/
     debugf_info("Device info:\n Device_Id nOpticalChannels FirmwareVersion SensorTypes FirmwareBuildNumber Features\n %s", buf_return);
+    free_ifnotnull(buf_return);
+}
+
+/**
+ * Writes to registers on the oxygen sensor
+ * @param register_block Register block number.
+T=0: Settings registers
+T=1: Calibration registers
+T=3: Results registers
+T=4: AnalogOutput registe
+ * @param frist_registerStart starting register number (R=0 for starting with the first register)
+ * @param nValues Number of registers to write.
+ * @param  buffer_values buffer of Register values to be written
+ **/
+void oxy_write_register(const s32_t register_block, const s32_t first_register, const s32_t nValues, const s32_t buffer_values[])
+{
+    char buffer[COMMAND_LENGTH_MAX];
+    /*write command string*/
+    snprintf(buffer, COMMAND_LENGTH_MAX, "WTM %i %i %i ", OXY_OPTICALCHANNEL, register_block, first_register);
+
+    /*add values(parameters) to command string*/
+    char temp_buffer[COMMAND_LENGTH_MAX];
+
+    for (size_t i = 0; i < nValues; i++) // Loop through the buffer_values array and convert each number to a string
+    {
+        sprintf(temp_buffer, "%d", buffer_values[i]); // Use sprintf to format the integer into temp_buffer
+        strcat(buffer, temp_buffer);
+
+        if (i < (nValues - 1))
+        {
+            strcat(buffer, " ");
+        }
+    }
+
+    /*send ready string to sensor*/
+    debugf_status("oxy_write_register:%s", buffer);
+    char *buf_return = oxy_commandhandler(buffer);
     free_ifnotnull(buf_return);
 }

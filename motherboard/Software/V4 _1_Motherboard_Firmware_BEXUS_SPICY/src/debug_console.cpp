@@ -3,8 +3,7 @@
 #include "hardware/adc.h"
 #include "hardware/pwm.h"
 #define nGPIOS 29
-static void printIO();
-static void short_detection();
+uint32_t check_peripherals();
 void printMemoryUse();
 
 /**
@@ -71,7 +70,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
 /i|scans for i2c devices\n\
 /f|changes the analogWrite frequency. \n\
    For heater run one heating command and change then.\n\
-/d|pin shorts detection\n\
+/d|check connected peripherals\n\
 /p|sends a test packet over lan\n\
 /w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
 /u|single file usb update. /u 1 closes singlefileusb\n\
@@ -206,8 +205,8 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   }
   case 'd':
   {
-    debugf_status("<shorted_pin_detection>\n");
-    short_detection();
+    debugf_status("<pin_detection>\n");
+    check_peripherals();
     break;
   }
   case 'p':
@@ -272,7 +271,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
     else
     {
       debugf_status("<Reading out Thermistor %u>\n", (unsigned int)param1);
-      temp_read_one((unsigned int)param1);
+      debugf_info("%f °C\n", temp_read_one((unsigned int)param1));
     }
     break;
   }
@@ -373,136 +372,6 @@ void printMemoryUse()
   debugf_info("-freeHeadp: %.2f kbytes | usedHeap: %.2f kbytes\n", (float)rp2040.getFreeHeap() * 0.001, (float)rp2040.getUsedHeap() * 0.001);
 }
 
-/*DIgital and Analog Reads all IO Pins*/
-void printIO()
-{
-  Serial.println();
-  Serial.println("printio: ");
-  debug("Pinnumb: ");
-  char *d = (char *)malloc(nGPIOS);
-  char *a = (char *)malloc(nGPIOS);
-  if (d == NULL)
-  {
-    Serial.println("Initializing of dynamic array d failed");
-  }
-  if (a == NULL)
-  {
-    Serial.println("Initializing of dynamic array a failed");
-  }
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    pinMode(i, INPUT);
-    d[i] = digitalRead(i);
-    a[i] = analogRead(i);
-  }
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    debug(i);
-    if (i < 10)
-    {
-      debug(" ");
-    }
-    debug(" |");
-  }
-  Serial.println();
-  debug("Digital: ");
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    debug(d[i], BIN);
-    debug(" ");
-    debug(" |");
-  }
-  Serial.println();
-  debug("Analog:  ");
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    debug(a[i], DEC);
-    if (a[i] < 100)
-    {
-      debug(" ");
-    }
-    debug("|");
-  }
-}
-
-/*needs rework to exclude Flash*/
-void short_detection()
-{
-  char *pin_buffer = (char *)calloc(nGPIOS + 1, 1);
-
-  // shorts to ground detection
-  for (int i = 0; i < nGPIOS + 1; i++)
-  {
-    pinMode(i, INPUT_PULLUP);
-  }
-  for (int i = 0; i < nGPIOS + 1; i++)
-  {
-    if (digitalRead(i) == 0)
-    {
-      debug("Pin ");
-      debug(i);
-      debug(" is connected to ground.\n");
-    }
-  }
-
-  // shorts to VCC detection
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    pinMode(i, INPUT_PULLDOWN);
-  }
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    if (digitalRead(i) == 1)
-    {
-      debug("Pin ");
-      debug(i);
-      debug(" is connected to VCC. I2C?.\n");
-      pin_buffer[i] = 1;
-    }
-  }
-
-  // pin shorting each other
-  for (int i = 0; i < nGPIOS; i++)
-  {
-    pinMode(i, INPUT_PULLDOWN);
-  }
-
-  for (int Pin_now = 0; Pin_now < nGPIOS; Pin_now++)
-  {
-    if (pin_buffer[Pin_now] == 1)
-    {
-    }
-    else
-    {
-      // sets all pins to 0
-      for (int i = 0; i < nGPIOS; i++)
-      {
-        digitalWrite(i, 0);
-      }
-
-      // tests for a short by individually setting each pin high
-      for (int i = 0; i < nGPIOS; i++)
-      {
-
-        if (i != Pin_now)
-        {
-          digitalWrite(i, HIGH);
-          if (digitalRead(Pin_now) == 1)
-          {
-            debug("Pin ");
-            debug(Pin_now);
-            debug(" is shorted to ");
-            debugln(i);
-          }
-          digitalWrite(i, LOW);
-        }
-      }
-    }
-  }
-  free_ifnotnull(pin_buffer);
-  debugln("Short detection done.");
-}
-
 /*frees given pointer it it isnt NULL, then sets it to NULL.
  If it is NULL, throws error*/
 void free_ifnotnull(void *pointer)
@@ -527,86 +396,104 @@ void free_ifnotnull(void *pointer)
 uint32_t get_Status()
 {
   uint32_t status = 0;
-  status = 1;
 
   // sd
-  sd_setup();
   status |= ((uint32_t)sd_init << 0);
 
   // TCP connection
   status |= ((uint32_t)tcp_link_status() << 1);
 
-  tcp_setup_client();
+  // TCP init
   status |= ((uint32_t)TCP_init << 2);
 
   // Heater
-  heat_setup();
   status |= ((uint32_t)heat_init << 3);
 
   // Oxygen Sensors
-  oxy_setup();
   status |= ((uint32_t)oxy_init << 4);
 
   // Light
-  light_setup();
   status |= ((uint32_t)light_init << 5);
 
-  // default 0
-  status |= ((uint32_t)light_init << 6);
-  status |= ((uint32_t)light_init << 7);
+  // Default 0 bits
+  status |= ((uint32_t)0 << 6);
+  status |= ((uint32_t)0 << 7);
 
-  // PID
-  status |= ((uint8_t)ki << 8);
-  status |= ((uint8_t)ki << 8);
-  status |= ((uint8_t)ki << 8);
+  // PID constants
+  status |= ((uint32_t)ki << 8);  // Ki
+  status |= ((uint32_t)kd << 16); // Kd
+  status |= ((uint32_t)kp << 24); // Kp
 
-  // memory
   return status;
 }
 
-/*
-void sleep_goto_sleep_until(datetime_t *t, rtc_callback_t callback)
+/**
+ * returns what on what port a peripheral is connected
+ * @return first 8 bit are the NTCs, next 8 are the oxygen sensors and the next 8 are the heaters
+ */
+uint32_t check_peripherals()
 {
-  // We should have already called the sleep_run_from_dormant_source function
-  assert(dormant_source_valid(_dormant_source));
+  uint32_t results = 0;
+  /* NTC probes */
+  results |= (temp_isconnected(NTC_PROBE_0) << 0);
+  results |= (temp_isconnected(NTC_PROBE_1) << 1);
+  results |= (temp_isconnected(NTC_PROBE_2) << 2);
+  results |= (temp_isconnected(NTC_PROBE_3) << 3);
+  results |= (temp_isconnected(NTC_PROBE_4) << 4);
+  results |= (temp_isconnected(NTC_PROBE_5) << 5);
 
-  // Turn off all clocks when in sleep mode except for RTC
-  clocks_hw->sleep_en0 = CLOCKS_SLEEP_EN0_CLK_RTC_RTC_BITS;
-  clocks_hw->sleep_en1 = 0x0;
+  /* Oxygen sensors */
+  results |= (oxy_isconnected(NTC_PROBE_0) << 8);
+  results |= (oxy_isconnected(NTC_PROBE_1) << 9);
+  results |= (oxy_isconnected(NTC_PROBE_2) << 10);
+  results |= (oxy_isconnected(NTC_PROBE_3) << 11);
+  results |= (oxy_isconnected(NTC_PROBE_4) << 12);
+  results |= (oxy_isconnected(NTC_PROBE_5) << 13);
 
-  rtc_set_alarm(t, callback);
+  /* Heating */
 
-  uint save = scb_hw->scr;
-  // Enable deep sleep at the proc
-  scb_hw->scr = save | M0PLUS_SCR_SLEEPDEEP_BITS;
+  /*turns all heater off*/
+  float buff_heat[] = {0, 0, 0, 0, 0, 0, 0, 0};
+  heat_updateall(buff_heat);
 
-  // Go to sleep
-  __wfi();
+  float cur_alloff = get_current(); // current with all heater off
+
+  for (uint8_t i = 0; i < 7; i++)
+  {
+    /*turns one heater on and messures the current*/
+    buff_heat[i] = 100.0;
+    heat_updateall(buff_heat);
+    float cur_one = get_current() - cur_alloff;
+    buff_heat[i] = 0.0;
+
+    /* checks if current increased*/
+    if (((HEAT_CURRENT - 0.100) < cur_one) && (cur_one < (HEAT_CURRENT + 0.100)))
+    {
+      results |= (1 << 16 + i);
+      // debug(cur_one);
+    }
+  }
+
+  Serial.print("NTCs: \n");
+  for (int i = 0; i < 7; i++)
+  {
+    Serial.print((results & 0xFF) >> i & 1);
+  }
+  Serial.println();
+
+  Serial.print("Oxygen Sensors: \n");
+  for (int i = 0; i < 7; i++)
+  {
+    Serial.print(((results >> 8) & 0xFF) >> i & 1);
+  }
+  Serial.println();
+
+  Serial.print("Heaters: \n");
+  for (int i = 0; i < 7; i++)
+  {
+    Serial.print(((results >> 16) & 0xFF) >> i & 1);
+  }
+  Serial.println();
+
+  return results;
 }
-*/
-
-/*
-void sleep_goto_dormant_until_pin(uint gpio_pin, bool edge, bool high) {
- bool low = !high;
- bool level = !edge;
-
- // Configure the appropriate IRQ at IO bank 0
- assert(gpio_pin < NUM_BANK0_GPIOS);
-
- uint32_t event = 0;
-
- if (level && low) event = IO_BANK0_DORMANT_WAKE_INTE0_GPIO0_LEVEL_LOW_BITS;
- if (level && high) event = IO_BANK0_DORMANT_WAKE_INTE0_GPIO0_LEVEL_HIGH_BITS;
- if (edge && high) event = IO_BANK0_DORMANT_WAKE_INTE0_GPIO0_EDGE_HIGH_BITS;
- if (edge && low) event = IO_BANK0_DORMANT_WAKE_INTE0_GPIO0_EDGE_LOW_BITS;
-
- gpio_set_dormant_irq_enabled(gpio_pin, event, true);
-
-_go_dormant();
-
- // Execution stops here until woken up
-
- // Clear the irq so we can go back to dormant mode again if we want
- gpio_acknowledge_irq(gpio_pin, event);
- }
-*/

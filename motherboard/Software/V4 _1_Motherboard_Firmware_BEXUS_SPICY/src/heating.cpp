@@ -32,7 +32,7 @@ void heat_setup()
  * /updates the PWM Dutycicle of the Heaters. Will not change PWM values wich are set to 1.
  * @param unsigned int HeaterPWM[] the PWM in an array size of 8
  */
-void heat_updateall(float *HeaterPWM)
+void heat_updateall(const float HeaterPWM[])
 {
   if (!heat_init)
   {
@@ -53,7 +53,7 @@ void heat_updateall(float *HeaterPWM)
  * Updates one Heater
  * @param duty is the duty cicyle in percent 
  */
-void heat_updateone(uint8_t PIN, float duty)
+void heat_updateone(const uint8_t PIN, const float duty)
 {
   if (!heat_init)
   {
@@ -78,26 +78,3 @@ void heat_testmanual()
   heat_updateall(buf);
 }
 
-/*can evalue the functionality fo individual heaters via the currentdraw
-@return:*/
-uint8_t heat_testauto()
-{
-  float buf[] = {0, 0, 0, 0, 0, 0};
-  heat_updateall(buf);
-
-  uint8_t results = 0;
-  unsigned long cur_alloff = get_current(); // current with all heater off
-
-  unsigned long cur_one;
-  for (uint8_t i = 0; i < 6; i++)
-  {
-    buf[i] = ADC_FREQ_WRITE;
-    heat_updateall(buf);
-    cur_one = get_current() - cur_alloff;
-    if (((HEAT_CURRENT - 30) < cur_one) && (cur_one <( HEAT_CURRENT + 30)))
-    {
-      results |= (1 << i);
-    }
-  }
-  return results;
-}
