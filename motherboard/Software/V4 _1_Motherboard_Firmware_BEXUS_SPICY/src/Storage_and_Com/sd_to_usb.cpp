@@ -52,6 +52,7 @@
 //  * SdFat Library
 
 // #include "header.h"
+#include "debug_in_color.h"
 // #include "Adafruit_TinyUSB.h"
 // #include "SPI.h"
 // #include "SdFat.h"

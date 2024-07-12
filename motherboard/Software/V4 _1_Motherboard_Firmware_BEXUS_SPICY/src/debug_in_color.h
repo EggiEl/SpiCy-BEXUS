@@ -1,11 +1,10 @@
+
 #ifndef DEBUG_IN_COLOR_H
 #define DEBUG_IN_COLOR_H
+#include "header.h"
+#include "debug_in_color.h"
 
 #define LENGTHARRAY(array) ((sizeof(array)) / (sizeof(array[0])))
-
-// #ifndef DEBUG
-// #define DEBUG 1 /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
-// #endif
 
 #ifndef COLOUR_SERIAL
 #define COLOUR_SERIAL 1 /*activates Serial.printing with color*/
@@ -17,7 +16,7 @@
 
 /*-------Basic Debug -------------------*/
 // replaces debugf() with a Serial output or a TPC downlink is actrivated
-#if DEBUG == 0 // no debug
+#if DEBUG_MODE == 0 // no debug
 #define debug(...)
 #define debugln(...)
 #define debugf(...)
@@ -25,7 +24,7 @@
 #define MESSURETIME_STOP
 #endif
 
-#if DEBUG == 1 // debug over Serial Console
+#if DEBUG_MODE == 1 // debug over Serial Console
 #define debug(...) Serial.print(__VA_ARGS__)
 #define debugln(...) Serial.println(__VA_ARGS__) /*Can be a Serial.println, a tcp downlink or disabled in the config*/
 #define debugf(...) Serial.printf(__VA_ARGS__)   /*Can be a Serial.printf, a tcp downlink or disabled in the config*/
@@ -39,7 +38,7 @@
     debugf_magenta("Time: %.2fs|%.2fms|%ius\n", ta / 1000000.0, ta / 1000.0, ta);
 #endif
 
-#if DEBUG == 2 // debug over TCP packet
+#if DEBUG_MODE == 2 // debug over TCP packet
 #define debug(...) Serial.print(__VA_ARGS__)
 #define debugln(...) Serial.println(__VA_ARGS__) /*Can be a Serial.println, a tcp downlink or disabled in the config*/
 #define debugf(...) Serial.printf(__VA_ARGS__)   /*Can be a Serial.printf, a tcp downlink or disabled in the config*/

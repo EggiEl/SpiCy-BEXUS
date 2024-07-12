@@ -1,6 +1,7 @@
 
 /*Coordination of the struct packet, wich is a container for downlink purposes*/
 #include "header.h"
+#include "debug_in_color.h"
 
 static unsigned long id_struct = 0;
 

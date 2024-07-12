@@ -1,4 +1,5 @@
 #include "header.h"
+#include "debug_in_color.h"
 
 void state_print(unsigned int Status);
 
@@ -20,7 +21,7 @@ void nextState()
 {
     static enum states state = START;
     static struct packet packet_dl = {0}; /*packet wich will be the next downlink*/
-    static struct oxy_mesure oxy_mesure_buff;
+    static struct OxygenReadout mesure_buffer[6];
 
     const char sd_filepath[] = "data.bin";
     static float buffer[20];
@@ -56,20 +57,16 @@ void nextState()
     }
     case READ_OXY:
     {
-        // rp2040.idleOtherCore();
-        // oxy_read_all(&oxy_mesure_buff);
-        //  rp2040.resumeOtherCore();
-        // for (uint8_t i = 0; i < 6; i++)
-        // {
-        //     packet_dl.pyro_temp[i] = oxy_mesure_buff.pyro_temp[i];
-        //     packet_dl.pyro_pressure[i] = oxy_mesure_buff.pyro_pressure[i];
-        //     packet_dl.pyro_oxy[i] = oxy_mesure_buff.pyro_oxy[i];
-        // }
+        rp2040.idleOtherCore();
+        oxy_read_all(mesure_buffer);
+        rp2040.resumeOtherCore();
+        memcpy(packet_dl.oxy_measure, mesure_buffer, sizeof(mesure_buffer));
         state = READ_LIGHT;
         break;
     }
     case READ_LIGHT:
     {
+        delay(1000);
         // light_read(buffer, 0);
         // for (uint8_t i = 0; i < 6; i++)
         // {
@@ -80,7 +77,7 @@ void nextState()
     }
     case SAVESENDPACKET:
     {
-        sd_writestruct(&packet_dl, sd_filepath);
+        // sd_writestruct(&packet_dl, sd_filepath);
         // tcp_send_packet(packet_dl);
         state = CLEAR_PACKET;
         break;

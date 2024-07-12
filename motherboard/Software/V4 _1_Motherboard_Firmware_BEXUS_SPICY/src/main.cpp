@@ -12,6 +12,7 @@
 */
 
 #include "header.h"
+#include "debug_in_color.h"
 #include <EEPROM.h>
 
 // check memory leaks with: platformio check --skip-packages
@@ -27,27 +28,16 @@ void check_periodic_tasks();
 /*does all the data handeling*/
 void setup()
 {
-  rp2040.wdt_begin(WATCHDOG_TIMEOUT);
+  // rp2040.wdt_begin(WATCHDOG_TIMEOUT);
   update_nResets();
   print_startup_message();
 }
 
 void loop()
 {
-  // check_periodic_tasks();
-  // rp2040.wdt_reset();
-
-  if (temp_read_one(NTC_PROBE_0) > 30.0)
-  {
-    heat_updateone(PIN_H0, 0);
-  }
-  else
-  {
-    heat_updateone(PIN_H0, 100.0);
-  }
-
+  check_periodic_tasks();
   nextState();
- 
+
   rp2040.wdt_reset();
 }
 
@@ -68,6 +58,7 @@ void setup1()
 
 void loop1()
 {
+  pid_update_all();
 }
 
 unsigned long nMOTHERBOARD_BOOTUPS = 0;
@@ -109,7 +100,7 @@ void update_nResets()
 /* Prints a message with facts about the MPU like frequency and weather a watchdog restarted it*/
 void print_startup_message()
 {
-#if DEBUG == 1
+#if DEBUG_MODE == 1
   Serial.setTimeout(1000);
   Serial.begin();
   for (unsigned int i = 0; i < 200; i++)

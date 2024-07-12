@@ -1,4 +1,5 @@
 #include "header.h"
+#include "debug_in_color.h"
 #include <SD.h>
 #include <SPI.h>
 // if testing via breadboard make sure to just connect the SD Card and disconnecting the LAN

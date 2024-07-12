@@ -1,4 +1,5 @@
 #include "header.h"
+#include "debug_in_color.h"
 #include <Wire.h>
 static void scan_wire_single(unsigned int pinsda, unsigned int pinscl, char Wire_select, unsigned long freq);
 

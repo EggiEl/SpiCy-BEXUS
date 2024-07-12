@@ -1,4 +1,5 @@
 #include "header.h"
+#include "debug_in_color.h"
 #if USB_ENABLE ==1
 #include <LittleFS.h>
 #include <SingleFileDrive.h>

@@ -1,4 +1,5 @@
 #include "header.h"
+#include "debug_in_color.h"
 #include "pico/stdlib.h"
 #include "hardware/adc.h"
 #include "hardware/pwm.h"
@@ -9,11 +10,11 @@ void printMemoryUse();
 /**
  * Reads Serial Commands wich start with "/".
  * /? for help
- *disabled if DEBUG == 0
+ *disabled if DEBUG_MODE == 0
  */
 void checkSerialInput()
 {
-#if DEBUG == 1
+#if DEBUG_MODE == 1
   if (Serial.available())
   {
     if (Serial.read() == '/')
@@ -410,7 +411,7 @@ uint32_t get_Status()
   status |= ((uint32_t)heat_init << 3);
 
   // Oxygen Sensors
-  status |= ((uint32_t)oxy_init << 4);
+  status |= ((uint32_t)oxy_serial_init << 4);
 
   // Light
   status |= ((uint32_t)light_init << 5);

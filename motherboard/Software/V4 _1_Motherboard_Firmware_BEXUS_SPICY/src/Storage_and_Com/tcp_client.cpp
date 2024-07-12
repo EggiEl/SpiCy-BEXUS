@@ -2,6 +2,7 @@
 // the downlink is container based, a struct namned packet is used.
 
 #include "header.h"
+#include "debug_in_color.h"
 #include <SPI.h>
 // #include <Ethernet_spi1.h> /*The stock Etherent.h libary only supports spi0, i changed that to spi1*/
 #include <Ethernet.h>

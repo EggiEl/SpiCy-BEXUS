@@ -1,4 +1,5 @@
 #include "header.h"
+#include "debug_in_color.h"
 static float PID_MAX = ADC_MAX_WRITE;
 static float I_BUFFER_MAX = PID_MAX * 0.2;
 float PID_FREQ = 100.0;

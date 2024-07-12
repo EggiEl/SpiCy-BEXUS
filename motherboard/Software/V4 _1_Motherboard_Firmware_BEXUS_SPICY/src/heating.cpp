@@ -1,4 +1,5 @@
 #include "header.h"
+#include "debug_in_color.h"
 
 char heat_init = 0;
 

@@ -3,9 +3,8 @@
 #define HEADER_H
 
 #include <Arduino.h>
-#include "debug_in_color.h"
 /*--------Settings-----------------------*/
-#define DEBUG 0         /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
+#define DEBUG_MODE 1    /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
 #define COLOUR_SERIAL 1 /*activates/deactivates Serial.printing with color*/
 #define USB_ENABLE 0    /*enables single drive USB functions*/
 #define ADC_REF 3.0
@@ -144,9 +143,29 @@ typedef enum
 // #define PIN_LIGHT_SDA SDA0 // blue
 // #define PIN_LIGHT_SCL SCL0 // yellow
 
-/** packet used for downlink.
+/**
+ * contains all data of one readout form the oxygen sensors
+ * */
+struct OxygenReadout
+{
+    int32_t error = 0;
+    int32_t dphi = 0;
+    int32_t umolar = 0;
+    int32_t mbar = 0;
+    int32_t airSat = 0;
+    int32_t tempSample = 0;
+    int32_t tempCase = 0;
+    int32_t signalIntensity = 0;
+    int32_t ambientLight = 0;
+    int32_t pressure = 0;
+    int32_t resistorTemp = 0;
+    int32_t percentOtwo = 0;
+    unsigned long timestamp_mesurement = 0;
+};
+
+/**
+ * packet used for downlink.
  * please use packet_create() and packet_destroy() for good memory management
- * 2L 2f 6L 6I 6I 6I 8I 6I 18f 20s
  * */
 struct packet
 {                                     // struct_format L L 6L 6f 6f 6i i f 2i 80s
@@ -154,10 +173,7 @@ struct packet
     unsigned int timestampPacket = 0; // in ms
     float power[2] = {0};             // battery voltage in mV and current consumption in mA
 
-    unsigned int pyro_timestamp[6] = {0}; //
-    int32_t pyro_temp[6] = {0};           // temp on the sensor pcb in °C * 100
-    int32_t pyro_oxy[6] = {0};            // Oxygenvalue
-    int32_t pyro_pressure[6] = {0};       // pressure
+    struct OxygenReadout oxy_measure[6];
     float light[12] = {0.0f};
 
     /**temperature from thermistors:
@@ -237,7 +253,7 @@ void pid_update_all();
 extern char temp_init;
 void temp_setup();
 float temp_read_one(uint8_t NTC, uint8_t nTimes = 100);
-void temp_read_all(float *buffer);
+void temp_read_all(float buffer[8]);
 void temp_log(const char path[], uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
 uint8_t temp_isconnected(uint8_t NTC = 255);
 
@@ -245,16 +261,11 @@ uint8_t temp_isconnected(uint8_t NTC = 255);
 #define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
 #define RETURN_LENGTH_MAX 100  // how long a return string can possibly be
 #define OXY_BAUD 19200
-struct oxy_mesure
-{
-    int32_t pyro_temp[6] = {0};     // temp on the sensor pcb in °C * 100
-    int32_t pyro_oxy[6] = {0};      // Oxygenvalue
-    int32_t pyro_pressure[6] = {0}; // pressure?
-};
-extern char oxy_init;
-void oxy_setup();
+
+extern char oxy_serial_init;
+void oxy_serial_setup();
 void oxy_console();
-bool oxy_read_all(struct oxy_mesure *mesure_buffer);
+uint8_t oxy_read_all(struct OxygenReadout mesure_buffer[6]);
 char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_MAX);
 uint8_t oxy_isconnected(const uint8_t PROBE = 255);
 
@@ -320,8 +331,9 @@ enum
     ERROR_OXY_HUMIDITY_SENSOR
 };
 
-void error_handler(const unsigned int ErrorCode, const uint8_t destination = 0);
 extern const uint8_t ERROR_DESTINATION_NO_TCP;
 extern const uint8_t ERROR_DESTINATION_NO_SD;
 extern const uint8_t ERROR_DESTINATION_NO_TCP_SD;
+void error_handler(const unsigned int ErrorCode, const uint8_t destination = 0);
+
 #endif

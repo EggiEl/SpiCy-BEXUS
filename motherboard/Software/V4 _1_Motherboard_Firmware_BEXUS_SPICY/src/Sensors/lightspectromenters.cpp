@@ -1,4 +1,5 @@
 #include "header.h"
+#include "debug_in_color.h"
 
 #include "AS726X.h" //https://github.com/sparkfun/SparkFun_AS726X_Arduino_Library/tree/master
 

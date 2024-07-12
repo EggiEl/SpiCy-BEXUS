@@ -1,4 +1,5 @@
 #include "header.h"
+#include "debug_in_color.h"
 // https://eu.mouser.com/ProductDetail/TDK/NTCGS163JF103FT8?qs=dbcCsuKDzFU4pk95bZlq7w%3D%3D&countryCode=DE&currencyCode=EUR
 // https://www.mouser.de/ProductDetail/Amphenol-Advanced-Sensors/JI-103C1R2-L301?qs=JUmsgfbaopRXkasA8RUqKg%3D%3D&countryCode=DE&currencyCode=EUR
 
@@ -13,9 +14,11 @@ void temp_setup()
 
 /**
  * Reads out every Thermistor.
- * @param buffer pointer to an array with 8 floats
+ * 0-5 NTC cable
+ * 6 NTC SMD
+ * 7 fix reference value
  **/
-void temp_read_all(float *buffer)
+void temp_read_all(float buffer[8])
 {
     buffer[0] = temp_read_one(NTC_PROBE_0);
     buffer[1] = temp_read_one(NTC_PROBE_1);
@@ -76,6 +79,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
 
     /*Connect the right one*/
     select_probe_or_NTC(NTC);
+    
     // uint8_t A0 = (NTC - 1) & 0b00000001;
     // uint8_t A1 = ((NTC - 1) & 0b00000010) >> 1;
     // uint8_t A2 = ((NTC - 1) & 0b00000100) >> 2;
