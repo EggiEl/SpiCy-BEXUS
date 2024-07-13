@@ -28,7 +28,7 @@ void check_periodic_tasks();
 /*does all the data handeling*/
 void setup()
 {
-  // rp2040.wdt_begin(WATCHDOG_TIMEOUT);
+  rp2040.wdt_begin(WATCHDOG_TIMEOUT);
   update_nResets();
   print_startup_message();
 }
@@ -36,7 +36,7 @@ void setup()
 void loop()
 {
   check_periodic_tasks();
-  // nextState();
+  nextState();
 
   rp2040.wdt_reset();
 }
@@ -47,6 +47,8 @@ void check_periodic_tasks()
   checkSerialInput();
   rp2040.wdt_reset();
   StatusLedBlink(STATLED);
+  // float buf[6];
+  // temp_read_all(buf);
   // tcp_check_command();
 }
 
@@ -54,11 +56,24 @@ void check_periodic_tasks()
 /*controlls heating*/
 void setup1()
 {
+  rp2040.begin();
 }
 
 void loop1()
 {
-  pid_update_all();
+  if (!flag_pause_core1) // core 0 can raise this flag to pause core 1
+  {
+    flag_core1_isrunning = 1;
+
+    // float bufer[8] = {0};
+    // temp_read_all(bufer);
+    debugf_blue(".");
+    delay(1);
+  }
+  else // idles core1 when flag flag_pause_core1 is raised
+  {
+    flag_core1_isrunning = 0;
+  }
 }
 
 unsigned long nMOTHERBOARD_BOOTUPS = 0;

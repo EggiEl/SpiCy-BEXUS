@@ -5,7 +5,7 @@
 
 AS726X light_spectro; // https://cdn.sparkfun.com/assets/c/2/9/0/a/AS7265x_Datasheet.pdf
 
-char light_init = 0;
+volatile char light_init = 0;
 
 void light_setup()
 {

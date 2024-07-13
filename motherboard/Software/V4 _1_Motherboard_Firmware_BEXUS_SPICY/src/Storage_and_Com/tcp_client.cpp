@@ -17,7 +17,7 @@ static IPAddress SUBNET(255, 255, 0, 0);
 static int SERVERPORT = 8888;
 static byte MAC[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 
-char TCP_init = 0; /*If true the Ethernet Ic is connected and fuctional*/
+volatile char TCP_init = 0; /*If true the Ethernet Ic is connected and fuctional*/
 EthernetClient client;
 
 /**

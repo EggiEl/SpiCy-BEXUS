@@ -11,7 +11,7 @@ float kd = 0;
 
 void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor);
 
-char pid_init = 0;
+volatile char pid_init = 0;
 void pid_setup()
 {
     heat_setup();

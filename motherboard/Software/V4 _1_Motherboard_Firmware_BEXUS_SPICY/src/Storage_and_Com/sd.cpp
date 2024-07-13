@@ -8,7 +8,7 @@ void printDirectory(File dir, int numTabs);
 void sd_printinfo();
 
 File root;
-char sd_init = 0;
+volatile char sd_init = 0;
 
 void sd_setup()
 {

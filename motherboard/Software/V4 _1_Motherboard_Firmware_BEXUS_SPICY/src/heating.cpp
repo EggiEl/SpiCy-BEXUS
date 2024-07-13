@@ -1,7 +1,7 @@
 #include "header.h"
 #include "debug_in_color.h"
 
-char heat_init = 0;
+volatile char heat_init = 0;
 
 /*initializes the pins, freq and range of the heating elements*/
 void heat_setup()

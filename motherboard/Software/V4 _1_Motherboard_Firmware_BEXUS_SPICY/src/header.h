@@ -194,8 +194,14 @@ void destroy_packet(struct packet *p);
 void nextState();
 void select_probe_or_NTC(const uint8_t ProbeorNTC);
 
+/* multithreading */
+extern uint8_t flag_pause_core1;
+extern uint8_t flag_core1_isrunning;
+void pause_Core1();
+void resume_Core1();
+
 /*tcp_client*/
-extern char TCP_init;
+extern volatile char TCP_init;
 void tcp_setup_client();
 void tpc_testmanually(int nPackets = 1, unsigned int nTries = 5);
 char tcp_send_packet(struct packet *packet);
@@ -206,7 +212,7 @@ void tpc_send_error(unsigned char error);
 unsigned char tcp_link_status();
 
 /*sd*/
-extern char sd_init;
+extern volatile char sd_init;
 void sd_setup();
 int sd_numpackets(const char filepath[]);
 bool sd_writestruct(struct packet *s_out, const char filepath[]);
@@ -225,6 +231,7 @@ float get_current();
 void checkSerialInput();
 void StatusLedBlink(uint8_t LED);
 void free_ifnotnull(void *pointer);
+void printMemoryUse();
 
 /*i2c scan*/
 void scan_wire();
@@ -234,14 +241,14 @@ const float HEAT_VOLTAGE = 5;                              // in V
 const float HEAT_RESISTANCE = 10;                          // in Ohm
 const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE; // current of a single Heater in A
 
-extern char heat_init;
+extern volatile char heat_init;
 void heat_setup();
 void heat_updateall(const float HeaterPWM[]);
 void heat_updateone(const uint8_t PIN, const float duty);
 void heat_testmanual();
 
 /*Pid*/
-extern char pid_init;
+extern volatile char pid_init;
 extern float kp;
 extern float ki;
 extern float kd;
@@ -250,7 +257,7 @@ void pid_update_all();
 
 /*Thermistors*/
 #define nNTC 8 // Number of NTC probes
-extern char temp_init;
+extern volatile char temp_init;
 void temp_setup();
 float temp_read_one(uint8_t NTC, uint8_t nTimes = 100);
 void temp_read_all(float buffer[8]);
@@ -263,7 +270,7 @@ uint8_t temp_isconnected(uint8_t NTC = 255);
 #define OXY_BAUD 19200
 #define OXY_SERIAL_TIMEOUT 550
 
-extern char oxy_serial_init;
+extern volatile char oxy_serial_init;
 void oxy_serial_setup();
 void oxy_console();
 uint8_t oxy_read_all(struct OxygenReadout mesure_buffer[6]);
@@ -271,12 +278,12 @@ char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_
 uint8_t oxy_isconnected(const uint8_t PROBE = 255);
 
 /*light spectrometers*/
-extern char light_init;
+extern volatile char light_init;
 void light_setup();
 void light_read(float *buffer, bool with_flash = 0);
 
 /*single File USB*/
-extern char singleFileUsb_init;
+extern volatile char singleFileUsb_init;
 void usb_singlefile_setup();
 void usb_singlefile_update();
 void headerCSV();

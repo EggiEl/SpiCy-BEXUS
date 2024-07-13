@@ -3,7 +3,7 @@
 // https://eu.mouser.com/ProductDetail/TDK/NTCGS163JF103FT8?qs=dbcCsuKDzFU4pk95bZlq7w%3D%3D&countryCode=DE&currencyCode=EUR
 // https://www.mouser.de/ProductDetail/Amphenol-Advanced-Sensors/JI-103C1R2-L301?qs=JUmsgfbaopRXkasA8RUqKg%3D%3D&countryCode=DE&currencyCode=EUR
 
-char temp_init = 0;
+volatile char temp_init = 0;
 
 void temp_setup()
 {
@@ -88,7 +88,6 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
     // digitalWrite(PIN_PROBEMUX_2, A2);
 
     /*Read out ADC*/
-    analogReadResolution(ADC_RES);
     float voltage_adc = 0;
     for (int i = 0; i < nTimes; i++)
     {
@@ -127,7 +126,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
 
     // Convert temperature from Kelvin to Celsius
     float tempC = tempK - 273.15;
-    debugf_info("VADC:%.2f VNTC:%.2f R:%.2f T:%.2f\n", voltage_adc, volt_ntc, resistance, tempC);
+    // debugf_info("VADC:%.2f VNTC:%.2f R:%.2f T:%.2f\n", voltage_adc, volt_ntc, resistance, tempC);
     return tempC;
 }
 

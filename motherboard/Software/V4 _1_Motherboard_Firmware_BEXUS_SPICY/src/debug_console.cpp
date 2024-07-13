@@ -5,7 +5,6 @@
 #include "hardware/pwm.h"
 #define nGPIOS 29
 uint32_t check_peripherals();
-void printMemoryUse();
 
 /**
  * Reads Serial Commands wich start with "/".

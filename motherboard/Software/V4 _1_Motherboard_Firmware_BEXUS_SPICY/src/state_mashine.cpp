@@ -43,9 +43,9 @@ void nextState()
     }
     case READ_TEMP:
     {
-        // rp2040.idleOtherCore();
+        pause_Core1();
         temp_read_all(buffer);
-        // rp2040.restartCore1();
+        resume_Core1();
         for (uint8_t i = 0; i < 8; i++)
         {
             packet_dl.thermistor[i] = buffer[i];
@@ -57,9 +57,9 @@ void nextState()
     }
     case READ_OXY:
     {
-        rp2040.idleOtherCore();
+        pause_Core1();
         oxy_read_all(mesure_buffer);
-        rp2040.resumeOtherCore();
+        resume_Core1();
         memcpy(packet_dl.oxy_measure, mesure_buffer, sizeof(mesure_buffer));
         state = READ_LIGHT;
         break;

@@ -2,8 +2,8 @@
 #include "debug_in_color.h"
 
 #define oxySerial Serial1
-char oxy_serial_init = 0;
-char oxy_calib = 0;
+volatile char oxy_serial_init = 0;
+volatile char oxy_calib = 0;
 
 void oxy_send_dummy();
 uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout);
@@ -135,6 +135,7 @@ void oxy_console()
                 }
                 case 'c':
                 {
+                    select_probe_or_NTC((uint)buffer[2]);
                     oxy_calibrateOxy_air((uint32_t)(temp_read_one((uint)buffer[2]) * 100), 95000UL, 100000UL);
                     break;
                 }
@@ -377,24 +378,24 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
 
     if (numScanned != 11)
     {
-        debugf_warn("oxy_read returned only %i from 11 values\n", numScanned);
+        // debugf_warn("oxy_read returned only %i from 11 values\n", numScanned);
     }
 
     // Ausgabe der Strukturwerte
-    debugf_info("Error: %d\n", readout->error);
-    debugf_info("Dphi: %d\n", readout->dphi);
-    debugf_info("Umolar: %d\n", readout->umolar);
-    debugf_info("Mbar: %d\n", readout->mbar);
-    debugf_info("AirSat: %d\n", readout->airSat);
-    debugf_info("TempSample: %d\n", readout->tempSample);
-    debugf_info("TempCase: %d\n", readout->tempCase);
-    debugf_info("SignalIntensity: %d\n", readout->signalIntensity);
-    debugf_info("AmbientLight: %d\n", readout->ambientLight);
-    debugf_info("Pressure: %d\n", readout->pressure);
-    debugf_info("ResistorTemp: %d\n", readout->resistorTemp);
-    debugf_info("PercentOtwo: %d\n", readout->percentOtwo);
+    // debugf_info("Error: %d\n", readout->error);
+    // debugf_info("Dphi: %d\n", readout->dphi);
+    // debugf_info("Umolar: %d\n", readout->umolar);
+    // debugf_info("Mbar: %d\n", readout->mbar);
+    // debugf_info("AirSat: %d\n", readout->airSat);
+    // debugf_info("TempSample: %d\n", readout->tempSample);
+    // debugf_info("TempCase: %d\n", readout->tempCase);
+    // debugf_info("SignalIntensity: %d\n", readout->signalIntensity);
+    // debugf_info("AmbientLight: %d\n", readout->ambientLight);
+    // debugf_info("Pressure: %d\n", readout->pressure);
+    // debugf_info("ResistorTemp: %d\n", readout->resistorTemp);
+    // debugf_info("PercentOtwo: %d\n", readout->percentOtwo);
 
-    oxy_decode_mesurement_errors(readout->error); // if theres an error this will print a debug statement
+    // oxy_decode_mesurement_errors(readout->error); // if theres an error this will print a debug statement
     return 1;
 }
 
