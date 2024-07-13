@@ -1,0 +1,8 @@
+standart settings:
+RMR 1 0 0 13 -300000 -1 0 5 0 5 4000 0 0 3 3080192 1 2
+
+Broadcast:
+read command: RMR 1 0 10 1
+standart: 3080192-> 00000000001011110000000000000000
+write command: WTM 1 0 10 1 7274497
+periodic measurements: 7274497 -> 00000000011011110000000000000001

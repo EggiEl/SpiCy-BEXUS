@@ -36,7 +36,7 @@ void temp_read_all(float buffer[8])
  *  */
 uint8_t temp_isconnected(uint8_t NTC)
 {
-    if (temp_read_one(NTC, 1) == -1000000.0)
+    if (temp_read_one(NTC, 5) == -1000000.0)
     {
         return 0;
     }
@@ -79,7 +79,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
 
     /*Connect the right one*/
     select_probe_or_NTC(NTC);
-    
+
     // uint8_t A0 = (NTC - 1) & 0b00000001;
     // uint8_t A1 = ((NTC - 1) & 0b00000010) >> 1;
     // uint8_t A2 = ((NTC - 1) & 0b00000100) >> 2;
@@ -127,7 +127,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
 
     // Convert temperature from Kelvin to Celsius
     float tempC = tempK - 273.15;
-    // debugf_info("VADC:%.2f VNTC:%.2f R:%.2f T:%.2f\n", voltage_adc, volt_ntc, resistance, tempC);
+    debugf_info("VADC:%.2f VNTC:%.2f R:%.2f T:%.2f\n", voltage_adc, volt_ntc, resistance, tempC);
     return tempC;
 }
 

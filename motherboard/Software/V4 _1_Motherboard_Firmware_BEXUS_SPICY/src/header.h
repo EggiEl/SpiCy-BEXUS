@@ -261,6 +261,7 @@ uint8_t temp_isconnected(uint8_t NTC = 255);
 #define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
 #define RETURN_LENGTH_MAX 100  // how long a return string can possibly be
 #define OXY_BAUD 19200
+#define OXY_SERIAL_TIMEOUT 550
 
 extern char oxy_serial_init;
 void oxy_serial_setup();

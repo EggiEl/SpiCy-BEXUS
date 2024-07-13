@@ -475,26 +475,24 @@ uint32_t check_peripherals()
     }
   }
 
-  Serial.print("NTCs: \n");
+  debug("NTCs: ");
   for (int i = 0; i < 7; i++)
   {
-    Serial.print((results & 0xFF) >> i & 1);
+    debugf_info("%u|",(results & 0xFF) >> i & 1);
   }
-  Serial.println();
 
-  Serial.print("Oxygen Sensors: \n");
+  debug("\nOxyg: ");
   for (int i = 0; i < 7; i++)
   {
-    Serial.print(((results >> 8) & 0xFF) >> i & 1);
+    debugf_info("%u|",((results >> 8) & 0xFF) >> i & 1);
   }
-  Serial.println();
 
-  Serial.print("Heaters: \n");
+  debug("\nHeat: ");
   for (int i = 0; i < 7; i++)
   {
-    Serial.print(((results >> 16) & 0xFF) >> i & 1);
+    debugf_info("%u|",((results >> 16) & 0xFF) >> i & 1);
   }
-  Serial.println();
+  debugln();
 
   return results;
 }

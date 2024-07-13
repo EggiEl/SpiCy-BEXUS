@@ -9,6 +9,7 @@ void oxy_send_dummy();
 uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout);
 void oxy_decode_mesurement_errors(const u32_t R0);
 void oxy_decode_general_error(const char errorCode_buff[]);
+void oxy_calibrateOxy_air(const uint temp, const uint pressure, const uint humidity);
 
 /*setups the SoftwareSerial Connection to the oxygen sensor*/
 void oxy_serial_setup()
@@ -16,17 +17,27 @@ void oxy_serial_setup()
     debugf_status("oxy_serial_setup ");
     if (millis() < (3 * 60 * 1000))
     {
-        debugf_warn("Oxygen Sensors warnuptime of 3min isnt fullfilled yet\n");
+        debugf_warn("- warnuptime of 3min not reached -");
     }
 
     oxySerial.setTX(PIN_OX_TX);
     oxySerial.setRX(PIN_OX_RX);
-    // oxySerial.setTimeout(1000);
+    oxySerial.setTimeout(OXY_SERIAL_TIMEOUT); // longst command yet: #LOGO->550ms
     // oxySerial.setPollingMode(true);
     // oxySerial.setFIFOSize(128);
     oxySerial.begin(OXY_BAUD);
     // delay(2000);
     oxy_send_dummy();
+
+    /* resets sensor. needs to be increased to all of them */
+    // char buffer[100];
+    // oxySerial.write("#RSET\r");
+    // oxySerial.flush();
+    // oxySerial.readBytesUntil('\r', buffer, sizeof(buffer));
+    // delay(50);
+
+    /* calibrates sensor. needs to be increased to all of them */
+
     debugf_sucess("oxy setup was succesfull\n");
     oxy_serial_init = 1;
 }
@@ -72,8 +83,8 @@ uint8_t oxy_isconnected(const uint8_t PROBE)
     }
     else
     {
-        debugf_warn("Return for testing command #LOGO:\"%s\"\n", buffer);
-        oxy_decode_general_error(buffer);
+        // debugf_warn("Return for testing command #LOGO:\"%s\"\n", buffer);
+        // oxy_decode_general_error(buffer);
         return 0;
     }
 }
@@ -82,14 +93,17 @@ uint8_t oxy_isconnected(const uint8_t PROBE)
 void oxy_console()
 {
     debugf_status("Console for Pyrosience FD-OEM Module\n");
-    debugf_info("/q to exit.\n");
+    debugf_info("use /m to trigger a oxygen measurement.\n");
+    debugf_info("use /c to calibrate.\n");
+    debugf_info("use /q to exit.\n");
 
     if (!oxy_serial_init)
     {
         oxy_serial_setup();
     }
 
-    while (1)
+    unsigned char isrunning = 1;
+    while (isrunning)
     {
         /*recives & prints data from FD-ODEM*/
         if (oxySerial.available())
@@ -98,18 +112,40 @@ void oxy_console()
         }
 
         /*sends data to FD-ODEM*/
-        if (Serial.available() > 4)
+        if (Serial.available() >= 3)
         {
-            char *buffer = (char *)calloc(1, COMMAND_LENGTH_MAX + 1);
+            char buffer[COMMAND_LENGTH_MAX + 1] = {0};
             Serial.readBytesUntil('\n', buffer, COMMAND_LENGTH_MAX);
             buffer[COMMAND_LENGTH_MAX] = '\0';
 
-            if (buffer[0] == '/' && buffer[1] == 'q')
+            if (buffer[0] == '/') // filters for commands
             {
-                break;
+                switch (buffer[1])
+                {
+                case 'q':
+                {
+                    isrunning = 0;
+                    break;
+                }
+                case 'm':
+                {
+                    OxygenReadout readout;
+                    oxy_meassure((uint)buffer[2], &readout);
+                    break;
+                }
+                case 'c':
+                {
+                    oxy_calibrateOxy_air((uint32_t)(temp_read_one((uint)buffer[2]) * 100), 95000UL, 100000UL);
+                    break;
+                }
+                default:
+                    break;
+                }
             }
-            oxy_commandhandler(buffer, RETURN_LENGTH_MAX);
-            free_ifnotnull(buffer);
+            else // if no command it goes directly to sensor
+            {
+                oxy_commandhandler(buffer, RETURN_LENGTH_MAX);
+            }
         }
 
         /*resets Watchdog*/
@@ -132,6 +168,7 @@ char *oxy_commandhandler(const char command[], uint8_t nReturn)
     {
         oxy_serial_setup();
     }
+
     /*creates return buffer*/
     if (nReturn == 0)
     {
@@ -145,6 +182,8 @@ char *oxy_commandhandler(const char command[], uint8_t nReturn)
     }
 
     /*Sending Command*/
+    oxy_send_dummy();
+
     debugf_status("sending oxy_command:%s\n", command);
     unsigned int command_length = strlen(command);
     if (command[command_length - 1] == '\r') // makes sure that the command is terminated
@@ -286,18 +325,18 @@ uint8_t oxy_read_all(struct OxygenReadout mesure_buffer[6])
     debugf_status("oxy_readall ");
     uint success = 0;
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_0,&mesure_buffer[0]);
+    success += oxy_meassure(NTC_PROBE_0, &mesure_buffer[0]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_1,&mesure_buffer[1]);
+    success += oxy_meassure(NTC_PROBE_1, &mesure_buffer[1]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_2,&mesure_buffer[2]);
+    success += oxy_meassure(NTC_PROBE_2, &mesure_buffer[2]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_3,&mesure_buffer[3]);
+    success += oxy_meassure(NTC_PROBE_3, &mesure_buffer[3]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_4,&mesure_buffer[4]);
+    success += oxy_meassure(NTC_PROBE_4, &mesure_buffer[4]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_5,&mesure_buffer[5]);
-debugf_status("done\n");
+    success += oxy_meassure(NTC_PROBE_5, &mesure_buffer[5]);
+    debugf_status("done\n");
     return success;
 }
 
@@ -313,7 +352,7 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
     select_probe_or_NTC(Probe_Number);
 
     readout->timestamp_mesurement = millis();
-    
+
     oxy_send_dummy();
 
     /*sends command to messure*/
@@ -323,38 +362,37 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
 
     /*decodes answer*/
     int numScanned = sscanf(buf_return, "%*c %*c %*c %*d %*d %d %d %d %d %d %d %d %d %d %d %d %d",
-                            readout->error,
-                            readout->dphi,
-                            readout->umolar,
-                            readout->mbar,
-                            readout->airSat,
-                            readout->tempSample,
-                            readout->tempCase,
-                            readout->signalIntensity,
-                            readout->ambientLight,
-                            readout->pressure,
-                            readout->resistorTemp,
-                            readout->percentOtwo);
+                            &readout->error,
+                            &readout->dphi,
+                            &readout->umolar,
+                            &readout->mbar,
+                            &readout->airSat,
+                            &readout->tempSample,
+                            &readout->tempCase,
+                            &readout->signalIntensity,
+                            &readout->ambientLight,
+                            &readout->pressure,
+                            &readout->resistorTemp,
+                            &readout->percentOtwo);
 
     if (numScanned != 11)
     {
         debugf_warn("oxy_read returned only %i from 11 values\n", numScanned);
-        return 0;
     }
 
     // Ausgabe der Strukturwerte
-    debugf_info("Error: %i\n", readout->error);
-    debugf_info("Dphi: %i\n", readout->dphi);
-    debugf_info("Umolar: %i\n", readout->umolar);
-    debugf_info("Mbar: %i\n", readout->mbar);
-    debugf_info("AirSat: %i\n", readout->airSat);
-    debugf_info("TempSample: %i\n", readout->tempSample);
-    debugf_info("TempCase: %i\n", readout->tempCase);
-    debugf_info("SignalIntensity: %i\n", readout->signalIntensity);
-    debugf_info("AmbientLight: %i\n", readout->ambientLight);
-    debugf_info("Pressure: %i\n", readout->pressure);
-    debugf_info("ResistorTemp: %i\n", readout->resistorTemp);
-    debugf_info("PercentOtwo: %i\n", readout->percentOtwo);
+    debugf_info("Error: %d\n", readout->error);
+    debugf_info("Dphi: %d\n", readout->dphi);
+    debugf_info("Umolar: %d\n", readout->umolar);
+    debugf_info("Mbar: %d\n", readout->mbar);
+    debugf_info("AirSat: %d\n", readout->airSat);
+    debugf_info("TempSample: %d\n", readout->tempSample);
+    debugf_info("TempCase: %d\n", readout->tempCase);
+    debugf_info("SignalIntensity: %d\n", readout->signalIntensity);
+    debugf_info("AmbientLight: %d\n", readout->ambientLight);
+    debugf_info("Pressure: %d\n", readout->pressure);
+    debugf_info("ResistorTemp: %d\n", readout->resistorTemp);
+    debugf_info("PercentOtwo: %d\n", readout->percentOtwo);
 
     oxy_decode_mesurement_errors(readout->error); // if theres an error this will print a debug statement
     return 1;
@@ -423,20 +461,22 @@ void oxy_decode_mesurement_errors(const u32_t R0)
 
 /**
  * Calibrate oxygen Sensor at ambient air
-*@param channel Optical channel number. Set C=1
-*@param temp Temperature of the calibration standard in 100 * C
-*@param pressure Ambient air pressure in 100 * mbar
-*@param humidity Relative humidity of the ambient air in units of 10-3 %RH (e.g. 50000
+ * takes around 3,2s
+ * @param temp Temperature of the calibration standard in 100 * C
+ * @param pressure Ambient air pressure in 100 * mbar
+ * @param humidity Relative humidity of the ambient air in units of 10-3 %RH (e.g. 50000
 means 50%RH) Set H=100000 (=100%RH) for calibrations in air saturated
 water
  **/
-void oxy_calibrateOxy_air(const uint8_t channel, const uint temp, const uint pressure, const uint humidity)
+void oxy_calibrateOxy_air(const uint temp, const uint pressure, const uint humidity)
 {
+    oxySerial.setTimeout(4000);
+    const uint8_t channel = 1;
     char buffer[COMMAND_LENGTH_MAX];
-    snprintf(buffer, COMMAND_LENGTH_MAX, "CHI %u %u %u", temp, pressure, humidity);
+    snprintf(buffer, COMMAND_LENGTH_MAX, "CHI %u %u %u %u", channel, temp, pressure, humidity);
     char *buf_return = oxy_commandhandler(buffer);
     free_ifnotnull(buf_return);
-
+    oxySerial.setTimeout(OXY_SERIAL_TIMEOUT);
     // save calibration with SVG
 }
 

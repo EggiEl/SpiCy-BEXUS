@@ -36,7 +36,7 @@ void setup()
 void loop()
 {
   check_periodic_tasks();
-  nextState();
+  // nextState();
 
   rp2040.wdt_reset();
 }
