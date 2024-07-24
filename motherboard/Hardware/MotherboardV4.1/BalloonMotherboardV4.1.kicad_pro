@@ -477,21 +477,7 @@
     "meta": {
       "version": 3
     },
-    "net_colors": {
-      "+1V1": "rgb(30, 255, 253)",
-      "+28V": "rgb(191, 0, 255)",
-      "/3V3_rest": "rgb(255, 197, 0)",
-      "/3V3lan": "rgb(255, 160, 73)",
-      "/5V": "rgb(0, 121, 50)",
-      "/Ethernet/3V3": "rgb(255, 161, 46)",
-      "/Heater/Vs_Heat": "rgb(255, 151, 162)",
-      "/Power/3V3_uC": "rgb(29, 37, 255)",
-      "/Power/5VBuck": "rgb(255, 87, 206)",
-      "/Power/5VSys": "rgb(63, 255, 26)",
-      "/Prozessor/GPIO7": "rgb(0, 121, 50)",
-      "/Sensors/ntc+": "rgb(255, 70, 240)",
-      "GND": "rgb(127, 127, 127)"
-    },
+    "net_colors": null,
     "netclass_assignments": null,
     "netclass_patterns": []
   },
