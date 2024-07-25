@@ -19,7 +19,8 @@ app.use(bodyParser.json()) ;
 app.use(databaserouter) ; 
 
 
-const uri = "mongodb://localhost:27017/testDB"
+const uri = "mongodb://localhost:27017/BEXUS"
+
 
 export async function connect() : Promise<void> {
     try {
@@ -32,5 +33,7 @@ export async function connect() : Promise<void> {
     }
   }
 connect() ; 
+
+
 
 export default app ; 
