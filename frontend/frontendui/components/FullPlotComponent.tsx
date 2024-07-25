@@ -57,7 +57,7 @@ export default function FullPlot({ plotdata, plotlimit, sensorname, upperlimit, 
 
   return (
     <div>
-      <h1>Hallo Welt</h1>
+      
       <Slider upperlimit={plotdata.length} lowerlimit={lowerlimit} onLimitChange={handleLimitChange} />
 
       <button onClick={fetchNewData}>Daten abrufen</button>
