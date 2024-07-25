@@ -22,7 +22,6 @@
 //  https://arduino-pico.readthedocs.io/en/latest/index.html
 void print_startup_message();
 void update_nResets();
-void check_periodic_tasks();
 
 //------------------------core1--------------------------------
 /*does all the data handeling*/
@@ -33,20 +32,21 @@ void setup()
   print_startup_message();
 }
 
+void periodic_tasks_core_0();
 void loop()
 {
-  check_periodic_tasks();
+  periodic_tasks_core_0();
   nextState();
-
   rp2040.wdt_reset();
 }
 
 /*all things that should get checkt every loop of CPU0*/
-void check_periodic_tasks()
+void periodic_tasks_core_0()
 {
   checkSerialInput();
   rp2040.wdt_reset();
   StatusLedBlink(STATLED);
+  rp2040.wdt_reset();
   // float buf[6];
   // temp_read_all(buf);
   // tcp_check_command();
@@ -56,17 +56,18 @@ void check_periodic_tasks()
 /*controlls heating*/
 void setup1()
 {
-  rp2040.begin();
+  // rp2040.begin();
 }
 
+void periodic_tasks_core_1();
 void loop1()
 {
   if (!flag_pause_core1) // core 0 can raise this flag to pause core 1
   {
     flag_core1_isrunning = 1;
 
-    // float bufer[8] = {0};
-    // temp_read_all(bufer);
+    periodic_tasks_core_1();
+
     debugf_blue(".");
     delay(1);
   }
@@ -74,6 +75,10 @@ void loop1()
   {
     flag_core1_isrunning = 0;
   }
+}
+
+void periodic_tasks_core_1()
+{
 }
 
 unsigned long nMOTHERBOARD_BOOTUPS = 0;

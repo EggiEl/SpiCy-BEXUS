@@ -26,25 +26,12 @@ void oxy_serial_setup()
     // oxySerial.setPollingMode(true);
     // oxySerial.setFIFOSize(128);
     oxySerial.begin(OXY_BAUD);
-    // delay(2000);
     oxy_send_dummy();
-
-    /* resets sensor. needs to be increased to all of them */
-    // char buffer[100];
-    // oxySerial.write("#RSET\r");
-    // oxySerial.flush();
-    // oxySerial.readBytesUntil('\r', buffer, sizeof(buffer));
-    // delay(50);
-
-    /* calibrates sensor. needs to be increased to all of them */
-
     debugf_sucess("oxy setup was succesfull\n");
     oxy_serial_init = 1;
 }
 
-/**
- *sending dummy byte. For syncronising the data line.
- */
+/*sending dummy byte. For syncronising the data line.*/
 void oxy_send_dummy()
 {
     char buffer[100];
