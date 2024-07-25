@@ -31,7 +31,6 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 export default function OxChart({ datalist, limit, upperlimit, lowerlimit }: Data) {
   const dataToShow = datalist.slice(Math.max(datalist.length - limit, 0)); // Show only the last 'limit' data points
-  console.log(dataToShow);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
