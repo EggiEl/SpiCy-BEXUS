@@ -24,8 +24,8 @@ void temp_read_all(float buffer[8])
     buffer[1] = temp_read_one(NTC_PROBE_1);
     buffer[2] = temp_read_one(NTC_PROBE_2);
     buffer[3] = temp_read_one(NTC_PROBE_3);
-    buffer[4] = temp_read_one(NTC_PROBE_4);
-    buffer[5] = temp_read_one(NTC_PROBE_5);
+    buffer[4] = temp_read_one(NTC_4);
+    buffer[5] = temp_read_one(NTC_5);
     buffer[6] = temp_read_one(NTC_SMD);
     buffer[7] = temp_read_one(NTC_PROBE_10kfix);
 }

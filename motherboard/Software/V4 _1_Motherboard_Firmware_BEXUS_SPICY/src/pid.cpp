@@ -31,8 +31,8 @@ void pid_update_all()
         pid_update_one(SET_TEMP, PIN_H1, NTC_PROBE_1);
         pid_update_one(SET_TEMP, PIN_H2, NTC_PROBE_2);
         pid_update_one(SET_TEMP, PIN_H3, NTC_PROBE_3);
-        pid_update_one(SET_TEMP, PIN_H4, NTC_PROBE_4);
-        pid_update_one(SET_TEMP, PIN_H5, NTC_PROBE_5);
+        pid_update_one(SET_TEMP, PIN_H4, NTC_4);
+        pid_update_one(SET_TEMP, PIN_H5, NTC_5);
     }
 }
 
@@ -40,14 +40,16 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
 {
     /*static Variables*/
     static float I_buffer = 0;
-
+    static unsigned long last_measurement = millis();
+   
     /*Variables.*/
+    unsigned long current_measurement = millis();
     float measured_temp = temp_read_one(thermistor);
     float error = desired_temp - measured_temp;
     /*p*/
     float p = kp * error;
     /*i*/
-    I_buffer += error;
+    I_buffer += error * ();
     if (I_buffer > I_BUFFER_MAX)
     {
         I_buffer = I_BUFFER_MAX;

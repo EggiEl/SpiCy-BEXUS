@@ -71,10 +71,13 @@ typedef enum
     NTC_PROBE_1 = 2,      // S2 of MUX
     NTC_PROBE_2 = 3,      // S3 of MUX
     NTC_PROBE_3 = 4,      // S4 of MUX
-    NTC_PROBE_4 = 8,      // S8 of MUX
-    NTC_PROBE_5 = 7,      // S7 of MUX
+    NTC_4 = 8,            // S8 of MUX
+    NTC_5 = 7,            // S7 of MUX
     NTC_SMD = 5,          // S5 of MUX
     NTC_PROBE_10kfix = 6, // S6 of MUX
+
+    PROBE_4 = 5,
+    PROBE_5 = 6,
 
     PIN_OX_RX = 0, // Oxygen Sensor RX
     PIN_OX_TX = 1, // Oxygen Sensor TX
@@ -85,8 +88,11 @@ typedef enum
     PIN_CURR = A1, // Current Pin
 
     // Connection of the Light Sensor
-    PIN_LIGHT_SDA = SDA0, // I2C Data Line for Light Sensor
-    PIN_LIGHT_SCL = SCL0  // I2C Clock Line for Light Sensor
+    PIN_LIGHT_SDA_0 = SDA0, // I2C Data Line for Light Sensor AS7262
+    PIN_LIGHT_SCL_0 = SCL0, // I2C Clock Line for Light Sensor AS7262
+
+    PIN_LIGHT_SDA_1 = SDA1, // I2C Data Line for Light Sensor AS7263
+    PIN_LIGHT_SCL_1 = SCL1  // I2C Clock Line for Light Sensor AS7263
 } PIN_MAPPING;
 
 /**
@@ -216,12 +222,7 @@ uint8_t temp_isconnected(uint8_t NTC = 255);
 #define OXY_BAUD 19200
 #define OXY_SERIAL_TIMEOUT 100
 
-
-extern SerialPIO oxySerial1;
-extern SerialPIO oxySerial2;
-
-extern SerialPIO* oxySerial;
-
+extern SerialPIO oxySerial;
 extern volatile char oxy_serial_init;
 void oxy_serial_setup();
 void oxy_console();
@@ -230,6 +231,7 @@ char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_
 uint8_t oxy_isconnected(const int PROBE = 255);
 
 /*light spectrometers*/
+const unsigned long TIMEOUT_LIGHT_SENSOR 100
 extern volatile char light_init;
 void light_setup();
 void light_read(float *buffer, bool with_flash = 0);

@@ -132,6 +132,7 @@ void state_print(unsigned int Status)
 
 void select_probe_or_NTC(const int ProbeorNTC)
 {
+    
     // debugf_status("select probe\n");
     static uint8_t init = 0;
     if (!init)
@@ -151,14 +152,5 @@ void select_probe_or_NTC(const int ProbeorNTC)
     digitalWrite(PIN_PROBEMUX_0, A0);
     digitalWrite(PIN_PROBEMUX_1, A1);
     digitalWrite(PIN_PROBEMUX_2, A2);
-
-    if (ProbeorNTC == PIN_PROBEMUX_0)
-    {
-        oxySerial = &oxySerial1;
-    }
-    else
-    {
-        oxySerial = &oxySerial2;
-    }
     // debugf_info("Select S%u|A0:%u|A1:%u|A2:%u\n", ProbeorNTC, A0, A1, A2);
 }
