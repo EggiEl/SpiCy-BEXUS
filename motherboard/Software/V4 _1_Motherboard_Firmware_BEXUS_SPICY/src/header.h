@@ -3,6 +3,7 @@
 #define HEADER_H
 
 #include <Arduino.h>
+#include <SoftwareSerial.h>
 /*--------Settings-----------------------*/
 #define DEBUG_MODE 1    /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
 #define COLOUR_SERIAL 1 /*activates/deactivates Serial.printing with color*/
@@ -13,7 +14,7 @@
 const unsigned int ADC_MAX_WRITE = 100; //  Value where analogRrite = 100% duty cycle
 const unsigned int ADC_FREQ_WRITE = 30000;
 
-#define WATCHDOG_TIMEOUT 2000 // neds to be 8000ms max i think
+#define WATCHDOG_TIMEOUT 4000 // neds to be 8000ms max i think
 #define CONNECTIONTIMEOUT 20  /*Conntection Timeout of the tcp client*/
 
 extern unsigned long nMOTHERBOARD_BOOTUPS; // this number is stored in the flash and increses with every reset of th uC
@@ -75,8 +76,8 @@ typedef enum
     NTC_SMD = 5,          // S5 of MUX
     NTC_PROBE_10kfix = 6, // S6 of MUX
 
-    PIN_OX_RX = 1, // Oxygen Sensor RX
-    PIN_OX_TX = 0, // Oxygen Sensor TX
+    PIN_OX_RX = 0, // Oxygen Sensor RX
+    PIN_OX_TX = 1, // Oxygen Sensor TX
 
     STATLED = 23, // Status LED
 
@@ -87,61 +88,6 @@ typedef enum
     PIN_LIGHT_SDA = SDA0, // I2C Data Line for Light Sensor
     PIN_LIGHT_SCL = SCL0  // I2C Clock Line for Light Sensor
 } PIN_MAPPING;
-// // 2 busses of the GPIO extentions
-// #define SDA0 2
-// #define SCL0 3
-// #define SDA1 4
-// #define SCL1 5
-// // Lan and SD ic are connected both on SPI0 Bus
-// #define CS_LAN 17
-// #define CS_SD 16
-// #define MISO_SPI0 20
-// #define SCK_SPI0 18
-// #define MOSI_SPI0 19
-// #define LAN_MISO MISO_SPI0
-// #define LAN_MOSI MOSI_SPI0
-// #define LAN_SCK SCK_SPI0
-// /*V4.0 pins :*/
-// // #define MISO_SPI0 0
-// // #define CS_SD 1
-// // #define SCK_SPI0 2
-// // #define MOSI_SPI0 3
-// // #define LAN_MISO 8
-// // #define CS_LAN 9
-// // #define LAN_MOSI 11
-// // #define LAN_SCK 10
-// #define PIN_H0 8
-// #define PIN_H1 9
-// #define PIN_H2 10
-// #define PIN_H3 11
-// #define PIN_H4 12
-// #define PIN_H5 13
-// #define PIN_H6 14
-// #define PIN_H7 15
-// // the temp probes and the oxygen sensors are connected to the same multiplexerlines axa if temp 0 is selected so is oxy0
-// #define PIN_PROBEMUX_0 26
-// #define PIN_PROBEMUX_1 25
-// #define PIN_PROBEMUX_2 24
-// #define PIN_MUX_OXY_DISABLE 21
-// #define PIN_TEMPADC A3
-// #define nNTC 8
-// #define NTC_PROBE_0 1      // S1 of MUX
-// #define NTC_PROBE_1 2      // S2 of MUX
-// #define NTC_PROBE_2 3      // S3 of MUX
-// #define NTC_PROBE_3 4      // S4 of MUX
-// #define NTC_PROBE_4 8      // S8 of MUX
-// #define NTC_PROBE_5 7      // S7 of MUX
-// #define NTC_SMD 5          // S5 of MUX
-// #define NTC_PROBE_10kfix 6 // S6 of MUX
-// #define PIN_OX_RX 1
-// #define PIN_OX_TX 0
-// #define PIN_OXY_ENABLE 21
-// #define STATLED 23 // Status LED
-// #define PIN_VOLT A2
-// #define PIN_CURR A1
-// // COnnection of the Light Sensor
-// #define PIN_LIGHT_SDA SDA0 // blue
-// #define PIN_LIGHT_SCL SCL0 // yellow
 
 /**
  * contains all data of one readout form the oxygen sensors
@@ -192,7 +138,7 @@ void destroy_packet(struct packet *p);
 
 /*state mashine*/
 void nextState();
-void select_probe_or_NTC(const uint8_t ProbeorNTC);
+void select_probe_or_NTC(const int ProbeorNTC);
 
 /* multithreading */
 extern uint8_t flag_pause_core1;
@@ -268,14 +214,20 @@ uint8_t temp_isconnected(uint8_t NTC = 255);
 #define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
 #define RETURN_LENGTH_MAX 100  // how long a return string can possibly be
 #define OXY_BAUD 19200
-#define OXY_SERIAL_TIMEOUT 550
+#define OXY_SERIAL_TIMEOUT 100
+
+
+extern SerialPIO oxySerial1;
+extern SerialPIO oxySerial2;
+
+extern SerialPIO* oxySerial;
 
 extern volatile char oxy_serial_init;
 void oxy_serial_setup();
 void oxy_console();
 uint8_t oxy_read_all(struct OxygenReadout mesure_buffer[6]);
 char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_MAX);
-uint8_t oxy_isconnected(const uint8_t PROBE = 255);
+uint8_t oxy_isconnected(const int PROBE = 255);
 
 /*light spectrometers*/
 extern volatile char light_init;

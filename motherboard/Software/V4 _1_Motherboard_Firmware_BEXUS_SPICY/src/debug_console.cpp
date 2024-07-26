@@ -443,12 +443,22 @@ uint32_t check_peripherals()
   results |= (temp_isconnected(NTC_PROBE_5) << 5);
 
   /* Oxygen sensors */
+
+  rp2040.wdt_reset();
+  Serial1.setTimeout(500);
   results |= (oxy_isconnected(NTC_PROBE_0) << 8);
+  rp2040.wdt_reset();
   results |= (oxy_isconnected(NTC_PROBE_1) << 9);
+  rp2040.wdt_reset();
   results |= (oxy_isconnected(NTC_PROBE_2) << 10);
+  rp2040.wdt_reset();
   results |= (oxy_isconnected(NTC_PROBE_3) << 11);
+  rp2040.wdt_reset();
   results |= (oxy_isconnected(NTC_PROBE_4) << 12);
+  rp2040.wdt_reset();
   results |= (oxy_isconnected(NTC_PROBE_5) << 13);
+  rp2040.wdt_reset();
+  Serial1.setTimeout(OXY_SERIAL_TIMEOUT);
 
   /* Heating */
 
@@ -464,6 +474,7 @@ uint32_t check_peripherals()
     buff_heat[i] = 100.0;
     heat_updateall(buff_heat);
     float cur_one = get_current() - cur_alloff;
+    // debugln(cur_one);
     buff_heat[i] = 0.0;
 
     /* checks if current increased*/
@@ -477,19 +488,19 @@ uint32_t check_peripherals()
   debug("NTCs: ");
   for (int i = 0; i < 7; i++)
   {
-    debugf_info("%u|",(results & 0xFF) >> i & 1);
+    debugf_info("%u|", (results & 0xFF) >> i & 1);
   }
 
   debug("\nOxyg: ");
   for (int i = 0; i < 7; i++)
   {
-    debugf_info("%u|",((results >> 8) & 0xFF) >> i & 1);
+    debugf_info("%u|", ((results >> 8) & 0xFF) >> i & 1);
   }
 
   debug("\nHeat: ");
   for (int i = 0; i < 7; i++)
   {
-    debugf_info("%u|",((results >> 16) & 0xFF) >> i & 1);
+    debugf_info("%u|", ((results >> 16) & 0xFF) >> i & 1);
   }
   debugln();
 

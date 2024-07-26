@@ -27,7 +27,7 @@ void update_nResets();
 /*does all the data handeling*/
 void setup()
 {
-  rp2040.wdt_begin(WATCHDOG_TIMEOUT);
+  // rp2040.wdt_begin(WATCHDOG_TIMEOUT);
   update_nResets();
   print_startup_message();
 }
@@ -36,7 +36,10 @@ void periodic_tasks_core_0();
 void loop()
 {
   periodic_tasks_core_0();
-  nextState();
+  // nextState();
+  // debugln(oxy_isconnected(1));
+  //  debugln(oxy_isconnected(NTC_PROBE_1));
+  // delay(500);
   rp2040.wdt_reset();
 }
 
@@ -68,8 +71,8 @@ void loop1()
 
     periodic_tasks_core_1();
 
-    debugf_blue(".");
-    delay(1);
+    // debugf_blue(".");
+    // delay(1);
   }
   else // idles core1 when flag flag_pause_core1 is raised
   {

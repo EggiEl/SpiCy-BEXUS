@@ -1,9 +1,13 @@
 #include "header.h"
 #include "debug_in_color.h"
 
-#define oxySerial Serial1
 volatile char oxy_serial_init = 0;
 volatile char oxy_calib = 0;
+
+SerialPIO* oxySerial;
+SerialPIO oxySerial1(PIN_OX_TX, PIN_OX_RX);
+SerialPIO oxySerial2(PIN_OX_RX, PIN_OX_TX);
+
 
 void oxy_send_dummy();
 uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout);
@@ -20,13 +24,17 @@ void oxy_serial_setup()
         debugf_warn("- warnuptime of 3min not reached -");
     }
 
-    oxySerial.setTX(PIN_OX_TX);
-    oxySerial.setRX(PIN_OX_RX);
-    oxySerial.setTimeout(OXY_SERIAL_TIMEOUT); // longst command yet: #LOGO->550ms
-    // oxySerial.setPollingMode(true);
-    // oxySerial.setFIFOSize(128);
-    oxySerial.begin(OXY_BAUD);
-    oxy_send_dummy();
+    oxySerial1.setTimeout(OXY_SERIAL_TIMEOUT); // longst command yet: #LOGO->550ms
+    oxySerial1.begin(OXY_BAUD);
+
+    oxySerial2.setTimeout(OXY_SERIAL_TIMEOUT); // longst command yet: #LOGO->550ms
+    oxySerial2.begin(OXY_BAUD);
+
+    oxySerial = &oxySerial2;
+
+    // select_probe_or_NTC(NTC_PROBE_0);
+    // oxy_send_dummy();
+
     debugf_sucess("oxy setup was succesfull\n");
     oxy_serial_init = 1;
 }
@@ -34,11 +42,11 @@ void oxy_serial_setup()
 /*sending dummy byte. For syncronising the data line.*/
 void oxy_send_dummy()
 {
-    char buffer[100];
-    oxySerial.write("\r");
-    oxySerial.flush();
+    char buffer[20];
+    oxySerial->write("\r");
+    oxySerial->flush();
     // returns a error after 10ms
-    oxySerial.readBytesUntil('\r', buffer, sizeof(buffer));
+    oxySerial->readBytesUntil('\r', buffer, sizeof(buffer));
     delay(2); // this is necessary
 }
 
@@ -46,7 +54,7 @@ void oxy_send_dummy()
  * tests weather a oxygen sensor is connected
  * @param PROBE specify here wich Probe y wanna check. dont specify anything or set to 255 checks the currently connected one
  */
-uint8_t oxy_isconnected(const uint8_t PROBE)
+uint8_t oxy_isconnected(const int PROBE)
 {
     if (!oxy_serial_init)
     {
@@ -57,21 +65,21 @@ uint8_t oxy_isconnected(const uint8_t PROBE)
 
     oxy_send_dummy();
 
-    /*reads out return values*/
-    char buffer[100];
-    char commnad[] = "#IDNR\r";
-    Serial1.write(commnad);
-    Serial1.flush();
-    Serial1.readBytesUntil('\r', buffer, sizeof(buffer));
+    /*sendst test*/
+    char buffer[10] = {0};
+    oxySerial->write("\r");
+    oxySerial->flush();
+    oxySerial->readBytes(buffer, 1);
+    delay(2); // this is necessary
 
-    if (buffer[0] == commnad[0] && buffer[1] == commnad[1] && buffer[2] == commnad[2] && buffer[3] == commnad[3] && buffer[4] == commnad[4])
+    if (buffer[0] == '\r')
     {
         return 1;
     }
     else
     {
-        // debugf_warn("Return for testing command #LOGO:\"%s\"\n", buffer);
-        // oxy_decode_general_error(buffer);
+        debugf_warn("Return for testing command #LOGO:\"%s\"\n", buffer);
+        oxy_decode_general_error(buffer);
         return 0;
     }
 }
@@ -80,7 +88,7 @@ uint8_t oxy_isconnected(const uint8_t PROBE)
 void oxy_console()
 {
     debugf_status("Console for Pyrosience FD-OEM Module\n");
-    debugf_info("use /m to trigger a oxygen measurement.\n");
+    debugf_info("use /m[probenumber] to trigger a oxygen measurement. probenumber must follow /m with no empty space\n");
     debugf_info("use /c to calibrate.\n");
     debugf_info("use /q to exit.\n");
 
@@ -92,15 +100,18 @@ void oxy_console()
     unsigned char isrunning = 1;
     while (isrunning)
     {
+        select_probe_or_NTC(NTC_PROBE_0);
+
         /*recives & prints data from FD-ODEM*/
-        if (oxySerial.available())
+        if (oxySerial->available())
         {
-            Serial.write(oxySerial.read());
+            Serial.write(oxySerial->read());
         }
 
         /*sends data to FD-ODEM*/
         if (Serial.available() >= 3)
         {
+
             char buffer[COMMAND_LENGTH_MAX + 1] = {0};
             Serial.readBytesUntil('\n', buffer, COMMAND_LENGTH_MAX);
             buffer[COMMAND_LENGTH_MAX] = '\0';
@@ -176,22 +187,22 @@ char *oxy_commandhandler(const char command[], uint8_t nReturn)
     unsigned int command_length = strlen(command);
     if (command[command_length - 1] == '\r') // makes sure that the command is terminated
     {
-        oxySerial.write(command, command_length);
+        oxySerial->write(command, command_length);
     }
     else
     {
-        oxySerial.write(command, command_length);
-        oxySerial.write('\r');
+        oxySerial->write(command, command_length);
+        oxySerial->write('\r');
     }
 
     /*flushes output*/
-    oxySerial.flush();
+    oxySerial->flush();
 
     /*reads out return values*/
-    unsigned int recievedbytes = oxySerial.readBytesUntil('\r', buffer, nReturn);
+    unsigned int recievedbytes = oxySerial->readBytesUntil('\r', buffer, nReturn);
 
     /*checks if still data avaliable*/
-    if (oxySerial.available())
+    if (oxySerial->available())
     {
         debugf_warn("OxyComandHandler: There are more than nReturn %i bytes for command %s\n", nReturn, command);
     }
@@ -458,13 +469,13 @@ water
  **/
 void oxy_calibrateOxy_air(const uint temp, const uint pressure, const uint humidity)
 {
-    oxySerial.setTimeout(4000);
+    oxySerial->setTimeout(4000);
     const uint8_t channel = 1;
     char buffer[COMMAND_LENGTH_MAX];
     snprintf(buffer, COMMAND_LENGTH_MAX, "CHI %u %u %u %u", channel, temp, pressure, humidity);
     char *buf_return = oxy_commandhandler(buffer);
     free_ifnotnull(buf_return);
-    oxySerial.setTimeout(OXY_SERIAL_TIMEOUT);
+    oxySerial->setTimeout(OXY_SERIAL_TIMEOUT);
     // save calibration with SVG
 }
 
