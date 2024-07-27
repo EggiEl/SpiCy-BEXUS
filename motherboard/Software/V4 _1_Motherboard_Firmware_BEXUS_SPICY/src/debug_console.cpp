@@ -439,16 +439,26 @@ uint32_t check_peripherals()
   results |= (temp_isconnected(NTC_PROBE_1) << 1);
   results |= (temp_isconnected(NTC_PROBE_2) << 2);
   results |= (temp_isconnected(NTC_PROBE_3) << 3);
-  results |= (temp_isconnected(NTC_PROBE_4) << 4);
-  results |= (temp_isconnected(NTC_PROBE_5) << 5);
+  results |= (temp_isconnected(NTC_4) << 4);
+  results |= (temp_isconnected(NTC_5) << 5);
 
   /* Oxygen sensors */
+
+  rp2040.wdt_reset();
+  Serial1.setTimeout(500);
   results |= (oxy_isconnected(NTC_PROBE_0) << 8);
+  rp2040.wdt_reset();
   results |= (oxy_isconnected(NTC_PROBE_1) << 9);
+  rp2040.wdt_reset();
   results |= (oxy_isconnected(NTC_PROBE_2) << 10);
+  rp2040.wdt_reset();
   results |= (oxy_isconnected(NTC_PROBE_3) << 11);
-  results |= (oxy_isconnected(NTC_PROBE_4) << 12);
-  results |= (oxy_isconnected(NTC_PROBE_5) << 13);
+  rp2040.wdt_reset();
+  results |= (oxy_isconnected(PROBE_4) << 12);
+  rp2040.wdt_reset();
+  results |= (oxy_isconnected(PROBE_5) << 13);
+  rp2040.wdt_reset();
+  Serial1.setTimeout(OXY_SERIAL_TIMEOUT);
 
   /* Heating */
 
@@ -458,38 +468,41 @@ uint32_t check_peripherals()
 
   float cur_alloff = get_current(); // current with all heater off
 
-  for (uint8_t i = 0; i < 7; i++)
+  for (uint8_t i = 0; i < 8; i++)
   {
     /*turns one heater on and messures the current*/
     buff_heat[i] = 100.0;
     heat_updateall(buff_heat);
+    delay(1);
     float cur_one = get_current() - cur_alloff;
+    // debugln(cur_one);
     buff_heat[i] = 0.0;
 
     /* checks if current increased*/
-    if (((HEAT_CURRENT - 0.100) < cur_one) && (cur_one < (HEAT_CURRENT + 0.100)))
+    if (((HEAT_CURRENT - HEAT_CURRENT*0.3) < cur_one) && (cur_one < (HEAT_CURRENT + HEAT_CURRENT*0.3)))
     {
       results |= (1 << 16 + i);
       // debug(cur_one);
     }
   }
 
+  debugln("     |0|1|2|3|4|5|6|7|");
   debug("NTCs: ");
-  for (int i = 0; i < 7; i++)
+  for (int i = 0; i < 6; i++)
   {
-    debugf_info("%u|",(results & 0xFF) >> i & 1);
+    debugf_info("%u|", (results & 0xFF) >> i & 1);
   }
 
   debug("\nOxyg: ");
-  for (int i = 0; i < 7; i++)
+  for (int i = 0; i < 6; i++)
   {
-    debugf_info("%u|",((results >> 8) & 0xFF) >> i & 1);
+    debugf_info("%u|", ((results >> 8) & 0xFF) >> i & 1);
   }
 
   debug("\nHeat: ");
-  for (int i = 0; i < 7; i++)
+  for (int i = 0; i < 8; i++)
   {
-    debugf_info("%u|",((results >> 16) & 0xFF) >> i & 1);
+    debugf_info("%u|", ((results >> 16) & 0xFF) >> i & 1);
   }
   debugln();
 

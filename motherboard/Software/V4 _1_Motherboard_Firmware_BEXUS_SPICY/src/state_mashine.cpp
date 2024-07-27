@@ -130,8 +130,9 @@ void state_print(unsigned int Status)
     }
 }
 
-void select_probe_or_NTC(const uint8_t ProbeorNTC)
+void select_probe_or_NTC(const int ProbeorNTC)
 {
+    
     // debugf_status("select probe\n");
     static uint8_t init = 0;
     if (!init)

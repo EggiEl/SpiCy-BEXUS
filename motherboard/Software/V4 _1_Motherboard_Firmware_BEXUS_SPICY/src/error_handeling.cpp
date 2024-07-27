@@ -25,7 +25,7 @@ void error_handler(const unsigned int ErrorCode, const uint8_t destination)
     //         error_init = 1;
     //     }
     //     char string[200];
-    //     snprintf(string, sizeof(string), "%u;%u", millis(), ErrorCode);
+    //     snprintf(string, sizeo   f(string), "%u;%u", millis(), ErrorCode);
     //     sd_writetofile(string, error_file_path);
     // }
 
