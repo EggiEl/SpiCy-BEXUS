@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import Slider from "../../../components/sliderComp";
 import OxChart from "./OxChart";
-import  {get_latest_data} from "../../../functions/get_latest_ox";
+import { get_latest_data } from "../../../functions/get_latest_ox";
+import styled from "styled-components";
+
 interface OxygenSensorData {
   _id: string;
   fullstruct_id: string;
@@ -13,51 +15,71 @@ interface OxygenSensorData {
 
 interface OxDataClProps {
   initialData: OxygenSensorData[];
-  sensorname : string ; 
+  sensorname: string;
 }
 
-export default function SensorPlotOx({ initialData, sensorname  }: OxDataClProps) {
+const Container = styled.div`
+  background-color: white;
+  color: black;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  margin: 20px auto;
+`;
+
+const Header = styled.h1`
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 80px;
+  color: #333;
+`;
+
+const ChartWrapper = styled.div`
+  height: 500px;
+  margin-top: 20px;
+`;
+
+export default function SensorPlotOx({ initialData, sensorname }: OxDataClProps) {
   const [data, setData] = useState(initialData);
-  const [sliderLimit , setSliderLimit] = useState(data.length);
-  const [limit, setLimit] = useState(sliderLimit); // Neuer Zustand für das Limit
-  const increaseLimit = () => setLimit(prevLimit => prevLimit + 50); // Funktion zum Erhöhen des Limits
-  const decreaseLimit = () => setLimit(prevLimit => Math.max(prevLimit - 50, 50)); // Funktion zum Verringern des Limits
-  
+  const [sliderLimit, setSliderLimit] = useState(data.length);
+  const [limit, setLimit] = useState(sliderLimit); // State for the limit
+
+  const increaseLimit = () => setLimit(prevLimit => prevLimit + 50); // Function to increase the limit
+  const decreaseLimit = () => setLimit(prevLimit => Math.max(prevLimit - 50, 50)); // Function to decrease the limit
+
   const fetchNewData = async () => {
     if (data.length > 0) {
       const lastData = data[data.length - 1];
       if (lastData && lastData._id) {
-        const newData  : [OxygenSensorData] = await get_latest_data(lastData._id, sensorname);
-        setData((prevData: any[]) => [...prevData, ...newData]);
+        const newData: [OxygenSensorData] = await get_latest_data(lastData._id, sensorname);
+        setData(prevData => [...prevData, ...newData]);
         setSliderLimit(data.length);
-        console.log(newData)
+        console.log(newData);
       }
-    }
-    if (data.length === 0) {
+    } else {
       const firstData = await get_latest_data("0", sensorname);
-      console.log(firstData)
-      setData(firstData)
+      console.log(firstData);
+      setData(firstData);
     }
   };
 
-
- useEffect(() => {
+  useEffect(() => {
     const intervalId = setInterval(fetchNewData, 1000); // Fetch new data every second
     return () => clearInterval(intervalId); // Clean up on component unmount
   }, [data]); // Add data as a dependency
 
-
-  
   const handleLimitChange = (newLimit: number) => {
     setLimit(newLimit);
   };
 
   return (
-    <div style={{backgroundColor :"white", color: "black"}}>
+    <Container>
+      <Header>{sensorname}</Header>
       <Slider upperlimit={data.length} lowerlimit={0} onLimitChange={handleLimitChange} />
-      <div style={{ height: "500px" }}>
+      <ChartWrapper>
         <OxChart datalist={data} upperlimit={100} lowerlimit={40} limit={limit} />
-      </div>
-    </div>
+      </ChartWrapper>
+    </Container>
   );
 }

@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 import SensorPlotOx from "./SensorPlotOx";
-import { FaChartBar, FaChartLine, FaChartPie, FaChartArea, FaBars } from 'react-icons/fa';
+import { GiChemicalTank, GiChemicalDrop, GiChemicalArrow, GiChemicalBolt } from 'react-icons/gi';
+import { MdOutlineScience, MdOutlineSensors } from 'react-icons/md';
+import { FaBars } from 'react-icons/fa';
 import styles from "../oxStyles/PlotField.module.css";
 
 interface OxygenSensorData {
@@ -25,11 +27,11 @@ export default function PlotField({ plotInitalData }: InitialData) {
   const Oxsensor6 = plotInitalData[5];
 
   const [showPlot1, setShowPlot1] = useState(true);
-  const [showPlot2, setShowPlot2] = useState(true);
-  const [showPlot3, setShowPlot3] = useState(true);
-  const [showPlot4, setShowPlot4] = useState(true);
-  const [showPlot5, setShowPlot5] = useState(true);
-  const [showPlot6, setShowPlot6] = useState(true);
+  const [showPlot2, setShowPlot2] = useState(false);
+  const [showPlot3, setShowPlot3] = useState(false);
+  const [showPlot4, setShowPlot4] = useState(false);
+  const [showPlot5, setShowPlot5] = useState(false);
+  const [showPlot6, setShowPlot6] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleButtonClick = (sensorName: string) => {
@@ -62,7 +64,7 @@ export default function PlotField({ plotInitalData }: InitialData) {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "row", height: "100%"}}>
+    <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
       {sidebarCollapsed && (
         <button onClick={toggleSidebar} className={styles.toggleButton}>
           <FaBars />
@@ -77,37 +79,37 @@ export default function PlotField({ plotInitalData }: InitialData) {
           onClick={() => handleButtonClick("Sensor1")}
           className={showPlot1 ? styles.active : ""}
         >
-          <FaChartBar /> Sensor 1
+          <MdOutlineSensors /> Sensor 1
         </button>
         <button
           onClick={() => handleButtonClick("Sensor2")}
           className={showPlot2 ? styles.active : ""}
         >
-          <FaChartLine /> Sensor 2
+          <GiChemicalTank /> Sensor 2
         </button>
         <button
           onClick={() => handleButtonClick("Sensor3")}
           className={showPlot3 ? styles.active : ""}
         >
-          <FaChartPie /> Sensor 3
+          <GiChemicalDrop /> Sensor 3
         </button>
         <button
           onClick={() => handleButtonClick("Sensor4")}
           className={showPlot4 ? styles.active : ""}
         >
-          <FaChartArea /> Sensor 4
+          <GiChemicalArrow /> Sensor 4
         </button>
         <button
           onClick={() => handleButtonClick("Sensor5")}
           className={showPlot5 ? styles.active : ""}
         >
-          <FaChartArea /> Sensor 5
+          <GiChemicalBolt /> Sensor 5
         </button>
         <button
           onClick={() => handleButtonClick("Sensor6")}
           className={showPlot6 ? styles.active : ""}
         >
-          <FaChartArea /> Sensor 6
+          <MdOutlineScience /> Sensor 6
         </button>
       </div>
       <div className={`${styles.content} ${sidebarCollapsed ? styles.expanded : ''}`}>

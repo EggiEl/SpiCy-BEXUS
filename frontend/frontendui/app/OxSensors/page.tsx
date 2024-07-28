@@ -8,6 +8,7 @@ import PlotField from './OxComponents/plotfield';
 
 const fetchData = async () => {
   try {
+    console.log("Inital Fetch")
     const response = await axios.get('http://localhost:8000/oxygenSensor');
     return response.data;
   } catch (error) {
