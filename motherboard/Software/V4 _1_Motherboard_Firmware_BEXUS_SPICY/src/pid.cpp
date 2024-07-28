@@ -2,12 +2,12 @@
 #include "debug_in_color.h"
 const static float MAX_HEAT_POWER = HEAT_CURRENT * HEAT_CURRENT * HEAT_RESISTANCE;
 static float PID_MAX = 2.5;
-static float I_BUFFER_MAX = PID_MAX * 0.2;
+static float I_BUFFER_MAX = 5;
 const unsigned long PID_T = 1000; // time in ms till next PID controller update
-float SET_TEMP = 33.0;
+float SET_TEMP = 30.0;
 
-float kp = 10;
-float ki = 0;
+float kp = 5;
+float ki = 0.007;
 float kd = 0;
 
 void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor);
@@ -51,16 +51,17 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
     }
     /*static Variables*/
     static float I_buffer = 0;
-    static unsigned long last_measurement = millis();
+    static unsigned long time_last = millis();
+    float error_last = 0;
 
     /*Variables.*/
-    unsigned long current_measurement = millis();
+    unsigned long time_curr = millis();
     float measured_temp = temp_read_one(thermistor);
     float error = desired_temp - measured_temp;
     /*p*/
     float p = kp * error;
     /*i*/
-    I_buffer += ki* error * (current_measurement - last_measurement);
+    I_buffer += ki * (error - error_last) * (time_curr - time_last);
     if (I_buffer > I_BUFFER_MAX)
     {
         I_buffer = I_BUFFER_MAX;
@@ -90,6 +91,6 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
 
     heat_updateone(heater, heat);
 
-    last_measurement = millis();
+    time_last = millis();
     debugf_info("PIN_HEAT:%u PIN_NTC:%u SET_TEMP:%.2f°C measure_temp:%.2f°C p:%.2f i:%.2f heat:%.2f%%\n", heater, thermistor, desired_temp, measured_temp, p, i, heat);
 }

@@ -21,7 +21,6 @@ struct OxygenReadout
     int32_t percentOtwo = 0;
     unsigned long timestamp_mesurement = 0;
 };
-
 struct packet
 {                                     // struct_format L L 6L 6f 6f 6i i f 2i 80s
     unsigned int id = 0;              // each packet has a unique id
@@ -48,20 +47,23 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Usage: %s <file_path>\n", argv[0]);
         return EXIT_FAILURE;
     }
-
     const char *file_path = argv[1];
+
     // Attempt to open the file to ensure it exists and is accessible
     FILE *file = fopen(file_path, "rb");
     if (file == NULL)
     {
         perror("fopen");
+        printf("add file name as parameter when calling the exe.\n");
         return EXIT_FAILURE;
     }
     fclose(file);
 
+    /*generates out file from input file*/
     char file_path_csv[300];
-    snprintf(file_path_csv, 199, "%s.csv", file_path);
+    snprintf(file_path_csv, 300, "%s.csv", file_path);
 
+    /*start conversion*/
     printf("Converting -%s- in the folder of this exe to -%s-\n", file_path, file_path_csv);
     convert_bin_to_csv(file_path, file_path_csv);
     printf("done\n");
@@ -85,7 +87,7 @@ void convert_bin_to_csv(const char *bin_filename, const char *csv_filename)
         return;
     }
 
-    // Write CSV header
+    /*Write CSV header*/
     fprintf(csv_file, "id,timestampPacket,Vbat,Ibat,");
 
     for (int i = 0; i < 6; ++i)
@@ -128,7 +130,8 @@ void convert_bin_to_csv(const char *bin_filename, const char *csv_filename)
     fprintf(csv_file, "\n");
 
     printf("header done\n");
-
+    
+    /*writing data*/
     struct packet pkt;
     while (fread(&pkt, sizeof(struct packet), 1, bin_file) == 1)
     {
