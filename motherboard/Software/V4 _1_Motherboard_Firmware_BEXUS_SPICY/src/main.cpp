@@ -36,7 +36,7 @@ void periodic_tasks_core_0();
 void loop()
 {
   periodic_tasks_core_0();
-  // nextState();
+  nextState();
   // debugln(oxy_isconnected(1));
   //  debugln(oxy_isconnected(NTC_PROBE_1));
   // delay(500);
@@ -70,7 +70,8 @@ void loop1()
     flag_core1_isrunning = 1;
 
     periodic_tasks_core_1();
-
+    pid_update_all();
+    
     // debugf_blue(".");
     // delay(1);
   }

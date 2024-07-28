@@ -40,7 +40,8 @@ void light_setup()
 
 /**
  * returns light values. make the buffer 14 flaots long
- * 6x values and 1x temperature, 2 times for 2 Sensors
+ * 6x values and 1x temperature with the first sensor connected
+ * 6x values and 1x temperature with the second sensor connected
  */
 void light_read(float *buffer, bool with_flash)
 {

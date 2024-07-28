@@ -69,7 +69,7 @@ int sd_numpackets(const char filepath[])
 // writes a packet to sd card
 bool sd_writestruct(struct packet *s_out, const char filepath[])
 {
-  debugf_status("SD_writestru.id: %u file: %s", s_out->id, filepath);
+  debugf_status("SD_writestru.id: %u file: %s\n", s_out->id, filepath);
   if (!sd_init)
   {
     sd_setup();

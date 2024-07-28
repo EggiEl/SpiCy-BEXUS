@@ -205,7 +205,6 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   }
   case 'd':
   {
-    debugf_status("<pin_detection>\n");
     check_peripherals();
     break;
   }
@@ -333,11 +332,11 @@ float get_batvoltage()
   analogReadResolution(ADC_RES);
   pinMode(PIN_VOLT, INPUT);
   float analog_read_buffer = 0;
-  for (int i = 0; i < 50; i++)
+  for (int i = 0; i < 100; i++)
   {
     analog_read_buffer += analogRead(PIN_VOLT);
   }
-  analog_read_buffer = analog_read_buffer / 50;
+  analog_read_buffer = analog_read_buffer / 100;
 
   float adc_volt = (float)(analog_read_buffer / ADC_MAX_READ) * ADC_REF;
   // debugf_info("batmes_adc_volt:%.4f\n", adc_volt);
@@ -354,11 +353,11 @@ float get_current()
   pinMode(PIN_CURR, INPUT);
 
   float analog_read_buffer = 0;
-  for (int i = 0; i < 50; i++)
+  for (int i = 0; i < 100; i++)
   {
     analog_read_buffer += analogRead(PIN_CURR);
   }
-  analog_read_buffer = analog_read_buffer / 50;
+  analog_read_buffer = analog_read_buffer / 100;
 
   float adc_volt = (float)(analog_read_buffer / ADC_MAX_READ) * ADC_REF;
   // debugf_info("batmes_adc_curr:%.4f\n", adc_volt);
@@ -433,8 +432,10 @@ uint32_t get_Status()
  */
 uint32_t check_peripherals()
 {
+  debugf_status("<peithals_detection>\n");
   uint32_t results = 0;
   /* NTC probes */
+  rp2040.wdt_reset();
   results |= (temp_isconnected(NTC_PROBE_0) << 0);
   results |= (temp_isconnected(NTC_PROBE_1) << 1);
   results |= (temp_isconnected(NTC_PROBE_2) << 2);
@@ -443,7 +444,6 @@ uint32_t check_peripherals()
   results |= (temp_isconnected(NTC_5) << 5);
 
   /* Oxygen sensors */
-
   rp2040.wdt_reset();
   Serial1.setTimeout(500);
   results |= (oxy_isconnected(NTC_PROBE_0) << 8);
@@ -463,6 +463,7 @@ uint32_t check_peripherals()
   /* Heating */
 
   /*turns all heater off*/
+  pause_Core1();
   float buff_heat[] = {0, 0, 0, 0, 0, 0, 0, 0};
   heat_updateall(buff_heat);
 
@@ -479,32 +480,34 @@ uint32_t check_peripherals()
     buff_heat[i] = 0.0;
 
     /* checks if current increased*/
-    if (((HEAT_CURRENT - HEAT_CURRENT*0.3) < cur_one) && (cur_one < (HEAT_CURRENT + HEAT_CURRENT*0.3)))
+    if ((HEAT_CURRENT * 0.5 < cur_one))
     {
       results |= (1 << 16 + i);
       // debug(cur_one);
     }
   }
-
-  debugln("     |0|1|2|3|4|5|6|7|");
-  debug("NTCs: ");
+  resume_Core1();
+  
+  debugf_info("!For heater mesasurement y need to connect the jumper!\n");
+  debugf_info("     |0|1|2|3|4|5|6|7|\n");
+  debugf_info("NTCs: ");
   for (int i = 0; i < 6; i++)
   {
     debugf_info("%u|", (results & 0xFF) >> i & 1);
   }
 
-  debug("\nOxyg: ");
+  debugf_info("\nOxyg: ");
   for (int i = 0; i < 6; i++)
   {
     debugf_info("%u|", ((results >> 8) & 0xFF) >> i & 1);
   }
 
-  debug("\nHeat: ");
+  debugf_info("\nHeat: ");
   for (int i = 0; i < 8; i++)
   {
     debugf_info("%u|", ((results >> 16) & 0xFF) >> i & 1);
   }
-  debugln();
+  debugf_info("\n");
 
   return results;
 }

@@ -21,9 +21,9 @@ void nextState()
 {
     static enum states state = START;
     static struct packet packet_dl = {0}; /*packet wich will be the next downlink*/
-    static struct OxygenReadout mesure_buffer[6];
+    static struct OxygenReadout mesure_buffer[6]={0};
 
-    const char sd_filepath[] = "data.bin";
+    static char sd_filepath[100];
     static float buffer[20];
     state_print(state);
     switch (state)
@@ -31,6 +31,7 @@ void nextState()
     case START:
     {
         state = CLEAR_PACKET;
+        snprintf(sd_filepath,99, "data[%u].bin",nMOTHERBOARD_BOOTUPS);
         break;
     }
     case CLEAR_PACKET:
@@ -46,6 +47,7 @@ void nextState()
         pause_Core1();
         temp_read_all(buffer);
         resume_Core1();
+
         for (uint8_t i = 0; i < 8; i++)
         {
             packet_dl.thermistor[i] = buffer[i];
@@ -66,7 +68,7 @@ void nextState()
     }
     case READ_LIGHT:
     {
-        delay(1000);
+        // delay(1000);
         // light_read(buffer, 0);
         // for (uint8_t i = 0; i < 6; i++)
         // {
@@ -77,7 +79,7 @@ void nextState()
     }
     case SAVESENDPACKET:
     {
-        // sd_writestruct(&packet_dl, sd_filepath);
+        sd_writestruct(&packet_dl, sd_filepath);
         // tcp_send_packet(packet_dl);
         state = CLEAR_PACKET;
         break;
@@ -132,7 +134,7 @@ void state_print(unsigned int Status)
 
 void select_probe_or_NTC(const int ProbeorNTC)
 {
-    
+
     // debugf_status("select probe\n");
     static uint8_t init = 0;
     if (!init)

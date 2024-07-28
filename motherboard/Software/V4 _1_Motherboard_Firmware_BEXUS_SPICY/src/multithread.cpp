@@ -10,11 +10,11 @@ void pause_Core1()
     while (flag_core1_isrunning)
     {
     }
-    debugf_status("core 1 puased\n");
+    // debugf_status("core 1 puased\n");
 }
 
 void resume_Core1()
 {
-    debugf_status("core 1 resumed\n");
+    // debugf_status("core 1 resumed\n");
     flag_pause_core1 = 0;
 }

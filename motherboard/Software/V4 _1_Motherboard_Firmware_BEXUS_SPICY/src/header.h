@@ -110,6 +110,7 @@ struct OxygenReadout
     int32_t signalIntensity = 0;
     int32_t ambientLight = 0;
     int32_t pressure = 0;
+    int32_t humidity = 0;
     int32_t resistorTemp = 0;
     int32_t percentOtwo = 0;
     unsigned long timestamp_mesurement = 0;
@@ -126,7 +127,7 @@ struct packet
     float power[2] = {0};             // battery voltage in mV and current consumption in mA
 
     struct OxygenReadout oxy_measure[6];
-    float light[12] = {0.0f};
+    float light[12] = {0};
 
     /**temperature from thermistors:
      *0-5 NTC cable
@@ -220,18 +221,18 @@ uint8_t temp_isconnected(uint8_t NTC = 255);
 #define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
 #define RETURN_LENGTH_MAX 100  // how long a return string can possibly be
 #define OXY_BAUD 19200
-#define OXY_SERIAL_TIMEOUT 100
+#define OXY_SERIAL_TIMEOUT 300
 
 extern SerialPIO oxySerial;
 extern volatile char oxy_serial_init;
 void oxy_serial_setup();
 void oxy_console();
 uint8_t oxy_read_all(struct OxygenReadout mesure_buffer[6]);
-char *oxy_commandhandler(const char command[], uint8_t nReturn = COMMAND_LENGTH_MAX);
+char *oxy_commandhandler(const char command[], uint8_t returnValues = 0);
 uint8_t oxy_isconnected(const int PROBE = 255);
 
 /*light spectrometers*/
-const unsigned long TIMEOUT_LIGHT_SENSOR 100
+const unsigned long TIMEOUT_LIGHT_SENSOR = 100;
 extern volatile char light_init;
 void light_setup();
 void light_read(float *buffer, bool with_flash = 0);

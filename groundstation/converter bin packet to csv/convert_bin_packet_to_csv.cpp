@@ -1,7 +1,26 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdint.h>
 
 void convert_bin_to_csv(const char *bin_filename, const char *csv_filename);
+struct OxygenReadout
+{
+    int32_t error = 0;
+    int32_t dphi = 0;
+    int32_t umolar = 0;
+    int32_t mbar = 0;
+    int32_t airSat = 0;
+    int32_t tempSample = 0;
+    int32_t tempCase = 0;
+    int32_t signalIntensity = 0;
+    int32_t ambientLight = 0;
+    int32_t pressure = 0;
+    int32_t humidity = 0;
+    int32_t resistorTemp = 0;
+    int32_t percentOtwo = 0;
+    unsigned long timestamp_mesurement = 0;
+};
 
 struct packet
 {                                     // struct_format L L 6L 6f 6f 6i i f 2i 80s
@@ -9,10 +28,7 @@ struct packet
     unsigned int timestampPacket = 0; // in ms
     float power[2] = {0};             // battery voltage in mV and current consumption in mA
 
-    unsigned int pyro_timestamp[6] = {0}; //
-    int32_t pyro_temp[6] = {0};           // temp on the sensor pcb in °C * 100
-    int32_t pyro_oxy[6] = {0};            // Oxygenvalue
-    int32_t pyro_pressure[6] = {0};       // pressure
+    struct OxygenReadout oxy_measure[6];
     float light[12] = {0.0f};
 
     /**temperature from thermistors:
@@ -25,10 +41,29 @@ struct packet
     float pid[3] = {0};
 };
 
-int main()
+int main(int argc, char *argv[])
 {
-    printf("Converting data.bin in the folder of this exe to data.csv\n");
-    convert_bin_to_csv("data.bin", "data.csv");
+    if (argc != 2)
+    {
+        fprintf(stderr, "Usage: %s <file_path>\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+
+    const char *file_path = argv[1];
+    // Attempt to open the file to ensure it exists and is accessible
+    FILE *file = fopen(file_path, "rb");
+    if (file == NULL)
+    {
+        perror("fopen");
+        return EXIT_FAILURE;
+    }
+    fclose(file);
+
+    char file_path_csv[300];
+    snprintf(file_path_csv, 199, "%s.csv", file_path);
+
+    printf("Converting -%s- in the folder of this exe to -%s-\n", file_path, file_path_csv);
+    convert_bin_to_csv(file_path, file_path_csv);
     printf("done\n");
     return 0;
 }
@@ -51,15 +86,31 @@ void convert_bin_to_csv(const char *bin_filename, const char *csv_filename)
     }
 
     // Write CSV header
-    fprintf(csv_file, "id,timestampPacket,power[0],power[1],");
+    fprintf(csv_file, "id,timestampPacket,Vbat,Ibat,");
+
     for (int i = 0; i < 6; ++i)
     {
-        fprintf(csv_file, "pyro_timestamp[%d],pyro_temp[%d],pyro_oxy[%d],pyro_pressure[%d],", i, i, i, i);
+        fprintf(csv_file, "oxy_error[%d],", i);
+        fprintf(csv_file, "dpho[%d],", i);
+        fprintf(csv_file, "umolar[%d],", i);
+        fprintf(csv_file, "mbar[%d],", i);
+        fprintf(csv_file, "airSat[%d],", i);
+        fprintf(csv_file, "tempSample[%d],", i);
+        fprintf(csv_file, "tempCase[%d],", i);
+        fprintf(csv_file, "signalIntens[%d],", i);
+        fprintf(csv_file, "ambiLight[%d],", i);
+        fprintf(csv_file, "pressure[%d],", i);
+        fprintf(csv_file, "humidity[%d],", i);
+        fprintf(csv_file, "reistorTEmp[%d],", i);
+        fprintf(csv_file, "percentOxy[%d],", i);
+        fprintf(csv_file, "timestamp[%d],", i);
     }
+
     for (int i = 0; i < 12; ++i)
     {
         fprintf(csv_file, "light[%d],", i);
     }
+
     for (int i = 0; i < 9; ++i)
     {
         fprintf(csv_file, "thermistor[%d],", i);
@@ -68,24 +119,48 @@ void convert_bin_to_csv(const char *bin_filename, const char *csv_filename)
     {
         fprintf(csv_file, "heaterPWM[%d],", i);
     }
-    for (int i = 0; i < 18; ++i)
+
+    for (int i = 0; i < 3; ++i)
     {
-        fprintf(csv_file, "pid[%d]", i);
-        if (i < 17)
-        {
-            fprintf(csv_file, ",");
-        }
+        fprintf(csv_file, "pid[%d],", i);
     }
+
     fprintf(csv_file, "\n");
+
+    printf("header done\n");
 
     struct packet pkt;
     while (fread(&pkt, sizeof(struct packet), 1, bin_file) == 1)
     {
+        static int a = 0;
+        if (a != 0)
+        {
+            printf("\r");
+        }
+        printf("writing line %d", a);
+        a++;
+
         fprintf(csv_file, "%u,%u,%f,%f,", pkt.id, pkt.timestampPacket, pkt.power[0], pkt.power[1]);
+
         for (int i = 0; i < 6; ++i)
         {
-            fprintf(csv_file, "%u,%u,%u,%u,", pkt.pyro_timestamp[i], pkt.pyro_temp[i], pkt.pyro_oxy[i], pkt.pyro_pressure[i]);
+            fprintf(csv_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%u,",
+                    pkt.oxy_measure[i].error,
+                    pkt.oxy_measure[i].dphi,
+                    pkt.oxy_measure[i].umolar,
+                    pkt.oxy_measure[i].mbar,
+                    pkt.oxy_measure[i].airSat,
+                    pkt.oxy_measure[i].tempSample,
+                    pkt.oxy_measure[i].tempCase,
+                    pkt.oxy_measure[i].signalIntensity,
+                    pkt.oxy_measure[i].ambientLight,
+                    pkt.oxy_measure[i].pressure,
+                    pkt.oxy_measure[i].humidity,
+                    pkt.oxy_measure[i].resistorTemp,
+                    pkt.oxy_measure[i].percentOtwo,
+                    pkt.oxy_measure[i].timestamp_mesurement);
         }
+
         for (int i = 0; i < 12; ++i)
         {
             fprintf(csv_file, "%f,", pkt.light[i]);
@@ -98,17 +173,16 @@ void convert_bin_to_csv(const char *bin_filename, const char *csv_filename)
         {
             fprintf(csv_file, "%f,", pkt.heaterPWM[i]);
         }
-        for (int i = 0; i < 18; ++i)
+
+        for (int i = 0; i < 3; ++i)
         {
-            fprintf(csv_file, "%f", pkt.pid[i]);
-            if (i < 17)
-            {
-                fprintf(csv_file, ",");
-            }
+            fprintf(csv_file, "%f,", pkt.pid[i]);
         }
+
         fprintf(csv_file, "\n");
     }
 
+    printf("\ndata done\n");
     fclose(bin_file);
     fclose(csv_file);
 }
