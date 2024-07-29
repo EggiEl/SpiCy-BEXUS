@@ -136,7 +136,7 @@ struct packet
      *8 cpu temp*/
     float thermistor[9] = {0};
     float heaterPWM[6] = {0}; // power going to heating
-    float pid[3] = {0};
+    float pid[3] = {0}; //kp and ki
 };
 
 struct packet *packet_create();
@@ -204,9 +204,12 @@ void heat_testmanual();
 extern volatile char pid_init;
 extern float kp;
 extern float ki;
-extern float kd;
+extern float I_MAX;
+extern float SET_TEMP;
+
 void pid_setup();
 void pid_update_all();
+void pid_collect_samples(uint8_t Heater, uint8_t NTC);
 
 /*Thermistors*/
 #define nNTC 8 // Number of NTC probes

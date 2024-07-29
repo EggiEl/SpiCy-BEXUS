@@ -77,7 +77,9 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
 /t|returns temperature value. 0-6 for external probes, 7 for uC one, -1 for all of them\n\
 /x|prints barometer temperature and pressure\n\
 /o|starts console to talk to PyroSience FD-OEM Oxygen Module\n\
-/a|reads out light spectrometers\n"));
+/a|reads out light spectrometers\n\
+/q|shut down microcontroller\n\
+/c|kp ki imax sets pi controller gain values\n"));
     break;
   }
   case 'b':
@@ -291,6 +293,41 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
     light_read(buffer, 0);
     break;
   }
+  case 'q':
+  {
+    debugf_status("Shutting down microcontroller\n");
+    pause_Core1();
+    float buffer[20] = {0};
+    heat_updateall(buffer);
+    while (1)
+    {
+      rp2040.wdt_reset();
+    }
+    break;
+  }
+  case 'c':
+  {
+    if (param1 != -1)
+    {
+      kp = param1;
+    }
+    if (param2 != -1)
+    {
+      ki = param2;
+    }
+    if (param3 != -1)
+    {
+      I_MAX = param3;
+    }
+    if (param4 != -1)
+    {
+      SET_TEMP = param4;
+    }
+
+    debugf_info("Set pi controller to p:%.4f i:%.4f i_max:%.4f SetTemp:%.2f\n", kp, ki, I_MAX, SET_TEMP);
+
+    break;
+  }
   default:
   {
     debugf_error("dafuck is \"/%c\" ?!?! try \"/?\".\n", buffer_comand);
@@ -331,14 +368,14 @@ float get_batvoltage()
 {
   analogReadResolution(ADC_RES);
   pinMode(PIN_VOLT, INPUT);
-  float analog_read_buffer = 0;
+  float adc_average = 0;
   for (int i = 0; i < 100; i++)
   {
-    analog_read_buffer += analogRead(PIN_VOLT);
+    adc_average += analogRead(PIN_VOLT);
   }
-  analog_read_buffer = analog_read_buffer / 100;
+  adc_average = adc_average / 100;
 
-  float adc_volt = (float)(analog_read_buffer / ADC_MAX_READ) * ADC_REF;
+  float adc_volt = (float)(adc_average / ADC_MAX_READ) * ADC_REF;
   // debugf_info("batmes_adc_volt:%.4f\n", adc_volt);
   return adc_volt / BAT_VOLTAG_DIV;
 }
@@ -352,15 +389,37 @@ float get_current()
   analogReadResolution(ADC_RES);
   pinMode(PIN_CURR, INPUT);
 
-  float analog_read_buffer = 0;
+  /*saves 100 readings and calculates average*/
+  float adc_average = 0;
+  float buffer[100];
+
   for (int i = 0; i < 100; i++)
   {
-    analog_read_buffer += analogRead(PIN_CURR);
+    int measure = analogRead(PIN_CURR);
+    buffer[i] = measure;
+    adc_average += measure;
   }
-  analog_read_buffer = analog_read_buffer / 100;
+  adc_average = adc_average / 100.0;
 
-  float adc_volt = (float)(analog_read_buffer / ADC_MAX_READ) * ADC_REF;
-  // debugf_info("batmes_adc_curr:%.4f\n", adc_volt);
+  /*replaces every reading wich dividates strongly from average with average*/
+  /*calculates new average from this*/
+  float new_average = 0;
+  for (int i = 0; i < 100; i++)
+  {
+    if ((buffer[i] > (adc_average * 1.3)) || (buffer[i] < (adc_average * 0.7)))
+    {
+      new_average += adc_average;
+    }
+    else
+    {
+      new_average += buffer[i];
+    }
+  }
+  new_average = new_average / 100.0;
+
+  /*calculates current*/
+  float adc_volt = (float)(new_average / ADC_MAX_READ) * ADC_REF;
+  debugf_info("batmes_adc_curr:%.4f\n", adc_average);
   return adc_volt / (R_SHUNT * Gain);
 }
 
@@ -419,9 +478,8 @@ uint32_t get_Status()
   status |= ((uint32_t)0 << 7);
 
   // PID constants
-  status |= ((uint32_t)ki << 8);  // Ki
-  status |= ((uint32_t)kd << 16); // Kd
-  status |= ((uint32_t)kp << 24); // Kp
+  status |= ((uint32_t)kp << 8);  // Ki
+  status |= ((uint32_t)ki << 16); // Kd
 
   return status;
 }
@@ -487,7 +545,7 @@ uint32_t check_peripherals()
     }
   }
   resume_Core1();
-  
+
   debugf_info("!For heater mesasurement y need to connect the jumper!\n");
   debugf_info("     |0|1|2|3|4|5|6|7|\n");
   debugf_info("NTCs: ");

@@ -180,7 +180,7 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues)
     /*Sending Command*/
     oxy_send_dummy();
 
-    debugf_status("sending oxy_command:%s\n", command);
+    // debugf_status("sending oxy_command:%s\n", command);
     unsigned int command_length = strlen(command);
     if (command[command_length - 1] == '\r') // makes sure that the command is terminated
     {
@@ -218,15 +218,15 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues)
 
     if (recievedbytes == 0)
     {
-        debugf_warn("no answer from oxy sensor\n");
+        // debugf_warn("no answer from oxy sensor\n");
         success = 0;
     }
 
     if (success)
     {
         /*returns string*/
-        debugf_sucess("recieved:");
-        debugf_info("%s\n", buffer);
+        // debugf_sucess("recieved:");
+        // debugf_info("%s\n", buffer);
         if (!returnValues)
         {
             free_ifnotnull(buffer);

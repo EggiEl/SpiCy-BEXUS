@@ -18,14 +18,14 @@ void sd_setup()
     SPI.setRX(MISO_SPI0);
     SPI.setTX(MOSI_SPI0);
     SPI.setSCK(SCK_SPI0);
-    sd_init = SD.begin(CS_SD);
+    sd_init = (char)SD.begin(CS_SD);
   }
   else if (MISO_SPI0 == 8 || MISO_SPI0 == 12)
   {
     SPI1.setRX(MISO_SPI0);
     SPI1.setTX(MOSI_SPI0);
     SPI1.setSCK(SCK_SPI0);
-    sd_init = SD.begin(CS_SD, SPI1);
+    sd_init = (char)SD.begin(CS_SD, SPI1);
   }
   else
   {
@@ -36,6 +36,7 @@ void sd_setup()
 
   if (!sd_init)
   {
+    debugf_error("SD init failed\n");
     error_handler(ERROR_SD_INI, ERROR_DESTINATION_NO_SD);
     return;
   }
@@ -69,7 +70,7 @@ int sd_numpackets(const char filepath[])
 // writes a packet to sd card
 bool sd_writestruct(struct packet *s_out, const char filepath[])
 {
-  debugf_status("SD_writestru.id: %u file: %s\n", s_out->id, filepath);
+  debugf_status("SD_writestru.id:%u file:%s\n", s_out->id, filepath);
   if (!sd_init)
   {
     sd_setup();

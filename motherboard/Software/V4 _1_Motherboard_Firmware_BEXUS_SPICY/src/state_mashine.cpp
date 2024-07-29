@@ -60,9 +60,10 @@ void nextState()
     case READ_OXY:
     {
         pause_Core1();
-        oxy_read_all(mesure_buffer);
+        // oxy_read_all(mesure_buffer);
+        delay(1000);
         resume_Core1();
-        memcpy(packet_dl.oxy_measure, mesure_buffer, sizeof(mesure_buffer));
+        // memcpy(packet_dl.oxy_measure, mesure_buffer, sizeof(mesure_buffer));
         state = READ_LIGHT;
         break;
     }
@@ -101,35 +102,35 @@ void nextState()
 void state_print(unsigned int Status)
 
 {
-    switch (Status)
-    {
-    case START:
-        debugf_status("<current state: START>\n");
-        break;
-    case CLEAR_PACKET:
-        debugf_status("<current state: CLEAR_PACKET>\n");
-        break;
-    case READ_LIGHT:
-        debugf_status("<current state: READ_LIGHT>\n");
-        break;
-    case READ_OXY:
-        debugf_status("<current state: READ_OXY>\n");
-        break;
-    case READ_TEMP:
-        debugf_status("<current state: READ_TEMP>\n");
-        break;
-    case SAVESENDPACKET:
-        debugf_status("<current state: SAVESENDPACKET>\n");
-        break;
-    case ERROR:
-        debugf_error("<current state: ERROR>\n");
-        break;
+    // switch (Status)
+    // {
+    // case START:
+    //     debugf_status("<current state: START>\n");
+    //     break;
+    // case CLEAR_PACKET:
+    //     debugf_status("<current state: CLEAR_PACKET>\n");
+    //     break;
+    // case READ_LIGHT:
+    //     debugf_status("<current state: READ_LIGHT>\n");
+    //     break;
+    // case READ_OXY:
+    //     debugf_status("<current state: READ_OXY>\n");
+    //     break;
+    // case READ_TEMP:
+    //     debugf_status("<current state: READ_TEMP>\n");
+    //     break;
+    // case SAVESENDPACKET:
+    //     debugf_status("<current state: SAVESENDPACKET>\n");
+    //     break;
+    // case ERROR:
+    //     debugf_error("<current state: ERROR>\n");
+    //     break;
 
-    default:
-        error_handler(ERROR_STATE);
-        debugf_error("State out of bounds\n");
-        break;
-    }
+    // default:
+    //     error_handler(ERROR_STATE);
+    //     debugf_error("State out of bounds\n");
+    //     break;
+    // }
 }
 
 void select_probe_or_NTC(const int ProbeorNTC)
