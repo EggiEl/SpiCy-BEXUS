@@ -16,6 +16,7 @@ interface OxygenSensorData {
 interface OxDataClProps {
   initialData: OxygenSensorData[];
   sensorname: string;
+  measureTimeFeat : boolean ; 
 }
 
 const Container = styled.div`
@@ -40,7 +41,7 @@ const ChartWrapper = styled.div`
   margin-top: 20px;
 `;
 
-export default function SensorPlotOx({ initialData, sensorname }: OxDataClProps) {
+export default function SensorPlotOx({ initialData, sensorname , measureTimeFeat}: OxDataClProps) {
   const [data, setData] = useState(initialData);
   const [sliderLimit, setSliderLimit] = useState(data.length);
   const [limit, setLimit] = useState(sliderLimit); // State for the limit
@@ -78,7 +79,7 @@ export default function SensorPlotOx({ initialData, sensorname }: OxDataClProps)
       <Header>{sensorname}</Header>
       <Slider upperlimit={data.length} lowerlimit={0} onLimitChange={handleLimitChange} />
       <ChartWrapper>
-        <OxChart datalist={data} upperlimit={100} lowerlimit={40} limit={limit} />
+        <OxChart datalist={data} upperlimit={100} lowerlimit={40} limit={limit} measureTimeFeat = {measureTimeFeat}/>
       </ChartWrapper>
     </Container>
   );
