@@ -63,9 +63,16 @@ export default function PlotField({ plotInitalData }: InitialData) {
     setSidebarCollapsed(!sidebarCollapsed);
   };
 
+  const [timeMeasurementFeat, setTimemeasurementFeat] = useState(false)
+
+  const timeMeasurementFunc = () => { 
+    setTimemeasurementFeat(!timeMeasurementFeat)
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
       {sidebarCollapsed && (
+        
         <button onClick={toggleSidebar} className={styles.toggleButton}>
           <FaBars />
         </button>
@@ -75,6 +82,7 @@ export default function PlotField({ plotInitalData }: InitialData) {
         <button onClick={toggleSidebar} style={{ alignSelf: "flex-end" }}>
           <FaBars />
         </button>
+        <button onClick={(timeMeasurementFunc)}>Time Measurement</button>
         <button
           onClick={() => handleButtonClick("Sensor1")}
           className={showPlot1 ? styles.active : ""}
@@ -113,12 +121,12 @@ export default function PlotField({ plotInitalData }: InitialData) {
         </button>
       </div>
       <div className={`${styles.content} ${sidebarCollapsed ? styles.expanded : ''}`}>
-        {showPlot1 && <SensorPlotOx initialData={Oxsensor1} sensorname="Sensor1" />}
-        {showPlot2 && <SensorPlotOx initialData={Oxsensor2} sensorname="Sensor2" />}
-        {showPlot3 && <SensorPlotOx initialData={Oxsensor3} sensorname="Sensor3" />}
-        {showPlot4 && <SensorPlotOx initialData={Oxsensor4} sensorname="Sensor4" />}
-        {showPlot5 && <SensorPlotOx initialData={Oxsensor5} sensorname="Sensor5" />}
-        {showPlot6 && <SensorPlotOx initialData={Oxsensor6} sensorname="Sensor6" />}
+        {showPlot1 && <SensorPlotOx initialData={Oxsensor1} sensorname="Sensor1" measureTimeFeat={timeMeasurementFeat}  />}
+        {showPlot2 && <SensorPlotOx initialData={Oxsensor2} sensorname="Sensor2" measureTimeFeat={timeMeasurementFeat}/>}
+        {showPlot3 && <SensorPlotOx initialData={Oxsensor3} sensorname="Sensor3" measureTimeFeat={timeMeasurementFeat}/>}
+        {showPlot4 && <SensorPlotOx initialData={Oxsensor4} sensorname="Sensor4" measureTimeFeat={timeMeasurementFeat}/>}
+        {showPlot5 && <SensorPlotOx initialData={Oxsensor5} sensorname="Sensor5" measureTimeFeat={timeMeasurementFeat}/>}
+        {showPlot6 && <SensorPlotOx initialData={Oxsensor6} sensorname="Sensor6" measureTimeFeat={timeMeasurementFeat}/>}
       </div>
     </div>
   );

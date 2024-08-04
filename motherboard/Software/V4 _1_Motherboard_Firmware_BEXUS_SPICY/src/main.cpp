@@ -36,12 +36,8 @@ void periodic_tasks_core_0();
 void loop()
 {
   periodic_tasks_core_0();
-  // nextState();
-      pid_collect_samples(PIN_H0, NTC_PROBE_0);
-  // debugln(oxy_isconnected(1));
-  //  debugln(oxy_isconnected(NTC_PROBE_1));
-  // delay(500);
-  rp2040.wdt_reset();
+  nextState();
+  pid_controller_sweep(PIN_H0, NTC_PROBE_0);
 }
 
 /*all things that should get checkt every loop of CPU0*/
@@ -53,6 +49,10 @@ void periodic_tasks_core_0()
   rp2040.wdt_reset();
   // float buf[6];
   // temp_read_all(buf);
+  if (TCP_init)
+  {
+    tcp_check_command();
+  }
   // tcp_check_command();
 }
 
@@ -72,8 +72,7 @@ void loop1()
 
     periodic_tasks_core_1();
     // pid_update_all();
-     
-    
+
     // debugf_blue(".");
     // delay(1);
   }
@@ -85,6 +84,7 @@ void loop1()
 
 void periodic_tasks_core_1()
 {
+  
 }
 
 unsigned long nMOTHERBOARD_BOOTUPS = 0;

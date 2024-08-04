@@ -35,9 +35,9 @@ typedef enum
     SCK_SPI0 = 18,  // Serial Clock for SPI0
     MOSI_SPI0 = 19, // Master Out Slave In for SPI0
 
-    LAN_MISO = MISO_SPI0, // Alias for LAN MISO
-    LAN_MOSI = MOSI_SPI0, // Alias for LAN MOSI
-    LAN_SCK = SCK_SPI0,   // Alias for LAN SCK
+    // LAN_MISO = MISO_SPI0, // Alias for LAN MISO
+    // LAN_MOSI = MOSI_SPI0, // Alias for LAN MOSI
+    // LAN_SCK = SCK_SPI0,   // Alias for LAN SCK
 
     // V4.0 pins (commented out)
     // MISO_SPI0 = 0,
@@ -185,6 +185,7 @@ void checkSerialInput();
 void StatusLedBlink(uint8_t LED);
 void free_ifnotnull(void *pointer);
 void printMemoryUse();
+void read_out_BMP180();
 
 /*i2c scan*/
 void scan_wire();
@@ -209,7 +210,7 @@ extern float SET_TEMP;
 
 void pid_setup();
 void pid_update_all();
-void pid_collect_samples(uint8_t Heater, uint8_t NTC);
+void pid_controller_sweep(uint8_t Heater, uint8_t NTC);
 
 /*Thermistors*/
 #define nNTC 8 // Number of NTC probes
@@ -230,7 +231,7 @@ extern SerialPIO oxySerial;
 extern volatile char oxy_serial_init;
 void oxy_serial_setup();
 void oxy_console();
-uint8_t oxy_read_all(struct OxygenReadout mesure_buffer[6]);
+uint8_t oxy_read_all(struct OxygenReadout measure_buffer[6]);
 char *oxy_commandhandler(const char command[], uint8_t returnValues = 0);
 uint8_t oxy_isconnected(const int PROBE = 255);
 

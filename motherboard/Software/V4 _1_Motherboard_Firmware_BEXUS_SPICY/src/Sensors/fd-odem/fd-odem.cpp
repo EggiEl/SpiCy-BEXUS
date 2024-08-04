@@ -369,7 +369,7 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
         return 0;
     }
 
-    int numScanned = sscanf(buf_return, "%*c %*c %*c %*d %*d %d %d %d %d %d %d %d %d %d %d %d %d",
+    int numScanned = sscanf(buf_return, "%*c %*c %*c %*d %*d %d %d %d %d %d %d %d %d %d %d %d %d %d",
                             &readout->error,
                             &readout->dphi,
                             &readout->umolar,

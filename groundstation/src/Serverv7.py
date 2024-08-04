@@ -13,6 +13,8 @@ from colored_terminal import *
 IP_SERVER = ("169.254.218.4") # if of Ethernet-Adapter Ethernet 6 # ip_Desktop = '192.168.178.23'
 PORT = 8888
 
+PACKET_LENTH = 472
+
 TIMEOUT_SERVER = 1
 
 def sleep_till_stop(stop_flag,time_s:float):
@@ -111,9 +113,8 @@ class TCP_SERVER:
             """recieves data in binary form from the client_socket"""
             success = 1
             try:
-                timestamp = time.asctime(time.localtime())[::-1][::-1]
-                received_data = client_socket.recv(200)
-                self.datalog.rawdata.append((timestamp, received_data))
+                received_data = client_socket.recv(PACKET_LENTH)
+                self.datalog.rawdata.append(received_data)
                 if received_data:
                     print_green(f"packet len: {len(received_data)} bytes\n", indent=3)
 
@@ -127,7 +128,8 @@ class TCP_SERVER:
                     success = 0
 
             except socket.timeout:
-                print_cyan("Datastream stopped. Socket timed out\n", indent=2)
+                # print_cyan("Datastream stopped. Socket timed out\n", indent=2)
+                pass
             except ConnectionResetError:  # Handle connection reset by peer
                 print_red(
                     "\nConnectionResetError aka Stecker gezogen / uC Reset\n", indent=2
@@ -145,7 +147,7 @@ class TCP_SERVER:
                 param2 = self.command["param2"]
                 param3 = self.command["param3"]
                 param4 = self.command["param4"]
-                uploadbuffer = comand.encode("utf-8")*2 + struct.pack("ffffffff", param1,param1,param2,param2,param3,param3,param4,param4)
+                uploadbuffer = comand.encode("utf-8")*3 + struct.pack("ffffffff", param1,param1,param2,param2,param3,param3,param4,param4)
                 print(f'sending command: {comand}|{param1}|{param2}|{param3}|{param4}|\nin bytes: {uploadbuffer}')
                 client_socket.sendall(uploadbuffer)
                 # deletes command from buffer of server
@@ -251,25 +253,22 @@ class DATALOGGER:
         sucess = 1
         for el in self.rawdata:
             try:
-                with open("./rawdata.csv", "a") as f:
-                    f.write(str(el[0]))
-                    f.write(";")
-                    f.write(str(el[1]))
-                    f.write(";")
-                    f.write("\n")
+                with open("./rawdata.bin", "ab") as f:
+                    f.write(el)
                     f.close
             except FileNotFoundError:
                 print("File not found.")
+                sucess = 0
                 break
             except IOError:
                 print(IOError)
                 print("Error reading the file.")
+                sucess = 0
                 break
             except Exception as e:
                 print(e)
+                sucess = 0
                 break
-        else:
-            sucess = 0
         return sucess
 
     def shutdown(self):

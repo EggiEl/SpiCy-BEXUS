@@ -31,7 +31,7 @@ void nextState()
     case START:
     {
         state = CLEAR_PACKET;
-        snprintf(sd_filepath,99, "data[%u].bin",nMOTHERBOARD_BOOTUPS);
+        snprintf(sd_filepath,99, "data[%lu].bin",nMOTHERBOARD_BOOTUPS);
         break;
     }
     case CLEAR_PACKET:
@@ -81,7 +81,7 @@ void nextState()
     case SAVESENDPACKET:
     {
         sd_writestruct(&packet_dl, sd_filepath);
-        // tcp_send_packet(packet_dl);
+        tcp_send_packet(&packet_dl);
         state = CLEAR_PACKET;
         break;
     }

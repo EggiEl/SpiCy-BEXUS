@@ -121,7 +121,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
         break;
     }
 
-    // Calculate the temperature in Kelvin using the Steinhart–Hart  equation
+    // Calculate the temperature in Kelvin using the Steinhart–Hart equation
     float tempK = 1.0 / (1.0 / NTC_T0 + (1.0 / NTC_B) * log(resistance / NTC_R0));
 
     // Convert temperature from Kelvin to Celsius

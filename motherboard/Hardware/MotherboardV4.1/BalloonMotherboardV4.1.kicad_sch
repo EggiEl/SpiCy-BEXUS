@@ -1124,6 +1124,17 @@
 		)
 		(uuid "1a0d1793-6744-4f35-94b9-c5c854b91286")
 	)
+	(label "GPIO18{slash}sck"
+		(at 57.15 88.9 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2c60b12a-7638-40a4-820f-f4a455357008")
+	)
 	(label "RX"
 		(at 58.42 119.38 180)
 		(fields_autoplaced yes)
@@ -1134,6 +1145,17 @@
 			(justify right bottom)
 		)
 		(uuid "32266d36-8acb-40a4-a72a-74d9f532409a")
+	)
+	(label "GPIO19{slash}mosi"
+		(at 60.96 86.36 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3c5266f8-04ab-4dab-a702-991f5bdffc63")
 	)
 	(label "3V3lan"
 		(at 58.42 48.26 0)
@@ -1178,6 +1200,28 @@
 			(justify right bottom)
 		)
 		(uuid "ad6c9424-310d-4b98-9414-1de2f38985be")
+	)
+	(label "GPIO20{slash}miso"
+		(at 64.77 81.28 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ae1af348-7683-4ae3-8756-b55569170477")
+	)
+	(label "GPIO17{slash}cs_lan"
+		(at 63.5 91.44 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "dfe1dac8-f59e-4157-82a0-85522f49da6f")
 	)
 	(label "A2"
 		(at 110.49 115.57 180)

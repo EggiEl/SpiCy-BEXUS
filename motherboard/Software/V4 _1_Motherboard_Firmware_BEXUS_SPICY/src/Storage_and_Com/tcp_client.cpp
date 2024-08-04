@@ -4,10 +4,10 @@
 #include "header.h"
 #include "debug_in_color.h"
 #include <SPI.h>
-// #include <Ethernet_spi1.h> /*The stock Etherent.h libary only supports spi0, i changed that to spi1*/
-#include <Ethernet.h>
+#include <Ethernet_spi0.h> /*The stock Etherent.h libary only supports spi0, i changed that to spi1*/
+// #include <Ethernet.h>
 
-char AUTOMATIC_IP_ALLOCATION = 0;            /*0 means static ip allocation | 1 means dynamic*/
+static char AUTOMATIC_IP_ALLOCATION = 0;     /*0 means static ip allocation | 1 means dynamic*/
 static IPAddress SERVERIP(169, 254, 218, 4); // IP address of the Groundstation
 // #define SERVERIP IPAddress(100, 81, 57, 236)
 static IPAddress CLIENTIP(169, 254, 218, 100); // ip of this uC. Used ony in fixed IP allocation
@@ -26,21 +26,29 @@ EthernetClient client;
  */
 void tcp_setup_client()
 {
-  MESSURETIME_START
+  // MESSURETIME_START
 
   debugf_status("tcp_setup_client>\n");
 
-  // SPI.setRX(MISO_SPI0);
-  // SPI.setTX(MOSI_SPI0);
-  // SPI.setSCK(SCK_SPI0);
+if(TCP_init){
+  debugln("tcP_already_initialised");
+  return;
+}
+  // pinMode(CS_SD, OUTPUT);
+  // digitalWrite(CS_SD, HIGH);
 
-  SPI.setRX(LAN_MISO);
-  SPI.setTX(LAN_MOSI);
-  SPI.setSCK(LAN_SCK);
+    // pinMode(CS_SD, OUTPUT);
+  // digitalWrite(CS_SD, HIGH);
 
-  Ethernet.setRetransmissionCount(3);
-  Ethernet.setRetransmissionTimeout(20); // miliseconds
-  client.setConnectionTimeout(CONNECTIONTIMEOUT);
+  SPI.setRX(MISO_SPI0);
+  SPI.setTX(MOSI_SPI0);
+  SPI.setSCK(SCK_SPI0);
+
+  // SPI.begin();
+
+  // Ethernet.setRetransmissionCount(3);
+  // Ethernet.setRetransmissionTimeout(20); // miliseconds
+  // client.setConnectionTimeout(CONNECTIONTIMEOUT);
 
   Ethernet.init(CS_LAN);
 
@@ -61,8 +69,7 @@ void tcp_setup_client()
     Ethernet.setSubnetMask(SUBNET);
   }
 
-  tcp_print_info();
-
+  // tcp_print_info();
   if (Ethernet.hardwareStatus())
   {
     TCP_init = 1;
@@ -71,11 +78,11 @@ void tcp_setup_client()
   else
   {
     TCP_init = 0;
-    error_handler(ERROR_TCP_INI,ERROR_DESTINATION_NO_TCP);
+    error_handler(ERROR_TCP_INI, ERROR_DESTINATION_NO_TCP);
     debugf_error("TCP_init_failed\n");
   }
 
-  MESSURETIME_STOP
+  // MESSURETIME_STOP
 }
 
 /*
@@ -191,45 +198,16 @@ void tcp_check_command()
     return;
   }
 
-  /*old kinda working code:
-  // reads the TCP_incomming_bytes_buffer in union
-    union TCPMessageParser
-    {
-      byte ByteStream[35];
-      struct
-      {
-        char comand[3];
-        float param[8];
-      };
-    } buffer;
-
-    byte *RawByteStream = (byte *)malloc(sizeof(TCPMessageParser));
-    if (!RawByteStream)
-    {
-      debugf_error("Malloc error tcp read RawByteStream\n");
-      return;
-    }
-
-    int status = client.readBytesUntil('\n', RawByteStream, sizeof(TCPMessageParser)); // Returns The next byte (or character), or -1 if none is available.
-    if (status == -1)
-    {
-      debugf_error("Some error parsing tcp readBytesUntil cmmand\n");
-      free_ifnotnull(RawByteStream);
-      return;
-    }
-    memcpy(&buffer.ByteStream, RawByteStream, sizeof(TCPMessageParser));
-    free_ifnotnull(RawByteStream);*/
-
   // checks if command is corrupted
   char success = 1;
   if (!(buffer.comand[0] == buffer.comand[1] && buffer.comand[1] == buffer.comand[2]))
   {
     error_handler(ERROR_TCP_COMMAND_CORRUPT);
     debugf_error("TCP Command corrputed\n");
-    debugf_error("Command:\n%c\n%c\n%c\n", buffer.comand[0], buffer.comand[1], buffer.comand[2]);
+    debugf_error("Command: %c %c %c\n Param:\n", buffer.comand[0], buffer.comand[1], buffer.comand[2]);
     for (uint8_t i = 0; i < 4; i++)
     {
-      debugf_error("%f\n", buffer.param[i * 2]);
+      debugf_error("%f ", buffer.param[i * 2]);
       debugf_error("%f\n", buffer.param[i * 2 + 1]);
     }
     success = 0;
@@ -289,37 +267,37 @@ char tcp_send_packet(struct packet *packet)
     else
     {
       status = -6;
-      error_handler(ERROR_TCP_SEND_FAILED,ERROR_DESTINATION_NO_TCP);
+      error_handler(ERROR_TCP_SEND_FAILED, ERROR_DESTINATION_NO_TCP);
       debugf_error("sendpacket failed\n");
     }
     // client.flush();                               //waits till all is send //can be left out if TCP Server recives just 200bytes per package.unsave?
     break;
   case -1:
-    error_handler(ERROR_TCP_SEND_TIMEOUT,ERROR_DESTINATION_NO_TCP);
+    error_handler(ERROR_TCP_SEND_TIMEOUT, ERROR_DESTINATION_NO_TCP);
     debugf_error("-sendpacket TIMED_OUT\n");
     break;
   case -2:
-  error_handler(ERROR_TCP_SERVER_INVALID,ERROR_DESTINATION_NO_TCP);
+    error_handler(ERROR_TCP_SERVER_INVALID, ERROR_DESTINATION_NO_TCP);
     debugf_error("-sendpacket INVALID_SERVER\n");
     break;
   case -3:
-  error_handler(ERROR_TCP_TRUNCATED,ERROR_DESTINATION_NO_TCP);
+    error_handler(ERROR_TCP_TRUNCATED, ERROR_DESTINATION_NO_TCP);
     debugf_error("-sendpacket TRUNCATED\n");
     break;
   case -4:
-  error_handler(ERROR_TCP_TRUNCATED_2,ERROR_DESTINATION_NO_TCP);
+    error_handler(ERROR_TCP_TRUNCATED_2, ERROR_DESTINATION_NO_TCP);
     debugf_error("-sendpacket TRUNCATED\n");
     break;
   default:
     debugf_error("error %i: ", status);
     if (Ethernet.linkStatus() == 2)
     {
-      error_handler(ERROR_TCP_CABLE_DISCO,ERROR_DESTINATION_NO_TCP);
+      error_handler(ERROR_TCP_CABLE_DISCO, ERROR_DESTINATION_NO_TCP);
       debugf_error("cable disconnected\n");
     }
     else
     {
-      error_handler(ERROR_TCP_NO_RESPONSE,ERROR_DESTINATION_NO_TCP);
+      error_handler(ERROR_TCP_NO_RESPONSE, ERROR_DESTINATION_NO_TCP);
       debugf_error("prob no response from server\n");
     }
     break;

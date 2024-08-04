@@ -145,7 +145,7 @@ bool sd_writetofile(const char *buffer_text, const char *filename)
   File myFile = SD.open(filename, FILE_WRITE);
   if (myFile)
   { // if the file opened okay, write to it:
-    debugf_status("Writing to %s \n", filename);
+    // debugf_status("Writing to %s \n", filename);
     myFile.println(buffer_text);
     myFile.close();
   }

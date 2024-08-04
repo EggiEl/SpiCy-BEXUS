@@ -33,15 +33,15 @@ void tcp_setup_client()
   // SPI.setTX(MOSI_LAN);
   // SPI.setSCK(SCK_LAN);
 
-  SPI1.setRX(MISO_LAN);
-  SPI1.setTX(MOSI_LAN);
-  SPI1.setSCK(SCK_LAN);
+  SPI1.setRX(12);
+  SPI1.setTX(15);
+  SPI1.setSCK(14);
 
   Ethernet.setRetransmissionCount(3);
   Ethernet.setRetransmissionTimeout(20); // miliseconds
   client.setConnectionTimeout(CONNECTIONTIMEOUT);
 
-  Ethernet.init(CS_LAN);
+  Ethernet.init(13);
 
   if (AUTOMATIC_IP_ALLOCATION)
   {
