@@ -8,28 +8,13 @@ float I_MAX = 3;
 const unsigned long PID_T = 200; // time in ms till next PID controller update
 float SET_TEMP = 34.0;
 
-float kp = 4;
+float kp = 10;
 float ki = 0.1;
 
 void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor);
 
-volatile char pid_init = 0;
-void pid_setup()
-{
-    if (!heat_init)
-    {
-        heat_setup();
-    }
-
-    pid_init = 1;
-}
-
 void pid_update_all()
 {
-    if (!pid_init)
-    {
-        pid_setup();
-    }
     static long TimeStampPid = millis() + PID_T;
     if (millis() > TimeStampPid)
     {
@@ -46,9 +31,9 @@ void pid_update_all()
 
 void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
 {
-    if (!pid_init)
+    if (!heat_init)
     {
-        pid_setup();
+        heat_setup();
     }
 
     /*static Variables*/
@@ -61,7 +46,7 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
     unsigned long time_curr = millis();
     float measured_temp = temp_read_one(thermistor);
     float error = desired_temp - measured_temp;
-    float dt = (time_curr - time_last) / 1000.0f;
+    float dt = (time_curr - time_last) / 1000.0f; // divided by 1000 because then its in s and not ms
     /*p*/
     float p = kp * error;
     /*i*/
@@ -94,6 +79,8 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
 
     /*integral clamping*/
     if (i > I_MAX)
+    // This clamping isn´t depended on anything. Shouldn´t be needed in normal operation,
+    //  but prevents exessive integral values if something gets wrong
     {
         i = I_MAX;
     }
@@ -105,12 +92,14 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
 
     /*adding all up*/
     float pid = p + i;
-    /*claping PID output*/
+
+    /*clamping PID output*/
     if (pid > PID_MAX)
+    /*This is needed as the heating power provided can´t be infinite large*/
     {
         pid = PID_MAX;
     }
-    if (pid <= -PID_MAX)
+    else if (pid <= -PID_MAX)
     {
         pid = -PID_MAX;
     }
@@ -153,13 +142,13 @@ void pid_controller_sweep(uint8_t Heater, uint8_t NTC)
     /*controll parameters*/
     const float TEMP_COOL = 31;
     const float TEMP_SET = 32;
-    const unsigned long TIME_TILL_STOP = 1.5 * (60 * 60 * 1000); // in h
+    const unsigned long TIME_TILL_STOP = 0.75 * (60 * 60 * 1000); // in h
     const unsigned int nCYCLES = 10;
 
     /*Pi values to test*/
-    const float kp_buffer[] = {0.1, 1, 5, 10, 4, 4, 4, 4, 4, 4};
-    const float ki_buffer[] = {0, 0, 0, 0, 0, 0.0001, 0.0004, 0.001, 0.01, 0.1}; 
-    const float ki_max_buffer[] = {0, 0, 0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0.1};
+    const float kp_buffer[] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
+    const float ki_buffer[] = {0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000};
+    const float ki_max_buffer[] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
 
     /*static variables*/
     static enum pi_collect_states pi_state = INIT;
@@ -176,12 +165,28 @@ void pid_controller_sweep(uint8_t Heater, uint8_t NTC)
         if (current_cycle < nCYCLES)
         // test if finished with all cycles
         {
+            /*prints status every status_delay s*/
+            const unsigned long status_delay = 60 * 1000;
+            unsigned long timestamp_status = millis() + status_delay;
+            if (millis() > timestamp_status)
+            {
+                timestamp_status = millis() + status_delay;
+                if (pi_state == COOLING)
+                {
+                    debugf_status("pi[%u][%u][%u] Cooling...\n", nMOTHERBOARD_BOOTUPS, Heater, current_cycle);
+                }
+                else if (pi_state == TESTING_PI)
+                {
+                    debugf_status("pi[%u][%u][%u] Testing PID for: [%u]min\n", nMOTHERBOARD_BOOTUPS, Heater, current_cycle, (millis() - timestamp_testing_pi - TIME_TILL_STOP) / 1000.0 / 60.0);
+                }
+            }
+
+            /*writes current temp to SD card*/
             char str_buff[300];
             float temp_measure = temp_read_one(NTC);
-            /*writes current temp to SD card*/
             if (pi_state != INIT)
             {
-                snprintf(str_buff, 300, "%u,%.4f,", millis(), temp_measure);
+                snprintf(str_buff, 300, "%u,%f,", millis(), temp_measure);
                 sd_writetofile(str_buff, sd_filepath);
             }
 
@@ -238,17 +243,6 @@ void pid_controller_sweep(uint8_t Heater, uint8_t NTC)
                     ki = ki_buffer[current_cycle];
                     I_MAX = ki_max_buffer[current_cycle];
                     pid_update_one(TEMP_SET, Heater, NTC);
-
-                    // if ((millis() - (timestamp_testing_pi - TIME_TILL_STOP)) > (0.5 * TIME_TILL_STOP))
-                    // /*print a info after halftime*/
-                    // {
-                    //     static uint8_t already_printed = 0;
-                    //     if (!already_printed)
-                    //     {
-                    //         already_printed = 1;
-                    //         debugf_status("pi[%u][%u][%u] state: TESTING_PI 50%% done\n", nMOTHERBOARD_BOOTUPS, Heater, current_cycle);
-                    //     }
-                    // }
 
                     if (millis() > timestamp_testing_pi)
                     {

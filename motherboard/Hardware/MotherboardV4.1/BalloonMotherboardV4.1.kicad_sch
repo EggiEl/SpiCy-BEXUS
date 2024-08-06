@@ -1076,9 +1076,9 @@
 		)
 		(uuid "57cd276e-9962-4c14-ab0e-e680344059ea")
 	)
-	(text "Bekannte Designfehler\n- keine seperate Analog/HF Groundplanes\n- no ESD Protection\n- Buck Heat Condensators won't decharge if heater off\n- Inrush current limiting Resistor has to handle way to mutch power\n- Oxygen UART 0 Pins swapped\n- Oxygen 4 =! Probe 4, same goes for 5. Fix MUX "
+	(text "Bekannte Designfehler\n- keine seperate Analog/HF Groundplanes\n- no ESD Protection\n- Buck Heat Condensators won't decharge if heater off\n- Inrush current limiting Resistor has to handle way to mutch power\n- Oxygen UART 0 Pins swapped\n- Oxygen 4 =! Probe 4, same goes for 5. Fix MUX \n- Lowpass/PI filter on analog singals"
 		(exclude_from_sim no)
-		(at 185.674 75.692 0)
+		(at 185.42 72.39 0)
 		(effects
 			(font
 				(size 2 2)

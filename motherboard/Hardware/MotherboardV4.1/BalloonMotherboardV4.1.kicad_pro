@@ -486,7 +486,10 @@
       "/GPIO17": "rgb(255, 251, 0)",
       "/GPIO18": "rgb(0, 255, 60)",
       "/GPIO19": "rgb(255, 72, 217)",
-      "/GPIO20": "rgb(255, 152, 57)"
+      "/GPIO20": "rgb(255, 152, 57)",
+      "30V": "rgb(255, 83, 212)",
+      "GND": "rgb(94, 94, 94)",
+      "Net-(BUCK201-VIN)": "rgb(255, 158, 244)"
     },
     "netclass_assignments": null,
     "netclass_patterns": []

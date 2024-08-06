@@ -137,7 +137,7 @@ void print_startup_message()
       break;
     }
   }
-
+   delay(100);
   // ghost
   debugf_green(
       "  .-')       _ (`-.                                       \n"
