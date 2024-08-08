@@ -5,19 +5,9 @@ import Slider from "../../../components/sliderComp";
 import OxChart from "./OxChart";
 import { get_latest_data } from "../../../functions/get_latest_ox";
 import styled from "styled-components";
+import { OxygenSensorData } from "../OxInterfaces/OxygenSensorData"
+import { OxDataClProps } from "../OxInterfaces/ComponentProps"; 
 
-interface OxygenSensorData {
-  _id: string;
-  fullstruct_id: string;
-  percentOtwo: number;
-  timestamp_measurement: string;
-}
-
-interface OxDataClProps {
-  initialData: OxygenSensorData[];
-  sensorname: string;
-  measureTimeFeat : boolean ; 
-}
 
 const Container = styled.div`
   background-color: white;
