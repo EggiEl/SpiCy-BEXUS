@@ -577,7 +577,7 @@ uint32_t check_peripherals()
 void read_out_BMP180()
 {
   static SFE_BMP180 pressure;
-  const float ALTITUDE = 1655.0; // Altitude of SparkFun's HQ in Boulder, CO. in meters
+  // const float ALTITUDE = 1655.0; // Altitude of SparkFun's HQ in Boulder, CO. in meters
   static uint8_t init = 0;
   if (!init)
   {
@@ -632,7 +632,8 @@ void read_out_BMP180()
     // Retrieve the completed temperature measurement:
     // Note that the measurement is stored in the variable T.
     // Function returns 1 if successful, 0 if failure.
-    double T, P, p0, a;
+    double T, P;
+    // double p0, a;
     status = pressure.getTemperature(T);
     if (status != 0)
     {
@@ -664,9 +665,10 @@ void read_out_BMP180()
         if (status != 0)
         {
           // Print out the measurement:
-          Serial.print(">absolute pressure: ");
-          Serial.print(P, 2);
-          Serial.print(" mb\n");
+          // Serial.print(">absolute pressure: ");
+          // Serial.print(P, 2);
+          // Serial.print(" mb\n");
+          Serial.println(P, 2);
 
           // The pressure sensor returns abolute pressure, which varies with altitude.
           // To remove the effects of altitude, use the sealevel function and your current altitude.

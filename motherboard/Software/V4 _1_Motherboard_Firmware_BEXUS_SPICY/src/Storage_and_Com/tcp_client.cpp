@@ -30,14 +30,15 @@ void tcp_setup_client()
 
   debugf_status("tcp_setup_client>\n");
 
-if(TCP_init){
-  debugln("tcP_already_initialised");
-  return;
-}
+  if (TCP_init)
+  {
+    debugln("tcP_already_initialised");
+    return;
+  }
   // pinMode(CS_SD, OUTPUT);
   // digitalWrite(CS_SD, HIGH);
 
-    // pinMode(CS_SD, OUTPUT);
+  // pinMode(CS_SD, OUTPUT);
   // digitalWrite(CS_SD, HIGH);
 
   SPI.setRX(MISO_SPI0);
@@ -46,9 +47,9 @@ if(TCP_init){
 
   // SPI.begin();
 
-  // Ethernet.setRetransmissionCount(3);
-  // Ethernet.setRetransmissionTimeout(20); // miliseconds
-  // client.setConnectionTimeout(CONNECTIONTIMEOUT);
+  Ethernet.setRetransmissionCount(3);
+  Ethernet.setRetransmissionTimeout(20); // miliseconds
+  client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
 
   Ethernet.init(CS_LAN);
 
@@ -169,7 +170,7 @@ void tcp_check_command()
   if (!client.connected())
   {
     client.connect(SERVERIP, SERVERPORT);
-    client.setConnectionTimeout(CONNECTIONTIMEOUT);
+    client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
   }
 
   // checks whether  data is avaliable
@@ -253,7 +254,7 @@ char tcp_send_packet(struct packet *packet)
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     debugf_status("-connecting_client-");
     status = client.connect(SERVERIP, SERVERPORT);
-    client.setConnectionTimeout(CONNECTIONTIMEOUT);
+    client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
   }
 
   switch (status) // client.connect returns different int values depending of the sucess of the operation
@@ -353,7 +354,7 @@ char tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPacket
  * 4294967296 would be the last id before a overflow
  *
  * */
-void tpc_send_error(unsigned char error)
+void tpc_send_error(const unsigned char error)
 {
   debugf_status("sender_down_error:%u", error);
 
@@ -390,8 +391,22 @@ void tpc_send_error(unsigned char error)
   {
     debugf_info("faliue\n");
   }
+}
 
-  free_ifnotnull(buffer);
+void tpc_send_string(const char string[])
+{
+  if (!TCP_init)
+  {
+    tcp_setup_client();
+  }
+
+  if (!client.connected())
+  { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
+    debugf_status("-connecting_client-");
+  }
+
+  client.write(string, strnlen(string, 1000));
+  client.flush(); // blocking?
 }
 
 /**

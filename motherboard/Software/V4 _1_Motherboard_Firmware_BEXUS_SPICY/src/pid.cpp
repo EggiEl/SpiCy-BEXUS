@@ -130,9 +130,131 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
  * - cooling down again
  * repeats this cycle a fixed amout with different ki values
  */
-void pid_controller_sweep(uint8_t Heater, uint8_t NTC)
+void pid_controller_sweep(PID_ControllerSweepData *data)
 {
-    enum pi_collect_states
+
+    if (millis() > data->timestamp_last_update)
+    /*limits frequency at 1 Hz*/
+    {
+        data->timestamp_last_update = millis() + 1000;
+
+        if (data->current_cycle < data->nCYCLES)
+        // test if finished with all cycles
+        {
+            /*prints status every status_delay s*/
+            const unsigned long status_delay = 60 * 1000;
+            unsigned long timestamp_status = millis() + status_delay;
+            if (millis() > timestamp_status)
+            {
+                timestamp_status = millis() + status_delay;
+                if (data->pi_state == COOLING)
+                {
+                    debugf_status("pi[%u][%u][%u] Cooling...\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle);
+                }
+                else if (data->pi_state == TESTING_PI)
+                {
+                    debugf_status("pi[%u][%u][%u] Testing PID for: [%u]min\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle, (millis() - data->timestamp_testing_pi - data->TIME_TILL_STOP) / 1000.0 / 60.0);
+                }
+            }
+
+            /*writes current temp to SD card*/
+            char str_buff[300];
+            float temp_measure = temp_read_one(data->NTC);
+            if (data->pi_state != INIT)
+            {
+                snprintf(str_buff, 300, "%u,%f,", millis(), temp_measure);
+                sd_writetofile(str_buff, data->sd_filepath);
+            }
+
+            switch (data->pi_state)
+            {
+            case INIT:
+            {
+                debugf_status("pi[%u][%u] state: Initialising\n", nMOTHERBOARD_BOOTUPS, data->Heater);
+                /*checks if all buffers are the right size*/
+                // if (!(sizeof(data->kp_buffer) / sizeof(float) == data->nCYCLES && sizeof(data->ki_buffer) / sizeof(float) == data->nCYCLES && data->nCYCLES == data->nCYCLES))
+                // {
+                //     debugf_error("Some Controller gain buffer is wrong\n");
+                //     return;
+                // }
+
+                /*creating file path from bootups and heater*/
+                snprintf(data->sd_filepath, 99, "temp_log[%lu][%u].csv", nMOTHERBOARD_BOOTUPS, data->Heater);
+
+                /*saves Kp Ki Ki_max values*/
+                char str_buff_big[500];
+                snprintf(str_buff_big, 300, "!PID_CONTROLLER_SWEEP!\nnCycle %u,TEMP_COOL %.2f, TEMP_SET %.2f, time_till_stop %lu\n", data->nCYCLES, data->TEMP_COOL, data->TEMP_SET, data->TIME_TILL_STOP);
+                for (uint8_t a = 0; a < data->nCYCLES; a++)
+                // copies each value in a string
+                {
+                    snprintf(str_buff, 300, "|%u|Kp:%f Ki:%f Ki_max:%f\n", a, data->kp_buffer[a], data->ki_buffer[a], data->ki_max_buffer[a]);
+                    strncat(str_buff_big, str_buff, 500 - strlen(str_buff_big) - 1);
+                }
+                sd_writetofile(str_buff_big, data->sd_filepath);
+
+                /*creating header*/
+                snprintf(str_buff, 300, "Timestamp,Temperatur");
+                sd_writetofile(str_buff, data->sd_filepath);
+
+                debugf_status("pi[%u][%u][%u] state: Cooling\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle);
+                data->pi_state = COOLING;
+                break;
+            }
+            case COOLING:
+                /*cools probe down till TEMP_COOL*/
+                {
+                    heat_updateone(data->Heater, 0.0);
+                    if (temp_measure < data->TEMP_COOL)
+                    {
+                        debugf_status("pi[%u][%u][%u] state: TESTING_PI\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle);
+                        data->pi_state = TESTING_PI;
+                        data->timestamp_testing_pi = millis() + data->TIME_TILL_STOP;
+                    }
+                    break;
+                }
+            case TESTING_PI:
+                /*switches on a PI controller with preprogrammed values for TIME_TILL_STOP*/
+                {
+                    kp = data->kp_buffer[data->current_cycle];
+                    ki = data->ki_buffer[data->current_cycle];
+                    I_MAX = data->ki_max_buffer[data->current_cycle];
+                    pid_update_one(data->TEMP_SET, data->Heater, data->NTC);
+
+                    if (millis() > data->timestamp_testing_pi)
+                    {
+                        debugf_status("pi[%u][%u][%u] state: Cooling\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle);
+                        data->pi_state = COOLING;
+                        data->current_cycle++;
+                    }
+                    break;
+                }
+            default:
+                break;
+            }
+        }
+        else
+        {
+            if (!data->done)
+            /*limits "done" print state*/
+            {
+                debugf_status("pi[%u][%u] state: Done\n", nMOTHERBOARD_BOOTUPS, data->Heater);
+                heat_updateone(data->Heater, 0.0);
+                data->done;
+            }
+        }
+    }
+}
+
+// /**
+//  * - cools down to TEMP_COOL
+//  * - engages a pi controller with preprogrmmed values
+//  * - when temp hits TEMP_SET -> waits for TIME_TILL_STOP
+//  * - cooling down again
+//  * repeats this cycle a fixed amout with different ki values
+//  */
+void pid_controller_sweep_simple(uint8_t Heater, uint8_t NTC)
+{
+    enum pi_sweep_states
     {
         INIT,      // writes header and infos on the sd card
         COOLING,   // Waits till probe reaches TEMP_COOL
@@ -142,16 +264,16 @@ void pid_controller_sweep(uint8_t Heater, uint8_t NTC)
     /*controll parameters*/
     const float TEMP_COOL = 31;
     const float TEMP_SET = 32;
-    const unsigned long TIME_TILL_STOP = 0.75 * (60 * 60 * 1000); // in h
+    const unsigned long TIME_TILL_STOP = 0.5 * (60 * 60 * 1000); // in h
     const unsigned int nCYCLES = 10;
 
     /*Pi values to test*/
-    const float kp_buffer[] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
-    const float ki_buffer[] = {0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000};
-    const float ki_max_buffer[] = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
+    const float kp_buffer[] = {4, 10, 4, 10, 4, 10, 4, 10, 4, 10};
+    const float ki_buffer[] = {0.01, 0.01, 0.1, 0.1, 1, 1, 10, 10, 100, 100}; // 0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000
+    const float ki_max_buffer[] = {0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2};
 
     /*static variables*/
-    static enum pi_collect_states pi_state = INIT;
+    static enum pi_sweep_states pi_state = INIT;
     static char sd_filepath[100];
     static unsigned int current_cycle = 0;
     static unsigned long timestamp_testing_pi = 0;
@@ -258,14 +380,111 @@ void pid_controller_sweep(uint8_t Heater, uint8_t NTC)
         }
         else
         {
-            static uint8_t done_counter = 0;
-            if (!done_counter)
+            static uint8_t done = 0;
+            if (!done)
             /*limits "done" print state*/
             {
                 debugf_status("pi[%u][%u] state: Done\n", nMOTHERBOARD_BOOTUPS, Heater);
                 heat_updateone(Heater, 0.0);
-                done_counter++;
+                done++;
             }
         }
     }
+}
+
+uint8_t pid_record_tranfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP)
+{
+    enum pi_sweep_states
+    {
+        INIT, // writes header and infos on the sd card
+        COOLING,
+        RECORD_STEP
+    };
+
+    /*static variables*/
+    static enum pi_sweep_states pi_state = INIT;
+    static char sd_filepath[100];
+    static unsigned long timestamp_tranfer_function = millis() + TIME_TILL_STOP;
+    static unsigned long timestamp_last_update = millis() + 1000;
+    static uint8_t done = 0;
+
+    if (millis() > timestamp_last_update)
+    /*limits frequency at 1 Hz*/
+    {
+        timestamp_last_update = millis() + 1000;
+
+        if (millis() < timestamp_tranfer_function)
+        // test if finished with all cycles
+        {
+            float temp_measure = temp_read_one(NTC);
+
+            /*prints status every status_delay s*/
+            const unsigned long status_delay = 60 * 1000;
+            unsigned long timestamp_status = millis() + status_delay;
+            if (millis() > timestamp_status)
+            {
+                timestamp_status = millis() + status_delay;
+                debugf_status("pi_step_response[%u][%u][%f] Testing PID for: [%u]min\n", nMOTHERBOARD_BOOTUPS, Heater, temp_measure, (millis() - timestamp_tranfer_function - TIME_TILL_STOP) / 1000.0 / 60.0);
+            }
+
+            /*writes current temp to SD card*/
+            char str_buff[300];
+
+            if (pi_state != INIT)
+            {
+                snprintf(str_buff, 300, "%u,%f,%f", millis(), temp_measure, get_current());
+                sd_writetofile(str_buff, sd_filepath);
+            }
+
+            switch (pi_state)
+            {
+            case INIT:
+            {
+                debugf_status("pi_step_response[%u][%u] state: Initialising\n", nMOTHERBOARD_BOOTUPS, Heater);
+
+                /*creating file path from bootups and heater*/
+                snprintf(sd_filepath, 99, "temp_step_respons[%lu][%.2f].csv", nMOTHERBOARD_BOOTUPS, HEAT_VOLTAGE * HEAT_CURRENT);
+
+                /*creating header*/
+                snprintf(str_buff, 300, "Timestamp,Temperatur,Power");
+                sd_writetofile(str_buff, sd_filepath);
+
+                debugf_status("pi_step_response[%u][%u] state: COOLING\n", nMOTHERBOARD_BOOTUPS, Heater);
+                pi_state = COOLING;
+                break;
+            }
+            case COOLING:
+                /*cools probe down till TEMP_COOL*/
+                {
+                    heat_updateone(Heater, 0.0);
+                    if (temp_measure < T_START)
+                    {
+                        debugf_status("pi_step_response[%u][%u] state: RECORD_STEP\n", nMOTHERBOARD_BOOTUPS, Heater);
+                        pi_state = RECORD_STEP;
+                        timestamp_tranfer_function = millis() + TIME_TILL_STOP;
+                    }
+                    break;
+                }
+            case RECORD_STEP:
+                /*switches on a PI controller with preprogrammed values for TIME_TILL_STOP*/
+                {
+                    heat_updateone(Heater, 100.0);
+                    break;
+                }
+            default:
+                break;
+            }
+        }
+        else
+        {
+            if (!done)
+            /*limits "done" print state*/
+            {
+                debugf_status("pi_step_response[%u][%u] state: Done\n", nMOTHERBOARD_BOOTUPS, Heater);
+                heat_updateone(Heater, 0.0);
+                done = 1;
+            }
+        }
+    }
+    return done;
 }

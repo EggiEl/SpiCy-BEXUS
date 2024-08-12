@@ -97,7 +97,7 @@ void oxy_console()
     unsigned char isrunning = 1;
     while (isrunning)
     {
-        select_probe_or_NTC(NTC_PROBE_0);
+        select_probe_or_NTC(NTC_PROBE_1);
 
         /*recives & prints data from FD-ODEM*/
         if (oxySerial.available())

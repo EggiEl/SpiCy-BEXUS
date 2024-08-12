@@ -14,8 +14,11 @@
 const unsigned int ADC_MAX_WRITE = 100; //  Value where analogRrite = 100% duty cycle
 const unsigned int ADC_FREQ_WRITE = 30000;
 
-#define WATCHDOG_TIMEOUT 4000 // neds to be 8000ms max i think
-#define CONNECTIONTIMEOUT 20  /*Conntection Timeout of the tcp client*/
+/*------Timings.......................*/
+const unsigned long WATCHDOG_TIMEOUT =4000; // neds to be 8000ms max i think
+const unsigned long TCP_CONNECTIONTIMEOUT= 20; /*Conntection Timeout of the tcp client*/
+const unsigned long TIMEOUT_LIGHT_SENSOR = 100;
+const unsigned long OXY_SERIAL_TIMEOUT= 300;
 
 extern unsigned long nMOTHERBOARD_BOOTUPS; // this number is stored in the flash and increses with every reset of th uC
 /*----------------Pin mapping-------------*/
@@ -161,7 +164,8 @@ char tcp_send_packet(struct packet *packet);
 char tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPackets);
 void tcp_check_command();
 void tcp_print_info();
-void tpc_send_error(unsigned char error);
+void tpc_send_error(const unsigned char error);
+void tpc_send_string(const char string[]);
 unsigned char tcp_link_status();
 
 /*sd*/
@@ -210,7 +214,41 @@ extern float SET_TEMP;
 
 void pid_setup();
 void pid_update_all();
-void pid_controller_sweep(uint8_t Heater, uint8_t NTC);
+
+void pid_controller_sweep_simple(uint8_t Heater, uint8_t NTC);
+uint8_t pid_record_tranfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP);
+
+enum pi_sweep_states
+{
+    INIT,      // writes header and infos on the sd card
+    COOLING,   // Waits till probe reaches TEMP_COOL
+    TESTING_PI // testing the PI controller for TIME_TILL_STOP more milliseconds
+};
+/*saves all relevant data for the */
+typedef struct
+{
+    uint8_t Heater = -1;
+    uint8_t NTC = -1;
+    /* Control parameters */
+    float TEMP_COOL = 31;
+    float TEMP_SET = 32;
+    unsigned long TIME_TILL_STOP = 0.5 * (60 * 60 * 1000);
+    unsigned int nCYCLES = 10;
+
+    /* PI values to test */
+    float kp_buffer[15];
+    float ki_buffer[15];
+    float ki_max_buffer[15];
+
+    /* Static variables */
+    enum pi_sweep_states pi_state = INIT;
+    char sd_filepath[100] = {0};
+    unsigned int current_cycle = 0;
+    unsigned long timestamp_testing_pi = 0;
+    unsigned long timestamp_last_update = millis() + 1000;
+    uint8_t done = 0;
+} PID_ControllerSweepData;
+void pid_controller_sweep(PID_ControllerSweepData *data);
 
 /*Thermistors*/
 #define nNTC 8 // Number of NTC probes
@@ -225,7 +263,6 @@ uint8_t temp_isconnected(uint8_t NTC = 255);
 #define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
 #define RETURN_LENGTH_MAX 100  // how long a return string can possibly be
 #define OXY_BAUD 19200
-#define OXY_SERIAL_TIMEOUT 300
 
 extern SerialPIO oxySerial;
 extern volatile char oxy_serial_init;
@@ -236,7 +273,6 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues = 0);
 uint8_t oxy_isconnected(const int PROBE = 255);
 
 /*light spectrometers*/
-const unsigned long TIMEOUT_LIGHT_SENSOR = 100;
 extern volatile char light_init;
 void light_setup();
 void light_read(float *buffer, bool with_flash = 0);

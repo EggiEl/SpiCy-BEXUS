@@ -81,7 +81,7 @@ void nextState()
     case SAVESENDPACKET:
     {
         sd_writestruct(&packet_dl, sd_filepath);
-        tcp_send_packet(&packet_dl);
+        // tcp_send_packet(&packet_dl);
         state = CLEAR_PACKET;
         break;
     }

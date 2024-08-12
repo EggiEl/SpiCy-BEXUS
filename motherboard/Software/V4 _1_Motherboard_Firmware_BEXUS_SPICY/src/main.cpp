@@ -23,8 +23,24 @@
 void print_startup_message();
 void update_nResets();
 
+PID_ControllerSweepData Sweep_1 = {
+    .Heater = PIN_H0,
+    .NTC = NTC_PROBE_0,
+    .TEMP_COOL = 31,
+    .TEMP_SET = 32,
+    .TIME_TILL_STOP = (unsigned long)(0.5 * (60 * 60 * 1000)),
+    .nCYCLES = 5,
+    .kp_buffer = {0.01,0.1,1,5,10},
+    .ki_buffer = {0,0,0,0,0},
+    .ki_max_buffer = {0,0,0,0,0},
+    .pi_state = INIT,
+    .sd_filepath = {0}, // Zero-initialize the array
+    .current_cycle = 0,
+    .timestamp_testing_pi = 0,
+    .timestamp_last_update = millis() + 1000};
 //------------------------core1--------------------------------
 /*does all the data handeling*/
+
 void setup()
 {
   // rp2040.wdt_begin(WATCHDOG_TIMEOUT);
@@ -37,7 +53,14 @@ void loop()
 {
   periodic_tasks_core_0();
   nextState();
-  pid_controller_sweep(PIN_H0, NTC_PROBE_0);
+  // if (pid_record_tranfer_function(PIN_H0, NTC_PROBE_0, 25, 1.5 * 60 * 60 * 1000)) //1.5 * 60 * 60 * 1000
+  // {
+  //   pid_controller_sweep(&Sweep_1);
+  // }
+  pid_controller_sweep(&Sweep_1);
+  // tpc_send_string("test");
+
+  // read_out_BMP180();
 }
 
 /*all things that should get checkt every loop of CPU0*/
@@ -84,7 +107,6 @@ void loop1()
 
 void periodic_tasks_core_1()
 {
-  
 }
 
 unsigned long nMOTHERBOARD_BOOTUPS = 0;
@@ -101,23 +123,25 @@ void update_nResets()
   {
     int integer;
     byte bytearray[sizeof(int)];
-  } buffer;
+  } buf_intbyte;
 
   // reads a nMOTHERBOARD_BOOTUPSS from EEPROM
   for (int i = 0; i < sizeof(int); i++)
   {
-    buffer.bytearray[i] = EEPROM.read(ADRES_NRESETS + i);
+    buf_intbyte.bytearray[i] = EEPROM.read(ADRES_NRESETS + i);
   }
 
   // new reset -> +1
-  buffer.integer += 1;
+  buf_intbyte.integer += 1;
 
-  nMOTHERBOARD_BOOTUPS = buffer.integer;
+  // buf_intbyte.integer = 0; //uncomment /flash comment flash to reset counter
+
+  nMOTHERBOARD_BOOTUPS = buf_intbyte.integer;
 
   // writes the one increased nMOTHERBOARD_BOOTUPSS back to flash
   for (int i = 0; i < sizeof(int); i++)
   {
-    EEPROM.write(ADRES_NRESETS + i, buffer.bytearray[i]);
+    EEPROM.write(ADRES_NRESETS + i, buf_intbyte.bytearray[i]);
   }
   EEPROM.commit();
   EEPROM.end();
@@ -137,7 +161,7 @@ void print_startup_message()
       break;
     }
   }
-   delay(100);
+  delay(100);
   // ghost
   debugf_green(
       "  .-')       _ (`-.                                       \n"
