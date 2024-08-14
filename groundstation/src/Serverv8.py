@@ -129,8 +129,11 @@ class TCP_SERVER:
                         self.datalog.rawdata.append(received_data)
                         print_green(f'recieved packet ID:"{ struct.unpack('<I', received_data[:4])[0]}"\n',indent =2)
 
-                    elif(len(received_data) == 8): #this is an error code being downlinked
-                            print_red(f'recieved error code: "{received_data[4]}"\n',indent =2)
+                    elif(len(received_data) == 8 and received_data[0]==0b11111111 and received_data[1]==0b11111111 and received_data[2]==0b11111111 and received_data[3]==0b11111111): #this is an error code being downlinked
+                            if(received_data[4] == received_data[5]):
+                                print_red(f'recieved error code: "{received_data[4]}"\n',indent =2)
+                            else:
+                                print_red(f'recieved error codes corrupted. recieved: "{received_data[4]}" and "{received_data[5]}"\n',indent =2)
 
                     else: #this is a debug message being downlinked. or an error. can't decide
                             received_data = received_data.decode("utf-8",errors='ignore')

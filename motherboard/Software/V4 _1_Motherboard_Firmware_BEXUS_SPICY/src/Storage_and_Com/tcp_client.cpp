@@ -356,7 +356,7 @@ char tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPacket
  * */
 void tpc_send_error(const unsigned char error)
 {
-  debugf_status("sender_down_error:%u", error);
+  // debugf_status("sender_down_error:%u", error);
 
   if (!TCP_init)
   {
@@ -380,17 +380,17 @@ void tpc_send_error(const unsigned char error)
 
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
-    debugf_status("-connecting_client-");
+    // debugf_status("-connecting_client-");
   }
   uint8_t status = client.write(buffer, sizebuffer);
-  if (status)
-  {
-    debugf_info("successs\n");
-  }
-  else
-  {
-    debugf_info("faliue\n");
-  }
+  // if (status)
+  // {
+  //   debugf_info("successs\n");
+  // }
+  // else
+  // {
+  //   debugf_info("faliue\n");
+  // }
 }
 
 void tpc_send_string(const char string[])
