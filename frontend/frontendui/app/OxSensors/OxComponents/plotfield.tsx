@@ -6,13 +6,8 @@ import { GiChemicalTank, GiChemicalDrop, GiChemicalArrow, GiChemicalBolt } from 
 import { MdOutlineScience, MdOutlineSensors } from 'react-icons/md';
 import { FaBars } from 'react-icons/fa';
 import styles from "../oxStyles/PlotField.module.css";
+import { OxygenSensorData } from "../OxInterfaces/OxygenSensorData"
 
-interface OxygenSensorData {
-  _id: string;
-  fullstruct_id: string;
-  percentOtwo: number;
-  timestamp_measurement: string;
-}
 
 interface InitialData {
   plotInitalData: OxygenSensorData[][];

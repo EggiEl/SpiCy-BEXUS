@@ -1,60 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  ReferenceLine,
-} from "recharts";
+import { OxygenSensorData } from "../OxInterfaces/OxygenSensorData"
+import CustomTooltip from "./CustomTooltip"; 
+import { OxChartProps } from "../OxInterfaces/ComponentProps"; 
+import {LineChart,Line,XAxis,YAxis,CartesianGrid,Tooltip,ResponsiveContainer, ReferenceLine} from "recharts";
 import styled from "styled-components";
 
-interface OxygenSensorData {
-  _id: string;
-  fullstruct_id: string;
-  percentOtwo: number;
-  timestamp_measurement: string;
-}
 
-interface Data {
-  datalist: Array<OxygenSensorData>;
-  limit: number;
-  upperlimit: number;
-  lowerlimit: number;
-  measureTimeFeat: boolean; 
-}
 
-const CustomTooltip = ({ active, payload }: any) => {
-  if (active && payload && payload.length) {
-    const data = payload[0].payload;
-    return (
-      <TooltipContainer>
-        <p className="label">{`Time: ${data.timestamp_measurement}`}</p>
-        <p className="intro">{`Oxygen Level: ${data.percentOtwo}%`}</p>
-      </TooltipContainer>
-    );
-  }
-
-  return null;
-};
-
-const TooltipContainer = styled.div`
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`;
 
 const ChartContainer = styled.div`
   width: 100%;
   height: 400px;
 `;
 
-export default function OxChart({ datalist, limit, upperlimit, lowerlimit , measureTimeFeat}: Data) {
+export default function OxChart({ datalist, limit, upperlimit, lowerlimit , measureTimeFeat}: OxChartProps) {
   const [timesBetween, setTimeBetween] = useState(0);
   const [timePoints, setTimePoints] = useState<string[]>([]);
   const dataToShow = datalist.slice(Math.max(datalist.length - limit, 0)); // Show only the last 'limit' data points
