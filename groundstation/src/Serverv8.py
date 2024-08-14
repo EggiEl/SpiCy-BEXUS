@@ -19,9 +19,10 @@ PORT = 8888
 
 PACKET_LENTH = 472
 
-TIMEOUT_SERVER = 1.0 #s timeout of client after no connetion
+TIMEOUT_CLIENT = 2.0 #s timeout of client after no connetion
 DELAY_DATALOG_LOOP = 0.1 #s slows datalogger loop to save performance
 DELAY_SERVER_LOOP = 0.01 #s slows server loop to save performance
+DELAY_CONSOLE_LOOP = 0.1 #s slows console loop to save performance
 DELAY_ERROR = 0.5 # delay to prevent errors to be spammed 
 
 def get_network_info():
@@ -69,31 +70,28 @@ class TCP_SERVER:
     def StartServer(self):
         """startet eine TCP Server an den sich ein client_socket verbinden kann"""
 
-        def connect_server_socket(timeout=TIMEOUT_SERVER):
+        def connect_server_socket(timeout=TIMEOUT_CLIENT):
             try:
                 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 server_socket.bind((self.ipadress, self.port))
                 server_socket.settimeout(timeout)
                 return server_socket
+            
             except OSError as e:
-                print_red(f"Error:{e} ", indent=2)
-                if e.errno == 10048:  # WinError 10048: Address already in use
-                    print_cyan("Address already in use.\n", indent=0)
-                    time.sleep(DELAY_ERROR)
-                    return None
-                elif e.errno == 10049:
-                    print_cyan("Probably cable not connected.\n", indent=0)
-                    time.sleep(DELAY_ERROR)
-                    return None
-                elif e.errno == 10038:  # WinError 10038: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist
-                    print_cyan("Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist.Probably no Ethernet dongle\n", indent=0)
-                    time.sleep(DELAY_ERROR)
-                    return None
+                if e.errno == 10048:print_cyan("Address already in use.\n", indent=0)
+                elif e.errno == 10049:print_cyan("Probably cable not connected.\n", indent=0)
+                elif e.errno == 10038:print_cyan("Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist. Probably no Ethernet dongle\n", indent=0)
+                else:print_red(f"Error:{e} ", indent=2)
+
+                time.sleep(DELAY_ERROR)
+                return None
+                
             except Exception as e:  # Handle other exceptions
                 print_red(f"Error Connect Server:{e}\n", indent=2)
+                time.sleep(DELAY_ERROR)
                 return None
 
-        def connect_client(server_socket: socket.socket, timeout=TIMEOUT_SERVER, counter=3):
+        def connect_client(server_socket: socket.socket, timeout=TIMEOUT_CLIENT, counter=3):
             """wartet auf einen client_socket und verbindet sich  mit demselben"""
             try:
                 server_socket.listen(1)  # Wartet auf 1 eingehende Verbindung
@@ -102,20 +100,24 @@ class TCP_SERVER:
                 print_cyan(f"Verbindung hergestellt von:{client_address}\n", indent=1)
                 client_socket.settimeout(timeout)
                 return client_socket
+            
             except socket.timeout:
                 clear_console_line()
                 print_cyan("waiting for a connection[" + counter * "."+"]")
                 return None
+            
             except OSError as e:
-                print_red(f"Error:{e} ", indent=2)
-                if e.errno == 10038:  # WinError 10038: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist
-                    print_cyan("Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist.Probably no Ethernet dongle\n", indent=0)
-                    time.sleep(DELAY_ERROR)
-                    server_socket.close()
-                    return None
-            except Exception as e:  # Handle other exceptions
-                print_red("Error Connect Client:", e)
+                if e.errno == 10038: print_cyan("Error Connect Client: Probably no Ethernet dongle\n", indent=0)
+                else: print_red(f"Error Connect Client: {e} ", indent=2)
 
+                time.sleep(DELAY_ERROR)
+                server_socket.close()
+                return None
+
+            except Exception as e:  # Handle other exceptions
+                print_red(f"Error Connect Client: {e} ", indent=2)
+                time.sleep(DELAY_ERROR)
+                server_socket.close()
                 return None
 
         def recieve_data(client_socket):
@@ -125,17 +127,18 @@ class TCP_SERVER:
                 ##recieves any data
                 received_data = client_socket.recv(PACKET_LENTH)
                 if received_data is not None:
-                    if(len(received_data)==PACKET_LENTH):  #this is a packat being downlinked
+                    #this is a packat being downlinked
+                    if(len(received_data)==PACKET_LENTH):  
                         self.datalog.rawdata.append(received_data)
                         print_green(f'recieved packet ID:"{ struct.unpack('<I', received_data[:4])[0]}"\n',indent =2)
-
-                    elif(len(received_data) == 8 and received_data[0]==0b11111111 and received_data[1]==0b11111111 and received_data[2]==0b11111111 and received_data[3]==0b11111111): #this is an error code being downlinked
-                            if(received_data[4] == received_data[5]):
+                    #this is an error code being downlinked
+                    elif(len(received_data) == 8 and received_data[0]==0b11111111 and received_data[1]==0b11111111 and received_data[2]==0b11111111 and received_data[3]==0b11111111): 
+                            if(received_data[4] == received_data[5]): 
                                 print_red(f'recieved error code: "{received_data[4]}"\n',indent =2)
                             else:
                                 print_red(f'recieved error codes corrupted. recieved: "{received_data[4]}" and "{received_data[5]}"\n',indent =2)
-
-                    else: #this is a debug message being downlinked. or an error. can't decide
+                    #this is a debug message being downlinked.
+                    else: 
                             received_data = received_data.decode("utf-8",errors='ignore')
                             print_yellow(f'debug: "{received_data}"\n',indent =2)
 
@@ -150,23 +153,21 @@ class TCP_SERVER:
                 success = 0
 
             except ConnectionResetError:  # Handle connection reset by peer
-                print_red(
-                    "\nConnectionResetError aka Stecker gezogen / uC Reset\n", indent=2
-                )
+                print_red("\nConnectionResetError aka Stecker gezogen / uC Reset\n", indent=2)
                 client_socket.close()
                 success = 0
 
-            except OSError as e:
-                print_red(f"Error Recieve Data:{e} ", indent=2)
-                if e.errno == 10038:  # WinError 10038: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist
-                    print_cyan("Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist.Probably no Ethernet dongle\n", indent=0)
-                    client_socket.close()
-                    time.sleep(DELAY_ERROR)
-                    success = 0
+            except OSError as e:     
+                if e.errno == 10038:print_cyan("WinError 10038: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist. Probably no Ethernet dongle\n", indent=0)
+                else:print_red(f"Error Recieve Data:{e} ", indent=2)
+                client_socket.close()
+                time.sleep(DELAY_ERROR)
+                success = 0
                 
             except Exception as e:  # Handle other exceptions
                 print_red(f"Error Recieve Data:{e}\n", indent=2)
                 client_socket.close()
+                time.sleep(DELAY_ERROR)
                 success = 0
 
             return success
@@ -194,10 +195,9 @@ class TCP_SERVER:
         client_socket = None
         counter_points = 0 #for thoes "waiting for client[...]" points
 
-        print_cyan(
-            f'<starting TCP server at "{self.ipadress}" | \
-            "{time.asctime(time.localtime())}>"\n'
-        )
+        print_cyan(f'<<<<starting TCP server>>>>\n')
+        
+        print_white(f'ip_adress: {self.ipadress}\nport: {self.port}"\ntime: {time.asctime(time.localtime())}\n\n')
 
         while self.__isRunning:
             ##connecting Socket if none is already connected
@@ -213,8 +213,7 @@ class TCP_SERVER:
                         server_socket, counter=counter_points
                     )
                     counter_points += 1
-                    if counter_points > 3:
-                        counter_points = 0
+                    if counter_points > 3: counter_points = 0
                 else:
                     print(client_socket)
                     ##[up link] sending command to client if there is one in the self.command buffer 
@@ -319,9 +318,9 @@ class INTERFACE:
     def loop(self):
         print_yellow("\n<<Interface TCP Server>>\n/? for help\n")
         while self.isRunning:
-            time.sleep(0.1) #delay to conserve performance
+            time.sleep(DELAY_CONSOLE_LOOP) #delay to conserve performance
             try:
-                self.Command(input(".\n"))
+                self.Command(input())
             except Exception as e:
                 print(e)
                 break
@@ -341,25 +340,38 @@ class INTERFACE:
                     print_yellow("<Help>")
                     print_yellow(
                         """
-/r /start start server
-/s /stop shutdown server
-/i /info get network info
-/t /threads get threads info
+/r [optional: server ip adress] start server
+/s shutdown server
+/i get network info
+/t get threads info
 /q /quit quit this file
-/c for sending a command
+/c for sending a command to client
 """
                     )
 
-                case "start" | "run" | "r":
+                case "r":
                     if self.server is None:
-                        self.server = TCP_SERVER()
+                        param_ip_adress = command[3:].split()
+                        print(param_ip_adress)
+                        print(len(param_ip_adress))
+
+                        if len(param_ip_adress)==0: 
+                            self.server = TCP_SERVER(_ipadress=IP_SERVER)
+                        elif len(param_ip_adress)==1:
+                            self.server = TCP_SERVER(_ipadress=str(param_ip_adress[0]))
+                        elif len(param_ip_adress)==2:
+                            self.server = TCP_SERVER(_ipadress=str(param_ip_adress[0]),_port=int(param_ip_adress[1]))
+                        else:
+                            print("sometgin broke as me")
+
                     else:
                         print_yellow("Server already running\n")
 
-                case "stop" | "s":
+
+                case "s":
                     self.server_shutdown()
 
-                case "info" | "i":
+                case "i":
                     get_network_info()
 
                 case "quit" | "q":
@@ -367,8 +379,8 @@ class INTERFACE:
                     self.server_shutdown()
                     self.isRunning = 0
                     print_yellow("<all down>\n", indent=1)
-                case "threads" | "t":
-                    print_yellow("Running threads:")
+                case "t":
+                    print_yellow("Running threads: ")
                     for thread in threading.enumerate():
                         print(thread.name)
                 case "c":
@@ -395,3 +407,5 @@ class INTERFACE:
 
 if __name__ == "__main__":
     interface = INTERFACE()
+
+
