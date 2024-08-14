@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 /*--------Settings-----------------------*/
-#define DEBUG_MODE 1    /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
+#define DEBUG_MODE 2   /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
 #define COLOUR_SERIAL 1 /*activates/deactivates Serial.printing with color*/
 #define USB_ENABLE 0    /*enables single drive USB functions*/
 #define ADC_REF 3.0
@@ -166,6 +166,7 @@ void tcp_check_command();
 void tcp_print_info();
 void tpc_send_error(const unsigned char error);
 void tpc_send_string(const char string[]);
+void tcp_sendf(const char *__restrict format, ...);
 unsigned char tcp_link_status();
 
 /*sd*/
@@ -212,7 +213,6 @@ extern float ki;
 extern float I_MAX;
 extern float SET_TEMP;
 
-void pid_setup();
 void pid_update_all();
 
 void pid_controller_sweep_simple(uint8_t Heater, uint8_t NTC);
@@ -230,22 +230,24 @@ typedef struct
     uint8_t Heater = -1;
     uint8_t NTC = -1;
     /* Control parameters */
-    float TEMP_COOL = 31;
-    float TEMP_SET = 32;
-    unsigned long TIME_TILL_STOP = 0.5 * (60 * 60 * 1000);
+    float TEMP_COOL = 31; // start tenperature for the PI controller to see an evtl. overshoot. [°C]
+    float TEMP_SET = 32; //Target temperature for the PI controller. [°C]
+    unsigned long TIME_TILL_STOP = 0.5 * (60 * 60 * 1000); //testing/recording duration for a single cotroller. [ms]
     unsigned int nCYCLES = 10;
 
     /* PI values to test */
-    float kp_buffer[15];
-    float ki_buffer[15];
-    float ki_max_buffer[15];
+    float kp_buffer[20] = {0};
+    float ki_buffer[20]= {0};
+    float ki_max_buffer[20]= {0};
 
-    /* Static variables */
+    /* "Static" variables */
+    //do not change those
     enum pi_sweep_states pi_state = INIT;
     char sd_filepath[100] = {0};
     unsigned int current_cycle = 0;
     unsigned long timestamp_testing_pi = 0;
     unsigned long timestamp_last_update = millis() + 1000;
+    unsigned long timestamp_print_status = 60 * 1000;
     uint8_t done = 0;
 } PID_ControllerSweepData;
 void pid_controller_sweep(PID_ControllerSweepData *data);
@@ -276,16 +278,7 @@ uint8_t oxy_isconnected(const int PROBE = 255);
 extern volatile char light_init;
 void light_setup();
 void light_read(float *buffer, bool with_flash = 0);
-
-/*single File USB*/
-extern volatile char singleFileUsb_init;
-void usb_singlefile_setup();
-void usb_singlefile_update();
-void headerCSV();
-void plug(uint32_t i);
-void unplug(uint32_t i);
-void deleteCSV(uint32_t i);
-void singlefile_close();
+uint8_t light_connected();
 
 /*error handeling*/
 enum
@@ -307,6 +300,7 @@ enum
     ERROR_TCP_TRUNCATED_2,
     ERROR_TCP_CABLE_DISCO,
     ERROR_TCP_NO_RESPONSE,
+    ERROR_TCP_DEBUG_MEMORY,
 
     ERROR_HEAT_INI,
 

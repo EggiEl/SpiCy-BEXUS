@@ -36,7 +36,7 @@ void temp_read_all(float buffer[8])
  *  */
 uint8_t temp_isconnected(uint8_t NTC)
 {
-    if (temp_read_one(NTC, 5) == -1000000.0)
+    if (temp_read_one(NTC, 1) == -1000000.0)
     {
         return 0;
     }
@@ -80,26 +80,61 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
     /*Connect the right one*/
     select_probe_or_NTC(NTC);
 
-    // uint8_t A0 = (NTC - 1) & 0b00000001;
-    // uint8_t A1 = ((NTC - 1) & 0b00000010) >> 1;
-    // uint8_t A2 = ((NTC - 1) & 0b00000100) >> 2;
-    // digitalWrite(PIN_PROBEMUX_0, A0);
-    // digitalWrite(PIN_PROBEMUX_1, A1);
-    // digitalWrite(PIN_PROBEMUX_2, A2);
+    /* check if NTC connected*/
+    if (analogRead(PIN_TEMPADC) > ADC_MAX_READ * 0.05)
+    {
+        // error_handler(ERROR_NO_NTC_CONNECTED);
+        return -1000000;
+    }
 
-    /*Read out ADC*/
+    /*old simple way
+    Read out ADC
     float voltage_adc = 0;
     for (int i = 0; i < nTimes; i++)
     {
         voltage_adc += (float)(analogRead(PIN_TEMPADC) / ADC_MAX_READ) * VCC_NTC;
     }
     voltage_adc = voltage_adc / nTimes;
-
     if (voltage_adc < 0.02)
     {
         // error_handler(ERROR_NO_NTC_CONNECTED);
         return -1000000;
+    }*/
+
+    /*Read out ADC in a buffer and calculating adc_average*/
+    float adc_average = 0;
+    float adc_buffer[nTimes];
+    for (int i = 0; i < nTimes; i++)
+    {
+        float adc_redout = (float)analogRead(PIN_TEMPADC);
+        adc_buffer[i] = adc_redout;
+        adc_average += adc_redout;
     }
+    adc_average = adc_average / nTimes;
+
+    /*removing spikes in adc_buffer*/
+    const float tolerance = 0.2;
+    float voltage_adc;
+    for (int i = 0; i < nTimes; i++)
+    {
+        if (!((1 - tolerance) * adc_average < adc_buffer[i] < adc_average * (1 + tolerance)))
+        // replaces adc_buffer values which dividate from the adc_average about more than tolerance
+        {
+            adc_buffer[i] = adc_average;
+        }
+    }
+
+    /*calculating new adc_average without spikes*/
+    float filtered_adc_average = 0;
+    for (int i = 0; i < nTimes; i++)
+    {
+        filtered_adc_average += adc_buffer[i];
+    }
+    filtered_adc_average = filtered_adc_average / nTimes;
+
+    /*calculating volgae form adc value*/
+    voltage_adc = (filtered_adc_average / ADC_MAX_READ) * VCC_NTC;
+
     /*Converts the adc voltage after the opamp circuit to the voltage on the ntc*/
     float volt_ntc = voltage_adc * (1.0 / gain) + voffset;
 
@@ -130,24 +165,3 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
     return tempC;
 }
 
-/**
- * logs ntc thermistor reatings over time tot he sd card
- */
-void temp_log(const char path[], uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms)
-{
-    static uint8_t init = 0;
-    if (!init)
-    {
-        sd_writetofile("timestamp[ms];temp_probe[°C];temp_ambient[°C];Voltage[V];Current[A]\n", path);
-        init = 1;
-    }
-
-    static unsigned long timestamp = millis() + t_nextmeas_ms;
-    if (millis() > timestamp)
-    {
-        timestamp = millis() + t_nextmeas_ms;
-        char string[200];
-        snprintf(string, sizeof(string), "%u;%.2f;%.2f;%.5f;%.7f", millis(), temp_read_one(NTC_Probe), temp_read_one(NTC_Ambient), get_batvoltage(), get_current());
-        sd_writetofile(string, path);
-    }
-}

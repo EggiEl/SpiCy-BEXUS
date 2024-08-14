@@ -39,6 +39,27 @@ void light_setup()
 }
 
 /**
+ * @return 2 if light_spectro_AS7262 is connected, 3 if light_spectro_AS7263 is connected and 5 if both
+ */
+uint8_t light_connected()
+{
+    if (!light_init)
+    {
+        light_setup();
+    }
+    uint8_t connected = 0;
+    if (light_spectro_AS7262.isConnected())
+    {
+        connected += 2;
+    }
+    if (light_spectro_AS7263.isConnected())
+    {
+        connected += 3;
+    }
+    return connected;
+}
+
+/**
  * returns light values. make the buffer 14 flaots long
  * 6x values and 1x temperature with the first sensor connected
  * 6x values and 1x temperature with the second sensor connected

@@ -30,14 +30,10 @@ PID_ControllerSweepData Sweep_1 = {
     .TEMP_SET = 32,
     .TIME_TILL_STOP = (unsigned long)(0.5 * (60 * 60 * 1000)),
     .nCYCLES = 5,
-    .kp_buffer = {0.01,0.1,1,5,10},
-    .ki_buffer = {0,0,0,0,0},
-    .ki_max_buffer = {0,0,0,0,0},
-    .pi_state = INIT,
-    .sd_filepath = {0}, // Zero-initialize the array
-    .current_cycle = 0,
-    .timestamp_testing_pi = 0,
-    .timestamp_last_update = millis() + 1000};
+    .kp_buffer = {0.01, 0.1, 1, 5, 10},
+    .ki_buffer = {0, 0, 0, 0, 0},
+    .ki_max_buffer = {0, 0, 0, 0, 0},
+};
 //------------------------core1--------------------------------
 /*does all the data handeling*/
 

@@ -487,7 +487,15 @@ uint32_t get_Status()
 
 /**
  * returns what on what port a peripheral is connected
- * @return first 8 bit are the NTCs, next 8 are the oxygen sensors and the next 8 are the heaters
+ * @return
+ * first 8 bits are the NTCs,
+ * next 8 bits are the oxygen sensors,
+ * next 8 bits are the heaters
+ * next bit the AS7262 sensor
+ * next bit AS7263 sensor
+ * next 4 bit the RJ45 cable
+ * -> |unknown|conmected|not connected|error
+ * next bit battery voltage above 25 and below 30
  */
 uint32_t check_peripherals()
 {
@@ -519,10 +527,9 @@ uint32_t check_peripherals()
   rp2040.wdt_reset();
   Serial1.setTimeout(OXY_SERIAL_TIMEOUT);
 
-  /* Heating */
-
-  /*turns all heater off*/
+  /* Heater */
   pause_Core1();
+  /*turns all heater off*/
   float buff_heat[] = {0, 0, 0, 0, 0, 0, 0, 0};
   heat_updateall(buff_heat);
 
@@ -567,6 +574,65 @@ uint32_t check_peripherals()
     debugf_info("%u|", ((results >> 16) & 0xFF) >> i & 1);
   }
   debugf_info("\n");
+
+  uint8_t light_connection = light_connected();
+
+  debugf_info("\nLight: ");
+  switch (light_connection)
+  {
+  case 0:
+    debugf_info("np light sensor connected");
+    break;
+  case 2:
+    debugf_info("only AS7262 connected");
+    results |= (1 << 23);
+    break;
+  case 3:
+    debugf_info("only AS7263 connected");
+    results |= (1 << 24);
+    break;
+  case 5:
+    debugf_info("both AS7262 and AS7263 are connected");
+    results |= (1 << 23);
+    results |= (1 << 24);
+    break;
+  default:
+    break;
+  }
+
+  uint8_t cabletest_buff = tcp_link_status();
+  debugf_info("\nRJ45 cable: ");
+  switch (cabletest_buff)
+  {
+  case 0:
+    debugf_error("unknown");
+    results |= (1 << 25);
+    break;
+  case 1:
+    debugf_sucess("connected");
+    results |= (1 << 26);
+    break;
+  case 2:
+    debugf_error("not connected");
+    results |= (1 << 27);
+    break;
+  default:
+    debugf_error("error in code. Ethernet.linkStatus() = %i", cabletest_buff);
+    results |= (1 << 28);
+    break;
+  }
+
+  debugf_info("\n25.0V< V_Bat <30.0 ");
+  if (25.0 < get_batvoltage() < 30.0)
+  {
+    debugf_sucess("connected");
+    results |= (1 << 29);
+  }
+  else
+  {
+    debugf_error("not connected");
+    results |= (1 << 29);
+  }
 
   return results;
 }

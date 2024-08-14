@@ -409,6 +409,46 @@ void tpc_send_string(const char string[])
   client.flush(); // blocking?
 }
 
+
+void tcp_sendf(const char *__restrict format, ...)
+{
+  va_list args;
+  va_list args_copy;
+  char *buffer;
+  int buffer_size;
+
+  // Start processing the variable arguments
+  va_start(args, format);
+
+  // Copy args to use it twice
+  va_copy(args_copy, args);
+
+  // Get the size of the buffer needed
+  buffer_size = vsnprintf(NULL, 0, format, args) + 1; // +1 for the null terminator
+
+  // Allocate the buffer dynamically
+  buffer = (char *)malloc(buffer_size);
+  if (buffer == NULL)
+  // Handle memory allocation failure
+  {
+    error_handler(ERROR_TCP_DEBUG_MEMORY, ERROR_DESTINATION_NO_TCP);
+    va_end(args);
+    va_end(args_copy);
+    return;
+  }
+
+  // Format the string
+  vsnprintf(buffer, buffer_size, format, args_copy);
+
+  // Send the formatted string over TCP
+  tpc_send_string(buffer);
+
+  // Clean up
+  free_ifnotnull(buffer);
+  va_end(args);
+  va_end(args_copy);
+}
+
 /**
  *  Test function for the TCP Server via creating and sending a packet.
  * "Dies ist der Test des Downlinks" is set as info.

@@ -22,13 +22,7 @@ PACKET_LENTH = 472
 TIMEOUT_SERVER = 1.0 #s timeout of client after no connetion
 DELAY_DATALOG_LOOP = 0.1 #s slows datalogger loop to save performance
 DELAY_SERVER_LOOP = 0.01 #s slows server loop to save performance
-
-
-def sleep_till_stop(stop_flag,time_s:float):
-    """sleeps till time runs out or stop_flag is 0"""
-    while time_s > 0 and stop_flag==1:
-        time.sleep(0.01)  # Adjust the sleep interval as needed
-        time_s -= 0.01
+DELAY_ERROR = 0.5 # delay to prevent errors to be spammed 
 
 def get_network_info():
     """returns lovely networking funfacts for the whole family"""
@@ -85,15 +79,15 @@ class TCP_SERVER:
                 print_red(f"Error:{e} ", indent=2)
                 if e.errno == 10048:  # WinError 10048: Address already in use
                     print_cyan("Address already in use.\n", indent=0)
-                    time.sleep(2)
+                    time.sleep(DELAY_ERROR)
                     return None
                 elif e.errno == 10049:
                     print_cyan("Probably cable not connected.\n", indent=0)
-                    time.sleep(2)
+                    time.sleep(DELAY_ERROR)
                     return None
                 elif e.errno == 10038:  # WinError 10038: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist
                     print_cyan("Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist.Probably no Ethernet dongle\n", indent=0)
-                    time.sleep(2)
+                    time.sleep(DELAY_ERROR)
                     return None
             except Exception as e:  # Handle other exceptions
                 print_red(f"Error Connect Server:{e}\n", indent=2)
@@ -116,7 +110,7 @@ class TCP_SERVER:
                 print_red(f"Error:{e} ", indent=2)
                 if e.errno == 10038:  # WinError 10038: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist
                     print_cyan("Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist.Probably no Ethernet dongle\n", indent=0)
-                    time.sleep(2)
+                    time.sleep(DELAY_ERROR)
                     server_socket.close()
                     return None
             except Exception as e:  # Handle other exceptions
@@ -164,7 +158,7 @@ class TCP_SERVER:
                 if e.errno == 10038:  # WinError 10038: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist
                     print_cyan("Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist.Probably no Ethernet dongle\n", indent=0)
                     client_socket.close()
-                    time.sleep(2)
+                    time.sleep(DELAY_ERROR)
                     success = 0
                 
             except Exception as e:  # Handle other exceptions
@@ -208,7 +202,7 @@ class TCP_SERVER:
                 print_blue("Connnecting Socket...\n", indent=1)
                 server_socket = connect_server_socket()
                 if not server_socket:
-                    sleep_till_stop(stop_flag=self.__isRunning,time_s=3)
+                    time.sleep(DELAY_ERROR)
             else:
                 ##connecting client if none is already connected
                 if not client_socket:

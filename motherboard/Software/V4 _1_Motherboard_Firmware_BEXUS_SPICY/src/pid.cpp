@@ -124,15 +124,18 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
 }
 
 /**
+ * This function records a frew PI controller with preprogrammed gains for a set time.
+ * All contoll variables are saved in the struct PID_ControllerSweepData.
+ * This is the cycle it goes through:
+ *
  * - cools down to TEMP_COOL
  * - engages a pi controller with preprogrmmed values
- * - when temp hits TEMP_SET -> waits for TIME_TILL_STOP
+ * - when temp hits data->TEMP_SET waits for data->TIME_TILL_STOP
  * - cooling down again
- * repeats this cycle a fixed amout with different ki values
+ * repeats this cycle for nCycles with different PI gain values
  */
 void pid_controller_sweep(PID_ControllerSweepData *data)
 {
-
     if (millis() > data->timestamp_last_update)
     /*limits frequency at 1 Hz*/
     {
@@ -141,25 +144,26 @@ void pid_controller_sweep(PID_ControllerSweepData *data)
         if (data->current_cycle < data->nCYCLES)
         // test if finished with all cycles
         {
-            /*prints status every status_delay s*/
-            const unsigned long status_delay = 60 * 1000;
-            unsigned long timestamp_status = millis() + status_delay;
-            if (millis() > timestamp_status)
+            /*reads out temperature*/
+            float temp_measure = temp_read_one(data->NTC);
+
+            /*prints status every status_delay ms*/
+            if (millis() > data->timestamp_print_status)
             {
-                timestamp_status = millis() + status_delay;
+                const unsigned long pid_sweep_print_delay = 60 * 1000;
+                data->timestamp_print_status = millis() + pid_sweep_print_delay;
                 if (data->pi_state == COOLING)
                 {
-                    debugf_status("pi[%u][%u][%u] Cooling...\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle);
+                    debugf_info("pi[%u][%u][%u][%f°C] Cooling...\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle, temp_measure);
                 }
                 else if (data->pi_state == TESTING_PI)
                 {
-                    debugf_status("pi[%u][%u][%u] Testing PID for: [%u]min\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle, (millis() - data->timestamp_testing_pi - data->TIME_TILL_STOP) / 1000.0 / 60.0);
+                    debugf_info("pi[%u][%u][%u][%.2fmin][%f°C] Testing PID for: [%u]min\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle, (float)(millis() - (data->timestamp_testing_pi - data->TIME_TILL_STOP)) / 1000.0 / 60.0, temp_measure);
                 }
             }
 
             /*writes current temp to SD card*/
             char str_buff[300];
-            float temp_measure = temp_read_one(data->NTC);
             if (data->pi_state != INIT)
             {
                 snprintf(str_buff, 300, "%u,%f,", millis(), temp_measure);
@@ -167,6 +171,7 @@ void pid_controller_sweep(PID_ControllerSweepData *data)
             }
 
             switch (data->pi_state)
+            /*finite state mashine*/
             {
             case INIT:
             {
@@ -195,6 +200,9 @@ void pid_controller_sweep(PID_ControllerSweepData *data)
                 /*creating header*/
                 snprintf(str_buff, 300, "Timestamp,Temperatur");
                 sd_writetofile(str_buff, data->sd_filepath);
+
+                /*printing infp*/
+                debugf_status("%s\n",str_buff);
 
                 debugf_status("pi[%u][%u][%u] state: Cooling\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle);
                 data->pi_state = COOLING;
@@ -245,13 +253,13 @@ void pid_controller_sweep(PID_ControllerSweepData *data)
     }
 }
 
-// /**
-//  * - cools down to TEMP_COOL
-//  * - engages a pi controller with preprogrmmed values
-//  * - when temp hits TEMP_SET -> waits for TIME_TILL_STOP
-//  * - cooling down again
-//  * repeats this cycle a fixed amout with different ki values
-//  */
+/**
+ * - cools down to TEMP_COOL
+ * - engages a pi controller with preprogrmmed values
+ * - when temp hits TEMP_SET -> waits for TIME_TILL_STOP
+ * - cooling down again
+ * repeats this cycle a fixed amout with different ki values
+ */
 void pid_controller_sweep_simple(uint8_t Heater, uint8_t NTC)
 {
     enum pi_sweep_states
@@ -392,6 +400,11 @@ void pid_controller_sweep_simple(uint8_t Heater, uint8_t NTC)
     }
 }
 
+/**
+ * First cooles Probes down to T_START.
+ * Then waits and records till TIME_TILL_STOP
+ * @return 0 is still recording 1 if done
+ */
 uint8_t pid_record_tranfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP)
 {
     enum pi_sweep_states
