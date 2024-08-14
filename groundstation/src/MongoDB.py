@@ -34,7 +34,13 @@ class MongoDB:
                 "Make sure you used the MongoDB.connect() method before writing to the database."
             )
 
-    def get_raw_data(self, binary_data):
+    def get_raw_data(self, binary_data: bytes):
+        """gets called by the DATA_LOGGER
+        and recieves a C "struct packet" in form of bytes.\n
+        These bytes are saved in a mongo database
+        and then unpacked in a dictionary.
+        This dictionary is then saved in a database as well.
+        """
         # struct packet
         # {                                     // struct_format L L 6L 6f 6f 6i i f 2i 80s
         #     unsigned int id = 0;              // each packet has a unique id
@@ -68,15 +74,19 @@ class MongoDB:
         #     float pid[3] = {0}; //kp and ki
         # };
 
-        # The format string
+        ## save raw data
+        # TODO
+
+        ## data conversion
+        # creating the format string
         length_oxy_struct = 14  # items not bytes
         format_oxy = "14 L"  # Format for one OxygenReadout struct
         format_packet = "2L 2f " + 6 * format_oxy + "12f 9f 6f 3f"
 
-        # Unpack all data at once
+        # Unpack all data
         unpacked_data = struct.unpack(format_packet, binary_data)
 
-        # Now, map the unpacked data to the respective fields
+        # mapping the unpacked data to the respective fields
         decoded_data = {
             "ID": unpacked_data[0],
             "timestamp_packet": unpacked_data[1],
@@ -84,7 +94,6 @@ class MongoDB:
             "oxy_measure": [],
         }
 
-        # Start extracting oxygen readouts (each is 104 bytes)
         offset = 4
         for i in range(6):  # 6 oxygen readouts
             oxy = {
@@ -108,10 +117,18 @@ class MongoDB:
             decoded_data["oxy_measure"].append(oxy)
             offset += length_oxy_struct  # Move to the next OxygenReadout
 
-        # Adding the remaining fields
-        decoded_data["thermistor"] = unpacked_data[offset : offset + 9] # °C
-        decoded_data["heaterPWM"] = unpacked_data[offset + 9 : offset + 9 + 6] # in % aka duty cycle
-        decoded_data["pid"] = unpacked_data[offset + 9 + 6 : offset + 9 + 6 + 3] # W (values normed)
+        decoded_data["thermistor"] = unpacked_data[offset : offset + 9]  # °C
+        decoded_data["heaterPWM"] = unpacked_data[
+            offset + 9 : offset + 9 + 6
+        ]  # in % aka duty cycle
+        decoded_data["pid"] = unpacked_data[
+            offset + 9 + 6 : offset + 9 + 6 + 3
+        ]  # W (values normed)
+
+        ## save oxy
+        # TODO
+        ## save pressure
+        # TODO
 
     def safeOx(
         self, struct: dict, db_name, collection_name_fullstruct, collection_name_ox
