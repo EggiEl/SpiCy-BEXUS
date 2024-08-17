@@ -82,6 +82,10 @@ class MongoDB:
         length_oxy_struct = 14  # items not bytes
         format_oxy = "14 L"  # Format for one OxygenReadout struct
         format_packet = "2L 2f " + 6 * format_oxy + "12f 9f 6f 3f"
+        
+        #check sizes
+        if struct.calcsize(format_packet) != len(binary_data):
+            print_red(f"MongoDB: recived data size:{len(binary_data)} != struct size {struct.calcsize(format_packet)}")
 
         # Unpack all data
         unpacked_data = struct.unpack(format_packet, binary_data)

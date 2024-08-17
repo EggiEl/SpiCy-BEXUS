@@ -25,29 +25,6 @@ DELAY_SERVER_LOOP = 0.01 #s slows server loop to save performance
 DELAY_CONSOLE_LOOP = 0.1 #s slows console loop to save performance
 DELAY_ERROR = 0.5 # delay to prevent errors to be spammed 
 
-def get_network_info():
-    """returns lovely networking funfacts for the whole family"""
-    # Get host name and IP address
-    hostname = socket.gethostname()
-    ip_address = socket.gethostbyname(hostname)
-
-    print("Hostname:", hostname)
-    print("IP Address:", ip_address)
-
-    # Get information about network interfaces
-    print("\nNetwork Interfaces:")
-    interfaces = netifaces.interfaces()
-    for iface in interfaces:
-        iface_details = netifaces.ifaddresses(iface)
-        print("Interface:", iface)
-        if netifaces.AF_INET in iface_details:
-            for addr_info in iface_details[netifaces.AF_INET]:
-                print("  IP Address:", addr_info["addr"])
-                print("  Netmask:", addr_info["netmask"])
-                print("  Broadcast Address:", addr_info.get("broadcast"))
-        else:
-            print("  No IPv4 address")
-
 class TCP_SERVER:
     """Connects in an extra thread a TCP server.\
         Connects to avaliable clients and recieves inoomming data\
@@ -372,7 +349,27 @@ class INTERFACE:
                     self.server_shutdown()
 
                 case "i":
-                    get_network_info()
+                    """returns lovely networking funfacts for the whole family"""
+                    # Get host name and IP address
+                    hostname = socket.gethostname()
+                    ip_address = socket.gethostbyname(hostname)
+
+                    print("Hostname:", hostname)
+                    print("IP Address:", ip_address)
+
+                    # Get information about network interfaces
+                    print("\nNetwork Interfaces:")
+                    interfaces = netifaces.interfaces()
+                    for iface in interfaces:
+                        iface_details = netifaces.ifaddresses(iface)
+                        print("Interface:", iface)
+                        if netifaces.AF_INET in iface_details:
+                            for addr_info in iface_details[netifaces.AF_INET]:
+                                print("  IP Address:", addr_info["addr"])
+                                print("  Netmask:", addr_info["netmask"])
+                                print("  Broadcast Address:", addr_info.get("broadcast"))
+                        else:
+                            print("  No IPv4 address")
 
                 case "quit" | "q":
                     print_yellow("<shuting down Interface>\n")
