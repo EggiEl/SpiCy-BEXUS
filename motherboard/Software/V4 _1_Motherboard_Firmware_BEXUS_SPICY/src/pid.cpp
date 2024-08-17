@@ -304,7 +304,7 @@ float ki = 0.1;
 float I_MAX = 3;
 
 /**
- * This function uses static variables, therfor is only usefull for a single controller
+ * This function uses static variables, therefor is only usefull for a single controller
  */
 void pi_update_one_simple(float desired_temp, uint8_t heater, uint8_t thermistor)
 {
