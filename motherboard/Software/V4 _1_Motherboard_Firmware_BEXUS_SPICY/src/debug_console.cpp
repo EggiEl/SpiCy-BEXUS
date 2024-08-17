@@ -79,7 +79,8 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
 /o|starts console to talk to PyroSience FD-OEM Oxygen Module\n\
 /a|reads out light spectrometers\n\
 /q|shut down microcontroller\n\
-/c|kp ki imax sets pi controller gain values\n"));
+/c|[kp] [ki] [imax] [set_temp] sets pi controller gain values. \n\
+   Set Set_temp = -1000000.0 to deactivate PI controller and be able to controller heater manually\n"));
     break;
   }
   case 'b':
@@ -308,24 +309,58 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   }
   case 'c':
   {
-    if (param1 != -1)
+    PI_CONTROLLER *pi = 0;
+
+    /*select controller*/
+    switch ((int)param1)
     {
-      kp = param1;
-    }
-    if (param2 != -1)
-    {
-      ki = param2;
-    }
-    if (param3 != -1)
-    {
-      I_MAX = param3;
-    }
-    if (param4 != -1)
-    {
-      SET_TEMP = param4;
+    case -1:
+
+      break;
+    case 0:
+      pi = &pi_probe0;
+      break;
+
+    case 1:
+      pi = &pi_probe1;
+      break;
+
+    case 2:
+      pi = &pi_probe2;
+      break;
+
+    case 3:
+      pi = &pi_probe3;
+      break;
+
+    case 4:
+      pi = &pi_probe4;
+      break;
+
+    case 5:
+      pi = &pi_probe4;
+      break;
+
+    default:
+      break;
     }
 
-    debugf_info("Set pi controller to p:%.4f i:%.4f i_max:%.4f SetTemp:%.2f\n", kp, ki, I_MAX, SET_TEMP);
+    if (param2 != -1)
+    {
+      pi->kp = param2;
+    }
+
+    if (param3 != -1)
+    {
+      pi->ki = param3;
+    }
+
+    if (param4 != -1)
+    {
+      pi->I_MAX = param4;
+    }
+
+    debugf_info("Set pi controller of probe:%u p:%.4f i:%.4f i_max:%.4f", kp, ki, I_MAX);
 
     break;
   }
@@ -527,7 +562,7 @@ uint32_t check_peripherals()
   rp2040.wdt_reset();
   Serial1.setTimeout(OXY_SERIAL_TIMEOUT);
 
-  /* Heater */
+  /* Heating */
   pause_Core1();
   /*turns all heater off*/
   float buff_heat[] = {0, 0, 0, 0, 0, 0, 0, 0};

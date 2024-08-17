@@ -33,7 +33,12 @@ PID_ControllerSweepData Sweep_1 = {
     .kp_buffer = {0.01, 0.1, 1, 5, 10},
     .ki_buffer = {0, 0, 0, 0, 0},
     .ki_max_buffer = {0, 0, 0, 0, 0},
-};
+    .pi_state = INIT,
+    .current_cycle = 0,
+    .timestamp_testing_pi = 0,
+    .timestamp_last_update = millis() + 1000,
+    .timestamp_print_status = 60 * 1000,
+    .done = 0};
 //------------------------core1--------------------------------
 /*does all the data handeling*/
 
@@ -49,13 +54,10 @@ void loop()
 {
   periodic_tasks_core_0();
   nextState();
-  // if (pid_record_tranfer_function(PIN_H0, NTC_PROBE_0, 25, 1.5 * 60 * 60 * 1000)) //1.5 * 60 * 60 * 1000
-  // {
-  //   pid_controller_sweep(&Sweep_1);
-  // }
-  pid_controller_sweep(&Sweep_1);
-  // tpc_send_string("test");
-
+  if (pid_record_tranfer_function(PIN_H0, NTC_PROBE_0, 25, 1.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
+  {
+    pid_controller_sweep(&Sweep_1);
+  }
   // read_out_BMP180();
 }
 
@@ -90,7 +92,7 @@ void loop1()
     flag_core1_isrunning = 1;
 
     periodic_tasks_core_1();
-    // pid_update_all();
+    // pi_update_all();
 
     // debugf_blue(".");
     // delay(1);

@@ -6,7 +6,7 @@ volatile char oxy_calib = 0;
 
 SerialPIO oxySerial(PIN_OX_TX, PIN_OX_RX);
 
-void oxy_send_dummy();
+uint8_t oxy_send_dummy();
 uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout);
 void oxy_decode_mesurement_errors(const u32_t R0);
 void oxy_decode_general_error(const char errorCode_buff[]);
@@ -34,51 +34,6 @@ void oxy_serial_setup()
 
     debugf_sucess("oxy setup was succesfull\n");
     oxy_serial_init = 1;
-}
-
-/*sending dummy byte. For syncronising the data line.*/
-void oxy_send_dummy()
-{
-    char buffer[20];
-    oxySerial.write("\r");
-    oxySerial.flush();
-    // returns a error after 10ms
-    oxySerial.readBytesUntil('\r', buffer, sizeof(buffer));
-    delay(2); // this is necessary
-}
-
-/**
- * tests weather a oxygen sensor is connected
- * @param PROBE specify here wich Probe y wanna check. dont specify anything or set to 255 checks the currently connected one
- */
-uint8_t oxy_isconnected(const int PROBE)
-{
-    if (!oxy_serial_init)
-    {
-        oxy_serial_setup();
-    }
-
-    select_probe_or_NTC(PROBE);
-
-    oxy_send_dummy();
-
-    /*sendst test*/
-    char buffer[10] = {0};
-    oxySerial.write("\r");
-    oxySerial.flush();
-    oxySerial.readBytes(buffer, 1);
-    delay(2); // this is necessary
-
-    if (buffer[0] == '\r')
-    {
-        return 1;
-    }
-    else
-    {
-        // debugf_warn("Return for testing command #LOGO:\"%s\"\n", buffer);
-        // oxy_decode_general_error(buffer);
-        return 0;
-    }
 }
 
 /*Starts Console for talk with fd-odem module*/
@@ -238,6 +193,45 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues)
         free_ifnotnull(buffer);
         return NULL;
     }
+}
+
+/*sending dummy byte. For syncronising the data line. returns 1 if sucessful aka sensor present, 0 if not*/
+uint8_t oxy_send_dummy()
+{
+    char buffer[2] = {0};
+    oxySerial.write("\r");
+    oxySerial.flush();
+    // returns a error after 10ms
+    oxySerial.readBytes(buffer, 1);
+    delay(2); // this is necessary
+
+    if (buffer[0] == '\r')
+    {
+        return 1;
+    }
+    else
+    {
+        // debugf_warn("Return for testing command #LOGO:\"%s\"\n", buffer);
+        // oxy_decode_general_error(buffer);
+        return 0;
+    }
+}
+
+/**
+ * tests weather a oxygen sensor is connected
+ * @param PROBE specify here wich Probe y wanna check. dont specify anything or set to 255 checks the currently connected one
+ */
+uint8_t oxy_isconnected(const int PROBE)
+{
+    if (!oxy_serial_init)
+    {
+        oxy_serial_setup();
+    }
+
+    select_probe_or_NTC(PROBE);
+
+    oxy_send_dummy();
+    return oxy_send_dummy();
 }
 
 /**

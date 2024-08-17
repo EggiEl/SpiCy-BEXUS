@@ -29,6 +29,10 @@ struct packet *packet_create()
     a->timestampPacket = millis();
     a->power[0] = get_batvoltage();
     a->power[1] = get_current();
+    for (int i = 0; i < 9; i++)
+    {
+      a->heaterPWM[i] = heat_pwm_atm[i];
+    }
   }
   else
   {
@@ -64,7 +68,7 @@ void destroy_packet(struct packet *p)
  * @param struct packet data to write to
  * @return pointer to buffer
  */
-void packettochar(struct packet *data,char buffer[])
+void packettochar(struct packet *data, char buffer[])
 {
   memcpy(buffer, data, sizeof(struct packet)); // Copy struct data into buffer
 }

@@ -63,10 +63,10 @@ void scan_wire_single(unsigned int pinsda, unsigned int pinscl, char Wire_select
         }
         else if (error == 4)
         {
-            debug("Unknown error at address 0x");
+            debugf("Unknown error at address 0x");
             if (address < 16)
             {
-                debug("0");
+                debugf("0");
             }
             debugln(address);
         }

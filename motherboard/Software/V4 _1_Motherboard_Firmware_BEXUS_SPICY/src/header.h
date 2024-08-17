@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 /*--------Settings-----------------------*/
-#define DEBUG_MODE 2   /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
+#define DEBUG_MODE 2    /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
 #define COLOUR_SERIAL 1 /*activates/deactivates Serial.printing with color*/
 #define USB_ENABLE 0    /*enables single drive USB functions*/
 #define ADC_REF 3.0
@@ -15,10 +15,10 @@ const unsigned int ADC_MAX_WRITE = 100; //  Value where analogRrite = 100% duty 
 const unsigned int ADC_FREQ_WRITE = 30000;
 
 /*------Timings.......................*/
-const unsigned long WATCHDOG_TIMEOUT =4000; // neds to be 8000ms max i think
-const unsigned long TCP_CONNECTIONTIMEOUT= 20; /*Conntection Timeout of the tcp client*/
+const unsigned long WATCHDOG_TIMEOUT = 4000;    // neds to be 8000ms max i think
+const unsigned long TCP_CONNECTIONTIMEOUT = 20; /*Conntection Timeout of the tcp client*/
 const unsigned long TIMEOUT_LIGHT_SENSOR = 100;
-const unsigned long OXY_SERIAL_TIMEOUT= 300;
+const unsigned long OXY_SERIAL_TIMEOUT = 300;
 
 extern unsigned long nMOTHERBOARD_BOOTUPS; // this number is stored in the flash and increses with every reset of th uC
 /*----------------Pin mapping-------------*/
@@ -139,7 +139,7 @@ struct packet
      *8 cpu temp*/
     float thermistor[9] = {0};
     float heaterPWM[6] = {0}; // power going to heating
-    float pid[3] = {0}; //kp and ki
+    float pid[3] = {0};       // kp and ki
 };
 
 struct packet *packet_create();
@@ -161,7 +161,7 @@ extern volatile char TCP_init;
 void tcp_setup_client();
 void tpc_testmanually(int nPackets = 1, unsigned int nTries = 5);
 char tcp_send_packet(struct packet *packet);
-char tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPackets);
+void tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPackets);
 void tcp_check_command();
 void tcp_print_info();
 void tpc_send_error(const unsigned char error);
@@ -196,6 +196,8 @@ void read_out_BMP180();
 void scan_wire();
 
 /*Heating*/
+
+extern float heat_pwm_atm[8];
 const float HEAT_VOLTAGE = 5;                              // in V
 const float HEAT_RESISTANCE = 10;                          // in Ohm
 const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE; // current of a single Heater in A
@@ -207,16 +209,33 @@ void heat_updateone(const uint8_t PIN, const float duty);
 void heat_testmanual();
 
 /*Pid*/
-extern volatile char pid_init;
+struct PI_CONTROLLER
+{
+    /*semi constant values*/
+    float desired_temp = SET_TEMP;
+    uint8_t heater = 0;
+    uint8_t thermistor = 0;
+    float kp = 0;
+    float ki = 0;
+    float I_MAX = 0;
+
+    /*static values*/
+    float i_last = 0;
+    unsigned long time_last = millis();
+    float error_last = 0;
+    float pi_last = 0;
+} pi_probe0, pi_probe1, pi_probe2, pi_probe3, pi_probe4, pi_probe5;
+
+void pi_update_all();
+void pi_print_controller(PI_CONTROLLER *pi);
+uint8_t pid_record_tranfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP);
+
+//those are exclusivle for the controller_update_simple and controller_sweep_simple:
 extern float kp;
 extern float ki;
 extern float I_MAX;
 extern float SET_TEMP;
-
-void pid_update_all();
-
 void pid_controller_sweep_simple(uint8_t Heater, uint8_t NTC);
-uint8_t pid_record_tranfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP);
 
 enum pi_sweep_states
 {
@@ -230,18 +249,18 @@ typedef struct
     uint8_t Heater = -1;
     uint8_t NTC = -1;
     /* Control parameters */
-    float TEMP_COOL = 31; // start tenperature for the PI controller to see an evtl. overshoot. [°C]
-    float TEMP_SET = 32; //Target temperature for the PI controller. [°C]
-    unsigned long TIME_TILL_STOP = 0.5 * (60 * 60 * 1000); //testing/recording duration for a single cotroller. [ms]
+    float TEMP_COOL = 31;                                  // start tenperature for the PI controller to see an evtl. overshoot. [°C]
+    float TEMP_SET = 32;                                   // Target temperature for the PI controller. [°C]
+    unsigned long TIME_TILL_STOP = 0.5 * (60 * 60 * 1000); // testing/recording duration for a single cotroller. [ms]
     unsigned int nCYCLES = 10;
 
     /* PI values to test */
     float kp_buffer[20] = {0};
-    float ki_buffer[20]= {0};
-    float ki_max_buffer[20]= {0};
+    float ki_buffer[20] = {0};
+    float ki_max_buffer[20] = {0};
 
     /* "Static" variables */
-    //do not change those
+    // do not change those
     enum pi_sweep_states pi_state = INIT;
     char sd_filepath[100] = {0};
     unsigned int current_cycle = 0;
@@ -258,7 +277,6 @@ extern volatile char temp_init;
 void temp_setup();
 float temp_read_one(uint8_t NTC, uint8_t nTimes = 100);
 void temp_read_all(float buffer[8]);
-void temp_log(const char path[], uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
 uint8_t temp_isconnected(uint8_t NTC = 255);
 
 /*Oxygen Sensors*/
@@ -301,6 +319,8 @@ enum
     ERROR_TCP_CABLE_DISCO,
     ERROR_TCP_NO_RESPONSE,
     ERROR_TCP_DEBUG_MEMORY,
+    ERROR_TCP_CLIENT_CONNTECION,
+    ERROR_TCP_SEND_MULTIBLE_FAILED,
 
     ERROR_HEAT_INI,
 
@@ -328,9 +348,13 @@ enum
     ERROR_OXY_HUMIDITY_SENSOR
 };
 
-extern const uint8_t ERROR_DESTINATION_NO_TCP;
-extern const uint8_t ERROR_DESTINATION_NO_SD;
-extern const uint8_t ERROR_DESTINATION_NO_TCP_SD;
-void error_handler(const unsigned int ErrorCode, const uint8_t destination = 0);
+enum ERROR_DESTINATION
+{
+    ERROR_DESTINATION_NO_TCP,
+    ERROR_DESTINATION_NO_SD,
+    ERROR_DESTINATION_NO_TCP_SD
+};
+
+void error_handler(const unsigned int ErrorCode, int destination = 0);
 
 #endif

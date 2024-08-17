@@ -32,20 +32,13 @@ void tcp_setup_client()
 
   if (TCP_init)
   {
-    debugln("tcP_already_initialised");
+    debugln("tcp_client_already_initialised");
     return;
   }
-  // pinMode(CS_SD, OUTPUT);
-  // digitalWrite(CS_SD, HIGH);
-
-  // pinMode(CS_SD, OUTPUT);
-  // digitalWrite(CS_SD, HIGH);
 
   SPI.setRX(MISO_SPI0);
   SPI.setTX(MOSI_SPI0);
   SPI.setSCK(SCK_SPI0);
-
-  // SPI.begin();
 
   Ethernet.setRetransmissionCount(3);
   Ethernet.setRetransmissionTimeout(20); // miliseconds
@@ -58,9 +51,7 @@ void tcp_setup_client()
     //----automatic ip allocation : ----
     if (!Ethernet.begin(MAC))
     {
-      debug("DHCP configuration failed}-");
-      debugln("-fail}-");
-      return;
+      debugf_error("DHCP configuration failed\n");
     }
   }
   else
@@ -70,7 +61,7 @@ void tcp_setup_client()
     Ethernet.setSubnetMask(SUBNET);
   }
 
-  // tcp_print_info();
+  tcp_print_info();
   if (Ethernet.hardwareStatus())
   {
     TCP_init = 1;
@@ -80,10 +71,8 @@ void tcp_setup_client()
   {
     TCP_init = 0;
     error_handler(ERROR_TCP_INI, ERROR_DESTINATION_NO_TCP);
-    debugf_error("TCP_init_failed\n");
+    debugf_error("TCP_init failed\n");
   }
-
-  // MESSURETIME_STOP
 }
 
 /*
@@ -97,7 +86,7 @@ void tcp_print_info()
   debugf_info("-dns: %d.%d.%d.%d\n", Ethernet.dnsServerIP()[0], Ethernet.dnsServerIP()[1], Ethernet.dnsServerIP()[2], Ethernet.dnsServerIP()[3]);
   debugf_info("-gatewayIP: %d.%d.%d.%d\n", Ethernet.gatewayIP()[0], Ethernet.gatewayIP()[1], Ethernet.gatewayIP()[2], Ethernet.gatewayIP()[3]);
   debugf_info("-subnet: %d.%d.%d.%d\n", Ethernet.subnetMask()[0], Ethernet.subnetMask()[1], Ethernet.subnetMask()[2], Ethernet.subnetMask()[3]);
-  debug("-lanIc: ");
+  debugf_info("-lanIc: ");
   uint8_t hardwareStatus_buff = Ethernet.hardwareStatus();
   switch (hardwareStatus_buff)
   {
@@ -118,7 +107,7 @@ void tcp_print_info()
     break;
   }
   uint8_t cabletest_buff = Ethernet.linkStatus();
-  debug("-Rj45 Cable: ");
+  debugf_info("-Rj45 Cable: ");
   switch (cabletest_buff)
   {
   case 0:
@@ -220,6 +209,7 @@ void tcp_check_command()
     if (buffer.param[i * 2] != buffer.param[i * 2 + 1])
     {
       error_handler(ERROR_TCP_PARAM_CORRUPT);
+      debugf_error("TCP parameters corrputed\n");
       success = 0;
     }
   }
@@ -239,9 +229,6 @@ void tcp_check_command()
 char tcp_send_packet(struct packet *packet)
 {
   debugf_status("sendpacket-id:%i", packet->id);
-  // packet_print(packet);
-  // MESSURETIME_START
-
   if (!TCP_init)
   {
     tcp_setup_client();
@@ -252,7 +239,6 @@ char tcp_send_packet(struct packet *packet)
   signed char status = 1;
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
-    debugf_status("-connecting_client-");
     status = client.connect(SERVERIP, SERVERPORT);
     client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
   }
@@ -263,48 +249,46 @@ char tcp_send_packet(struct packet *packet)
     if (client.write(buffer, sizeof(struct packet)))
     {
       status = 1;
-      debugf_sucess("sendpacket success\n");
+      debugf_sucess(" success\n");
     }
     else
     {
       status = -6;
       error_handler(ERROR_TCP_SEND_FAILED, ERROR_DESTINATION_NO_TCP);
-      debugf_error("sendpacket failed\n");
+      debugf_error(" failed\n");
     }
     // client.flush();                               //waits till all is send //can be left out if TCP Server recives just 200bytes per package.unsave?
     break;
   case -1:
     error_handler(ERROR_TCP_SEND_TIMEOUT, ERROR_DESTINATION_NO_TCP);
-    debugf_error("-sendpacket TIMED_OUT\n");
+    debugf_error(" timeout\n");
     break;
   case -2:
     error_handler(ERROR_TCP_SERVER_INVALID, ERROR_DESTINATION_NO_TCP);
-    debugf_error("-sendpacket INVALID_SERVER\n");
+    debugf_error(" invalid server\n");
     break;
   case -3:
     error_handler(ERROR_TCP_TRUNCATED, ERROR_DESTINATION_NO_TCP);
-    debugf_error("-sendpacket TRUNCATED\n");
+    debugf_error(" truncated\n");
     break;
   case -4:
     error_handler(ERROR_TCP_TRUNCATED_2, ERROR_DESTINATION_NO_TCP);
-    debugf_error("-sendpacket TRUNCATED\n");
+    debugf_error(" truncated_2\n");
     break;
   default:
-    debugf_error("error %i: ", status);
+    debug("error %i: ", status);
     if (Ethernet.linkStatus() == 2)
     {
       error_handler(ERROR_TCP_CABLE_DISCO, ERROR_DESTINATION_NO_TCP);
-      debugf_error("cable disconnected\n");
+      debugf_error(" cable disconnected\n");
     }
     else
     {
       error_handler(ERROR_TCP_NO_RESPONSE, ERROR_DESTINATION_NO_TCP);
-      debugf_error("prob no response from server\n");
+      debugf_error(" no response\n");
     }
     break;
   }
-
-  // MESSURETIME_STOP
   return status;
 }
 
@@ -315,16 +299,11 @@ char tcp_send_packet(struct packet *packet)
  * @param nPackets number of struct packets in that array
  * @return 1 for success
  */
-char tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPackets)
+void tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPackets)
 {
   if (!TCP_init)
   {
     tcp_setup_client();
-    if (!TCP_init)
-    {
-      debugf_error("send_multible_packet|tcp_init failed\n");
-      return 0;
-    }
   }
 
   // check if client ready and cnnected
@@ -340,11 +319,10 @@ char tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPacket
       }
       else
       {
-        debugf_error("send_multible_TCP couldn´t send package id %i\n", packet_buff[i]->id);
+        error_handler(ERROR_TCP_SEND_MULTIBLE_FAILED, ERROR_DESTINATION_NO_TCP);
       }
     }
   }
-  return 1;
 }
 
 /**
@@ -363,7 +341,7 @@ void tpc_send_error(const unsigned char error)
     tcp_setup_client();
   }
 
-  uint8_t sizebuffer = sizeof(unsigned int) + 4 * (sizeof(char));
+  uint8_t sizebuffer = 7 * (sizeof(char));
   char *buffer = (char *)calloc(sizebuffer, 1);
   if (buffer == NULL)
   {
@@ -378,19 +356,17 @@ void tpc_send_error(const unsigned char error)
   buffer[5] = error;
   buffer[6] = '\0';
 
+  uint8_t status = 1;
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
-    // debugf_status("-connecting_client-");
+    status = client.connect(SERVERIP, SERVERPORT);
+    client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
   }
-  uint8_t status = client.write(buffer, sizebuffer);
-  // if (status)
-  // {
-  //   debugf_info("successs\n");
-  // }
-  // else
-  // {
-  //   debugf_info("faliue\n");
-  // }
+
+  if (status)
+  {
+    client.write(buffer, sizebuffer);
+  }
 }
 
 void tpc_send_string(const char string[])
@@ -400,18 +376,27 @@ void tpc_send_string(const char string[])
     tcp_setup_client();
   }
 
+  uint8_t status = 1;
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
-    debugf_status("-connecting_client-");
+    status = client.connect(SERVERIP, SERVERPORT);
+    client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
   }
 
-  client.write(string, strnlen(string, 1000));
-  client.flush(); // blocking?
+  if (status)
+  {
+    client.write(string, strnlen(string, 1000));
+    client.flush(); // blocking? //TODO
+  }
 }
 
-
+/**
+ * acts like a printf with all the same parameters,
+ * just sends sting to a tcp server not console.
+ */
 void tcp_sendf(const char *__restrict format, ...)
 {
+  // TODO testing on memory savety
   va_list args;
   va_list args_copy;
   char *buffer;
@@ -432,6 +417,7 @@ void tcp_sendf(const char *__restrict format, ...)
   // Handle memory allocation failure
   {
     error_handler(ERROR_TCP_DEBUG_MEMORY, ERROR_DESTINATION_NO_TCP);
+    debugf_error("memory allocation failed tcp_sendf\n");
     va_end(args);
     va_end(args_copy);
     return;
@@ -458,40 +444,33 @@ void tcp_sendf(const char *__restrict format, ...)
  */
 void tpc_testmanually(int nPackets, unsigned int nTries)
 {
-  MESSURETIME_START
+  /*creates packet buffer*/
   struct packet **packet_buf = (struct packet **)malloc(nPackets * sizeof(struct packet *));
   if (!packet_buf)
   {
-    debugf_error("memory allocation failed\n");
+    error_handler(ERROR_TCP_DEBUG_MEMORY, ERROR_DESTINATION_NO_TCP);
     return;
   }
 
+  /*fills packet buffer with packets*/
   for (int i = 0; i < nPackets; i++)
   {
     struct packet *newPacket = packet_create();
-    // packet_write_error(newPacket, "Dies ist der Test des Downlinks");
     packet_buf[i] = newPacket;
   }
 
-  char success = tcp_send_multible_packets(packet_buf, nPackets);
+  /*send buffer*/
+  tcp_send_multible_packets(packet_buf, nPackets);
 
+  /*frees packet buffer*/
   for (int i = 0; i < nPackets; i++)
   {
     destroy_packet(packet_buf[i]);
   }
   free_ifnotnull(packet_buf);
-
-  if (success)
-  {
-    debugf_sucess("sendmultible success\n");
-  }
-  else
-  {
-    debugf_sucess("sendmultible failure \n");
-  }
-  MESSURETIME_STOP
 }
 
+/*returns the Ethernet-linkStatus() for the ethernet.h libary*/
 unsigned char tcp_link_status()
 {
   return Ethernet.linkStatus();
