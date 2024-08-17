@@ -4,32 +4,309 @@
 // expanation on the used anti-windeup https://www.youtube.com/watch?v=NVLXCwc8HzM
 const static float MAX_HEAT_POWER = HEAT_CURRENT * HEAT_CURRENT * HEAT_RESISTANCE;
 const float PID_MAX = 2.5;
-float I_MAX = 3;
+
 const unsigned long PID_T = 200; // time in ms till next PID controller update
-float SET_TEMP = 34.0;
+float SET_TEMP = 34.0;           // temperature target for PI controller. Set to -1000000.0 to disable Controller
 
-float kp = 10;
-float ki = 0.1;
+void pi_update_one_simple(float desired_temp, uint8_t heater, uint8_t thermistor);
 
-void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor);
+char pi_init = 0;
 
-void pid_update_all()
+void pi_setup()
 {
-    static long TimeStampPid = millis() + PID_T;
-    if (millis() > TimeStampPid)
+    /*probe 0*/
+    pi_probe0.desired_temp = SET_TEMP;
+    pi_probe0.heater = PIN_H0;
+    pi_probe0.thermistor = NTC_PROBE_0;
+    pi_probe0.kp = 10;
+    pi_probe0.ki = 0.1;
+    pi_probe0.I_MAX = 3;
+
+    /*probe 1*/
+    pi_probe1.desired_temp = SET_TEMP;
+    pi_probe1.heater = PIN_H1;
+    pi_probe1.thermistor = NTC_PROBE_1;
+    pi_probe1.kp = 10;
+    pi_probe1.ki = 0.1;
+    pi_probe1.I_MAX = 3;
+
+    /*probe 2*/
+    pi_probe2.desired_temp = SET_TEMP;
+    pi_probe2.heater = PIN_H2;
+    pi_probe2.thermistor = NTC_PROBE_2;
+    pi_probe2.kp = 10;
+    pi_probe2.ki = 0.1;
+    pi_probe2.I_MAX = 3;
+
+    /*probe 3*/
+    pi_probe3.desired_temp = SET_TEMP;
+    pi_probe3.heater = PIN_H3;
+    pi_probe3.thermistor = NTC_PROBE_3;
+    pi_probe3.kp = 10;
+    pi_probe3.ki = 0.1;
+    pi_probe3.I_MAX = 3;
+
+    /*probe 4*/
+    pi_probe4.desired_temp = SET_TEMP;
+    pi_probe4.heater = PIN_H4;
+    pi_probe4.thermistor = NTC_4;
+    pi_probe4.kp = 10;
+    pi_probe4.ki = 0.1;
+    pi_probe4.I_MAX = 3;
+
+    /*probe 5*/
+    pi_probe5.desired_temp = SET_TEMP;
+    pi_probe5.heater = PIN_H5;
+    pi_probe5.thermistor = NTC_5;
+    pi_probe5.kp = 10;
+    pi_probe5.ki = 0.1;
+    pi_probe5.I_MAX = 3;
+
+    pi_print_controller(&pi_probe0);
+    pi_print_controller(&pi_probe1);
+    pi_print_controller(&pi_probe2);
+    pi_print_controller(&pi_probe3);
+    pi_print_controller(&pi_probe4);
+    pi_print_controller(&pi_probe5);
+
+    pi_init = 1;
+}
+
+void pi_update_all()
+{
+    if(!pi_init){
+        pi_setup();
+    }
+
+    if (SET_TEMP != -1000000.0)
     {
-        TimeStampPid = millis() + PID_T;
-        // debugf_blue("pid pudate\n");
-        pid_update_one(SET_TEMP, PIN_H0, NTC_PROBE_0);
-        // pid_update_one(SET_TEMP, PIN_H1, NTC_PROBE_1);
-        // pid_update_one(SET_TEMP, PIN_H2, NTC_PROBE_2);
-        // pid_update_one(SET_TEMP, PIN_H3, NTC_PROBE_3);
-        // pid_update_one(SET_TEMP, PIN_H4, NTC_4);
-        // pid_update_one(SET_TEMP, PIN_H5, NTC_5);
+        static long TimeStampPid = millis() + PID_T;
+        if (millis() > TimeStampPid)
+        {
+            TimeStampPid = millis() + PID_T;
+            // debugf_status("pi udate all\n");
+
+            pi_update_controller(&pi_probe0);
+            pi_update_controller(&pi_probe1);
+            pi_update_controller(&pi_probe2);
+            pi_update_controller(&pi_probe3);
+            pi_update_controller(&pi_probe4);
+            pi_update_controller(&pi_probe5);
+        }
     }
 }
 
-void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
+void pi_print_controller(PI_CONTROLLER *pi)
+{
+    debugf_status("Pi controller h:%u t:%u T_SET:%.2f", pi->heater, pi->thermistor, pi->desired_temp);
+    debugf_info("kp:%f ki:%f ki_max:%f \n", pi->kp, pi->ki, pi->I_MAX);
+    debugf_info("error_last:%f pi_last:%f \n", pi->error_last, pi->pi_last);
+}
+/**
+ * updates the discrete PI controller and therefore the heating power as well.
+ */
+void pi_update_controller(PI_CONTROLLER *pi)
+{
+    if (!heat_init)
+    {
+        heat_setup();
+    }
+
+    /*static Variables*/
+
+    /*Variables.*/
+    unsigned long time_curr = millis();
+    float measured_temp = temp_read_one(pi->thermistor);
+    float error = pi->desired_temp - measured_temp;
+    float dt = (time_curr - pi->time_last) / 1000.0f; // divided by 1000 because then its in s and not ms
+    /*p*/
+    float p = pi->kp * error;
+    /*i*/
+    float i = 0.5f * pi->ki * dt * (error + pi->error_last);
+
+    /* Anti-wind-up */
+    if (pi->pi_last == PID_MAX)
+    // clamps integral when Controller is in positive saturation
+    //  and i is still increasing (making things worse)
+    {
+        if (i > 0)
+        {
+            i = pi->i_last;
+        }
+    }
+    else if (pi->pi_last == (-1 * PID_MAX))
+    // clamps integral when Controller is in negative saturation
+    //  and i is still decreasing (making things worse)
+    {
+        if (i < 0)
+        {
+            i = pi->i_last;
+        }
+    }
+    else
+    // increases i by the last value if non of the anti wind up occurs.
+    {
+        i = i + pi->i_last;
+    }
+
+    /*integral clamping*/
+    if (i > pi->I_MAX)
+    // This clamping isn´t depended on anything. Shouldn´t be needed in normal operation,
+    //  but prevents exessive integral values if something gets wrong
+    {
+        i = pi->I_MAX;
+    }
+    else if (i < (-1 * pi->I_MAX))
+    {
+
+        i = (-1 * pi->I_MAX);
+    }
+
+    /*adding all up*/
+    float pid = p + i;
+
+    /*clamping PID output*/
+    if (pid > PID_MAX)
+    /*This is needed as the heating power provided can´t be infinite large*/
+    {
+        pid = PID_MAX;
+    }
+    else if (pid <= -PID_MAX)
+    {
+        pid = -PID_MAX;
+    }
+
+    /*converting PID to dutycycle for heater*/
+    float heat = (100 * pid / PID_MAX);
+
+    /*claping heat*/
+    if (heat <= 0)
+    {
+        heat = 0;
+    }
+
+    heat_updateone(pi->heater, heat);
+
+    pi->time_last = millis();
+    pi->i_last = i;
+    pi->error_last = error;
+    pi->pi_last = pid;
+    // debugf_status("updating PIN_HEAT:%u with PIN_NTC:%u ", heater, thermistor);
+    // debugf_info("SET_TEMP:%.2f°C measure_temp:%.2f°C p:%.2f i:%.2f heat:%.2f%%\n", desired_temp, measured_temp, p, i, heat);
+}
+
+/**
+ * records a tranfer function with specified values.
+ * First cooles Probes down to T_START.
+ * Then waits and records till TIME_TILL_STOP
+ * @return 0 is still recording 1 if done
+ */
+uint8_t pid_record_tranfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP)
+{
+    enum pi_sweep_states
+    {
+        INIT, // writes header and infos on the sd card
+        COOLING,
+        RECORD_STEP
+    };
+
+    /*static variables*/
+    static enum pi_sweep_states pi_state = INIT;
+    static char sd_filepath[100];
+    static unsigned long timestamp_tranfer_function = millis() + TIME_TILL_STOP;
+    static unsigned long timestamp_last_update = millis() + 1000;
+    static uint8_t done = 0;
+
+    if (millis() > timestamp_last_update)
+    /*limits frequency at 1 Hz*/
+    {
+        timestamp_last_update = millis() + 1000;
+
+        if (millis() < timestamp_tranfer_function)
+        // test if finished with all cycles
+        {
+            float temp_measure = temp_read_one(NTC);
+
+            /*prints status every status_delay s*/
+            const unsigned long status_delay = 60 * 1000;
+            unsigned long timestamp_status = millis() + status_delay;
+            if (millis() > timestamp_status)
+            {
+                timestamp_status = millis() + status_delay;
+                debugf_status("pi_step_response[%u][%u][%f] Testing PID for: [%u]min\n", nMOTHERBOARD_BOOTUPS, Heater, temp_measure, (millis() - timestamp_tranfer_function - TIME_TILL_STOP) / 1000.0 / 60.0);
+            }
+
+            /*writes current temp to SD card*/
+            char str_buff[300];
+
+            if (pi_state != INIT)
+            {
+                snprintf(str_buff, 300, "%u,%f,%f", millis(), temp_measure, get_current());
+                sd_writetofile(str_buff, sd_filepath);
+            }
+
+            switch (pi_state)
+            {
+            case INIT:
+            {
+                debugf_status("pi_step_response[%u][%u] state: Initialising\n", nMOTHERBOARD_BOOTUPS, Heater);
+
+                /*creating file path from bootups and heater*/
+                snprintf(sd_filepath, 99, "temp_step_respons[%lu][%.2f].csv", nMOTHERBOARD_BOOTUPS, HEAT_VOLTAGE * HEAT_CURRENT);
+
+                /*creating header*/
+                snprintf(str_buff, 300, "Timestamp,Temperatur,Power");
+                sd_writetofile(str_buff, sd_filepath);
+
+                debugf_status("pi_step_response[%u][%u] state: COOLING\n", nMOTHERBOARD_BOOTUPS, Heater);
+                pi_state = COOLING;
+                break;
+            }
+            case COOLING:
+                /*cools probe down till TEMP_COOL*/
+                {
+                    heat_updateone(Heater, 0.0);
+                    if (temp_measure < T_START)
+                    {
+                        debugf_status("pi_step_response[%u][%u] state: RECORD_STEP\n", nMOTHERBOARD_BOOTUPS, Heater);
+                        pi_state = RECORD_STEP;
+                        timestamp_tranfer_function = millis() + TIME_TILL_STOP;
+                    }
+                    break;
+                }
+            case RECORD_STEP:
+                /*switches on a PI controller with preprogrammed values for TIME_TILL_STOP*/
+                {
+                    heat_updateone(Heater, 100.0);
+                    break;
+                }
+            default:
+                break;
+            }
+        }
+        else
+        {
+            if (!done)
+            /*limits "done" print state*/
+            {
+                debugf_status("pi_step_response[%u][%u] state: Done\n", nMOTHERBOARD_BOOTUPS, Heater);
+                heat_updateone(Heater, 0.0);
+                done = 1;
+            }
+        }
+    }
+    return done;
+}
+
+
+float kp = 10;
+float ki = 0.1;
+float I_MAX = 3;
+
+/**
+ * This function uses static variables, therfor is only usefull for a single controller
+ */
+void pi_update_one_simple(float desired_temp, uint8_t heater, uint8_t thermistor)
 {
     if (!heat_init)
     {
@@ -40,7 +317,7 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
     static float i_last = 0;
     static unsigned long time_last = millis();
     static float error_last = 0;
-    static float pid_last = 0;
+    static float pi_last = 0;
 
     /*Variables.*/
     unsigned long time_curr = millis();
@@ -53,7 +330,7 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
     float i = 0.5f * ki * dt * (error + error_last);
 
     /* Anti-wind-up */
-    if (pid_last == PID_MAX)
+    if (pi_last == PID_MAX)
     // clamps integral when Controller is in positive saturation
     //  and i is still increasing (making things worse)
     {
@@ -62,7 +339,7 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
             i = i_last;
         }
     }
-    else if (pid_last == (-1 * PID_MAX))
+    else if (pi_last == (-1 * PID_MAX))
     // clamps integral when Controller is in negative saturation
     //  and i is still decreasing (making things worse)
     {
@@ -118,7 +395,7 @@ void pid_update_one(float desired_temp, uint8_t heater, uint8_t thermistor)
     time_last = millis();
     i_last = i;
     error_last = error;
-    pid_last = pid;
+    pi_last = pid;
     // debugf_status("updating PIN_HEAT:%u with PIN_NTC:%u ", heater, thermistor);
     // debugf_info("SET_TEMP:%.2f°C measure_temp:%.2f°C p:%.2f i:%.2f heat:%.2f%%\n", desired_temp, measured_temp, p, i, heat);
 }
@@ -202,7 +479,7 @@ void pid_controller_sweep(PID_ControllerSweepData *data)
                 sd_writetofile(str_buff, data->sd_filepath);
 
                 /*printing infp*/
-                debugf_status("%s\n",str_buff);
+                debugf_status("%s\n", str_buff);
 
                 debugf_status("pi[%u][%u][%u] state: Cooling\n", nMOTHERBOARD_BOOTUPS, data->Heater, data->current_cycle);
                 data->pi_state = COOLING;
@@ -226,7 +503,7 @@ void pid_controller_sweep(PID_ControllerSweepData *data)
                     kp = data->kp_buffer[data->current_cycle];
                     ki = data->ki_buffer[data->current_cycle];
                     I_MAX = data->ki_max_buffer[data->current_cycle];
-                    pid_update_one(data->TEMP_SET, data->Heater, data->NTC);
+                    pi_update_one_simple(data->TEMP_SET, data->Heater, data->NTC);
 
                     if (millis() > data->timestamp_testing_pi)
                     {
@@ -372,7 +649,7 @@ void pid_controller_sweep_simple(uint8_t Heater, uint8_t NTC)
                     kp = kp_buffer[current_cycle];
                     ki = ki_buffer[current_cycle];
                     I_MAX = ki_max_buffer[current_cycle];
-                    pid_update_one(TEMP_SET, Heater, NTC);
+                    pi_update_one_simple(TEMP_SET, Heater, NTC);
 
                     if (millis() > timestamp_testing_pi)
                     {
@@ -398,106 +675,4 @@ void pid_controller_sweep_simple(uint8_t Heater, uint8_t NTC)
             }
         }
     }
-}
-
-/**
- * First cooles Probes down to T_START.
- * Then waits and records till TIME_TILL_STOP
- * @return 0 is still recording 1 if done
- */
-uint8_t pid_record_tranfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP)
-{
-    enum pi_sweep_states
-    {
-        INIT, // writes header and infos on the sd card
-        COOLING,
-        RECORD_STEP
-    };
-
-    /*static variables*/
-    static enum pi_sweep_states pi_state = INIT;
-    static char sd_filepath[100];
-    static unsigned long timestamp_tranfer_function = millis() + TIME_TILL_STOP;
-    static unsigned long timestamp_last_update = millis() + 1000;
-    static uint8_t done = 0;
-
-    if (millis() > timestamp_last_update)
-    /*limits frequency at 1 Hz*/
-    {
-        timestamp_last_update = millis() + 1000;
-
-        if (millis() < timestamp_tranfer_function)
-        // test if finished with all cycles
-        {
-            float temp_measure = temp_read_one(NTC);
-
-            /*prints status every status_delay s*/
-            const unsigned long status_delay = 60 * 1000;
-            unsigned long timestamp_status = millis() + status_delay;
-            if (millis() > timestamp_status)
-            {
-                timestamp_status = millis() + status_delay;
-                debugf_status("pi_step_response[%u][%u][%f] Testing PID for: [%u]min\n", nMOTHERBOARD_BOOTUPS, Heater, temp_measure, (millis() - timestamp_tranfer_function - TIME_TILL_STOP) / 1000.0 / 60.0);
-            }
-
-            /*writes current temp to SD card*/
-            char str_buff[300];
-
-            if (pi_state != INIT)
-            {
-                snprintf(str_buff, 300, "%u,%f,%f", millis(), temp_measure, get_current());
-                sd_writetofile(str_buff, sd_filepath);
-            }
-
-            switch (pi_state)
-            {
-            case INIT:
-            {
-                debugf_status("pi_step_response[%u][%u] state: Initialising\n", nMOTHERBOARD_BOOTUPS, Heater);
-
-                /*creating file path from bootups and heater*/
-                snprintf(sd_filepath, 99, "temp_step_respons[%lu][%.2f].csv", nMOTHERBOARD_BOOTUPS, HEAT_VOLTAGE * HEAT_CURRENT);
-
-                /*creating header*/
-                snprintf(str_buff, 300, "Timestamp,Temperatur,Power");
-                sd_writetofile(str_buff, sd_filepath);
-
-                debugf_status("pi_step_response[%u][%u] state: COOLING\n", nMOTHERBOARD_BOOTUPS, Heater);
-                pi_state = COOLING;
-                break;
-            }
-            case COOLING:
-                /*cools probe down till TEMP_COOL*/
-                {
-                    heat_updateone(Heater, 0.0);
-                    if (temp_measure < T_START)
-                    {
-                        debugf_status("pi_step_response[%u][%u] state: RECORD_STEP\n", nMOTHERBOARD_BOOTUPS, Heater);
-                        pi_state = RECORD_STEP;
-                        timestamp_tranfer_function = millis() + TIME_TILL_STOP;
-                    }
-                    break;
-                }
-            case RECORD_STEP:
-                /*switches on a PI controller with preprogrammed values for TIME_TILL_STOP*/
-                {
-                    heat_updateone(Heater, 100.0);
-                    break;
-                }
-            default:
-                break;
-            }
-        }
-        else
-        {
-            if (!done)
-            /*limits "done" print state*/
-            {
-                debugf_status("pi_step_response[%u][%u] state: Done\n", nMOTHERBOARD_BOOTUPS, Heater);
-                heat_updateone(Heater, 0.0);
-                done = 1;
-            }
-        }
-    }
-    return done;
 }
