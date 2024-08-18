@@ -68,8 +68,7 @@ void periodic_tasks_core_0()
   rp2040.wdt_reset();
   StatusLedBlink(STATLED);
   rp2040.wdt_reset();
-  // float buf[6];
-  // temp_read_all(buf);
+  
   if (TCP_init)
   {
     tcp_check_command();

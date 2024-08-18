@@ -60,7 +60,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   {
     debugf_status("<help>\n");
     debugln(F(
-        "/b|Returns Battery Voltage and current\n\
+"/b|Returns Battery Voltage and current\n\
 /s|Read out Status\n\
 /l|Sets the controller in sleep for ... ms.\n\
 /r|Reboots. if followed by a 1 reboots in Boot Mode\n\
@@ -80,7 +80,8 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
 /a|reads out light spectrometers\n\
 /q|shut down microcontroller\n\
 /c|[kp] [ki] [imax] [set_temp] sets pi controller gain values. \n\
-   Set Set_temp = -1000000.0 to deactivate PI controller and be able to controller heater manually\n"));
+   Set Set_temp = -1000000.0 to deactivate PI controller
+    and be able to controller heater manually\n"));
     break;
   }
   case 'b':

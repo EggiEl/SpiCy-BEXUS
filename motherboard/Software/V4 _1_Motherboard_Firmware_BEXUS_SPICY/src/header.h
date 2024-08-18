@@ -224,6 +224,7 @@ struct PI_CONTROLLER
     unsigned long time_last = millis();
     float error_last = 0;
     float pi_last = 0;
+    float heat = 0;
 } pi_probe0, pi_probe1, pi_probe2, pi_probe3, pi_probe4, pi_probe5;
 
 void pi_update_all();

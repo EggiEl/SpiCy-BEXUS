@@ -2,7 +2,6 @@
 #include "debug_in_color.h"
 
 volatile char heat_init = 0;
-float heat_pwm_atm[8] = {0}; // Saves the current pwm value of all heaters. Every time a heater gets updated, this value gets updated as well.
 
 /*initializes the pins, freq and range of the heating elements*/
 void heat_setup()
@@ -60,39 +59,6 @@ void heat_updateone(const uint8_t PIN, const float duty)
   if (!heat_init)
   {
     heat_setup();
-  }
-
-  switch (PIN)
-  // saves duty cycle in global float array heat_pwm_atm
-  {
-  case PIN_H0:
-    heat_pwm_atm[0] = duty;
-    break;
-  case PIN_H1:
-    heat_pwm_atm[1] = duty;
-    break;
-  case PIN_H2:
-    heat_pwm_atm[2] = duty;
-    break;
-  case PIN_H3:
-    heat_pwm_atm[3] = duty;
-    break;
-  case PIN_H4:
-    heat_pwm_atm[4] = duty;
-    break;
-  case PIN_H5:
-    heat_pwm_atm[5] = duty;
-    break;
-  case PIN_H6:
-    heat_pwm_atm[6] = duty;
-    break;
-  case PIN_H7:
-    heat_pwm_atm[7] = duty;
-    break;
-  default:
-    debugf_error("Pin %u is not mapped to a heating element\n", PIN);
-    return;
-    break;
   }
 
   analogWrite(PIN, duty * 0.01 * ADC_MAX_WRITE);
