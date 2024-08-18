@@ -1,0 +1,22 @@
+@startuml
+state TCP_SERVER {
+    [*] -> UI_Console
+
+    UI_Console -right--> Server_Thread : Start Server
+    UI_Console -right--> Server_Thread : Send Command
+    UI_Console -right--> Server_Thread : Shutdown Server
+    Server_Thread -left--> UI_Console : Display Status    
+    
+    state Server_Thread {
+        [*] --> Socket_Connect
+        Socket_Connect -down-> Client_Connect : Successful Connection
+        Socket_Connect --> Socket_Connect : Retry Connection
+        Client_Connect -down-> Receive_Data : Client Connected
+        Client_Connect --> Client_Connect : Retry Client Connection
+        Receive_Data -up-> Client_Connect : Connection Timeout
+        Receive_Data --> Datalogger_Thread.binary_file : Save Data to Binary
+        Receive_Data --> Datalogger_Thread.MongoDB : Send Data to MongoDB
+    }
+
+}
+@enduml
