@@ -11,7 +11,7 @@ uint32_t check_peripherals();
  * /? for help
  *disabled if DEBUG_MODE == 0
  */
-void checkSerialInput()
+void check_serial_input()
 {
 #if DEBUG_MODE == 1
   if (Serial.available())
@@ -43,7 +43,7 @@ void checkSerialInput()
         }
       }
 
-      handleCommand(buffer_comand, param1, param2, param3, param4);
+      handle_command(buffer_comand, param1, param2, param3, param4);
     }
   }
 #endif
@@ -52,7 +52,7 @@ void checkSerialInput()
 /**
  *
  */
-void handleCommand(char buffer_comand, float param1, float param2, float param3, float param4)
+void handle_command(char buffer_comand, float param1, float param2, float param3, float param4)
 {
   switch (buffer_comand)
   {
@@ -91,7 +91,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   case 's':
   {
     debugf_status("<get Status>\n");
-    debugf_sucess("Status: %i\n", get_Status());
+    debugf_sucess("Status: %i\n", get_status());
     break;
   }
   case 'r':
@@ -133,7 +133,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   }
   case 'm':
   {
-    printMemoryUse();
+    print_memory_use();
     break;
   }
   case 'h':
@@ -303,7 +303,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
     while (1)
     {
       rp2040.wdt_reset();
-      checkSerialInput();
+      check_serial_input();
     }
     break;
   }
@@ -373,7 +373,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
 }
 
 /*swtiches LED in fixed frequency. Non blocking*/
-void StatusLedBlink(uint8_t LED)
+void status_led_blink(uint8_t LED)
 {
   static unsigned int T_ms = 100;
   static unsigned long timestamp = millis() + T_ms;
@@ -460,7 +460,7 @@ float get_current()
 }
 
 /*print current Stack/Heap use*/
-void printMemoryUse()
+void print_memory_use()
 {
   debugf_info("-freeStack: %.2f kbytes\n", (float)rp2040.getFreeStack() * 0.001);
   debugf_info("-freeHeadp: %.2f kbytes | usedHeap: %.2f kbytes\n", (float)rp2040.getFreeHeap() * 0.001, (float)rp2040.getUsedHeap() * 0.001);
@@ -487,7 +487,7 @@ void free_ifnotnull(void *pointer)
  *  | sd init | cableTest  | TCP init | Heater init | Oxy init | Light init | default 0  | Ki   |  Kd   |  Kp   |
  *        0         1          2           3             4           5          6 - 7      8-15   16-23  24-32
  */
-uint32_t get_Status()
+uint32_t get_status()
 {
   uint32_t status = 0;
 
@@ -538,34 +538,34 @@ uint32_t check_peripherals()
   uint32_t results = 0;
   /* NTC probes */
   rp2040.wdt_reset();
-  results |= (temp_isconnected(NTC_PROBE_0) << 0);
-  results |= (temp_isconnected(NTC_PROBE_1) << 1);
-  results |= (temp_isconnected(NTC_PROBE_2) << 2);
-  results |= (temp_isconnected(NTC_PROBE_3) << 3);
+  results |= (temp_isconnected(NTC_OR_OxY_0) << 0);
+  results |= (temp_isconnected(NTC_OR_OxY_1) << 1);
+  results |= (temp_isconnected(NTC_OR_OxY_2) << 2);
+  results |= (temp_isconnected(NTC_OR_OxY_3) << 3);
   results |= (temp_isconnected(NTC_4) << 4);
   results |= (temp_isconnected(NTC_5) << 5);
 
   /* Oxygen sensors */
   rp2040.wdt_reset();
   Serial1.setTimeout(500);
-  results |= (oxy_isconnected(NTC_PROBE_0) << 8);
+  results |= (oxy_isconnected(NTC_OR_OxY_0) << 8);
   rp2040.wdt_reset();
-  results |= (oxy_isconnected(NTC_PROBE_1) << 9);
+  results |= (oxy_isconnected(NTC_OR_OxY_1) << 9);
   rp2040.wdt_reset();
-  results |= (oxy_isconnected(NTC_PROBE_2) << 10);
+  results |= (oxy_isconnected(NTC_OR_OxY_2) << 10);
   rp2040.wdt_reset();
-  results |= (oxy_isconnected(NTC_PROBE_3) << 11);
+  results |= (oxy_isconnected(NTC_OR_OxY_3) << 11);
   rp2040.wdt_reset();
-  results |= (oxy_isconnected(PROBE_4) << 12);
+  results |= (oxy_isconnected(OxY_4) << 12);
   rp2040.wdt_reset();
-  results |= (oxy_isconnected(PROBE_5) << 13);
+  results |= (oxy_isconnected(OxY_5) << 13);
   rp2040.wdt_reset();
   Serial1.setTimeout(TIMEOUT_OXY_SERIAL);
 
   /* Heating */
   pause_Core1();
   /*turns all heater off*/
-  float buff_heat[] = {0, 0, 0, 0, 0, 0, 0, 0};
+  float buff_heat[8] = {0.0};
   heat_updateall(buff_heat);
 
   float cur_alloff = get_current(); // current with all heater off

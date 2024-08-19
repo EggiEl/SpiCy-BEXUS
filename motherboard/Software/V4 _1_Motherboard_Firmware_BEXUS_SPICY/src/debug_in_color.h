@@ -5,11 +5,10 @@
 #include "config.h"
 #include <Arduino.h>
 
-
 #define LENGTHARRAY(array) ((sizeof(array)) / (sizeof(array[0])))
 
-#ifndef DEBUG_LEVELS
-#define DEBUG_LEVELS 4 /*changes the debug console prints. 0=just errors,1=Status Updates and sucess,2=Infos about running code,3 = Debug infos*/
+#ifndef DEBUG_LEVEL
+#define DEBUG_LEVEL 4 /*changes the debug console prints. 0=just errors,1=Status Updates and sucess,2=Infos about running code,3 = Debug infos*/
 #endif
 
 /*-------Explanation----------------*/
@@ -64,8 +63,8 @@ Error debug messages are disabled to prevent infinite error loopings, but all no
 #endif
 
 /*-------Debug levels------------*/
-#ifdef DEBUG_LEVELS
-#if DEBUG_LEVELS > 0 && DEBUG_MODE != 2
+#ifdef DEBUG_LEVEL
+#if DEBUG_LEVEL > 0 && DEBUG_MODE != 2
 /*prints errors in red*/
 #define debugf_error(...) debugf_red(__VA_ARGS__)
 #else
@@ -73,14 +72,14 @@ Error debug messages are disabled to prevent infinite error loopings, but all no
 #endif
 #endif
 
-#if DEBUG_LEVELS > 1
+#if DEBUG_LEVEL > 1
 /*prints in white and is used for not breaking warning abut running processes*/
 #define debugf_warn(...) debugf_yellow(__VA_ARGS__)
 #else
 #define debugf_warn(...)
 #endif
 
-#if DEBUG_LEVELS > 2
+#if DEBUG_LEVEL > 2
 /*prints in yellow gives status about what is running right now*/
 #define debugf_status(...) \
     debugf_magenta(">")    \
@@ -92,56 +91,68 @@ Error debug messages are disabled to prevent infinite error loopings, but all no
 #define debugf_sucess(...)
 #endif
 
-#if DEBUG_LEVELS > 3
+#if DEBUG_LEVEL > 3
 /*prints in white and is used for non critical infos abut running processes*/
 #define debugf_info(...) debugf_white(__VA_ARGS__)
 #else
 #define debugf_info(...)
 #endif
 
+#if DEBUG_LEVEL > 3
+/*print the current state of the statemashine running on the first core*/
+#endif
 
 /*-------Serial printing colours------------*/
 // provides coloured versions of debugf like debugf_yellow()
-#define debugf_yellow(...) \
-    debugf("\033[33m");    \
-    debugf("\033[1m");     \
-    debugf(__VA_ARGS__);   \
-    debugf("\033[0m");
+#if DEBUG_COLOUR == 1
+    #define debugf_yellow(...) \
+        debugf("\033[33m");   \
+        debugf(__VA_ARGS__) \
+        debugf("\033[0m");
 
-#define debugf_black(...) \
-    debugf("\033[30m");   \
-    debugf(__VA_ARGS__);  \
-    debugf("\033[0m");
+    #define debugf_black(...) \
+        debugf("\033[30m");   \
+        debugf(__VA_ARGS__)  \
+        debugf("\033[0m");
 
-#define debugf_red(...)  \
-    debugf("\033[31m");  \
-    debugf("\033[7m");   \
-    debugf(__VA_ARGS__); \
-    debugf("\033[0m");
+    #define debugf_red(...)   \
+        debugf("\033[31m");   \
+        debugf(__VA_ARGS__) \
+        debugf("\033[0m");
 
-#define debugf_green(...) \
-    debugf("\033[32m");   \
-    debugf(__VA_ARGS__);  \
-    debugf("\033[0m");
+    #define debugf_green(...) \
+        debugf("\033[32m");    \
+        debugf(__VA_ARGS__)  \
+        debugf("\033[0m");
 
-#define debugf_blue(...) \
-    debugf("\033[34m");  \
-    debugf(__VA_ARGS__); \
-    debugf("\033[0m");
+    #define debugf_blue(...) \
+        debugf("\033[34m");   \
+        debugf(__VA_ARGS__) \
+        debugf("\033[0m");
 
-#define debugf_magenta(...) \
-    debugf("\033[35m");     \
-    debugf(__VA_ARGS__);    \
-    debugf("\033[0m");
+    #define debugf_magenta(...) \
+        debugf("\033[35m");     \
+        debugf(__VA_ARGS__)    \
+        debugf("\033[0m");
 
-#define debugf_cyan(...) \
-    debugf("\033[36m");  \
-    debugf(__VA_ARGS__); \
-    debugf("\033[0m");
+    #define debugf_cyan(...) \
+        debugf("\033[36m");   \
+        debugf(__VA_ARGS__) \
+        debugf("\033[0m");
 
-#define debugf_white(...) \
-    debugf("\033[37m");   \
-    debugf(__VA_ARGS__);  \
-    debugf("\033[0m");
+    #define debugf_white(...) \
+        debugf("\033[37m");    \
+        debugf(__VA_ARGS__)  \
+        debugf("\033[0m");
+#else
+    #define debugf_yellow(...) debugf(__VA_ARGS__)
+    #define debugf_black(...) debugf(__VA_ARGS__)
+    #define debugf_red(...) debugf(__VA_ARGS__)
+    #define debugf_green(...) debugf(__VA_ARGS__)
+    #define debugf_blue(...) debugf(__VA_ARGS__)
+    #define debugf_magenta(...) debugf(__VA_ARGS__)
+    #define debugf_cyan(...) debugf(__VA_ARGS__)
+    #define debugf_white(...) debugf(__VA_ARGS__)
+#endif
 
 #endif

@@ -18,16 +18,16 @@ void temp_setup()
  * 6 NTC SMD
  * 7 fix reference value
  **/
-void temp_read_all(float buffer[nNTC])
+void temp_read_all(float buffer[AMOUNT_NTC_THERMISTORS])
 {
-    buffer[0] = temp_read_one(NTC_PROBE_0);
-    buffer[1] = temp_read_one(NTC_PROBE_1);
-    buffer[2] = temp_read_one(NTC_PROBE_2);
-    buffer[3] = temp_read_one(NTC_PROBE_3);
+    buffer[0] = temp_read_one(NTC_OR_OxY_0);
+    buffer[1] = temp_read_one(NTC_OR_OxY_1);
+    buffer[2] = temp_read_one(NTC_OR_OxY_2);
+    buffer[3] = temp_read_one(NTC_OR_OxY_3);
     buffer[4] = temp_read_one(NTC_4);
     buffer[5] = temp_read_one(NTC_5);
     buffer[6] = temp_read_one(NTC_SMD);
-    buffer[7] = temp_read_one(NTC_PROBE_10kfix);
+    buffer[7] = temp_read_one(NTC_10kfix);
 }
 
 /**
@@ -78,7 +78,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
     }
 
     /*Connect the right one*/
-    select_probe_or_NTC(NTC);
+    select_oxy_or_ntc(NTC);
 
     /* check if NTC connected*/
     if (analogRead(PIN_TEMPADC) > ADC_MAX_READ * 0.05)
@@ -148,7 +148,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
     case NTC_SMD:
         NTC_B = NTC_B_SMD;
         break;
-    case NTC_PROBE_10kfix:
+    case NTC_10kfix:
         NTC_B = NTC_B_FIX;
         break;
     default:

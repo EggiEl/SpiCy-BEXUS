@@ -29,7 +29,7 @@ void oxy_serial_setup()
     oxySerial.setTimeout(TIMEOUT_OXY_SERIAL); // longst command yet: #LOGO->550ms
     oxySerial.begin(OXY_BAUD);
 
-    // select_probe_or_NTC(NTC_PROBE_0);
+    // select_oxy_or_ntc(NTC_OR_OxY_0);
     // oxy_send_dummy();
 
     debugf_sucess("oxy setup was succesfull\n");
@@ -52,7 +52,7 @@ void oxy_console()
     unsigned char isrunning = 1;
     while (isrunning)
     {
-        select_probe_or_NTC(NTC_PROBE_1);
+        select_oxy_or_ntc(NTC_OR_OxY_1);
 
         /*recives & prints data from FD-ODEM*/
         if (oxySerial.available())
@@ -224,7 +224,7 @@ uint8_t oxy_isconnected(const int PROBE)
         oxy_serial_setup();
     }
 
-    select_probe_or_NTC(PROBE);
+    select_oxy_or_ntc(PROBE);
 
     oxy_send_dummy();
     return oxy_send_dummy();
@@ -316,13 +316,13 @@ uint8_t oxy_read_all(struct OxygenReadout measure_buffer[6])
     debugf_status("oxy_readall ");
     uint success = 0;
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_0, &measure_buffer[0]);
+    success += oxy_meassure(NTC_OR_OxY_0, &measure_buffer[0]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_1, &measure_buffer[1]);
+    success += oxy_meassure(NTC_OR_OxY_1, &measure_buffer[1]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_2, &measure_buffer[2]);
+    success += oxy_meassure(NTC_OR_OxY_2, &measure_buffer[2]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_3, &measure_buffer[3]);
+    success += oxy_meassure(NTC_OR_OxY_3, &measure_buffer[3]);
     debugf_status(". ");
     success += oxy_meassure(NTC_4, &measure_buffer[4]);
     debugf_status(". ");
@@ -340,7 +340,7 @@ const int32_t OXY_SENSORSENABLED = 47; // This parameter defines the enabled sen
 uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
 {
     /*chooses right oxygen Sensor*/
-    select_probe_or_NTC(Probe_Number);
+    select_oxy_or_ntc(Probe_Number);
 
     readout->timestamp_mesurement = millis();
 
@@ -477,7 +477,7 @@ void oxy_calibrateOxy_air(const uint8_t Probe_Number, const uint temp, const uin
 
     debugf_status("Calibrating OxySensor %u\n", Probe_Number);
     debugf_info("calibration values: temp= %.4f°C,pressure= %.4fmbar,humidity= %.6f%%\n", (float)(temp / 100.0), (float)(pressure / 100.0), (float)(humidity / 100.0));
-    select_probe_or_NTC(Probe_Number);
+    select_oxy_or_ntc(Probe_Number);
     oxySerial.setTimeout(7000);
 
     snprintf(buffer, COMMAND_LENGTH_MAX, "CHI %u %u %u %u", channel, temp, pressure, humidity);

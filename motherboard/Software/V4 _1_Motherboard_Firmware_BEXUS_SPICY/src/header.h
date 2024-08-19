@@ -7,8 +7,7 @@
 #include <SoftwareSerial.h>
 
 /*packet management*/
-
-/*contains all data of one readout form the oxygen sensors*/
+// contains all data of one readout form the oxygen sensors
 struct OxygenReadout
 {
     int32_t error = 0;
@@ -27,8 +26,7 @@ struct OxygenReadout
     unsigned long timestamp_mesurement = 0;
 };
 
-
-/*packet used for downlink.please use packet_create() and packet_destroy() for good memory management*/
+// packet used for downlink.please use packet_create() and packet_destroy() for good memory management
 struct packet
 {                                     // struct_format L L 6L 6f 6f 6i i f 2i 80s
     unsigned int id = 0;              // each packet has a unique id
@@ -53,8 +51,8 @@ void packettochar(struct packet *data, char buffer[]);
 void destroy_packet(struct packet *p);
 
 /*state mashine*/
-void nextState();
-void select_probe_or_NTC(const int ProbeorNTC);
+void next_state();
+void select_oxy_or_ntc(const int ProbeorNTC);
 
 /*multithreading*/
 extern uint8_t flag_pause_core1;
@@ -85,17 +83,17 @@ bool sd_printfile(const char filepath[]);
 bool sd_writetofile(const char *buffer_text, const char *filename);
 
 /*status*/
-uint32_t get_Status();
+uint32_t get_status();
 
 /*debug console*/
 extern unsigned long nMOTHERBOARD_BOOTUPS; // this number is stored in the flash and increses with every reset of th uC
-void handleCommand(char buffer_comand, float param1, float param2, float param3, float param4);
+void handle_command(char buffer_comand, float param1, float param2, float param3, float param4);
 float get_batvoltage();
 float get_current();
-void checkSerialInput();
-void StatusLedBlink(uint8_t LED);
+void check_serial_input();
+void status_led_blink(uint8_t LED);
 void free_ifnotnull(void *pointer);
-void printMemoryUse();
+void print_memory_use();
 void read_out_BMP180();
 
 /*i2c scan*/
@@ -105,7 +103,7 @@ void scan_wire();
 extern float heat_pwm_atm[8];
 extern volatile char heat_init;
 void heat_setup();
-void heat_updateall(const float HeaterPWM[]);
+void heat_updateall(const float HeaterPWM[8]);
 void heat_updateone(const uint8_t PIN, const float duty);
 void heat_testmanual();
 
@@ -166,11 +164,11 @@ typedef struct
 uint8_t pi_sweep_update(PI_CONTROLLER *pi, PID_ControllerSweepData *data);
 
 /*Thermistors*/
-#define nNTC 8 // Number of NTC probes
+#define AMOUNT_NTC_THERMISTORS 8 // Number of NTC probes
 extern volatile char temp_init;
 void temp_setup();
 float temp_read_one(uint8_t NTC, uint8_t nTimes = 100);
-void temp_read_all(float buffer[nNTC]);
+void temp_read_all(float buffer[AMOUNT_NTC_THERMISTORS]);
 uint8_t temp_isconnected(uint8_t NTC = 255);
 
 /*Oxygen Sensors*/

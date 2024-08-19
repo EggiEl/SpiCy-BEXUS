@@ -23,7 +23,7 @@ void pi_update_all()
         /*probe 0*/
         pi_probe0.desired_temp = SET_TEMP_DEFAULT;
         pi_probe0.heater_pin = PIN_H0;
-        pi_probe0.thermistor_pin = NTC_PROBE_0;
+        pi_probe0.thermistor_pin = NTC_OR_OxY_0;
         pi_probe0.kp = 10;
         pi_probe0.ki = 0.1;
         pi_probe0.I_MAX = 3;
@@ -31,7 +31,7 @@ void pi_update_all()
         /*probe 1*/
         pi_probe1.desired_temp = SET_TEMP_DEFAULT;
         pi_probe1.heater_pin = PIN_H1;
-        pi_probe1.thermistor_pin = NTC_PROBE_1;
+        pi_probe1.thermistor_pin = NTC_OR_OxY_1;
         pi_probe1.kp = 10;
         pi_probe1.ki = 0.1;
         pi_probe1.I_MAX = 3;
@@ -39,7 +39,7 @@ void pi_update_all()
         /*probe 2*/
         pi_probe2.desired_temp = SET_TEMP_DEFAULT;
         pi_probe2.heater_pin = PIN_H2;
-        pi_probe2.thermistor_pin = NTC_PROBE_2;
+        pi_probe2.thermistor_pin = NTC_OR_OxY_2;
         pi_probe2.kp = 10;
         pi_probe2.ki = 0.1;
         pi_probe2.I_MAX = 3;
@@ -47,7 +47,7 @@ void pi_update_all()
         /*probe 3*/
         pi_probe3.desired_temp = SET_TEMP_DEFAULT;
         pi_probe3.heater_pin = PIN_H3;
-        pi_probe3.thermistor_pin = NTC_PROBE_3;
+        pi_probe3.thermistor_pin = NTC_OR_OxY_3;
         pi_probe3.kp = 10;
         pi_probe3.ki = 0.1;
         pi_probe3.I_MAX = 3;

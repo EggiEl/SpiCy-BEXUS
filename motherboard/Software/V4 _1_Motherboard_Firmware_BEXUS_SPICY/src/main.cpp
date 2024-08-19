@@ -45,8 +45,8 @@ void periodic_tasks_core_0();
 void loop()
 {
   periodic_tasks_core_0();
-  nextState();
-  if (pi_record_transfer_function(PIN_H0, NTC_PROBE_0, 20, 1.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
+  next_state();
+  if (pi_record_transfer_function(PIN_H0, NTC_OR_OxY_0, 20, 1.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
   {
     pi_sweep_update(&pi_probe0, &sweep_0);
   }
@@ -56,9 +56,9 @@ void loop()
 /*all things that should get checkt every loop of CPU0*/
 void periodic_tasks_core_0()
 {
-  checkSerialInput();
+  check_serial_input();
   rp2040.wdt_reset();
-  StatusLedBlink(STATLED);
+  status_led_blink(STATLED);
   rp2040.wdt_reset();
   
   if (TCP_init)

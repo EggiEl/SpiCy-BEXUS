@@ -217,7 +217,7 @@ void tcp_check_command()
   if (success)
   {
     debugf_sucess("-TCP command recieved %c|%f|%f|%f|%f\n", buffer.comand[0], buffer.param[0], buffer.param[1], buffer.param[2], buffer.param[3]);
-    handleCommand(buffer.comand[0], buffer.param[0], buffer.param[1], buffer.param[2], buffer.param[3]);
+    handle_command(buffer.comand[0], buffer.param[0], buffer.param[1], buffer.param[2], buffer.param[3]);
   }
 }
 

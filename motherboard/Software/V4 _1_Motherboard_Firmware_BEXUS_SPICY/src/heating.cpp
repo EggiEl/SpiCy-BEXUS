@@ -33,7 +33,7 @@ void heat_setup()
  * /updates the PWM Dutycicle of the Heaters. Will not change PWM values wich are set to 1.
  * @param unsigned int HeaterPWM[] the PWM in an array size of 8
  */
-void heat_updateall(const float HeaterPWM[])
+void heat_updateall(const float HeaterPWM[8])
 {
   if (!heat_init)
   {
