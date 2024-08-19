@@ -5,7 +5,6 @@
 #include "Arduino.h"
 
 /*Debug*/
-
 #define DEBUG_MODE 0 /**activates debug statements. \
 0 = disable                                         \
 1 = Serial                                          \
