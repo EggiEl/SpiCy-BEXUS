@@ -23,7 +23,7 @@
 > 4: printing current state
 */
 
-// AThere are 2 debug modes:
+// There are 2 debug modes:
 /*
 0 = no debug. Nothing gets printed anywhere
 1 = Serial all debug messages & errors get printed on the Serial Termina
