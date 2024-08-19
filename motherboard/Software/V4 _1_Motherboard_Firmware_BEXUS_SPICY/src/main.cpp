@@ -23,28 +23,20 @@
 void print_startup_message();
 void update_nResets();
 
-PID_ControllerSweepData Sweep_1 = {
-    .Heater = PIN_H0,
-    .NTC = NTC_PROBE_0,
+PID_ControllerSweepData sweep_0 = {
     .TEMP_COOL = 31,
     .TEMP_SET = 32,
     .TIME_TILL_STOP = (unsigned long)(0.5 * (60 * 60 * 1000)),
     .nCYCLES = 5,
-    .kp_buffer = {0.01, 0.1, 1, 5, 10},
-    .ki_buffer = {0, 0, 0, 0, 0},
-    .ki_max_buffer = {0, 0, 0, 0, 0},
-    .pi_state = INIT,
-    .current_cycle = 0,
-    .timestamp_testing_pi = 0,
-    .timestamp_last_update = millis() + 1000,
-    .timestamp_print_status = 60 * 1000,
-    .done = 0};
+    .kp_buf = {0.01, 0.1, 1, 5, 10},
+    .ki_buf = {0, 0, 0, 0, 0},
+    .i_max_buf = {0, 0, 0, 0, 0}};
 //------------------------core1--------------------------------
 /*does all the data handeling*/
 
 void setup()
 {
-  // rp2040.wdt_begin(WATCHDOG_TIMEOUT);
+  // rp2040.wdt_begin(TIMEOUT_WATCHDOG);
   update_nResets();
   print_startup_message();
 }
@@ -54,9 +46,9 @@ void loop()
 {
   periodic_tasks_core_0();
   nextState();
-  if (pid_record_tranfer_function(PIN_H0, NTC_PROBE_0, 25, 1.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
+  if (pi_record_transfer_function(PIN_H0, NTC_PROBE_0, 20, 1.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
   {
-    pid_controller_sweep(&Sweep_1);
+    pi_sweep_update(&pi_probe0, &sweep_0);
   }
   // read_out_BMP180();
 }

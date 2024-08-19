@@ -1,8 +1,10 @@
 
 #ifndef DEBUG_IN_COLOR_H
 #define DEBUG_IN_COLOR_H
-#include "header.h"
-#include "debug_in_color.h"
+
+#include "config.h"
+#include <Arduino.h>
+
 
 #define LENGTHARRAY(array) ((sizeof(array)) / (sizeof(array[0])))
 
@@ -97,44 +99,6 @@ Error debug messages are disabled to prevent infinite error loopings, but all no
 #define debugf_info(...)
 #endif
 
-/*---------Error handling------------------*/
-/**
- * saves/sends errors
- * @param destination: here y can specify where the Error code should end up.
- * leave it undefined to save it to sd and send it via the tcp connection.
- * ERROR_DESTINATION_NO_TCP, ERROR_DESTINATION_NO_SD and ERROR_DESTINATION_NO_TCP_SD are parameters too
- */
-void error_handler(const unsigned int ErrorCode, int destination)
-{
-    /*initialising SD card*/
-    static char error_init = 0;
-    static char error_log_file_path[100];
-
-    if (!error_init)
-    {
-        snprintf(error_log_file_path, 99, "error_log[%u].csv", nMOTHERBOARD_BOOTUPS);
-        sd_writetofile("timestamp;errorcode", error_log_file_path);
-        error_init = 1;
-    }
-
-    /*saves error to SD card*/
-    if (destination != ERROR_DESTINATION_NO_SD && destination != ERROR_DESTINATION_NO_TCP_SD)
-    /*if saving to sd card is okay*/
-    {
-        char string[200];
-        snprintf(string, sizeof(string), "%u;%u", millis(), ErrorCode);
-        sd_writetofile(string, error_log_file_path);
-    }
-
-    /*sends error via TCP*/
-#if DEBUG_MODE == 2
-    if (destination != ERROR_DESTINATION_NO_TCP && destination != ERROR_DESTINATION_NO_TCP_SD)
-    /*if sending via tcp is okay*/
-    {
-        tpc_send_error((unsigned int)ErrorCode);
-    }
-#endif
-}
 
 /*-------Serial printing colours------------*/
 // provides coloured versions of debugf like debugf_yellow()

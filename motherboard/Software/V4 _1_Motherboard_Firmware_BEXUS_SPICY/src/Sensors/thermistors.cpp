@@ -18,7 +18,7 @@ void temp_setup()
  * 6 NTC SMD
  * 7 fix reference value
  **/
-void temp_read_all(float buffer[8])
+void temp_read_all(float buffer[nNTC])
 {
     buffer[0] = temp_read_one(NTC_PROBE_0);
     buffer[1] = temp_read_one(NTC_PROBE_1);

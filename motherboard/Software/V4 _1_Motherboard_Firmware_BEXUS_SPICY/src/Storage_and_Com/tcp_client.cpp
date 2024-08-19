@@ -42,7 +42,7 @@ void tcp_setup_client()
 
   Ethernet.setRetransmissionCount(3);
   Ethernet.setRetransmissionTimeout(20); // miliseconds
-  client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
+  client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
 
   Ethernet.init(CS_LAN);
 
@@ -159,7 +159,7 @@ void tcp_check_command()
   if (!client.connected())
   {
     client.connect(SERVERIP, SERVERPORT);
-    client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
+    client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
   }
 
   // checks whether  data is avaliable
@@ -240,7 +240,7 @@ char tcp_send_packet(struct packet *packet)
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     status = client.connect(SERVERIP, SERVERPORT);
-    client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
+    client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
   }
 
   switch (status) // client.connect returns different int values depending of the sucess of the operation
@@ -276,7 +276,7 @@ char tcp_send_packet(struct packet *packet)
     debugf_error(" truncated_2\n");
     break;
   default:
-    debug("error %i: ", status);
+    debugf_error("error %i: ", status);
     if (Ethernet.linkStatus() == 2)
     {
       error_handler(ERROR_TCP_CABLE_DISCO, ERROR_DESTINATION_NO_TCP);
@@ -360,7 +360,7 @@ void tpc_send_error(const unsigned char error)
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     status = client.connect(SERVERIP, SERVERPORT);
-    client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
+    client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
   }
 
   if (status)
@@ -380,7 +380,7 @@ void tpc_send_string(const char string[])
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     status = client.connect(SERVERIP, SERVERPORT);
-    client.setConnectionTimeout(TCP_CONNECTIONTIMEOUT);
+    client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
   }
 
   if (status)

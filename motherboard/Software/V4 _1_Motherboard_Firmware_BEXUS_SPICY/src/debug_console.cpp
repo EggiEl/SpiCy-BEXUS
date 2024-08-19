@@ -59,8 +59,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   case '?':
   {
     debugf_status("<help>\n");
-    debugln(F(
-"/b|Returns Battery Voltage and current\n\
+    debugf_info("/b|Returns Battery Voltage and current\n\
 /s|Read out Status\n\
 /l|Sets the controller in sleep for ... ms.\n\
 /r|Reboots. if followed by a 1 reboots in Boot Mode\n\
@@ -79,9 +78,9 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
 /o|starts console to talk to PyroSience FD-OEM Oxygen Module\n\
 /a|reads out light spectrometers\n\
 /q|shut down microcontroller\n\
-/c|[kp] [ki] [imax] [set_temp] sets pi controller gain values. \n\
-   Set Set_temp = -1000000.0 to deactivate PI controller
-    and be able to controller heater manually\n"));
+/c|[kp] [ki] [imax] [SET_TEMP_DEFAULT] sets pi controller gain values. \n\
+   Set SET_TEMP_DEFAULT = -1000000.0 to deactivate PI controller\
+    and be able to controller heater manually\n");
     break;
   }
   case 'b':
@@ -361,7 +360,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
       pi->I_MAX = param4;
     }
 
-    debugf_info("Set pi controller of probe:%u p:%.4f i:%.4f i_max:%.4f", kp, ki, I_MAX);
+    debugf_info("Set pi controller of probe:%u p:%.4f i:%.4f i_max:%.4f", pi->kp, pi->ki, pi->I_MAX);
 
     break;
   }
@@ -515,8 +514,8 @@ uint32_t get_Status()
   status |= ((uint32_t)0 << 7);
 
   // PID constants
-  status |= ((uint32_t)kp << 8);  // Ki
-  status |= ((uint32_t)ki << 16); // Kd
+  // status |= ((uint32_t)kp << 8);  // Ki
+  // status |= ((uint32_t)ki << 16); // Kd
 
   return status;
 }
@@ -561,7 +560,7 @@ uint32_t check_peripherals()
   rp2040.wdt_reset();
   results |= (oxy_isconnected(PROBE_5) << 13);
   rp2040.wdt_reset();
-  Serial1.setTimeout(OXY_SERIAL_TIMEOUT);
+  Serial1.setTimeout(TIMEOUT_OXY_SERIAL);
 
   /* Heating */
   pause_Core1();

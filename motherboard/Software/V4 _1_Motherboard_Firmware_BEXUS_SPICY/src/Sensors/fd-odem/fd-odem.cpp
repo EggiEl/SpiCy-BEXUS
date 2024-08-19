@@ -23,10 +23,10 @@ void oxy_serial_setup()
 
     // Serial1.setRX(PIN_OX_RX);
     // Serial1.setTX(PIN_OX_TX);
-    // Serial1.setTimeout(OXY_SERIAL_TIMEOUT);
+    // Serial1.setTimeout(TIMEOUT_OXY_SERIAL);
     // Serial1.begin(OXY_BAUD);
 
-    oxySerial.setTimeout(OXY_SERIAL_TIMEOUT); // longst command yet: #LOGO->550ms
+    oxySerial.setTimeout(TIMEOUT_OXY_SERIAL); // longst command yet: #LOGO->550ms
     oxySerial.begin(OXY_BAUD);
 
     // select_probe_or_NTC(NTC_PROBE_0);
@@ -79,17 +79,13 @@ void oxy_console()
                 }
                 case 'm':
                 {
-                    unsigned long timestamp = millis();
                     OxygenReadout readout;
                     oxy_meassure((uint)buffer[2], &readout);
-                    debugf_magenta("%u\n", millis() - timestamp);
                     break;
                 }
                 case 'c':
                 {
-                    unsigned long timestamp = millis();
                     oxy_calibrateOxy_air((uint)buffer[2], (uint32_t)(temp_read_one((uint)buffer[2]) * 100), 965935UL, 46942UL);
-                    debugf_magenta("%u\n", millis() - timestamp);
                     break;
                 }
                 default:
@@ -487,7 +483,7 @@ void oxy_calibrateOxy_air(const uint8_t Probe_Number, const uint temp, const uin
     snprintf(buffer, COMMAND_LENGTH_MAX, "CHI %u %u %u %u", channel, temp, pressure, humidity);
     oxy_commandhandler(buffer);
 
-    oxySerial.setTimeout(OXY_SERIAL_TIMEOUT);
+    oxySerial.setTimeout(TIMEOUT_OXY_SERIAL);
     // save calibration with SVG
     // oxy_commandhandler("SVS_1");
 }
