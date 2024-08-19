@@ -2,123 +2,11 @@
 #ifndef HEADER_H
 #define HEADER_H
 
+#include "config.h"
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-/*--------Settings-----------------------*/
-#define DEBUG_MODE 2    /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
-#define COLOUR_SERIAL 1 /*activates/deactivates Serial.printing with color*/
-#define USB_ENABLE 0    /*enables single drive USB functions*/
-#define ADC_REF 3.0
-#define ADC_RES 12 // ADC Resolution in Bit
-#define ADC_MAX_READ (pow(2, ADC_RES) - 1)
-const unsigned int ADC_MAX_WRITE = 100; //  Value where analogRrite = 100% duty cycle
-const unsigned int ADC_FREQ_WRITE = 30000;
 
-/*------Timings.......................*/
-const unsigned long WATCHDOG_TIMEOUT = 4000;    // neds to be 8000ms max i think
-const unsigned long TCP_CONNECTIONTIMEOUT = 20; /*Conntection Timeout of the tcp client*/
-const unsigned long TIMEOUT_LIGHT_SENSOR = 100;
-const unsigned long OXY_SERIAL_TIMEOUT = 300;
-
-extern unsigned long nMOTHERBOARD_BOOTUPS; // this number is stored in the flash and increses with every reset of th uC
-/*----------------Pin mapping-------------*/
-typedef enum
-{
-    // GPIO extension buses
-    SDA0 = 2, // I2C Data Line 0
-    SCL0 = 3, // I2C Clock Line 0
-
-    SDA1 = 4, // I2C Data Line 1
-    SCL1 = 5, // I2C Clock Line 1
-
-    // LAN and SD card connected on SPI0 Bus
-    CS_LAN = 17,    // Chip Select for LAN
-    CS_SD = 16,     // Chip Select for SD Card
-    MISO_SPI0 = 20, // Master In Slave Out for SPI0
-    SCK_SPI0 = 18,  // Serial Clock for SPI0
-    MOSI_SPI0 = 19, // Master Out Slave In for SPI0
-
-    // LAN_MISO = MISO_SPI0, // Alias for LAN MISO
-    // LAN_MOSI = MOSI_SPI0, // Alias for LAN MOSI
-    // LAN_SCK = SCK_SPI0,   // Alias for LAN SCK
-
-    // V4.0 pins (commented out)
-    // MISO_SPI0 = 0,
-    // CS_SD = 1,
-    // SCK_SPI0 = 2,
-    // MOSI_SPI0 = 3,
-    // LAN_MISO = 8,
-    // CS_LAN = 9,
-    // LAN_MOSI = 11,
-    // LAN_SCK = 10,
-
-    // High pins
-    PIN_H0 = 8,
-    PIN_H1 = 9,
-    PIN_H2 = 10,
-    PIN_H3 = 11,
-    PIN_H4 = 12,
-    PIN_H5 = 13,
-    PIN_H6 = 14,
-    PIN_H7 = 15,
-
-    // Multiplexer lines for temperature probes and oxygen sensors
-    PIN_PROBEMUX_0 = 26,      // Multiplexer Select Line 0
-    PIN_PROBEMUX_1 = 25,      // Multiplexer Select Line 1
-    PIN_PROBEMUX_2 = 24,      // Multiplexer Select Line 2
-    PIN_MUX_OXY_DISABLE = 21, // Multiplexer Oxygen Disable
-
-    PIN_TEMPADC = A3, // Analog-to-Digital Converter for temperature
-
-    NTC_PROBE_0 = 1,      // S1 of MUX
-    NTC_PROBE_1 = 2,      // S2 of MUX
-    NTC_PROBE_2 = 3,      // S3 of MUX
-    NTC_PROBE_3 = 4,      // S4 of MUX
-    NTC_4 = 8,            // S8 of MUX
-    NTC_5 = 7,            // S7 of MUX
-    NTC_SMD = 5,          // S5 of MUX
-    NTC_PROBE_10kfix = 6, // S6 of MUX
-
-    PROBE_4 = 5,
-    PROBE_5 = 6,
-
-    PIN_OX_RX = 0, // Oxygen Sensor RX
-    PIN_OX_TX = 1, // Oxygen Sensor TX
-
-    STATLED = 23, // Status LED
-
-    PIN_VOLT = A2, // Voltage Pin
-    PIN_CURR = A1, // Current Pin
-
-    // Connection of the Light Sensor
-    PIN_LIGHT_SDA_0 = SDA0, // I2C Data Line for Light Sensor AS7262
-    PIN_LIGHT_SCL_0 = SCL0, // I2C Clock Line for Light Sensor AS7262
-
-    PIN_LIGHT_SDA_1 = SDA1, // I2C Data Line for Light Sensor AS7263
-    PIN_LIGHT_SCL_1 = SCL1  // I2C Clock Line for Light Sensor AS7263
-} PIN_MAPPING;
-
-/**
- * contains all data of one readout form the oxygen sensors
- * */
-struct OxygenReadout
-{
-    int32_t error = 0;
-    int32_t dphi = 0;
-    int32_t umolar = 0;
-    int32_t mbar = 0;
-    int32_t airSat = 0;
-    int32_t tempSample = 0;
-    int32_t tempCase = 0;
-    int32_t signalIntensity = 0;
-    int32_t ambientLight = 0;
-    int32_t pressure = 0;
-    int32_t humidity = 0;
-    int32_t resistorTemp = 0;
-    int32_t percentOtwo = 0;
-    unsigned long timestamp_mesurement = 0;
-};
-
+/*packet management*/
 /**
  * packet used for downlink.
  * please use packet_create() and packet_destroy() for good memory management
@@ -142,6 +30,27 @@ struct packet
     float pid[3] = {0};       // kp and ki
 };
 
+/**
+ * contains all data of one readout form the oxygen sensors
+ * */
+struct OxygenReadout
+{
+    int32_t error = 0;
+    int32_t dphi = 0;
+    int32_t umolar = 0;
+    int32_t mbar = 0;
+    int32_t airSat = 0;
+    int32_t tempSample = 0;
+    int32_t tempCase = 0;
+    int32_t signalIntensity = 0;
+    int32_t ambientLight = 0;
+    int32_t pressure = 0;
+    int32_t humidity = 0;
+    int32_t resistorTemp = 0;
+    int32_t percentOtwo = 0;
+    unsigned long timestamp_mesurement = 0;
+};
+
 struct packet *packet_create();
 void packettochar(struct packet *data, char buffer[]);
 void destroy_packet(struct packet *p);
@@ -150,7 +59,7 @@ void destroy_packet(struct packet *p);
 void nextState();
 void select_probe_or_NTC(const int ProbeorNTC);
 
-/* multithreading */
+/*multithreading*/
 extern uint8_t flag_pause_core1;
 extern uint8_t flag_core1_isrunning;
 void pause_Core1();
@@ -179,10 +88,10 @@ bool sd_printfile(const char filepath[]);
 bool sd_writetofile(const char *buffer_text, const char *filename);
 
 /*status*/
-extern unsigned long nMOTHERBOARD_BOOTUPS; // keep tracks of how often the Motherboard did boot up
 uint32_t get_Status();
 
 /*debug console*/
+extern unsigned long nMOTHERBOARD_BOOTUPS; // this number is stored in the flash and increses with every reset of th uC
 void handleCommand(char buffer_comand, float param1, float param2, float param3, float param4);
 float get_batvoltage();
 float get_current();
@@ -196,12 +105,7 @@ void read_out_BMP180();
 void scan_wire();
 
 /*Heating*/
-
 extern float heat_pwm_atm[8];
-const float HEAT_VOLTAGE = 5;                              // in V
-const float HEAT_RESISTANCE = 10;                          // in Ohm
-const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE; // current of a single Heater in A
-
 extern volatile char heat_init;
 void heat_setup();
 void heat_updateall(const float HeaterPWM[]);
@@ -209,12 +113,13 @@ void heat_updateone(const uint8_t PIN, const float duty);
 void heat_testmanual();
 
 /*Pid*/
-struct PI_CONTROLLER
+typedef struct
 {
     /*semi constant values*/
-    float desired_temp = SET_TEMP;
-    uint8_t heater = 0;
-    uint8_t thermistor = 0;
+    float desired_temp = SET_TEMP_DEFAULT;
+
+    uint8_t heater_pin = 0;
+    uint8_t thermistor_pin = 0;
     float kp = 0;
     float ki = 0;
     float I_MAX = 0;
@@ -225,66 +130,53 @@ struct PI_CONTROLLER
     float error_last = 0;
     float pi_last = 0;
     float heat = 0;
-} pi_probe0, pi_probe1, pi_probe2, pi_probe3, pi_probe4, pi_probe5;
+}PI_CONTROLLER;
+
+extern PI_CONTROLLER pi_probe0;
+extern PI_CONTROLLER pi_probe1;
+extern PI_CONTROLLER pi_probe2;
+extern PI_CONTROLLER pi_probe3;
+extern PI_CONTROLLER pi_probe4;
+extern PI_CONTROLLER pi_probe5;
 
 void pi_update_all();
 void pi_print_controller(PI_CONTROLLER *pi);
-uint8_t pid_record_tranfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP);
+uint8_t pi_record_transfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP);
 
-//those are exclusivle for the controller_update_simple and controller_sweep_simple:
-extern float kp;
-extern float ki;
-extern float I_MAX;
-extern float SET_TEMP;
-void pid_controller_sweep_simple(uint8_t Heater, uint8_t NTC);
-
-enum pi_sweep_states
-{
-    INIT,      // writes header and infos on the sd card
-    COOLING,   // Waits till probe reaches TEMP_COOL
-    TESTING_PI // testing the PI controller for TIME_TILL_STOP more milliseconds
-};
-/*saves all relevant data for the */
 typedef struct
 {
-    uint8_t Heater = -1;
-    uint8_t NTC = -1;
     /* Control parameters */
     float TEMP_COOL = 31;                                  // start tenperature for the PI controller to see an evtl. overshoot. [°C]
     float TEMP_SET = 32;                                   // Target temperature for the PI controller. [°C]
     unsigned long TIME_TILL_STOP = 0.5 * (60 * 60 * 1000); // testing/recording duration for a single cotroller. [ms]
-    unsigned int nCYCLES = 10;
+    unsigned int nCYCLES = 10;                             // amount of cycles. Should be <= than elements in the gain buffers
 
     /* PI values to test */
-    float kp_buffer[20] = {0};
-    float ki_buffer[20] = {0};
-    float ki_max_buffer[20] = {0};
+    float kp_buf[20] = {0};
+    float ki_buf[20] = {0};
+    float i_max_buf[20] = {0};
 
     /* "Static" variables */
-    // do not change those
-    enum pi_sweep_states pi_state = INIT;
-    char sd_filepath[100] = {0};
-    unsigned int current_cycle = 0;
-    unsigned long timestamp_testing_pi = 0;
-    unsigned long timestamp_last_update = millis() + 1000;
-    unsigned long timestamp_print_status = 60 * 1000;
-    uint8_t done = 0;
+    int pi_state = 0;                                      // do not change
+    char sd_filepath[100] = {0};                           // do not change
+    unsigned int current_cycle = 0;                        // do not change
+    unsigned long timestamp_testing_pi = 0;                // do not change
+    unsigned long timestamp_last_update = millis() + 1000; // do not change
+    unsigned long timestamp_print_status = 60 * 1000;      // do not change
+    uint8_t done = 0;                                      // readout only. do not change
 } PID_ControllerSweepData;
-void pid_controller_sweep(PID_ControllerSweepData *data);
+
+uint8_t pi_sweep_update(PI_CONTROLLER *pi, PID_ControllerSweepData *data);
 
 /*Thermistors*/
 #define nNTC 8 // Number of NTC probes
 extern volatile char temp_init;
 void temp_setup();
 float temp_read_one(uint8_t NTC, uint8_t nTimes = 100);
-void temp_read_all(float buffer[8]);
+void temp_read_all(float buffer[nNTC]);
 uint8_t temp_isconnected(uint8_t NTC = 255);
 
 /*Oxygen Sensors*/
-#define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
-#define RETURN_LENGTH_MAX 100  // how long a return string can possibly be
-#define OXY_BAUD 19200
-
 extern SerialPIO oxySerial;
 extern volatile char oxy_serial_init;
 void oxy_serial_setup();
@@ -300,7 +192,7 @@ void light_read(float *buffer, bool with_flash = 0);
 uint8_t light_connected();
 
 /*error handeling*/
-enum
+enum ERRORS
 {
     ERROR_SD_INI,
     ERROR_SD_COUNT,
@@ -355,7 +247,6 @@ enum ERROR_DESTINATION
     ERROR_DESTINATION_NO_SD,
     ERROR_DESTINATION_NO_TCP_SD
 };
-
 void error_handler(const unsigned int ErrorCode, int destination = 0);
 
 #endif
