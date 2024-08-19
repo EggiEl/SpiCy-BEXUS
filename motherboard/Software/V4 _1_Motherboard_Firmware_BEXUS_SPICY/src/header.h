@@ -125,7 +125,7 @@ typedef struct
     float error_last = 0;
     float pi_last = 0;
     float heat = 0;
-}PI_CONTROLLER;
+} PI_CONTROLLER;
 
 extern PI_CONTROLLER pi_probe0;
 extern PI_CONTROLLER pi_probe1;

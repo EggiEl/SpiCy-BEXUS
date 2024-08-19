@@ -20,6 +20,7 @@
 > 1: Status Updates and sucess messages
 > 2: Infos about running code
 > 3: Debug infos
+> 4: printing current state
 */
 
 // AThere are 2 debug modes:

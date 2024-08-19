@@ -5,28 +5,34 @@
 #include "Arduino.h"
 
 /*Debug*/
-#define DEBUG_MODE 0 /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
-/*changes the debug console prints.
-0 = just errors
-1 = Status Updates and sucess
-2 = Infos about running code
-3 = Debug infos
+
+#define DEBUG_MODE 0 /**activates debug statements. \
+0 = disable                                         \
+1 = Serial                                          \
+2 = TCP */
+
+#define DEBUG_LEVEL 3 /*changes the debug console prints. \
+0 = just errors                                           \
+1 = Status Updates and sucess                             \
+2 = Infos about running code                              \
+3 = Debug infos                                           \
 4 = state infos*/
-#define DEBUG_LEVEL 3
-#define DEBUG_COLOUR 1 /*activates/deactivates Serial.printing with color*/
+
+#define DEBUG_COLOUR 1 /*activates/deactivates colour in debug outputs. \
+Can decrease bandwith when coulurs disabled.*/
 
 /*ADC/Analog Write*/
-const float ADC_REF = 3.0;
-const unsigned int ADC_RES = 12; // ADC Resolution in Bit
-const unsigned int ADC_MAX_READ = (pow(2, ADC_RES) - 1);
-const unsigned int ADC_MAX_WRITE = 100; //  Value where analogRrite = 100% duty cycle
-const unsigned int ADC_FREQ_WRITE = 30000;
+const float ADC_REF = 3.0;                               // reference voltage of the adc converter
+const unsigned int ADC_RES = 12;                         // adc resolution in bit
+const unsigned int ADC_MAX_READ = (pow(2, ADC_RES) - 1); // values adc generates when adc_ref voltage is applied to adc
+const unsigned int ADC_MAX_WRITE = 100;                  // value where analogRrite = 100% duty cycle
+const unsigned int ADC_FREQ_WRITE = 30000;               // frequency of adc write. therefore of the heater
 
 /*Timeouts*/
-const unsigned long TIMEOUT_WATCHDOG = 4000;     // in ms. 8000ms maximal.
-const unsigned long TIMEOUT_TCP_CONNECTION = 20; /*Conntection Timeout of the tcp client*/
-const unsigned long TIMEOUT_LIGHT_SENSOR = 100;
-const unsigned long TIMEOUT_OXY_SERIAL = 300;
+const unsigned long TIMEOUT_WATCHDOG = 4000;     // in ms. 8000ms maximal
+const unsigned long TIMEOUT_TCP_CONNECTION = 20; // conntection timeout of the tcp client
+const unsigned long TIMEOUT_LIGHT_SENSOR = 100;  // timeout i2c connection light sensor
+const unsigned long TIMEOUT_OXY_SERIAL = 300;    // timeout usart oxygen
 
 /*Heating*/
 const float HEAT_VOLTAGE = 5;                              // in V
@@ -38,7 +44,7 @@ const float PID_MAX = HEAT_POWER;
 /*FD-OEM Oxygen sensor*/
 const unsigned long COMMAND_LENGTH_MAX = 100; // how long a command string can possibly be
 const unsigned long RETURN_LENGTH_MAX = 100;  // how long a return string can possibly be
-const unsigned long OXY_BAUD = 19200;
+const unsigned long OXY_BAUD = 19200;         // baud of oxygen usart connection
 
 /*PI controller*/
 const unsigned long PI_T = 1000;                      // time in ms till next PID controller update. (1/Frequency of PI Controller)
