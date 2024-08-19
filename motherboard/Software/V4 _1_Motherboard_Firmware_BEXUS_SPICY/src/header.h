@@ -7,10 +7,28 @@
 #include <SoftwareSerial.h>
 
 /*packet management*/
-/**
- * packet used for downlink.
- * please use packet_create() and packet_destroy() for good memory management
- * */
+
+/*contains all data of one readout form the oxygen sensors*/
+struct OxygenReadout
+{
+    int32_t error = 0;
+    int32_t dphi = 0;
+    int32_t umolar = 0;
+    int32_t mbar = 0;
+    int32_t airSat = 0;
+    int32_t tempSample = 0;
+    int32_t tempCase = 0;
+    int32_t signalIntensity = 0;
+    int32_t ambientLight = 0;
+    int32_t pressure = 0;
+    int32_t humidity = 0;
+    int32_t resistorTemp = 0;
+    int32_t percentOtwo = 0;
+    unsigned long timestamp_mesurement = 0;
+};
+
+
+/*packet used for downlink.please use packet_create() and packet_destroy() for good memory management*/
 struct packet
 {                                     // struct_format L L 6L 6f 6f 6i i f 2i 80s
     unsigned int id = 0;              // each packet has a unique id
@@ -28,27 +46,6 @@ struct packet
     float thermistor[9] = {0};
     float heaterPWM[6] = {0}; // power going to heating
     float pid[3] = {0};       // kp and ki
-};
-
-/**
- * contains all data of one readout form the oxygen sensors
- * */
-struct OxygenReadout
-{
-    int32_t error = 0;
-    int32_t dphi = 0;
-    int32_t umolar = 0;
-    int32_t mbar = 0;
-    int32_t airSat = 0;
-    int32_t tempSample = 0;
-    int32_t tempCase = 0;
-    int32_t signalIntensity = 0;
-    int32_t ambientLight = 0;
-    int32_t pressure = 0;
-    int32_t humidity = 0;
-    int32_t resistorTemp = 0;
-    int32_t percentOtwo = 0;
-    unsigned long timestamp_mesurement = 0;
 };
 
 struct packet *packet_create();
