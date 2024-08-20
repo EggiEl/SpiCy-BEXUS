@@ -5,7 +5,6 @@ import random
 from datetime import datetime
 import struct
 
-
 class MongoDB:
     def __init__(self, uri) -> None:
         self.uri = uri
@@ -41,6 +40,7 @@ class MongoDB:
         and then unpacked in a dictionary.
         This dictionary is then saved in a database as well.
         """
+        """
         # struct packet
         # {                                     // struct_format L L 6L 6f 6f 6i i f 2i 80s
         #     unsigned int id = 0;              // each packet has a unique id
@@ -73,6 +73,7 @@ class MongoDB:
         #     float heaterPWM[6] = {0}; // power going to heating
         #     float pid[3] = {0}; //kp and ki
         # };
+        """
 
         ## save raw data
         # TODO
@@ -80,7 +81,7 @@ class MongoDB:
         ## data conversion
         # creating the format string
         length_oxy_struct = 14  # items not bytes
-        format_oxy = "14 L"  # Format for one OxygenReadout struct
+        format_oxy = "14L "  # Format for one OxygenReadout struct
         format_packet = "2L 2f " + 6 * format_oxy + "12f 9f 6f 3f"
         
         #check sizes
