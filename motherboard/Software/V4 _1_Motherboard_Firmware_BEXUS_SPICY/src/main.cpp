@@ -23,11 +23,20 @@
 void print_startup_message();
 void update_nResets();
 
+PID_ControllerSweepData sweep_0 = {
+    .TEMP_COOL = 31,
+    .TEMP_SET = 32,
+    .TIME_TILL_STOP = (unsigned long)(0.5 * (60 * 60 * 1000)),
+    .nCYCLES = 5,
+    .kp_buf = {0.01, 0.1, 1, 5, 10},
+    .ki_buf = {0, 0, 0, 0, 0},
+    .i_max_buf = {0, 0, 0, 0, 0}};
 //------------------------core1--------------------------------
 /*does all the data handeling*/
+
 void setup()
 {
-  // rp2040.wdt_begin(WATCHDOG_TIMEOUT);
+  // rp2040.wdt_begin(TIMEOUT_WATCHDOG);
   update_nResets();
   print_startup_message();
 }
@@ -36,19 +45,22 @@ void periodic_tasks_core_0();
 void loop()
 {
   periodic_tasks_core_0();
-  nextState();
-  pid_controller_sweep(PIN_H0, NTC_PROBE_0);
+  next_state();
+  if (pi_record_transfer_function(PIN_H0, NTC_OR_OxY_0, 20, 1.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
+  {
+    pi_sweep_update(&pi_probe0, &sweep_0);
+  }
+  // read_out_BMP180();
 }
 
 /*all things that should get checkt every loop of CPU0*/
 void periodic_tasks_core_0()
 {
-  checkSerialInput();
+  check_serial_input();
   rp2040.wdt_reset();
-  StatusLedBlink(STATLED);
+  status_led_blink(STATLED);
   rp2040.wdt_reset();
-  // float buf[6];
-  // temp_read_all(buf);
+  
   if (TCP_init)
   {
     tcp_check_command();
@@ -71,7 +83,7 @@ void loop1()
     flag_core1_isrunning = 1;
 
     periodic_tasks_core_1();
-    // pid_update_all();
+    // pi_update_all();
 
     // debugf_blue(".");
     // delay(1);
@@ -84,7 +96,6 @@ void loop1()
 
 void periodic_tasks_core_1()
 {
-  
 }
 
 unsigned long nMOTHERBOARD_BOOTUPS = 0;
@@ -101,23 +112,25 @@ void update_nResets()
   {
     int integer;
     byte bytearray[sizeof(int)];
-  } buffer;
+  } buf_intbyte;
 
   // reads a nMOTHERBOARD_BOOTUPSS from EEPROM
   for (int i = 0; i < sizeof(int); i++)
   {
-    buffer.bytearray[i] = EEPROM.read(ADRES_NRESETS + i);
+    buf_intbyte.bytearray[i] = EEPROM.read(ADRES_NRESETS + i);
   }
 
   // new reset -> +1
-  buffer.integer += 1;
+  buf_intbyte.integer += 1;
 
-  nMOTHERBOARD_BOOTUPS = buffer.integer;
+  // buf_intbyte.integer = 0; //uncomment /flash comment flash to reset counter
+
+  nMOTHERBOARD_BOOTUPS = buf_intbyte.integer;
 
   // writes the one increased nMOTHERBOARD_BOOTUPSS back to flash
   for (int i = 0; i < sizeof(int); i++)
   {
-    EEPROM.write(ADRES_NRESETS + i, buffer.bytearray[i]);
+    EEPROM.write(ADRES_NRESETS + i, buf_intbyte.bytearray[i]);
   }
   EEPROM.commit();
   EEPROM.end();
@@ -137,7 +150,7 @@ void print_startup_message()
       break;
     }
   }
-   delay(100);
+  delay(100);
   // ghost
   debugf_green(
       "  .-')       _ (`-.                                       \n"

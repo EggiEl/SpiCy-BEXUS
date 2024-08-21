@@ -33,11 +33,11 @@ void heat_setup()
  * /updates the PWM Dutycicle of the Heaters. Will not change PWM values wich are set to 1.
  * @param unsigned int HeaterPWM[] the PWM in an array size of 8
  */
-void heat_updateall(const float HeaterPWM[])
+void heat_updateall(const float HeaterPWM[8])
 {
   if (!heat_init)
   {
-     heat_setup();
+    heat_setup();
   }
   // analogWriteResolution
   heat_updateone(PIN_H0, HeaterPWM[0]);
@@ -52,7 +52,7 @@ void heat_updateall(const float HeaterPWM[])
 
 /**
  * Updates one Heater
- * @param duty is the duty cicyle in percent 
+ * @param duty is the duty cicyle in percent
  */
 void heat_updateone(const uint8_t PIN, const float duty)
 {
@@ -60,7 +60,8 @@ void heat_updateone(const uint8_t PIN, const float duty)
   {
     heat_setup();
   }
-  analogWrite(PIN, duty*0.01*ADC_MAX_WRITE);
+
+  analogWrite(PIN, duty * 0.01 * ADC_MAX_WRITE);
 }
 
 /**
@@ -73,9 +74,8 @@ void heat_testmanual()
   debugf_info("first Heater Pin: %i\n", PIN_H0);
   if (!heat_init)
   {
-     heat_setup();
+    heat_setup();
   }
   float buf[] = {10, 20, 30, 40, 50, 60, 70, 80};
   heat_updateall(buf);
 }
-

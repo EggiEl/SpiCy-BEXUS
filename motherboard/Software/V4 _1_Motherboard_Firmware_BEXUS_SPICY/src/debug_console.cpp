@@ -11,7 +11,7 @@ uint32_t check_peripherals();
  * /? for help
  *disabled if DEBUG_MODE == 0
  */
-void checkSerialInput()
+void check_serial_input()
 {
 #if DEBUG_MODE == 1
   if (Serial.available())
@@ -43,7 +43,7 @@ void checkSerialInput()
         }
       }
 
-      handleCommand(buffer_comand, param1, param2, param3, param4);
+      handle_command(buffer_comand, param1, param2, param3, param4);
     }
   }
 #endif
@@ -52,15 +52,14 @@ void checkSerialInput()
 /**
  *
  */
-void handleCommand(char buffer_comand, float param1, float param2, float param3, float param4)
+void handle_command(char buffer_comand, float param1, float param2, float param3, float param4)
 {
   switch (buffer_comand)
   {
   case '?':
   {
     debugf_status("<help>\n");
-    debugln(F(
-        "/b|Returns Battery Voltage and current\n\
+    debugf_info("/b|Returns Battery Voltage and current\n\
 /s|Read out Status\n\
 /l|Sets the controller in sleep for ... ms.\n\
 /r|Reboots. if followed by a 1 reboots in Boot Mode\n\
@@ -79,7 +78,9 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
 /o|starts console to talk to PyroSience FD-OEM Oxygen Module\n\
 /a|reads out light spectrometers\n\
 /q|shut down microcontroller\n\
-/c|kp ki imax sets pi controller gain values\n"));
+/c|[kp] [ki] [imax] [SET_TEMP_DEFAULT] sets pi controller gain values. \n\
+   Set SET_TEMP_DEFAULT = -1000000.0 to deactivate PI controller\
+    and be able to controller heater manually\n");
     break;
   }
   case 'b':
@@ -90,7 +91,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   case 's':
   {
     debugf_status("<get Status>\n");
-    debugf_sucess("Status: %i\n", get_Status());
+    debugf_sucess("Status: %i\n", get_status());
     break;
   }
   case 'r':
@@ -132,7 +133,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
   }
   case 'm':
   {
-    printMemoryUse();
+    print_memory_use();
     break;
   }
   case 'h':
@@ -302,30 +303,64 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
     while (1)
     {
       rp2040.wdt_reset();
-      checkSerialInput();
+      check_serial_input();
     }
     break;
   }
   case 'c':
   {
-    if (param1 != -1)
+    PI_CONTROLLER *pi = 0;
+
+    /*select controller*/
+    switch ((int)param1)
     {
-      kp = param1;
-    }
-    if (param2 != -1)
-    {
-      ki = param2;
-    }
-    if (param3 != -1)
-    {
-      I_MAX = param3;
-    }
-    if (param4 != -1)
-    {
-      SET_TEMP = param4;
+    case -1:
+
+      break;
+    case 0:
+      pi = &pi_probe0;
+      break;
+
+    case 1:
+      pi = &pi_probe1;
+      break;
+
+    case 2:
+      pi = &pi_probe2;
+      break;
+
+    case 3:
+      pi = &pi_probe3;
+      break;
+
+    case 4:
+      pi = &pi_probe4;
+      break;
+
+    case 5:
+      pi = &pi_probe4;
+      break;
+
+    default:
+      break;
     }
 
-    debugf_info("Set pi controller to p:%.4f i:%.4f i_max:%.4f SetTemp:%.2f\n", kp, ki, I_MAX, SET_TEMP);
+    if (param2 != -1)
+    {
+      pi->kp = param2;
+    }
+
+    if (param3 != -1)
+    {
+      pi->ki = param3;
+    }
+
+    if (param4 != -1)
+    {
+      pi->I_MAX = param4;
+    }
+
+    debugf_info("Set pi controller of probe:%u p:%.4f i:%.4f i_max:%.4f", pi->kp, pi->ki, pi->I_MAX);
 
     break;
   }
@@ -338,7 +373,7 @@ void handleCommand(char buffer_comand, float param1, float param2, float param3,
 }
 
 /*swtiches LED in fixed frequency. Non blocking*/
-void StatusLedBlink(uint8_t LED)
+void status_led_blink(uint8_t LED)
 {
   static unsigned int T_ms = 100;
   static unsigned long timestamp = millis() + T_ms;
@@ -425,7 +460,7 @@ float get_current()
 }
 
 /*print current Stack/Heap use*/
-void printMemoryUse()
+void print_memory_use()
 {
   debugf_info("-freeStack: %.2f kbytes\n", (float)rp2040.getFreeStack() * 0.001);
   debugf_info("-freeHeadp: %.2f kbytes | usedHeap: %.2f kbytes\n", (float)rp2040.getFreeHeap() * 0.001, (float)rp2040.getUsedHeap() * 0.001);
@@ -452,7 +487,7 @@ void free_ifnotnull(void *pointer)
  *  | sd init | cableTest  | TCP init | Heater init | Oxy init | Light init | default 0  | Ki   |  Kd   |  Kp   |
  *        0         1          2           3             4           5          6 - 7      8-15   16-23  24-32
  */
-uint32_t get_Status()
+uint32_t get_status()
 {
   uint32_t status = 0;
 
@@ -479,15 +514,23 @@ uint32_t get_Status()
   status |= ((uint32_t)0 << 7);
 
   // PID constants
-  status |= ((uint32_t)kp << 8);  // Ki
-  status |= ((uint32_t)ki << 16); // Kd
+  // status |= ((uint32_t)kp << 8);  // Ki
+  // status |= ((uint32_t)ki << 16); // Kd
 
   return status;
 }
 
 /**
  * returns what on what port a peripheral is connected
- * @return first 8 bit are the NTCs, next 8 are the oxygen sensors and the next 8 are the heaters
+ * @return
+ * first 8 bits are the NTCs,
+ * next 8 bits are the oxygen sensors,
+ * next 8 bits are the heaters
+ * next bit the AS7262 sensor
+ * next bit AS7263 sensor
+ * next 4 bit the RJ45 cable
+ * -> |unknown|conmected|not connected|error
+ * next bit battery voltage above 25 and below 30
  */
 uint32_t check_peripherals()
 {
@@ -495,35 +538,34 @@ uint32_t check_peripherals()
   uint32_t results = 0;
   /* NTC probes */
   rp2040.wdt_reset();
-  results |= (temp_isconnected(NTC_PROBE_0) << 0);
-  results |= (temp_isconnected(NTC_PROBE_1) << 1);
-  results |= (temp_isconnected(NTC_PROBE_2) << 2);
-  results |= (temp_isconnected(NTC_PROBE_3) << 3);
+  results |= (temp_isconnected(NTC_OR_OxY_0) << 0);
+  results |= (temp_isconnected(NTC_OR_OxY_1) << 1);
+  results |= (temp_isconnected(NTC_OR_OxY_2) << 2);
+  results |= (temp_isconnected(NTC_OR_OxY_3) << 3);
   results |= (temp_isconnected(NTC_4) << 4);
   results |= (temp_isconnected(NTC_5) << 5);
 
   /* Oxygen sensors */
   rp2040.wdt_reset();
   Serial1.setTimeout(500);
-  results |= (oxy_isconnected(NTC_PROBE_0) << 8);
+  results |= (oxy_isconnected(NTC_OR_OxY_0) << 8);
   rp2040.wdt_reset();
-  results |= (oxy_isconnected(NTC_PROBE_1) << 9);
+  results |= (oxy_isconnected(NTC_OR_OxY_1) << 9);
   rp2040.wdt_reset();
-  results |= (oxy_isconnected(NTC_PROBE_2) << 10);
+  results |= (oxy_isconnected(NTC_OR_OxY_2) << 10);
   rp2040.wdt_reset();
-  results |= (oxy_isconnected(NTC_PROBE_3) << 11);
+  results |= (oxy_isconnected(NTC_OR_OxY_3) << 11);
   rp2040.wdt_reset();
-  results |= (oxy_isconnected(PROBE_4) << 12);
+  results |= (oxy_isconnected(OxY_4) << 12);
   rp2040.wdt_reset();
-  results |= (oxy_isconnected(PROBE_5) << 13);
+  results |= (oxy_isconnected(OxY_5) << 13);
   rp2040.wdt_reset();
-  Serial1.setTimeout(OXY_SERIAL_TIMEOUT);
+  Serial1.setTimeout(TIMEOUT_OXY_SERIAL);
 
   /* Heating */
-
-  /*turns all heater off*/
   pause_Core1();
-  float buff_heat[] = {0, 0, 0, 0, 0, 0, 0, 0};
+  /*turns all heater off*/
+  float buff_heat[8] = {0.0};
   heat_updateall(buff_heat);
 
   float cur_alloff = get_current(); // current with all heater off
@@ -568,6 +610,65 @@ uint32_t check_peripherals()
   }
   debugf_info("\n");
 
+  uint8_t light_connection = light_connected();
+
+  debugf_info("\nLight: ");
+  switch (light_connection)
+  {
+  case 0:
+    debugf_info("np light sensor connected");
+    break;
+  case 2:
+    debugf_info("only AS7262 connected");
+    results |= (1 << 23);
+    break;
+  case 3:
+    debugf_info("only AS7263 connected");
+    results |= (1 << 24);
+    break;
+  case 5:
+    debugf_info("both AS7262 and AS7263 are connected");
+    results |= (1 << 23);
+    results |= (1 << 24);
+    break;
+  default:
+    break;
+  }
+
+  uint8_t cabletest_buff = tcp_link_status();
+  debugf_info("\nRJ45 cable: ");
+  switch (cabletest_buff)
+  {
+  case 0:
+    debugf_error("unknown");
+    results |= (1 << 25);
+    break;
+  case 1:
+    debugf_sucess("connected");
+    results |= (1 << 26);
+    break;
+  case 2:
+    debugf_error("not connected");
+    results |= (1 << 27);
+    break;
+  default:
+    debugf_error("error in code. Ethernet.linkStatus() = %i", cabletest_buff);
+    results |= (1 << 28);
+    break;
+  }
+
+  debugf_info("\n25.0V< V_Bat <30.0 ");
+  if (25.0 < get_batvoltage() < 30.0)
+  {
+    debugf_sucess("connected");
+    results |= (1 << 29);
+  }
+  else
+  {
+    debugf_error("not connected");
+    results |= (1 << 29);
+  }
+
   return results;
 }
 
@@ -577,7 +678,7 @@ uint32_t check_peripherals()
 void read_out_BMP180()
 {
   static SFE_BMP180 pressure;
-  const float ALTITUDE = 1655.0; // Altitude of SparkFun's HQ in Boulder, CO. in meters
+  // const float ALTITUDE = 1655.0; // Altitude of SparkFun's HQ in Boulder, CO. in meters
   static uint8_t init = 0;
   if (!init)
   {
@@ -632,7 +733,8 @@ void read_out_BMP180()
     // Retrieve the completed temperature measurement:
     // Note that the measurement is stored in the variable T.
     // Function returns 1 if successful, 0 if failure.
-    double T, P, p0, a;
+    double T, P;
+    // double p0, a;
     status = pressure.getTemperature(T);
     if (status != 0)
     {
@@ -664,9 +766,10 @@ void read_out_BMP180()
         if (status != 0)
         {
           // Print out the measurement:
-          Serial.print(">absolute pressure: ");
-          Serial.print(P, 2);
-          Serial.print(" mb\n");
+          // Serial.print(">absolute pressure: ");
+          // Serial.print(P, 2);
+          // Serial.print(" mb\n");
+          Serial.println(P, 2);
 
           // The pressure sensor returns abolute pressure, which varies with altitude.
           // To remove the effects of altitude, use the sealevel function and your current altitude.

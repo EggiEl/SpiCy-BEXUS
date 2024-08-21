@@ -70,7 +70,7 @@ int sd_numpackets(const char filepath[])
 // writes a packet to sd card
 bool sd_writestruct(struct packet *s_out, const char filepath[])
 {
-  debugf_status("SD_writestru.id:%u file:%s\n", s_out->id, filepath);
+  // debugf_status("SD_writestru.id:%u file:%s\n", s_out->id, filepath);
   if (!sd_init)
   {
     sd_setup();
@@ -109,7 +109,7 @@ bool sd_readstruct(struct packet *data, const char filepath[], unsigned long pos
     if (!myFile.available())
     { // can be openend but is empty
       debug("-SDopeningsuccess-error:size(file)=");
-      debug(myFile.available());
+      debug("%u", myFile.available());
       debugln("}-");
       return 0;
     }
@@ -233,9 +233,7 @@ void sd_printinfo()
   //             SD.clusterSize(), SD.blocksPerCluster(), SD.blockSize(), SD.totalBlocks(), SD.totalClusters());
   uint32_t volumesize;
   debugf_info("Volume type is: %i FAT\n", SD.fatType());
-  volumesize = SD.totalClusters();
-  volumesize *= SD.clusterSize();
-  volumesize /= 1000;
+  volumesize = SD.totalClusters() * SD.clusterSize() / 1000;
 
   debugf_info("Volume size %.2fGb| %.fMb| %.f kb\n", (float)(volumesize / 1024) / 1024.0, (float)volumesize / 1024, (float)volumesize);
   debugf_info("Card size:%u\n", SD.size() / 1000);
@@ -246,3 +244,4 @@ void sd_printinfo()
   root = SD.open("/");
   printDirectory(root, 0);
 }
+

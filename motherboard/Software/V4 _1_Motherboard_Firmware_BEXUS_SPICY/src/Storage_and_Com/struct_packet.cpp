@@ -29,6 +29,12 @@ struct packet *packet_create()
     a->timestampPacket = millis();
     a->power[0] = get_batvoltage();
     a->power[1] = get_current();
+    a->heaterPWM[0] = pi_probe0.heat;
+    a->heaterPWM[1] = pi_probe1.heat;
+    a->heaterPWM[2] = pi_probe2.heat;
+    a->heaterPWM[3] = pi_probe3.heat;
+    a->heaterPWM[4] = pi_probe4.heat;
+    a->heaterPWM[5] = pi_probe5.heat;
   }
   else
   {
@@ -64,7 +70,7 @@ void destroy_packet(struct packet *p)
  * @param struct packet data to write to
  * @return pointer to buffer
  */
-void packettochar(struct packet *data,char buffer[])
+void packettochar(struct packet *data, char buffer[])
 {
   memcpy(buffer, data, sizeof(struct packet)); // Copy struct data into buffer
 }

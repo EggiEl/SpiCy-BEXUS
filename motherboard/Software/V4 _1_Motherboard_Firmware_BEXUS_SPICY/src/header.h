@@ -2,102 +2,12 @@
 #ifndef HEADER_H
 #define HEADER_H
 
+#include "config.h"
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-/*--------Settings-----------------------*/
-#define DEBUG_MODE 1    /*actrivates debug statements. 0=disable,1=Serial,2=TCP*/
-#define COLOUR_SERIAL 1 /*activates/deactivates Serial.printing with color*/
-#define USB_ENABLE 0    /*enables single drive USB functions*/
-#define ADC_REF 3.0
-#define ADC_RES 12 // ADC Resolution in Bit
-#define ADC_MAX_READ (pow(2, ADC_RES) - 1)
-const unsigned int ADC_MAX_WRITE = 100; //  Value where analogRrite = 100% duty cycle
-const unsigned int ADC_FREQ_WRITE = 30000;
 
-#define WATCHDOG_TIMEOUT 4000 // neds to be 8000ms max i think
-#define CONNECTIONTIMEOUT 20  /*Conntection Timeout of the tcp client*/
-
-extern unsigned long nMOTHERBOARD_BOOTUPS; // this number is stored in the flash and increses with every reset of th uC
-/*----------------Pin mapping-------------*/
-typedef enum
-{
-    // GPIO extension buses
-    SDA0 = 2, // I2C Data Line 0
-    SCL0 = 3, // I2C Clock Line 0
-
-    SDA1 = 4, // I2C Data Line 1
-    SCL1 = 5, // I2C Clock Line 1
-
-    // LAN and SD card connected on SPI0 Bus
-    CS_LAN = 17,    // Chip Select for LAN
-    CS_SD = 16,     // Chip Select for SD Card
-    MISO_SPI0 = 20, // Master In Slave Out for SPI0
-    SCK_SPI0 = 18,  // Serial Clock for SPI0
-    MOSI_SPI0 = 19, // Master Out Slave In for SPI0
-
-    // LAN_MISO = MISO_SPI0, // Alias for LAN MISO
-    // LAN_MOSI = MOSI_SPI0, // Alias for LAN MOSI
-    // LAN_SCK = SCK_SPI0,   // Alias for LAN SCK
-
-    // V4.0 pins (commented out)
-    // MISO_SPI0 = 0,
-    // CS_SD = 1,
-    // SCK_SPI0 = 2,
-    // MOSI_SPI0 = 3,
-    // LAN_MISO = 8,
-    // CS_LAN = 9,
-    // LAN_MOSI = 11,
-    // LAN_SCK = 10,
-
-    // High pins
-    PIN_H0 = 8,
-    PIN_H1 = 9,
-    PIN_H2 = 10,
-    PIN_H3 = 11,
-    PIN_H4 = 12,
-    PIN_H5 = 13,
-    PIN_H6 = 14,
-    PIN_H7 = 15,
-
-    // Multiplexer lines for temperature probes and oxygen sensors
-    PIN_PROBEMUX_0 = 26,      // Multiplexer Select Line 0
-    PIN_PROBEMUX_1 = 25,      // Multiplexer Select Line 1
-    PIN_PROBEMUX_2 = 24,      // Multiplexer Select Line 2
-    PIN_MUX_OXY_DISABLE = 21, // Multiplexer Oxygen Disable
-
-    PIN_TEMPADC = A3, // Analog-to-Digital Converter for temperature
-
-    NTC_PROBE_0 = 1,      // S1 of MUX
-    NTC_PROBE_1 = 2,      // S2 of MUX
-    NTC_PROBE_2 = 3,      // S3 of MUX
-    NTC_PROBE_3 = 4,      // S4 of MUX
-    NTC_4 = 8,            // S8 of MUX
-    NTC_5 = 7,            // S7 of MUX
-    NTC_SMD = 5,          // S5 of MUX
-    NTC_PROBE_10kfix = 6, // S6 of MUX
-
-    PROBE_4 = 5,
-    PROBE_5 = 6,
-
-    PIN_OX_RX = 0, // Oxygen Sensor RX
-    PIN_OX_TX = 1, // Oxygen Sensor TX
-
-    STATLED = 23, // Status LED
-
-    PIN_VOLT = A2, // Voltage Pin
-    PIN_CURR = A1, // Current Pin
-
-    // Connection of the Light Sensor
-    PIN_LIGHT_SDA_0 = SDA0, // I2C Data Line for Light Sensor AS7262
-    PIN_LIGHT_SCL_0 = SCL0, // I2C Clock Line for Light Sensor AS7262
-
-    PIN_LIGHT_SDA_1 = SDA1, // I2C Data Line for Light Sensor AS7263
-    PIN_LIGHT_SCL_1 = SCL1  // I2C Clock Line for Light Sensor AS7263
-} PIN_MAPPING;
-
-/**
- * contains all data of one readout form the oxygen sensors
- * */
+/*packet management*/
+// contains all data of one readout form the oxygen sensors
 struct OxygenReadout
 {
     int32_t error = 0;
@@ -116,10 +26,7 @@ struct OxygenReadout
     unsigned long timestamp_mesurement = 0;
 };
 
-/**
- * packet used for downlink.
- * please use packet_create() and packet_destroy() for good memory management
- * */
+// packet used for downlink.please use packet_create() and packet_destroy() for good memory management
 struct packet
 {                                     // struct_format L L 6L 6f 6f 6i i f 2i 80s
     unsigned int id = 0;              // each packet has a unique id
@@ -136,7 +43,7 @@ struct packet
      *8 cpu temp*/
     float thermistor[9] = {0};
     float heaterPWM[6] = {0}; // power going to heating
-    float pid[3] = {0}; //kp and ki
+    float pid[3] = {0};       // kp and ki
 };
 
 struct packet *packet_create();
@@ -144,10 +51,10 @@ void packettochar(struct packet *data, char buffer[]);
 void destroy_packet(struct packet *p);
 
 /*state mashine*/
-void nextState();
-void select_probe_or_NTC(const int ProbeorNTC);
+void next_state();
+void select_oxy_or_ntc(const int ProbeorNTC);
 
-/* multithreading */
+/*multithreading*/
 extern uint8_t flag_pause_core1;
 extern uint8_t flag_core1_isrunning;
 void pause_Core1();
@@ -158,10 +65,12 @@ extern volatile char TCP_init;
 void tcp_setup_client();
 void tpc_testmanually(int nPackets = 1, unsigned int nTries = 5);
 char tcp_send_packet(struct packet *packet);
-char tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPackets);
+void tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPackets);
 void tcp_check_command();
 void tcp_print_info();
-void tpc_send_error(unsigned char error);
+void tpc_send_error(const unsigned char error);
+void tpc_send_string(const char string[]);
+void tcp_sendf(const char *__restrict format, ...);
 unsigned char tcp_link_status();
 
 /*sd*/
@@ -174,59 +83,95 @@ bool sd_printfile(const char filepath[]);
 bool sd_writetofile(const char *buffer_text, const char *filename);
 
 /*status*/
-extern unsigned long nMOTHERBOARD_BOOTUPS; // keep tracks of how often the Motherboard did boot up
-uint32_t get_Status();
+uint32_t get_status();
 
 /*debug console*/
-void handleCommand(char buffer_comand, float param1, float param2, float param3, float param4);
+extern unsigned long nMOTHERBOARD_BOOTUPS; // this number is stored in the flash and increses with every reset of th uC
+void handle_command(char buffer_comand, float param1, float param2, float param3, float param4);
 float get_batvoltage();
 float get_current();
-void checkSerialInput();
-void StatusLedBlink(uint8_t LED);
+void check_serial_input();
+void status_led_blink(uint8_t LED);
 void free_ifnotnull(void *pointer);
-void printMemoryUse();
+void print_memory_use();
 void read_out_BMP180();
 
 /*i2c scan*/
 void scan_wire();
 
 /*Heating*/
-const float HEAT_VOLTAGE = 5;                              // in V
-const float HEAT_RESISTANCE = 10;                          // in Ohm
-const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE; // current of a single Heater in A
-
+extern float heat_pwm_atm[8];
 extern volatile char heat_init;
 void heat_setup();
-void heat_updateall(const float HeaterPWM[]);
+void heat_updateall(const float HeaterPWM[8]);
 void heat_updateone(const uint8_t PIN, const float duty);
 void heat_testmanual();
 
 /*Pid*/
-extern volatile char pid_init;
-extern float kp;
-extern float ki;
-extern float I_MAX;
-extern float SET_TEMP;
+typedef struct
+{
+    /*semi constant values*/
+    float desired_temp = SET_TEMP_DEFAULT;
 
-void pid_setup();
-void pid_update_all();
-void pid_controller_sweep(uint8_t Heater, uint8_t NTC);
+    uint8_t heater_pin = 0;
+    uint8_t thermistor_pin = 0;
+    float kp = 0;
+    float ki = 0;
+    float I_MAX = 0;
+
+    /*static values*/
+    float i_last = 0;
+    unsigned long time_last = millis();
+    float error_last = 0;
+    float pi_last = 0;
+    float heat = 0;
+} PI_CONTROLLER;
+
+extern PI_CONTROLLER pi_probe0;
+extern PI_CONTROLLER pi_probe1;
+extern PI_CONTROLLER pi_probe2;
+extern PI_CONTROLLER pi_probe3;
+extern PI_CONTROLLER pi_probe4;
+extern PI_CONTROLLER pi_probe5;
+
+void pi_update_all();
+void pi_print_controller(PI_CONTROLLER *pi);
+uint8_t pi_record_transfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP);
+
+typedef struct
+{
+    /* Control parameters */
+    float TEMP_COOL = 31;                                  // start tenperature for the PI controller to see an evtl. overshoot. [°C]
+    float TEMP_SET = 32;                                   // Target temperature for the PI controller. [°C]
+    unsigned long TIME_TILL_STOP = 0.5 * (60 * 60 * 1000); // testing/recording duration for a single cotroller. [ms]
+    unsigned int nCYCLES = 10;                             // amount of cycles. Should be <= than elements in the gain buffers
+
+    /* PI values to test */
+    float kp_buf[20] = {0};
+    float ki_buf[20] = {0};
+    float i_max_buf[20] = {0};
+
+    /* "Static" variables */
+    int pi_state = 0;                                      // do not change
+    char sd_filepath[100] = {0};                           // do not change
+    unsigned int current_cycle = 0;                        // do not change
+    unsigned long timestamp_testing_pi = 0;                // do not change
+    unsigned long timestamp_last_update = millis() + 1000; // do not change
+    unsigned long timestamp_print_status = 60 * 1000;      // do not change
+    uint8_t done = 0;                                      // readout only. do not change
+} PID_ControllerSweepData;
+
+uint8_t pi_sweep_update(PI_CONTROLLER *pi, PID_ControllerSweepData *data);
 
 /*Thermistors*/
-#define nNTC 8 // Number of NTC probes
+#define AMOUNT_NTC_THERMISTORS 8 // Number of NTC probes
 extern volatile char temp_init;
 void temp_setup();
 float temp_read_one(uint8_t NTC, uint8_t nTimes = 100);
-void temp_read_all(float buffer[8]);
-void temp_log(const char path[], uint8_t NTC_Probe, uint8_t NTC_Ambient, unsigned long t_nextmeas_ms);
+void temp_read_all(float buffer[AMOUNT_NTC_THERMISTORS]);
 uint8_t temp_isconnected(uint8_t NTC = 255);
 
 /*Oxygen Sensors*/
-#define COMMAND_LENGTH_MAX 100 // how long a command string can possibly be
-#define RETURN_LENGTH_MAX 100  // how long a return string can possibly be
-#define OXY_BAUD 19200
-#define OXY_SERIAL_TIMEOUT 300
-
 extern SerialPIO oxySerial;
 extern volatile char oxy_serial_init;
 void oxy_serial_setup();
@@ -236,23 +181,13 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues = 0);
 uint8_t oxy_isconnected(const int PROBE = 255);
 
 /*light spectrometers*/
-const unsigned long TIMEOUT_LIGHT_SENSOR = 100;
 extern volatile char light_init;
 void light_setup();
 void light_read(float *buffer, bool with_flash = 0);
-
-/*single File USB*/
-extern volatile char singleFileUsb_init;
-void usb_singlefile_setup();
-void usb_singlefile_update();
-void headerCSV();
-void plug(uint32_t i);
-void unplug(uint32_t i);
-void deleteCSV(uint32_t i);
-void singlefile_close();
+uint8_t light_connected();
 
 /*error handeling*/
-enum
+enum ERRORS
 {
     ERROR_SD_INI,
     ERROR_SD_COUNT,
@@ -271,6 +206,9 @@ enum
     ERROR_TCP_TRUNCATED_2,
     ERROR_TCP_CABLE_DISCO,
     ERROR_TCP_NO_RESPONSE,
+    ERROR_TCP_DEBUG_MEMORY,
+    ERROR_TCP_CLIENT_CONNTECION,
+    ERROR_TCP_SEND_MULTIBLE_FAILED,
 
     ERROR_HEAT_INI,
 
@@ -298,9 +236,12 @@ enum
     ERROR_OXY_HUMIDITY_SENSOR
 };
 
-extern const uint8_t ERROR_DESTINATION_NO_TCP;
-extern const uint8_t ERROR_DESTINATION_NO_SD;
-extern const uint8_t ERROR_DESTINATION_NO_TCP_SD;
-void error_handler(const unsigned int ErrorCode, const uint8_t destination = 0);
+enum ERROR_DESTINATION
+{
+    ERROR_DESTINATION_NO_TCP,
+    ERROR_DESTINATION_NO_SD,
+    ERROR_DESTINATION_NO_TCP_SD
+};
+void error_handler(const unsigned int ErrorCode, int destination = 0);
 
 #endif

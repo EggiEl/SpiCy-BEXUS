@@ -6,7 +6,7 @@ volatile char oxy_calib = 0;
 
 SerialPIO oxySerial(PIN_OX_TX, PIN_OX_RX);
 
-void oxy_send_dummy();
+uint8_t oxy_send_dummy();
 uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout);
 void oxy_decode_mesurement_errors(const u32_t R0);
 void oxy_decode_general_error(const char errorCode_buff[]);
@@ -23,62 +23,17 @@ void oxy_serial_setup()
 
     // Serial1.setRX(PIN_OX_RX);
     // Serial1.setTX(PIN_OX_TX);
-    // Serial1.setTimeout(OXY_SERIAL_TIMEOUT);
+    // Serial1.setTimeout(TIMEOUT_OXY_SERIAL);
     // Serial1.begin(OXY_BAUD);
 
-    oxySerial.setTimeout(OXY_SERIAL_TIMEOUT); // longst command yet: #LOGO->550ms
+    oxySerial.setTimeout(TIMEOUT_OXY_SERIAL); // longst command yet: #LOGO->550ms
     oxySerial.begin(OXY_BAUD);
 
-    // select_probe_or_NTC(NTC_PROBE_0);
+    // select_oxy_or_ntc(NTC_OR_OxY_0);
     // oxy_send_dummy();
 
     debugf_sucess("oxy setup was succesfull\n");
     oxy_serial_init = 1;
-}
-
-/*sending dummy byte. For syncronising the data line.*/
-void oxy_send_dummy()
-{
-    char buffer[20];
-    oxySerial.write("\r");
-    oxySerial.flush();
-    // returns a error after 10ms
-    oxySerial.readBytesUntil('\r', buffer, sizeof(buffer));
-    delay(2); // this is necessary
-}
-
-/**
- * tests weather a oxygen sensor is connected
- * @param PROBE specify here wich Probe y wanna check. dont specify anything or set to 255 checks the currently connected one
- */
-uint8_t oxy_isconnected(const int PROBE)
-{
-    if (!oxy_serial_init)
-    {
-        oxy_serial_setup();
-    }
-
-    select_probe_or_NTC(PROBE);
-
-    oxy_send_dummy();
-
-    /*sendst test*/
-    char buffer[10] = {0};
-    oxySerial.write("\r");
-    oxySerial.flush();
-    oxySerial.readBytes(buffer, 1);
-    delay(2); // this is necessary
-
-    if (buffer[0] == '\r')
-    {
-        return 1;
-    }
-    else
-    {
-        // debugf_warn("Return for testing command #LOGO:\"%s\"\n", buffer);
-        // oxy_decode_general_error(buffer);
-        return 0;
-    }
 }
 
 /*Starts Console for talk with fd-odem module*/
@@ -97,7 +52,7 @@ void oxy_console()
     unsigned char isrunning = 1;
     while (isrunning)
     {
-        select_probe_or_NTC(NTC_PROBE_0);
+        select_oxy_or_ntc(NTC_OR_OxY_1);
 
         /*recives & prints data from FD-ODEM*/
         if (oxySerial.available())
@@ -124,17 +79,13 @@ void oxy_console()
                 }
                 case 'm':
                 {
-                    unsigned long timestamp = millis();
                     OxygenReadout readout;
                     oxy_meassure((uint)buffer[2], &readout);
-                    debugf_magenta("%u\n", millis() - timestamp);
                     break;
                 }
                 case 'c':
                 {
-                    unsigned long timestamp = millis();
                     oxy_calibrateOxy_air((uint)buffer[2], (uint32_t)(temp_read_one((uint)buffer[2]) * 100), 965935UL, 46942UL);
-                    debugf_magenta("%u\n", millis() - timestamp);
                     break;
                 }
                 default:
@@ -240,6 +191,45 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues)
     }
 }
 
+/*sending dummy byte. For syncronising the data line. returns 1 if sucessful aka sensor present, 0 if not*/
+uint8_t oxy_send_dummy()
+{
+    char buffer[2] = {0};
+    oxySerial.write("\r");
+    oxySerial.flush();
+    // returns a error after 10ms
+    oxySerial.readBytes(buffer, 1);
+    delay(2); // this is necessary
+
+    if (buffer[0] == '\r')
+    {
+        return 1;
+    }
+    else
+    {
+        // debugf_warn("Return for testing command #LOGO:\"%s\"\n", buffer);
+        // oxy_decode_general_error(buffer);
+        return 0;
+    }
+}
+
+/**
+ * tests weather a oxygen sensor is connected
+ * @param PROBE specify here wich Probe y wanna check. dont specify anything or set to 255 checks the currently connected one
+ */
+uint8_t oxy_isconnected(const int PROBE)
+{
+    if (!oxy_serial_init)
+    {
+        oxy_serial_setup();
+    }
+
+    select_oxy_or_ntc(PROBE);
+
+    oxy_send_dummy();
+    return oxy_send_dummy();
+}
+
 /**
  * Makes out of an error string a human readable debug statement.
  * Example of an error code would be "#ERRO -23"
@@ -326,13 +316,13 @@ uint8_t oxy_read_all(struct OxygenReadout measure_buffer[6])
     debugf_status("oxy_readall ");
     uint success = 0;
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_0, &measure_buffer[0]);
+    success += oxy_meassure(NTC_OR_OxY_0, &measure_buffer[0]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_1, &measure_buffer[1]);
+    success += oxy_meassure(NTC_OR_OxY_1, &measure_buffer[1]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_2, &measure_buffer[2]);
+    success += oxy_meassure(NTC_OR_OxY_2, &measure_buffer[2]);
     debugf_status(". ");
-    success += oxy_meassure(NTC_PROBE_3, &measure_buffer[3]);
+    success += oxy_meassure(NTC_OR_OxY_3, &measure_buffer[3]);
     debugf_status(". ");
     success += oxy_meassure(NTC_4, &measure_buffer[4]);
     debugf_status(". ");
@@ -350,7 +340,7 @@ const int32_t OXY_SENSORSENABLED = 47; // This parameter defines the enabled sen
 uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
 {
     /*chooses right oxygen Sensor*/
-    select_probe_or_NTC(Probe_Number);
+    select_oxy_or_ntc(Probe_Number);
 
     readout->timestamp_mesurement = millis();
 
@@ -487,13 +477,13 @@ void oxy_calibrateOxy_air(const uint8_t Probe_Number, const uint temp, const uin
 
     debugf_status("Calibrating OxySensor %u\n", Probe_Number);
     debugf_info("calibration values: temp= %.4f°C,pressure= %.4fmbar,humidity= %.6f%%\n", (float)(temp / 100.0), (float)(pressure / 100.0), (float)(humidity / 100.0));
-    select_probe_or_NTC(Probe_Number);
+    select_oxy_or_ntc(Probe_Number);
     oxySerial.setTimeout(7000);
 
     snprintf(buffer, COMMAND_LENGTH_MAX, "CHI %u %u %u %u", channel, temp, pressure, humidity);
     oxy_commandhandler(buffer);
 
-    oxySerial.setTimeout(OXY_SERIAL_TIMEOUT);
+    oxySerial.setTimeout(TIMEOUT_OXY_SERIAL);
     // save calibration with SVG
     // oxy_commandhandler("SVS_1");
 }
