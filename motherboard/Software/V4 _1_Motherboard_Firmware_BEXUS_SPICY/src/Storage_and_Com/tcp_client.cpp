@@ -475,3 +475,76 @@ unsigned char tcp_link_status()
 {
   return Ethernet.linkStatus();
 }
+
+#include <LittleFS.h>
+#include <picoOTA.h>
+void receiveOTAUpdate()
+{
+  #define IP_OTA_SERVER Ethernet.localIP().toString().c_str()
+
+  rp2040.wdt_begin(8000);
+
+  Ethernet.begin(MAC); //TODO add static ip
+
+  if (Ethernet.hardwareStatus() == EthernetNoHardware)
+  {
+    debugln("Ethernet chip not found. Cannot run without hardware.");
+    rp2040.reboot();
+  }
+
+  debugf("Ethernet initialized with IP: %s\n", IP_OTA_SERVER);
+
+  EthernetServer server(80);
+  server.begin();
+
+  debugln("Waiting for client connection...");
+  EthernetClient client = server.available();
+
+
+  if (client)
+  {
+    debugln("Client connected, receiving OTA image...");
+    LittleFS.begin();
+
+    File f = LittleFS.open("firmware.bin.efi", "w"); // before: blink.bin.gz
+
+    if (!f)
+    {
+      debugf("Failed to open file for writing\n");
+      return;
+    }
+
+    while (client.connected())
+    {
+      if (client.available())
+      {
+        int byteRead = client.read();
+        if (byteRead >= 0)
+        {
+          f.write((uint8_t)byteRead);
+        }
+      }
+    }
+
+    f.close();
+    debugf("File received and saved as blink.bin.gz\n");
+    client.stop();
+
+    // Perform OTA update
+    debugf("Programming OTA commands...\n");
+    picoOTA.begin();
+    picoOTA.addFile("firmware.bin.efi");
+    picoOTA.commit();
+    LittleFS.end();
+    debugf("OTA update completed.\n");
+
+    // Rebooting after delay
+    debugf("Rebooting in 1 seconds...\n");
+    delay(1);
+    rp2040.reboot();
+  }
+  else
+  {
+    debugln("No client connected, retrying...");
+  }
+}

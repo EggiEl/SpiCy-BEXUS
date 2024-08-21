@@ -3,7 +3,9 @@
 #include "pico/stdlib.h"
 #include "hardware/adc.h"
 #include "hardware/pwm.h"
-#define nGPIOS 29
+
+const unsigned long nGPIOS = 29;
+
 uint32_t check_peripherals();
 
 /**
@@ -72,7 +74,6 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
 /d|check connected peripherals\n\
 /p|sends a test packet over lan\n\
 /w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
-/u|single file usb update. /u 1 closes singlefileusb\n\
 /t|returns temperature value. 0-6 for external probes, 7 for uC one, -1 for all of them\n\
 /x|prints barometer temperature and pressure\n\
 /o|starts console to talk to PyroSience FD-OEM Oxygen Module\n\
@@ -80,7 +81,8 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
 /q|shut down microcontroller\n\
 /c|[kp] [ki] [imax] [SET_TEMP_DEFAULT] sets pi controller gain values. \n\
    Set SET_TEMP_DEFAULT = -1000000.0 to deactivate PI controller\
-    and be able to controller heater manually\n");
+    and be able to controller heater manually\
+/u|starts an over_the_air OTA update\n");
     break;
   }
   case 'b':
@@ -240,22 +242,6 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
     }
     break;
   }
-  case 'u':
-  {
-#if USB_ENABLE == 1
-    if (param1 == 1)
-    {
-      singlefile_close();
-    }
-    else
-    {
-      usb_singlefile_update();
-    }
-#else
-    debugf_status("Single file Usb disabled\n");
-#endif
-    break;
-  }
   case 't':
   {
     if (param1 == -1)
@@ -362,6 +348,13 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
 
     debugf_info("Set pi controller of probe:%u p:%.4f i:%.4f i_max:%.4f", pi->kp, pi->ki, pi->I_MAX);
 
+    break;
+  }
+  case 'u':
+  {
+    debugf_status("Over the air update. Waits for Serverfile\n");
+    WiFiClient client;
+    HTTPUpdate.update(client, "192.168.0.2", 80, "/arduino.bin");
     break;
   }
   default:

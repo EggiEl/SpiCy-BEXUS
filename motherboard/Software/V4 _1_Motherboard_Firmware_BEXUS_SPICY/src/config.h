@@ -18,7 +18,7 @@
 4 = state infos*/
 
 #define DEBUG_COLOUR 1 /*activates/deactivates colour in debug outputs. \
-Can decrease bandwith when coulurs disabled.*/
+Can decrease bandwith when colors disabled.*/
 
 /*ADC/Analog Write*/
 const float ADC_REF = 3.0;                               // reference voltage of the adc converter
@@ -34,11 +34,11 @@ const unsigned long TIMEOUT_LIGHT_SENSOR = 100;  // timeout i2c connection light
 const unsigned long TIMEOUT_OXY_SERIAL = 300;    // timeout usart oxygen
 
 /*Heating*/
-const float HEAT_VOLTAGE = 5;                              // in V
-const float HEAT_RESISTANCE = 12;                          // in Ohm
-const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE; // current of a single Heater in A
-const float HEAT_POWER = HEAT_CURRENT * HEAT_CURRENT * HEAT_RESISTANCE;
-const float PID_MAX = HEAT_POWER;
+const float HEAT_VOLTAGE = 5;                                           // in V
+const float HEAT_RESISTANCE = 12;                                       // in Ohm
+const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE;              // current of a single Heater in A
+const float HEAT_POWER = HEAT_CURRENT * HEAT_CURRENT * HEAT_RESISTANCE; // max heating power of a single heater
+const float PID_MAX = HEAT_POWER;                                       // max PID value. is normed on heating_power
 
 /*FD-OEM Oxygen sensor*/
 const unsigned long COMMAND_LENGTH_MAX = 100; // how long a command string can possibly be

@@ -23,7 +23,7 @@ TIMEOUT_CLIENT = 2.0 #s timeout of client after no connetion
 DELAY_DATALOG_LOOP = 0.1 #s slows datalogger loop to save performance
 DELAY_SERVER_LOOP = 0.01 #s slows server loop to save performance
 DELAY_CONSOLE_LOOP = 0.1 #s slows console loop to save performance
-DELAY_ERROR = 0.5 # delay to prevent errors to be spammed 
+DELAY_ERROR = 2 # delay to prevent errors to be spammed 
 
 class TCP_SERVER:
     """Connects in an extra thread a TCP server.\
@@ -314,6 +314,7 @@ class INTERFACE:
 /q /quit quit this file
 /c for sending a command to client
 /d [random data?] save dummy packet in MongoDB
+/o [filepath] [ip] [port] sends over the air update
 """)
                 
                 case "r":
@@ -442,7 +443,41 @@ class INTERFACE:
                         # Pack the values according to the format string
                         randombytes = struct.pack(format_packet, *dummy_values)
                         self.server.datalog.rawdata.append(randombytes)
-                       
+                case "o":
+                   
+                    firmware_file_path = "./firmware.bin.efi"  # Replace with the path to your firmware file
+                    target_ip = "192.168.1.100"  # Replace with your microcontroller's IP address
+                    target_port = 80             # Replace with the port your microcontroller is listening on
+                    
+
+                    param = command[3:].split()
+                    print(param)
+                    if len(param) >= 1:
+                        firmware_file_path = param[0]
+                        if len(param) >= 2:
+                            target_ip = param[1]
+                            if len(param) >= 3:
+                                target_port = param[2]
+                        
+                    print_yellow(f'"trying over the air updates with file:{firmware_file_path}, ip:{target_ip},port:{target_port}\n')
+                    try:
+                        # Open the firmware file
+                        with open(firmware_file_path, 'rb') as firmware_file:
+                            firmware_data = firmware_file.read()
+                        # Create a socket and connect to the microcontroller
+                        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                            print(f"Connecting to {target_ip}:{target_port}...")
+                            sock.connect((target_ip, target_port))
+                            print(f"Connected to {target_ip}:{target_port}")
+                            # Send the firmware data
+                            print(f"Sending firmware from {firmware_file_path}...")
+                            sock.sendall(firmware_data)
+                            print("Firmware sent successfully!")
+                    except FileNotFoundError:
+                        print(f"Error: The file at {firmware_file_path} was not found.")
+                    except Exception as e:
+                        print(f"An error occurred: {e}")
+
                 case _:
                     print_red(f"Unknown Command {command[1:]}\n")
 
