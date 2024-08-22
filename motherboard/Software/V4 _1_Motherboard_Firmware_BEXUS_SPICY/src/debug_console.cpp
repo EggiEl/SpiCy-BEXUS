@@ -352,9 +352,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   }
   case 'u':
   {
-    debugf_status("Over the air update. Waits for Serverfile\n");
-    WiFiClient client;
-    HTTPUpdate.update(client, "192.168.0.2", 80, "/arduino.bin");
+
     break;
   }
   default:
@@ -726,7 +724,7 @@ void read_out_BMP180()
     // Retrieve the completed temperature measurement:
     // Note that the measurement is stored in the variable T.
     // Function returns 1 if successful, 0 if failure.
-    double T, P;
+    double T;
     // double p0, a;
     status = pressure.getTemperature(T);
     if (status != 0)
@@ -754,7 +752,7 @@ void read_out_BMP180()
         // Note also that the function requires the previous temperature measurement (T).
         // (If temperature is stable, you can do one temperature measurement for a number of pressure measurements.)
         // Function returns 1 if successful, 0 if failure.
-
+        double P;
         status = pressure.getPressure(P, T);
         if (status != 0)
         {

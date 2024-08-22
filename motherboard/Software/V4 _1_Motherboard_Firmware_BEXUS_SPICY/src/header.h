@@ -72,6 +72,7 @@ void tpc_send_error(const unsigned char error);
 void tpc_send_string(const char string[]);
 void tcp_sendf(const char *__restrict format, ...);
 unsigned char tcp_link_status();
+void receiveOTAUpdate();
 
 /*sd*/
 extern volatile char sd_init;

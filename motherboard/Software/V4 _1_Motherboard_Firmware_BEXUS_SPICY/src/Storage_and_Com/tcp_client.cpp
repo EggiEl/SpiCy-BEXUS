@@ -480,71 +480,73 @@ unsigned char tcp_link_status()
 #include <picoOTA.h>
 void receiveOTAUpdate()
 {
-  #define IP_OTA_SERVER Ethernet.localIP().toString().c_str()
+  const char filename[] = "firmware.bin.efi"; // before: blink.bin.gz
 
-  rp2040.wdt_begin(8000);
-
-  Ethernet.begin(MAC); //TODO add static ip
-
-  if (Ethernet.hardwareStatus() == EthernetNoHardware)
+  if (!TCP_init)
   {
-    debugln("Ethernet chip not found. Cannot run without hardware.");
-    rp2040.reboot();
+    tcp_setup_client();
   }
 
-  debugf("Ethernet initialized with IP: %s\n", IP_OTA_SERVER);
-
-  EthernetServer server(80);
-  server.begin();
-
-  debugln("Waiting for client connection...");
-  EthernetClient client = server.available();
-
-
-  if (client)
+  /*connects client*/
+  if (!client.connected())
   {
-    debugln("Client connected, receiving OTA image...");
-    LittleFS.begin();
+    client.connect(SERVERIP, SERVERPORT);
+    client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
+  }
 
-    File f = LittleFS.open("firmware.bin.efi", "w"); // before: blink.bin.gz
-
-    if (!f)
+  /*checks if data avaliable*/
+  debugf_status("Waiting 7 seconds for filesteam from server...\n");
+  rp2040.wdt_begin(8000);
+  unsigned long timestamp = millis() + 7000;
+  while (!client.available())
+  {
+    if (millis() > timestamp)
     {
-      debugf("Failed to open file for writing\n");
+      debugf_red("No firmware uplad avaliable. Start firmware upload on the groundstation before calling this method.\n");
+      rp2040.wdt_begin(TIMEOUT_WATCHDOG);
       return;
     }
-
-    while (client.connected())
-    {
-      if (client.available())
-      {
-        int byteRead = client.read();
-        if (byteRead >= 0)
-        {
-          f.write((uint8_t)byteRead);
-        }
-      }
-    }
-
-    f.close();
-    debugf("File received and saved as blink.bin.gz\n");
-    client.stop();
-
-    // Perform OTA update
-    debugf("Programming OTA commands...\n");
-    picoOTA.begin();
-    picoOTA.addFile("firmware.bin.efi");
-    picoOTA.commit();
-    LittleFS.end();
-    debugf("OTA update completed.\n");
-
-    // Rebooting after delay
-    debugf("Rebooting in 1 seconds...\n");
-    delay(1);
-    rp2040.reboot();
   }
-  else
+
+  /*creates file*/
+  LittleFS.begin();
+  File f = LittleFS.open(filename, "w");
+  if (!f)
   {
-    debugln("No client connected, retrying...");
+    debugf_red("Failed to open file for writing\n");
+    rp2040.wdt_begin(TIMEOUT_WATCHDOG);
+    return;
   }
+
+  /*recieving file*/
+  debugf_status("Server connected, receiving OTA image...");
+  rp2040.wdt_reset();
+  while (client.available())
+  {
+    int byteRead = client.read(); // returns -1 if none is available.
+    if (byteRead >= 0)
+    {
+      f.write((uint8_t)byteRead);
+    }
+    else
+    {
+      break;
+    }
+  }
+  f.close();
+  client.stop();
+  debugf_info("File size of %u received and saved\n", f.size());
+
+  /*perform OTA update*/
+  debugf_info("Programming OTA commands...\n");
+  rp2040.wdt_reset();
+  picoOTA.begin();
+  picoOTA.addFile(filename);
+  picoOTA.commit();
+  LittleFS.end();
+  debugf_info("OTA update completed.\n");
+
+  /*rebooting after delay*/
+  debugf_status("Rebooting...\n");
+  rp2040.reboot(); //should i do this manualy?
 }
