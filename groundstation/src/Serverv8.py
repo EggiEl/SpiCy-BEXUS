@@ -461,6 +461,8 @@ class INTERFACE:
                             print_red(f"Error: The file at {firmware_file_path} was not found.\n",indent=1)
                         except Exception as e:
                             print_red(f"OTA error: {e}\n",indent=1)
+                    else:
+                        print_red("no server connected",indent=1)
 
                 case _:
                     print_red(f"Unknown Command {command[1:]}\n")
