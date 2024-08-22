@@ -1,8 +1,11 @@
 import socket
 import struct
+from textwrap import indent
 import threading
 import time
 import random
+
+from numpy import iterable
 
 from MongoDB import MongoDB
 import netifaces
@@ -34,13 +37,7 @@ class TCP_SERVER:
         self.ipadress = _ipadress
         self.port = _port
         self.__isRunning = 1
-        self.command = {
-            "command": '0',
-            "param1": 0.0,
-            "param2": 0.0,
-            "param3": 0.0,
-            "param4": 0.0,
-        }
+        self.uplink_buffer = [] #this buffer gets, when connected to client, send to it. fifo.
         self.thread = threading.Thread(target=self.start_server)
         self.thread.start()
 
@@ -153,19 +150,13 @@ class TCP_SERVER:
             """Sends a command to the client"""
             try:
                 # sends command
-                print_cyan(f"Sending Command:{self.command["command"]} {self.command["param1"]} {self.command["param2"]} {self.command["param3"]} {self.command["param4"]}\n")
-                comand = self.command["command"]
-                param1 = float(self.command["param1"])
-                param2 = float(self.command["param2"])
-                param3 = float(self.command["param3"])
-                param4 = float(self.command["param4"])
-                uploadbuffer = comand.encode("utf-8")*3 + struct.pack("ffffffff", param1,param1,param2,param2,param3,param3,param4,param4)
-                print_yellow(f'sending command: {comand}|{param1}|{param2}|{param3}|{param4}|\nin bytes: {uploadbuffer}\n',indent=1)
-                client_socket.sendall(uploadbuffer)
-                # deletes command from buffer of server
-                self.command = {"command": '0', "param1": 0.0, "param2": 0.0, "param3": 0.0, "param4": 0.0}
+                if len(self.uplink_buffer):
+                    print_white(f'send bytes: {self.uplink_buffer[0]}\n',indent=3)
+                    client_socket.sendall(self.uplink_buffer[0])
+                    self.uplink_buffer.pop(0)
+
             except Exception as e:
-                print_red(f"Error:{e}\n", indent=1)
+                print_red(f"Error sending:{e}\n", indent=1)
                 client_socket.close()
 
         server_socket = None
@@ -189,12 +180,12 @@ class TCP_SERVER:
                     if counter_client_points > 3: counter_client_points = 0
                 else:
                     ##[up link] sending command to client if there is one in the self.command buffer 
-                    if self.command["command"] != '0':
+                    if len(self.uplink_buffer):
                         send_command(client_socket)
 
                     ##[down link] recieves data if theres one avaliable. Disconnects client if theres any issues besides a timeout
                     while recieve_data(client_socket) and self.__isRunning:            
-                        if self.command["command"] != '0': #here the possibility to send a command in bewtween downlinks
+                        if len(self.uplink_buffer): #here the possibility to send a command in bewtween downlinks
                             send_command(client_socket)
 
                     # client_socket.close()  # geht ohne??
@@ -314,7 +305,7 @@ class INTERFACE:
 /q /quit quit this file
 /c for sending a command to client
 /d [random data?] save dummy packet in MongoDB
-/o [filepath] [ip] [port] sends over the air update
+/o [filepath] sends update "over the air" aka as bytestream to the uC. standart filepath: ./firmware.bin.efi
 """)
                 
                 case "r":
@@ -377,16 +368,19 @@ class INTERFACE:
                     else:
                         print_yellow("Setting command for next uplink: ")
                         try:
-                            command_uplink = (command[2:] + " 0 "*6).split()[:6] #filling missed spaces with 0
-                            command_buff = {
-                                "command": command_uplink[0],
-                                "param1": float(command_uplink[1]),
-                                "param2": float(command_uplink[2]),
-                                "param3": float(command_uplink[3]),
-                                "param4": float(command_uplink[4]),
-                            }
-                            print(command_buff)
-                            self.server.command = command_buff
+                            command_buf = (command[2:] + " 0 "*6).split()[:6] #filling missed spaces with 0
+                            
+                            print_yellow(f'{command_buf[0:5]}\n')
+
+                            comm = command_buf[0]
+                            param1 = float(command_buf[1])
+                            param3 = float(command_buf[2])
+                            param2 = float(command_buf[3])
+                            param4 = float(command_buf[4])
+
+                            uploadbuffer = comm.encode("utf-8")*3 + struct.pack("ffffffff", param1,param1,param2,param2,param3,param3,param4,param4)
+                            # print_yellow(f'sending command: {command_buf}|{param1}|{param2}|{param3}|{param4}|\nin bytes: {uploadbuffer}\n',indent=1)
+                            self.server.uplink_buffer.append(uploadbuffer)
                         except Exception as e:
                             print(e)
 
@@ -443,40 +437,30 @@ class INTERFACE:
                         # Pack the values according to the format string
                         randombytes = struct.pack(format_packet, *dummy_values)
                         self.server.datalog.rawdata.append(randombytes)
+               
                 case "o":
-                   
-                    firmware_file_path = "./firmware.bin.efi"  # Replace with the path to your firmware file
-                    target_ip = "192.168.1.100"  # Replace with your microcontroller's IP address
-                    target_port = 80             # Replace with the port your microcontroller is listening on
-                    
-
-                    param = command[3:].split()
-                    print(param)
-                    if len(param) >= 1:
-                        firmware_file_path = param[0]
-                        if len(param) >= 2:
-                            target_ip = param[1]
-                            if len(param) >= 3:
-                                target_port = param[2]
+                    if self.server is not None:
+                        firmware_file_path = "./firmware.bin.efi"  # path to the firmware file
                         
-                    print_yellow(f'"trying over the air updates with file:{firmware_file_path}, ip:{target_ip},port:{target_port}\n')
-                    try:
-                        # Open the firmware file
-                        with open(firmware_file_path, 'rb') as firmware_file:
-                            firmware_data = firmware_file.read()
-                        # Create a socket and connect to the microcontroller
-                        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-                            print(f"Connecting to {target_ip}:{target_port}...")
-                            sock.connect((target_ip, target_port))
-                            print(f"Connected to {target_ip}:{target_port}")
-                            # Send the firmware data
-                            print(f"Sending firmware from {firmware_file_path}...")
-                            sock.sendall(firmware_data)
-                            print("Firmware sent successfully!")
-                    except FileNotFoundError:
-                        print(f"Error: The file at {firmware_file_path} was not found.")
-                    except Exception as e:
-                        print(f"An error occurred: {e}")
+                        ##replaces firmware_file_path if param is given
+                        param = command[3:]
+                        print(param)
+                        if len(param) >= 1:
+                            firmware_file_path = param
+                        
+                        ##loads file into upload_buffer
+                        print_yellow(f'over the air updates with file:{firmware_file_path}\n')
+                        try:
+                            # Open the firmware file
+                            with open(firmware_file_path, 'rb') as firmware_file:
+                                firmware_data = firmware_file.read()
+                                print(f"Sending firmware from {firmware_file_path}.")
+                                self.server.uplink_buffer.append(firmware_data)
+
+                        except FileNotFoundError:
+                            print_red(f"Error: The file at {firmware_file_path} was not found.\n",indent=1)
+                        except Exception as e:
+                            print_red(f"OTA error: {e}\n",indent=1)
 
                 case _:
                     print_red(f"Unknown Command {command[1:]}\n")
