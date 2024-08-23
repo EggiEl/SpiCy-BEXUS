@@ -39,7 +39,7 @@ void next_state()
         state = READ_TEMP;
         struct packet *new_packet = packet_create();
         memcpy(&packet_dl, new_packet, sizeof(struct packet));
-        free_ifnotnull(new_packet);
+        free(new_packet);
         break;
     }
     case READ_TEMP:

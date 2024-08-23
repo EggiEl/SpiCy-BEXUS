@@ -113,17 +113,18 @@ bool sd_readstruct(struct packet *data, const char filepath[], unsigned long pos
       debugf("}-\n");
       return 0;
     }
+    
     uint8_t *buffer = (uint8_t *)malloc(sizeof(struct packet));
 
     if (!myFile.seek(position * sizeof(struct packet)))
     {
       debugf_error("-error:SDpositioning failed}-");
-      free_ifnotnull(buffer);
+      free(buffer);
       return 0;
     }
     myFile.read(buffer, sizeof(struct packet));
     memcpy(data, buffer, sizeof(struct packet));
-    free_ifnotnull(buffer);
+    free(buffer);
     myFile.close();
     debugf_sucess("-sucess}-");
     return 1;

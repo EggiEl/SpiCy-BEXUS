@@ -329,7 +329,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
       break;
 
     case 5:
-      pi = &pi_probe4;
+      pi = &pi_probe5;
       break;
 
     default:
@@ -464,12 +464,12 @@ void print_memory_use()
 
 /*frees given pointer it it isnt NULL, then sets it to NULL.
  If it is NULL, throws error*/
-void free_ifnotnull(void *pointer)
+void free_ifnotnull(void ** pointer) //TODO:check this
 {
-  if (pointer != NULL)
+  if (pointer != NULL && *pointer != NULL)
   {
-    free(pointer);
-    pointer = NULL;
+    free(*pointer);
+    *pointer = NULL;
   }
   else
   {

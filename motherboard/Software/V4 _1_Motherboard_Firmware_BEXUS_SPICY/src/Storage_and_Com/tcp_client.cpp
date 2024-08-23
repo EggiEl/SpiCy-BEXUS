@@ -430,7 +430,7 @@ void tcp_sendf(const char *__restrict format, ...)
   tpc_send_string(buffer);
 
   // Clean up
-  free_ifnotnull(buffer);
+  free(buffer);
   va_end(args);
   va_end(args_copy);
 }
@@ -467,7 +467,7 @@ void tpc_testmanually(int nPackets, unsigned int nTries)
   {
     destroy_packet(packet_buf[i]);
   }
-  free_ifnotnull(packet_buf);
+  free(packet_buf);
 }
 
 /*returns the Ethernet-linkStatus() for the ethernet.h libary*/

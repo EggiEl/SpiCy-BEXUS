@@ -94,7 +94,7 @@ void oxy_console()
             }
             else // if no command it goes directly to sensor
             {
-                oxy_commandhandler(buffer, RETURN_LENGTH_MAX);
+                oxy_commandhandler(buffer);
             }
         }
 
@@ -180,13 +180,13 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues)
         // debugf_info("%s\n", buffer);
         if (!returnValues)
         {
-            free_ifnotnull(buffer);
+            free(buffer);
         }
         return buffer;
     }
     else
     {
-        free_ifnotnull(buffer);
+        free(buffer);
         return NULL;
     }
 }
@@ -396,7 +396,7 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
 
     oxy_decode_mesurement_errors(readout->error); // if theres an error this will print a debug statement
 
-    free_ifnotnull(buf_return);
+    free(buf_return);
     return 1;
 }
 
@@ -514,7 +514,7 @@ void oxy_info(const int8_t channel)
     char *buf_return = oxy_commandhandler("VERS");
     /*recieve info*/
     debugf_info("Device info:\n Device_Id nOpticalChannels FirmwareVersion SensorTypes FirmwareBuildNumber Features\n %s", buf_return);
-    free_ifnotnull(buf_return);
+    free(buf_return);
 }
 
 /**

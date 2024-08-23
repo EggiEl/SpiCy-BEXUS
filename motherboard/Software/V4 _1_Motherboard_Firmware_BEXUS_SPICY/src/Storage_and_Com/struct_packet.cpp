@@ -54,7 +54,7 @@ void destroy_packet(struct packet *p)
 {
   if (p != NULL)
   {
-    free_ifnotnull(p);
+    free(p);
   }
   else
   {
