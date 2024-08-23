@@ -6,7 +6,7 @@ static void scan_wire_single(unsigned int pinsda, unsigned int pinscl, char Wire
 /*scan the Wire interfaces for devices. Only works on RP2040 boards.*/
 void scan_wire()
 {
-    debugln("\n<I2C Scan>");
+    debugf("\n<I2C Scan>\n");
     unsigned long freq = 100000;
     scan_wire_single(0, 1, 0, freq);
     scan_wire_single(2, 3, 1, freq);
@@ -24,7 +24,7 @@ void scan_wire()
     scan_wire_single(26, 27, 1, freq);
     scan_wire_single(28, 29, 0, freq);
 
-    debugln("I2C Scan complete.\n");
+    debugf("I2C Scan complete.\n");
 }
 
 /*needed for scan wire*/
@@ -71,11 +71,11 @@ void scan_wire_single(unsigned int pinsda, unsigned int pinscl, char Wire_select
     }
     if (nDevices == 0)
     {
-        // debugln("No I2C devices found\n");
+        // debugf("No I2C devices found\n");
     }
     else
     {
-        // debugln("Scan Complete\n");
+        // debugf("Scan Complete\n");
     }
     wireToUse->end();
 }

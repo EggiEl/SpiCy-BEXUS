@@ -3,6 +3,7 @@
 
 volatile char heat_init = 0;
 
+
 /*initializes the pins, freq and range of the heating elements*/
 void heat_setup()
 {
@@ -60,7 +61,6 @@ void heat_updateone(const uint8_t PIN, const float duty)
   {
     heat_setup();
   }
-
   analogWrite(PIN, duty * 0.01 * ADC_MAX_WRITE);
 }
 
@@ -70,7 +70,7 @@ void heat_updateone(const uint8_t PIN, const float duty)
 void heat_testmanual()
 {
   debugf_status("<Manual Heater Test>");
-  debugln("sets heater 1 to 10%, 2 to 20% and so on");
+  debugf_info("sets heater 1 to 10%, 2 to 20% and so on");
   debugf_info("first Heater Pin: %i\n", PIN_H0);
   if (!heat_init)
   {

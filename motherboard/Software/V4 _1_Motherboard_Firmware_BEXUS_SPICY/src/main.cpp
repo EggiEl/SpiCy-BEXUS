@@ -139,7 +139,7 @@ void update_nResets()
 /* Prints a message with facts about the MPU like frequency and weather a watchdog restarted it*/
 void print_startup_message()
 {
-#if DEBUG_MODE == 1
+#if DEBUG_MODE >= 1
   Serial.setTimeout(1000);
   Serial.begin();
   for (unsigned int i = 0; i < 200; i++)
@@ -152,7 +152,7 @@ void print_startup_message()
   }
   delay(100);
   // ghost
-  debugf_green(
+  debugf_green("%s",F(
       "  .-')       _ (`-.                                       \n"
       " ( OO ).    ( (OO  )                                      \n"
       "(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.\n"
@@ -161,7 +161,7 @@ void print_startup_message()
       " '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /    \n"
       ".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_  \n"
       "\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__) \n"
-      " `-----'   `--'        `--'       `-----'     `--'        \n");
+      " `-----'   `--'        `--'       `-----'     `--'        \n"));
   // graphiti
   // SET_COLOUR_GREEN
   // Serial.println(" _________        .__ _________                   _____  ");

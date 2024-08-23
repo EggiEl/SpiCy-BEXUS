@@ -440,27 +440,70 @@ class INTERFACE:
                
                 case "o":
                     if self.server is not None:
-                        firmware_file_path = "./firmware.bin.efi"  # path to the firmware file
-                        
-                        ##replaces firmware_file_path if param is given
-                        param = command[3:]
-                        print(param)
-                        if len(param) >= 1:
-                            firmware_file_path = param
-                        
-                        ##loads file into upload_buffer
-                        print_yellow(f'over the air updates with file:{firmware_file_path}\n')
+                        firmware_file_path = "./firmware.bin"  # path to the firmware file
+
                         try:
-                            # Open the firmware file
+                        ## replaces firmware_file_path if param is given
+                            param = command[3:]
+                            print(param)
+                            if len(param) >= 1:
+                                firmware_file_path = param
+
+                        ##reads out firmware file
+                            firmware_data : bytes
                             with open(firmware_file_path, 'rb') as firmware_file:
                                 firmware_data = firmware_file.read()
-                                print(f"Sending firmware from {firmware_file_path}.")
-                                self.server.uplink_buffer.append(firmware_data)
+
+                        ## prepares microcontroller to recieve update
+                            print_yellow("Sends OTA update command to microcontroller\n",indent=1)
+                        # clears uplink buffer
+                            self.server.uplink_buffer = [] 
+                        # sends ota command
+                            comm = 'u'
+                            param1 = float(len(firmware_data))
+                            param3 = float(0.0)
+                            param2 = float(0.0)
+                            param4 = float(0.0)
+
+                            uploadbuffer = comm.encode("utf-8")*3 + struct.pack("ffffffff", param1,param1,param2,param2,param3,param3,param4,param4)
+                            self.server.uplink_buffer.append(uploadbuffer)
+
+                        # waits till command is sent
+                            timeout_counter = 0
+                            TIMEOUT_COMMAND_WAIT = 7000 #ms
+                            while(len(self.server.uplink_buffer)):
+                                time.sleep(0.001)
+                                timeout_counter += 1
+                                if timeout_counter >= TIMEOUT_COMMAND_WAIT:
+                                    print_red(f"ota command not send after {TIMEOUT_COMMAND_WAIT/1000}s\n",indent=1)
+                                    self.server.uplink_buffer = []
+                                    return
+
+                        ## loads file into upload_buffer
+                            print_yellow(f'send firmware file:{firmware_file_path} over tcp\n',indent=1)
+
+                        # Sends the firmware file
+                            self.server.uplink_buffer.append(firmware_data)
+
+                        # waits till firmware is sent
+                            timeout_counter = 0
+                            TIMEOUT_COMMAND_WAIT = 7000 # ms
+                            while(len(self.server.uplink_buffer)):
+                                time.sleep(0.001)
+                                timeout_counter += 1
+                                if timeout_counter >= TIMEOUT_COMMAND_WAIT:
+                                    print_red(f"ota firmware not send after {TIMEOUT_COMMAND_WAIT/1000}s\n",indent=1)
+                                    self.server.uplink_buffer = []
+                                    return
+                                
+                            print_green("done\n",indent=2)
 
                         except FileNotFoundError:
                             print_red(f"Error: The file at {firmware_file_path} was not found.\n",indent=1)
+                        
                         except Exception as e:
                             print_red(f"OTA error: {e}\n",indent=1)
+
                     else:
                         print_red("no server connected",indent=1)
 

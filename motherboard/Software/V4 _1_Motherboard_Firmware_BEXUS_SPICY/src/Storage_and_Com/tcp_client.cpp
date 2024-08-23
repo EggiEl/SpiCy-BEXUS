@@ -32,7 +32,7 @@ void tcp_setup_client()
 
   if (TCP_init)
   {
-    debugln("tcp_client_already_initialised");
+    debugf("tcp_client_already_initialised\n");
     return;
   }
 
@@ -478,10 +478,13 @@ unsigned char tcp_link_status()
 
 #include <LittleFS.h>
 #include <picoOTA.h>
-void receiveOTAUpdate()
+/**
+ * @param size_firmware Size of over the air recieved firmware update. Used to check data integraty at least a bit.
+ */
+void tcp_receive_OTA_update(int size_firmware)
 {
-  const char filename[] = "firmware.bin.efi"; // before: blink.bin.gz
-
+  const char filename[] = "firmware.bin"; // before: blink.bin.gz
+  debugf_status("Over the air firmware update. Please reboot microcontroller manually after sucessful upload of firmware with /r.\n");
   if (!TCP_init)
   {
     tcp_setup_client();
@@ -537,6 +540,14 @@ void receiveOTAUpdate()
   client.stop();
   debugf_info("File size of %u received and saved\n", f.size());
 
+  /*checks if size of recieved file checks out*/
+  if (f.size() != size_firmware)
+  {
+    debugf_error("Size of recieved data:%d doesn´t match size the firmware should have:%d", f.size(), size_firmware);
+    // rp2040.wdt_begin(TIMEOUT_WATCHDOG);
+    // return;
+  }
+
   /*perform OTA update*/
   debugf_info("Programming OTA commands...\n");
   rp2040.wdt_reset();
@@ -544,9 +555,9 @@ void receiveOTAUpdate()
   picoOTA.addFile(filename);
   picoOTA.commit();
   LittleFS.end();
-  debugf_info("OTA update completed.\n");
+  debugf_info("OTA update completed. Reboot to apply. Reflash to retry.\n");
 
-  /*rebooting after delay*/
-  debugf_status("Rebooting...\n");
-  rp2040.reboot(); //should i do this manualy?
+  // /*rebooting*/
+  // debugf_status("Rebooting...\n");
+  // rp2040.reboot(); // should i do this manualy?
 }

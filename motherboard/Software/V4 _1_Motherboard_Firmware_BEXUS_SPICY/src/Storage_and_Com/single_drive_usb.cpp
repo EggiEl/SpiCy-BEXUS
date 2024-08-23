@@ -68,7 +68,7 @@ void usb_singlefile_update()
         {
             f.printf("%lu,%lu,%f,%lu\n", cnt++, millis(), temp, hwrand);
             f.close();
-            debugln("USB single File content updated, eject to display changes.");
+            debugf("USB single File content updated, eject to display changes.\n");
         }
     }
     plug(1);
@@ -105,7 +105,7 @@ void unplug(uint32_t i)
 void deleteCSV(uint32_t i)
 {
     (void)i;
-    debug("singleusbfile deleted by user\n");
+    debugf("singleusbfile deleted by user\n");
     LittleFS.remove("data.csv");
     headerCSV();
 }
@@ -114,7 +114,7 @@ void singlefile_close()
 {
     LittleFS.remove("data.csv");
     LittleFS.end();
-    debugln("USB single File closed. May in need of an reboot (/r)");
+    debugf("USB single File closed. May in need of an reboot (/r)\n");
 }
 
 #endif

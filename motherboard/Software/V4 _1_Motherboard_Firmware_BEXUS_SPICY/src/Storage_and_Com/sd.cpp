@@ -89,7 +89,7 @@ bool sd_writestruct(struct packet *s_out, const char filepath[])
   else
   {
     error_handler(ERROR_WR_STR);
-    debugln("-error:opening-failed-");
+    debugf_error("-error:opening-failed-");
     return 0;
   }
 }
@@ -97,8 +97,8 @@ bool sd_writestruct(struct packet *s_out, const char filepath[])
 // reads a packet from sd card @position = position of struct packet
 bool sd_readstruct(struct packet *data, const char filepath[], unsigned long position)
 {
-  debug("-{SD_readstru-file:");
-  debug(filepath);
+  debugf("-{SD_readstru-file:");
+  debugf("%s",filepath);
   if (!sd_init)
   {
     sd_setup();
@@ -108,16 +108,16 @@ bool sd_readstruct(struct packet *data, const char filepath[], unsigned long pos
   {
     if (!myFile.available())
     { // can be openend but is empty
-      debug("-SDopeningsuccess-error:size(file)=");
-      debug("%u", myFile.available());
-      debugln("}-");
+      debugf("-SDopeningsuccess-error:size(file)=");
+      debugf("%d", myFile.available());
+      debugf("}-\n");
       return 0;
     }
     uint8_t *buffer = (uint8_t *)malloc(sizeof(struct packet));
 
     if (!myFile.seek(position * sizeof(struct packet)))
     {
-      debugln("-error:SDpositioning failed}-");
+      debugf_error("-error:SDpositioning failed}-");
       free_ifnotnull(buffer);
       return 0;
     }
@@ -125,12 +125,12 @@ bool sd_readstruct(struct packet *data, const char filepath[], unsigned long pos
     memcpy(data, buffer, sizeof(struct packet));
     free_ifnotnull(buffer);
     myFile.close();
-    debugln("-sucess}-");
+    debugf_sucess("-sucess}-");
     return 1;
   }
   else
   {
-    debugln("-error:SDopening-failed}-");
+    debugf_error("-error:SDopening-failed}-");
     return 0;
   }
 }

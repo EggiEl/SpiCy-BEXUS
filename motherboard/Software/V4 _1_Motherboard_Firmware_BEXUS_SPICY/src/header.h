@@ -72,7 +72,7 @@ void tpc_send_error(const unsigned char error);
 void tpc_send_string(const char string[]);
 void tcp_sendf(const char *__restrict format, ...);
 unsigned char tcp_link_status();
-void receiveOTAUpdate();
+void tcp_receive_OTA_update(int size_firmware);
 
 /*sd*/
 extern volatile char sd_init;
@@ -101,7 +101,6 @@ void read_out_BMP180();
 void scan_wire();
 
 /*Heating*/
-extern float heat_pwm_atm[8];
 extern volatile char heat_init;
 void heat_setup();
 void heat_updateall(const float HeaterPWM[8]);
@@ -113,7 +112,6 @@ typedef struct
 {
     /*semi constant values*/
     float desired_temp = SET_TEMP_DEFAULT;
-
     uint8_t heater_pin = 0;
     uint8_t thermistor_pin = 0;
     float kp = 0;
@@ -125,7 +123,7 @@ typedef struct
     unsigned long time_last = millis();
     float error_last = 0;
     float pi_last = 0;
-    float heat = 0;
+    float heat = -1;
 } PI_CONTROLLER;
 
 extern PI_CONTROLLER pi_probe0;
@@ -188,55 +186,6 @@ void light_read(float *buffer, bool with_flash = 0);
 uint8_t light_connected();
 
 /*error handeling*/
-enum ERRORS
-{
-    ERROR_SD_INI,
-    ERROR_SD_COUNT,
-    ERROR_WR_STR,
-    ERROR_SD_WRITE_OPEN,
-    ERROR_SD_PINMAP,
-
-    ERROR_TCP_INI,
-    ERROR_TCP_COMMAND_PARSING,
-    ERROR_TCP_PARAM_CORRUPT,
-    ERROR_TCP_COMMAND_CORRUPT,
-    ERROR_TCP_SEND_FAILED,
-    ERROR_TCP_SEND_TIMEOUT,
-    ERROR_TCP_SERVER_INVALID,
-    ERROR_TCP_TRUNCATED,
-    ERROR_TCP_TRUNCATED_2,
-    ERROR_TCP_CABLE_DISCO,
-    ERROR_TCP_NO_RESPONSE,
-    ERROR_TCP_DEBUG_MEMORY,
-    ERROR_TCP_CLIENT_CONNTECION,
-    ERROR_TCP_SEND_MULTIBLE_FAILED,
-
-    ERROR_HEAT_INI,
-
-    ERROR_LIGHT_INI,
-
-    ERROR_NO_NTC_CONNECTED,
-
-    ERROR_STATE,
-
-    ERROR_PACK_ID_OV,
-    ERROR_PACK_MEM_AL,
-    ERROR_PACKAGE_FREE_TWICE,
-
-    ERROR_OXY_INI,
-    ERROR_OXY_AUTO_AMP,
-    ERROR_OXY_SIGNAL_INT_LOW,
-    ERROR_OXY_OPTICAL_DETECTOR_SATURATED,
-    ERROR_OXY_REF_SIGNAL_LOW,
-    ERROR_OXY_REF_SIGNAL_HIGH,
-    ERROR_OXY_SAMPLE_TEMP_SENSOR,
-    ERROR_OXY_RESERVED,
-    ERROR_OXY_HIGH_HUMIDITY,
-    ERROR_OXY_CASE_TEMP_SENSOR,
-    ERROR_OXY_PRESSURE_SENSOR,
-    ERROR_OXY_HUMIDITY_SENSOR
-};
-
 enum ERROR_DESTINATION
 {
     ERROR_DESTINATION_NO_TCP,

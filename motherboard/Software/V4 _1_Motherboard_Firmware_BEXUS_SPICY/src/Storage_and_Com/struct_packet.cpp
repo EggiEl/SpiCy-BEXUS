@@ -79,74 +79,74 @@ void packettochar(struct packet *data, char buffer[])
 // void packet_print(struct packetold *pkt)
 // {
 //   debugf_status("-----infos about packet----------\n");
-//   debug("Size in uC Memory: ");
-//   debugln(sizeof(struct packet));
-//   debug("id (address: ");
-//   debug((uintptr_t)&pkt->id, DEC);
-//   debug("): ");
-//   debugln(pkt->id);
-//   debug("timestampPacket (address: ");
-//   debug((uintptr_t)&pkt->timestampPacket, DEC);
-//   debug("): ");
-//   debugln(pkt->timestampPacket);
-//   debug("timestampOxy (address: ");
-//   debug((uintptr_t)&pkt->timestampOxy, DEC);
-//   debug("): ");
+//   debugf("Size in uC Memory: ");
+//   debugf(sizeof(struct packet));
+//   debugf("id (address: ");
+//   debugf((uintptr_t)&pkt->id, DEC);
+//   debugf("): ");
+//   debugf(pkt->id);
+//   debugf("timestampPacket (address: ");
+//   debugf((uintptr_t)&pkt->timestampPacket, DEC);
+//   debugf("): ");
+//   debugf(pkt->timestampPacket);
+//   debugf("timestampOxy (address: ");
+//   debugf((uintptr_t)&pkt->timestampOxy, DEC);
+//   debugf("): ");
 //   for (int i = 0; i < 6; i++)
 //   {
-//     debug(pkt->timestampOxy[i]);
-//     debug(" ");
+//     debugf(pkt->timestampOxy[i]);
+//     debugf(" ");
 //   }
-//   debugln();
-//   debug("oxigen (address: ");
-//   debug((uintptr_t)&pkt->oxigen, DEC);
-//   debug("): ");
+//   debugf();
+//   debugf("oxigen (address: ");
+//   debugf((uintptr_t)&pkt->oxigen, DEC);
+//   debugf("): ");
 //   for (int i = 0; i < 6; i++)
 //   {
-//     debug(pkt->oxigen[i]);
-//     debug(" ");
+//     debugf(pkt->oxigen[i]);
+//     debugf(" ");
 //   }
-//   debugln();
-//   debug("tempTube (address: ");
-//   debug((uintptr_t)&pkt->tempTube, DEC);
-//   debug("): ");
+//   debugf();
+//   debugf("tempTube (address: ");
+//   debugf((uintptr_t)&pkt->tempTube, DEC);
+//   debugf("): ");
 //   for (int i = 0; i < 6; i++)
 //   {
-//     debug(pkt->tempTube[i]);
-//     debug(" ");
+//     debugf(pkt->tempTube[i]);
+//     debugf(" ");
 //   }
-//   debugln();
-//   debug("heaterPWM (address: ");
-//   debug((uintptr_t)&pkt->heaterPWM, DEC);
-//   debug("): ");
+//   debugf();
+//   debugf("heaterPWM (address: ");
+//   debugf((uintptr_t)&pkt->heaterPWM, DEC);
+//   debugf("): ");
 //   for (int i = 0; i < 6; i++)
 //   {
-//     debug(pkt->heaterPWM[i]);
-//     debug(" ");
+//     debugf(pkt->heaterPWM[i]);
+//     debugf(" ");
 //   }
-//   debugln();
-//   debug("error (address: ");
-//   debug((uintptr_t)&pkt->error, DEC);
-//   debug("): ");
-//   debugln(pkt->error);
-//   debug("tempCpu (address: ");
-//   debug((uintptr_t)&pkt->tempCpu, DEC);
-//   debug("): ");
-//   debugln(pkt->tempCpu);
-//   debug("power (address: ");
-//   debug((uintptr_t)&pkt->power, DEC);
-//   debug("): ");
-//   debug(pkt->power[0]);
-//   debug(" ");
-//   debugln(pkt->power[1]);
-//   debug("info (address: ");
-//   debug((uintptr_t)&pkt->info, DEC);
-//   debug("): ");
+//   debugf();
+//   debugf("error (address: ");
+//   debugf((uintptr_t)&pkt->error, DEC);
+//   debugf("): ");
+//   debugf(pkt->error);
+//   debugf("tempCpu (address: ");
+//   debugf((uintptr_t)&pkt->tempCpu, DEC);
+//   debugf("): ");
+//   debugf(pkt->tempCpu);
+//   debugf("power (address: ");
+//   debugf((uintptr_t)&pkt->power, DEC);
+//   debugf("): ");
+//   debugf(pkt->power[0]);
+//   debugf(" ");
+//   debugf(pkt->power[1]);
+//   debugf("info (address: ");
+//   debugf((uintptr_t)&pkt->info, DEC);
+//   debugf("): ");
 //   for (int i = 0; i < 80; i++)
 //   {
-//     debug(pkt->info[i]);
+//     debugf(pkt->info[i]);
 //   }
-//   debugln();
+//   debugf();
 // }
 
 /**

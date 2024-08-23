@@ -62,9 +62,9 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
     /*thermistor stats*/
     const float NTC_B_AMPHENOL = 3977.0; // Beta parameter
     const float NTC_B_SMD = 3435.0;      // Beta parameter
-    const float NTC_B_FIX = 3977.0;
-    const float NTC_T0 = 298.15;  // Reference temperature in Kelvin (25°C)
-    const float NTC_R0 = 10000.0; // Resistance at reference temperature (10kΩ)
+    const float NTC_B_FIX = 4000.0;      // TODO: this really shouldn matter. check measured resistance
+    const float NTC_T0 = 298.15;         // Reference temperature in Kelvin (25°C)
+    const float NTC_R0 = 10000.0;        // Resistance at reference temperature (10kΩ)
 
     /*calculations*/
     const float R43_paral_R41 = R41 * R43 / (R41 + R43);
@@ -115,14 +115,17 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
     /*removing spikes in adc_buffer*/
     const float tolerance = 0.2;
     float voltage_adc;
+    unsigned int counter_spikes_removed = 0;
     for (int i = 0; i < nTimes; i++)
     {
         if (!((1 - tolerance) * adc_average < adc_buffer[i] < adc_average * (1 + tolerance)))
         // replaces adc_buffer values which dividate from the adc_average about more than tolerance
         {
             adc_buffer[i] = adc_average;
+            counter_spikes_removed++;
         }
     }
+    debugf_info("spikes removed:%u from %u samples\n", counter_spikes_removed, nTimes);
 
     /*calculating new adc_average without spikes*/
     float filtered_adc_average = 0;
@@ -141,7 +144,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
     /*Converts ADC value to a Resistance*/
     float resistance = (float)R_SERIES * (((float)VCC_NTC / volt_ntc) - 1);
 
-    // selects the right NTC_B value for each NTC type
+    /*selects the right NTC_B value for each NTC type*/
     float NTC_B = NTC_B_AMPHENOL;
     switch (NTC)
     {
@@ -156,10 +159,10 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
         break;
     }
 
-    // Calculate the temperature in Kelvin using the Steinhart–Hart equation
+    /*Calculate the temperature in Kelvin using the Steinhart–Hart equation*/
     float tempK = 1.0 / (1.0 / NTC_T0 + (1.0 / NTC_B) * log(resistance / NTC_R0));
 
-    // Convert temperature from Kelvin to Celsius
+    /*Convert temperature from Kelvin to Celsius*/
     float tempC = tempK - 273.15;
     // debugf_info("VADC:%.2f VNTC:%.2f R:%.2f T:%.2f\n", voltage_adc, volt_ntc, resistance, tempC);
     return tempC;

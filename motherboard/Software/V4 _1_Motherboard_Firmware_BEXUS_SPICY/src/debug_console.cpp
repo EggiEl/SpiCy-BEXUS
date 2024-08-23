@@ -60,14 +60,14 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   {
   case '?':
   {
-    debugf_status("<help>\n");
-    debugf_info("/b|Returns Battery Voltage and current\n\
+    debugf_status("%s", F("<help>\n"));
+    debugf_info("%s", F("/b|Returns Battery Voltage and current\n\
 /s|Read out Status\n\
 /l|Sets the controller in sleep for ... ms.\n\
 /r|Reboots. if followed by a 1 reboots in Boot Mode\n\
 /m|Read out Memory Info\n\
 /h x y| set heater pin x at prozent y .if x == -1 is given\n\
-        will set all heater to different numbers for testing.\n\
+        will return pwm status of all pi_controlled heaters.\n\
 /i|scans for i2c devices\n\
 /f|changes the analogWrite frequency. \n\
    For heater run one heating command and change then.\n\
@@ -82,7 +82,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
 /c|[kp] [ki] [imax] [SET_TEMP_DEFAULT] sets pi controller gain values. \n\
    Set SET_TEMP_DEFAULT = -1000000.0 to deactivate PI controller\
     and be able to controller heater manually\
-/u|starts an over_the_air OTA update\n");
+/u|starts an over_the_air OTA update\n"));
     break;
   }
   case 'b':
@@ -101,7 +101,8 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
     if (param1 == 1)
     {
       debugf_magenta("<Reboot in Boot Mode>\n");
-      rp2040.rebootToBootloader();
+      debugf_error("disabled do to danger of loosing controll midflight\n");
+      // rp2040.rebootToBootloader();
       break;
     }
     else
@@ -129,7 +130,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
     // // sleep_cpu();
     // // For Arduino, you can use delay() or other sleep functions provided by Arduino libraries
     delay(param1);
-    debugln("Awake Again");
+    debugf("Awake Again\nn");
     rp2040.resumeOtherCore();
     break;
   }
@@ -142,7 +143,9 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   {
     if (param1 == -1)
     {
-      heat_testmanual();
+      debugf_info("heating status of pi controller: \
+      p0:%f p1:%f p2:%f p3:%f p4:%f p5:%f \n",
+                  pi_probe0.heat, pi_probe1.heat, pi_probe2.heat, pi_probe3.heat, pi_probe4.heat, pi_probe5.heat);
       break;
     }
     else
@@ -197,14 +200,13 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   {
     if (param1)
     {
-      debug("Set Freq of AnalogWrite to: ");
-      debugln((int)param1);
-      // ADC_FREQ_WRITE = (int)param1;
-      analogWriteFreq(param1);
+      debugf_info("Set Freq of AnalogWrite to: ");
+      debugf_info("%u", (uint32_t)param1);
+      analogWriteFreq((uint32_t)param1);
     }
     else
     {
-      debug("Numerical input >= 0");
+      debugf("Numerical input >= 0\n");
     }
     break;
   }
@@ -266,7 +268,10 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   case 'x':
   {
     debugf_status("<Reads out Barometer> WIP\n");
-    // pressure_read();
+
+#if BAROMETER_TEATING == 1
+    pressure_read();
+#endif
     break;
   }
   case 'o':
@@ -276,7 +281,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   }
   case 'a':
   {
-    float buffer[7];
+    float buffer[14];
     light_read(buffer, 0);
     break;
   }
@@ -352,7 +357,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   }
   case 'u':
   {
-
+    tcp_receive_OTA_update(int(param1));
     break;
   }
   default:
@@ -568,14 +573,14 @@ uint32_t check_peripherals()
     heat_updateall(buff_heat);
     delay(1);
     float cur_one = get_current() - cur_alloff;
-    // debugln(cur_one);
+    // debugf("%f\n",cur_one);
     buff_heat[i] = 0.0;
 
     /* checks if current increased*/
     if ((HEAT_CURRENT * 0.5 < cur_one))
     {
       results |= (1 << 16 + i);
-      // debug(cur_one);
+      // debugf("%f",cur_one);
     }
   }
   resume_Core1();
@@ -663,6 +668,7 @@ uint32_t check_peripherals()
   return results;
 }
 
+#if BAROMETER_TEATING == 1
 #include <SFE_BMP180.h>
 #include <Wire.h>
 
@@ -799,3 +805,4 @@ void read_out_BMP180()
   else
     Serial.println("error starting temperature measurement\n");
 }
+#endif
