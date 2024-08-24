@@ -27,8 +27,10 @@ EthernetClient client;
 void tcp_setup_client()
 {
   // MESSURETIME_START
-
-  debugf_status("tcp_setup_client>\n");
+  if (DEBUG_LEVEL == 2)
+  {
+    debugf_status("tcp_setup_client>\n");
+  }
 
   if (TCP_init)
   {
@@ -60,8 +62,10 @@ void tcp_setup_client()
     Ethernet.begin(MAC, CLIENTIP); // MAC, CLIENTIP, DNS, GATEWAY, SUBNET
     Ethernet.setSubnetMask(SUBNET);
   }
-
-  tcp_print_info();
+  if (DEBUG_LEVEL == 2)
+  {
+    tcp_print_info();
+  }
   if (Ethernet.hardwareStatus())
   {
     TCP_init = 1;
@@ -170,35 +174,45 @@ void tcp_check_command()
   }
 
   // reads the TCP_incomming_bytes_buffer in union
-  union TCPMessageParser
-  {
-    byte ByteStream[35];
-    struct
-    {
-      char comand[3];
-      float param[8];
-    };
-  } buffer;
 
-  int status = client.readBytesUntil('\n', buffer.ByteStream, sizeof(TCPMessageParser)); // Returns The next byte (or character), or -1 if none is available.
-  if (status == -1)
+  byte ByteStream[35];
+  int status = client.readBytes(ByteStream, sizeof(ByteStream)); // Returns the numbers of bytes read, or 0 if no data found.
+
+  if (status == 0)
   {
     error_handler(ERROR_TCP_COMMAND_PARSING);
     debugf_error("Some error parsing tcp readBytesUntil cmmand\n");
     return;
   }
 
+  for (int i = 0; i < sizeof(ByteStream); i++)
+  {
+    debugf("0x%02X/", ByteStream[i]);
+  }
+  debugln();
+
+  // convert values
+  char command[3];
+  command[0] = ByteStream[0];
+  command[1] = ByteStream[1];
+  command[2] = ByteStream[2];
+
+  float param[8];
+  memcpy(param, ByteStream + 3, 8 * sizeof(float));
+
+  debugf_sucess("-TCP command recieved %c|%f|%f|%f|%f\n", command[0], param[0], param[2], param[4], param[6]);
+
   // checks if command is corrupted
   char success = 1;
-  if (!(buffer.comand[0] == buffer.comand[1] && buffer.comand[1] == buffer.comand[2]))
+  if (!(command[0] == command[1] && command[1] == command[2]))
   {
     error_handler(ERROR_TCP_COMMAND_CORRUPT);
     debugf_error("TCP Command corrputed\n");
-    debugf_error("Command: %c %c %c\n Param:\n", buffer.comand[0], buffer.comand[1], buffer.comand[2]);
+    debugf_error("Command: %c %c %c\n Param:\n", command[0], command[1], command[2]);
     for (uint8_t i = 0; i < 4; i++)
     {
-      debugf_error("%f ", buffer.param[i * 2]);
-      debugf_error("%f\n", buffer.param[i * 2 + 1]);
+      debugf_error("%f ", param[i * 2]);
+      debugf_error("%f\n", param[i * 2 + 1]);
     }
     success = 0;
   }
@@ -206,7 +220,7 @@ void tcp_check_command()
   // checks if parameter are corrupted
   for (int i = 0; i < 4; i++)
   {
-    if (buffer.param[i * 2] != buffer.param[i * 2 + 1])
+    if (param[i * 2] != param[i * 2 + 1])
     {
       error_handler(ERROR_TCP_PARAM_CORRUPT);
       debugf_error("TCP parameters corrputed\n");
@@ -216,8 +230,7 @@ void tcp_check_command()
 
   if (success)
   {
-    debugf_sucess("-TCP command recieved %c|%f|%f|%f|%f\n", buffer.comand[0], buffer.param[0], buffer.param[1], buffer.param[2], buffer.param[3]);
-    handle_command(buffer.comand[0], buffer.param[0], buffer.param[1], buffer.param[2], buffer.param[3]);
+    handle_command(command[0], param[0], param[2], param[4], param[6]);
   }
 }
 
@@ -483,11 +496,27 @@ unsigned char tcp_link_status()
  */
 void tcp_receive_OTA_update(int size_firmware)
 {
-  const char filename[] = "firmware.bin"; // before: blink.bin.gz
+  const char filename[] = "/firmware.bin"; // before: blink.bin.gz
   debugf_status("Over the air firmware update. Please reboot microcontroller manually after sucessful upload of firmware with /r.\n");
   if (!TCP_init)
   {
     tcp_setup_client();
+  }
+
+  /*creates file*/
+
+  if (!LittleFS.begin())
+  {
+    Serial.println("An error has occurred while mounting LittleFS");
+    return;
+  }
+
+  File f = LittleFS.open(filename, "w");
+  if (!f)
+  {
+    debugf_red("Failed to open file for writing\n");
+    LittleFS.end();
+    return;
   }
 
   /*connects client*/
@@ -498,7 +527,7 @@ void tcp_receive_OTA_update(int size_firmware)
   }
 
   /*checks if data avaliable*/
-  debugf_status("Waiting 7 seconds for filesteam from server...\n");
+  debugf_status("Waiting 7 seconds for server connection...");
   rp2040.wdt_begin(8000);
   unsigned long timestamp = millis() + 7000;
   while (!client.available())
@@ -507,18 +536,10 @@ void tcp_receive_OTA_update(int size_firmware)
     {
       debugf_red("No firmware uplad avaliable. Start firmware upload on the groundstation before calling this method.\n");
       rp2040.wdt_begin(TIMEOUT_WATCHDOG);
+      f.close();
+      LittleFS.end();
       return;
     }
-  }
-
-  /*creates file*/
-  LittleFS.begin();
-  File f = LittleFS.open(filename, "w");
-  if (!f)
-  {
-    debugf_red("Failed to open file for writing\n");
-    rp2040.wdt_begin(TIMEOUT_WATCHDOG);
-    return;
   }
 
   /*recieving file*/
@@ -538,12 +559,12 @@ void tcp_receive_OTA_update(int size_firmware)
   }
   f.close();
   client.stop();
-  debugf_info("File size of %u received and saved\n", f.size());
+  debugf_sucess("File size of %zu received and saved\n", f.size());
 
   /*checks if size of recieved file checks out*/
   if (f.size() != size_firmware)
   {
-    debugf_error("Size of recieved data:%d doesn´t match size the firmware should have:%d", f.size(), size_firmware);
+    debugf_error("Size of recieved data:%zu doesn´t match size the firmware should have:%d", f.size(), size_firmware);
     // rp2040.wdt_begin(TIMEOUT_WATCHDOG);
     // return;
   }

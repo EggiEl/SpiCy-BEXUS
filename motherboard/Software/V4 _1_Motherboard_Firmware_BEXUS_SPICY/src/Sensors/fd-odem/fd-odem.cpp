@@ -181,6 +181,7 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues)
         if (!returnValues)
         {
             free(buffer);
+            return NULL;
         }
         return buffer;
     }

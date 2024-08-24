@@ -1,11 +1,8 @@
 import socket
 import struct
-from textwrap import indent
 import threading
 import time
 import random
-
-from numpy import iterable
 
 from MongoDB import MongoDB
 import netifaces
@@ -44,11 +41,11 @@ class TCP_SERVER:
     def start_server(self):
         """startet eine TCP Server an den sich ein client_socket verbinden kann"""
 
-        def connect_server_socket(timeout=TIMEOUT_CLIENT):
+        def connect_server_socket():
             try:
                 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                server_socket.settimeout(TIMEOUT_CLIENT)
                 server_socket.bind((self.ipadress, self.port))
-                server_socket.settimeout(timeout)
                 return server_socket
             
             except OSError as e:
@@ -56,7 +53,6 @@ class TCP_SERVER:
                 elif e.errno == 10049:print_red("Probably cable not connected.\n", indent=1)
                 elif e.errno == 10038:print_red("Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist. Probably no Ethernet dongle\n", indent=1)
                 else:print_red(f"Error:{e} ", indent=2)
-
                 time.sleep(DELAY_ERROR)
                 return None
                 
@@ -65,12 +61,12 @@ class TCP_SERVER:
                 time.sleep(DELAY_ERROR)
                 return None
 
-        def connect_client(server_socket: socket.socket, timeout=TIMEOUT_CLIENT, counter=3):
+        def connect_client(server_socket: socket.socket, counter=3):
             """wartet auf einen client_socket und verbindet sich  mit demselben"""
             try:
                 server_socket.listen(1)  # Wartet auf 1 eingehende Verbindung
                 client_socket, client_address = server_socket.accept()
-                client_socket.settimeout(timeout)
+                client_socket.settimeout(TIMEOUT_CLIENT)
                 clear_console_line()
                 print_cyan(f"Verbindung hergestellt von:{client_address}\n", indent=1)
                 return client_socket
@@ -114,7 +110,8 @@ class TCP_SERVER:
                     #this is a debug message being downlinked.
                     else: 
                             received_data = received_data.decode("utf-8",errors='ignore')
-                            print_yellow(f'debug: "{received_data}"\n',indent =2)
+                            # print_yellow('debug: ',indent =2)
+                            print(received_data,end="")
 
                 else:
                     print_red("duno wtf this is\n", indent=2)
@@ -146,7 +143,7 @@ class TCP_SERVER:
 
             return success
 
-        def send_command(client_socket: socket.socket):
+        def send_command(client_socket):
             """Sends a command to the client"""
             try:
                 # sends command
@@ -155,9 +152,13 @@ class TCP_SERVER:
                     client_socket.sendall(self.uplink_buffer[0])
                     self.uplink_buffer.pop(0)
 
+            except OSError as e:     
+                if e.errno == 10038:print_cyan("senden WinError 10038: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist. Probably no Ethernet dongle\n", indent=0)
+                client_socket = None
+
             except Exception as e:
                 print_red(f"Error sending:{e}\n", indent=1)
-                client_socket.close()
+                client_socket = None
 
         server_socket = None
         client_socket = None
@@ -224,7 +225,7 @@ class DATALOGGER:
             if len(self.rawdata)>=1:
                 self.save_raw_mongo()
                 if self.save_raw_bin():
-                    print_white(f"saved {len(self.rawdata)} packages",indent=3)
+                    print_white(f"saved {len(self.rawdata)} packages\n",indent=3)
                     self.rawdata = []
             else:
                 time.sleep(DELAY_DATALOG_LOOP) #delay to conserve performance
@@ -374,15 +375,15 @@ class INTERFACE:
 
                             comm = command_buf[0]
                             param1 = float(command_buf[1])
-                            param3 = float(command_buf[2])
-                            param2 = float(command_buf[3])
+                            param2 = float(command_buf[2])
+                            param3 = float(command_buf[3])
                             param4 = float(command_buf[4])
 
                             uploadbuffer = comm.encode("utf-8")*3 + struct.pack("ffffffff", param1,param1,param2,param2,param3,param3,param4,param4)
                             # print_yellow(f'sending command: {command_buf}|{param1}|{param2}|{param3}|{param4}|\nin bytes: {uploadbuffer}\n',indent=1)
                             self.server.uplink_buffer.append(uploadbuffer)
                         except Exception as e:
-                            print(e)
+                            print_red(f'Error Commadn:{e}',indent=1)
 
                 case "d":
                     if self.server is None:

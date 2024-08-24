@@ -42,7 +42,7 @@ void sd_setup()
   }
   else
   {
-    sd_printinfo();
+    // sd_printinfo();
     debugf_sucess("SD init succesfulll\n");
   }
 }

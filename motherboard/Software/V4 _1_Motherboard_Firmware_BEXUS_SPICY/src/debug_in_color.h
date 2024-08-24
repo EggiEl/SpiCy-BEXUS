@@ -7,9 +7,9 @@
 
 #define LENGTHARRAY(array) ((sizeof(array)) / (sizeof(array[0])))
 
-#ifndef DEBUG_LEVEL
-#define DEBUG_LEVEL 4 /*changes the debug console prints. 0=just errors,1=Status Updates and sucess,2=Infos about running code,3 = Debug infos*/
-#endif
+// #ifndef DEBUG_LEVEL
+// #define DEBUG_LEVEL 4 /*changes the debug console prints. 0=just errors,1=Status Updates and sucess,2=Infos about running code,3 = Debug infos*/
+// #endif
 
 /*-------Explanation----------------*/
 
@@ -57,10 +57,25 @@ Error debug messages are disabled to prevent infinite error loopings, but all no
 
 #if DEBUG_MODE == 2 // debug over TCP packet
 #define debug(...)
-#define debugln(...)                          /*Can be a Serial.println, no tcp downlink or disabled in the config*/
+#define debugln(...)                       /*Can be a Serial.println, no tcp downlink or disabled in the config*/
 #define debugf(...) tcp_sendf(__VA_ARGS__) /*Can be a Serial.printf, a tcp downlink or disabled in the config*/
 #define MESSURETIME_START
 #define MESSURETIME_STOP
+#endif
+
+#if DEBUG_MODE == 3 // debug over Serial and TCP
+#define debug(...) Serial.print(__VA_ARGS__)
+#define debugln(...) Serial.println(__VA_ARGS__) /*Can be a Serial.println, a tcp downlink or disabled in the config*/
+#define debugf(...)   Serial.printf(__VA_ARGS__); \
+tcp_sendf(__VA_ARGS__)         /*Can be a Serial.printf, a tcp downlink or disabled in the config*/
+#define MESSURETIME_START        \
+    unsigned long tb = 0;        \
+    unsigned long ta = micros(); \
+    debugf_magenta(".");
+#define MESSURETIME_STOP \
+    tb = micros();       \
+    ta = tb - ta;        \
+    debugf_magenta("Time: %.2fs|%.2fms|%ius\n", ta / 1000000.0, ta / 1000.0, ta);
 #endif
 
 /*-------Debug levels------------*/

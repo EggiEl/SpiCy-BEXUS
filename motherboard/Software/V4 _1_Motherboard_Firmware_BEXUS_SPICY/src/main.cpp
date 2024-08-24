@@ -39,17 +39,20 @@ void setup()
   // rp2040.wdt_begin(TIMEOUT_WATCHDOG);
   update_nResets();
   print_startup_message();
+  sd_setup();
+  tcp_setup_client();
+  debugln("OTA update sucessful\n");
 }
 
 void periodic_tasks_core_0();
 void loop()
 {
   periodic_tasks_core_0();
-  next_state();
-  if (pi_record_transfer_function(PIN_H0, NTC_OR_OxY_0, 20, 1.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
-  {
-    pi_sweep_update(&pi_probe0, &sweep_0);
-  }
+  // next_state();
+  // if (pi_record_transfer_function(PIN_H0, NTC_OR_OxY_0, 20, 1.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
+  // {
+  //   pi_sweep_update(&pi_probe0, &sweep_0);
+  // }
   // read_out_BMP180();
 }
 
@@ -60,7 +63,7 @@ void periodic_tasks_core_0()
   rp2040.wdt_reset();
   status_led_blink(STATLED);
   rp2040.wdt_reset();
-  
+
   if (TCP_init)
   {
     tcp_check_command();
@@ -139,7 +142,7 @@ void update_nResets()
 /* Prints a message with facts about the MPU like frequency and weather a watchdog restarted it*/
 void print_startup_message()
 {
-#if DEBUG_MODE >= 1
+#if DEBUG_MODE == 1 || DEBUG_MODE == 3
   Serial.setTimeout(1000);
   Serial.begin();
   for (unsigned int i = 0; i < 200; i++)
@@ -151,17 +154,18 @@ void print_startup_message()
     }
   }
   delay(100);
+  #endif
   // ghost
-  debugf_green("%s",F(
-      "  .-')       _ (`-.                                       \n"
-      " ( OO ).    ( (OO  )                                      \n"
-      "(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.\n"
-      "/    _ |  (__...--''   |  |OO)   '  .--./     \\  `.'  /  \n"
-      "\\  :` `.   |  /  | |   |  |  \\   |  |('-.   .-')     /  \n"
-      " '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /    \n"
-      ".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_  \n"
-      "\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__) \n"
-      " `-----'   `--'        `--'       `-----'     `--'        \n"));
+  debugf_green("%s", F(
+                         "  .-')       _ (`-.                                       \n"
+                         " ( OO ).    ( (OO  )                                      \n"
+                         "(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.\n"
+                         "/    _ |  (__...--''   |  |OO)   '  .--./     \\  `.'  /  \n"
+                         "\\  :` `.   |  /  | |   |  |  \\   |  |('-.   .-')     /  \n"
+                         " '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /    \n"
+                         ".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_  \n"
+                         "\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__) \n"
+                         " `-----'   `--'        `--'       `-----'     `--'        \n"));
   // graphiti
   // SET_COLOUR_GREEN
   // Serial.println(" _________        .__ _________                   _____  ");
@@ -183,5 +187,4 @@ void print_startup_message()
 
   debugf_info("\"/?\" for help\n");
   rp2040.enableDoubleResetBootloader();
-#endif
 }

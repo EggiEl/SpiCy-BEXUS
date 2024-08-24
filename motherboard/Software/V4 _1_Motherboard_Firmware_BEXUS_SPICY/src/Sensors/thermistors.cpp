@@ -103,7 +103,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
 
     /*Read out ADC in a buffer and calculating adc_average*/
     float adc_average = 0;
-    float adc_buffer[nTimes];
+    float adc_buffer[nTimes] = {0.0};
     for (int i = 0; i < nTimes; i++)
     {
         float adc_redout = (float)analogRead(PIN_TEMPADC);
