@@ -23,11 +23,9 @@ void heat_setup()
   digitalWrite(PIN_H5, 0);
   digitalWrite(PIN_H6, 0);
   digitalWrite(PIN_H7, 0);
-  debugf_status("<heat_setup>\n");
   analogWriteFreq(ADC_FREQ_WRITE);
   analogWriteRange(ADC_MAX_WRITE);
   heat_init = 1;
-  debugf_sucess("heat_setup success\n");
 }
 
 /**

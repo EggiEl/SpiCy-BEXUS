@@ -79,9 +79,9 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
 /o|starts console to talk to PyroSience FD-OEM Oxygen Module\n\
 /a|reads out light spectrometers\n\
 /q|shut down microcontroller\n\
-/c|[kp] [ki] [imax] [SET_TEMP_DEFAULT] sets pi controller gain values. \n\
-   Set SET_TEMP_DEFAULT = -1000000.0 to deactivate PI controller\
-    and be able to controller heater manually\
+/c|[probe][kp] [ki] [imax] sets pi controller gain values. \n\
+  Set [kp] == -1 to print  PI controller\n\
+  and [kp] == -100000.0 be able to controller heater manually\n\
 /u|starts an over_the_air OTA update\n"));
     break;
   }
@@ -256,7 +256,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
         debugf_info("Probe Nr:%i|%.2f°C\n", i, buf[i]);
       }
       debugf_info("Probe SMD|%.2f°C\n", buf[6]);
-      debugf_info("Probe Check|%.2f°C [should be 25°C]\n", buf[7]);
+      debugf_info("Probe Check|%fV [should be ~ 1.01325V]\n", buf[7]);
     }
     else
     {
@@ -308,6 +308,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
     case -1:
 
       break;
+
     case 0:
       pi = &pi_probe0;
       break;
@@ -333,12 +334,22 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
       break;
 
     default:
-      break;
+      debugf_red("no vaid controller\n");
+      return;
     }
 
     if (param2 != -1)
     {
       pi->kp = param2;
+      if (param2 == -100000.0)
+      {
+        debugf_info("pi controller disabled\n")
+      }
+    }
+    else
+    {
+      pi_print_controller(pi);
+      return;
     }
 
     if (param3 != -1)
@@ -351,7 +362,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
       pi->I_MAX = param4;
     }
 
-    debugf_info("Set pi controller of probe:%u p:%.4f i:%.4f i_max:%.4f", pi->kp, pi->ki, pi->I_MAX);
+    debugf_info("Set pi controller:%u p:%f i:%f i_max:%f", (unsigned int)param1, pi->kp, pi->ki, pi->I_MAX);
 
     break;
   }
@@ -464,7 +475,7 @@ void print_memory_use()
 
 /*frees given pointer it it isnt NULL, then sets it to NULL.
  If it is NULL, throws error*/
-void free_ifnotnull(void ** pointer) //TODO:check this
+void free_ifnotnull(void **pointer) // TODO:check this
 {
   if (pointer != NULL && *pointer != NULL)
   {
@@ -566,6 +577,7 @@ uint32_t check_peripherals()
 
   float cur_alloff = get_current(); // current with all heater off
 
+  float HEAT_CURRENT_ON_BATTERY = HEAT_POWER / get_batvoltage(); // increase of battery current when one heater is switched on
   for (uint8_t i = 0; i < 8; i++)
   {
     /*turns one heater on and messures the current*/
@@ -577,7 +589,7 @@ uint32_t check_peripherals()
     buff_heat[i] = 0.0;
 
     /* checks if current increased*/
-    if ((HEAT_CURRENT * 0.5 < cur_one))
+    if ((HEAT_CURRENT_ON_BATTERY * 0.5 < cur_one))
     {
       results |= (1 << 16 + i);
       // debugf("%f",cur_one);
@@ -585,6 +597,14 @@ uint32_t check_peripherals()
   }
   resume_Core1();
 
+  /*light*/
+  uint8_t light_connection = 0;
+  // uint8_t light_connection = light_connected();
+
+  /*tcp*/
+  uint8_t cabletest_buff = tcp_link_status();
+
+  /*prints*/
   debugf_info("!For heater mesasurement y need to connect the jumper!\n");
   debugf_info("     |0|1|2|3|4|5|6|7|\n");
   debugf_info("NTCs: ");
@@ -605,8 +625,6 @@ uint32_t check_peripherals()
     debugf_info("%u|", ((results >> 16) & 0xFF) >> i & 1);
   }
   debugf_info("\n");
-
-  uint8_t light_connection = light_connected();
 
   debugf_info("\nLight: ");
   switch (light_connection)
@@ -631,7 +649,6 @@ uint32_t check_peripherals()
     break;
   }
 
-  uint8_t cabletest_buff = tcp_link_status();
   debugf_info("\nRJ45 cable: ");
   switch (cabletest_buff)
   {
@@ -653,15 +670,15 @@ uint32_t check_peripherals()
     break;
   }
 
-  debugf_info("\n25.0V< V_Bat <30.0 ");
-  if (25.0 < get_batvoltage() < 30.0)
+  debugf_info("\nBattery ");
+  if (15.0 < get_batvoltage() < 30.0)
   {
-    debugf_sucess("connected");
+    debugf_sucess("%.2fV\n",get_batvoltage());
     results |= (1 << 29);
   }
   else
   {
-    debugf_error("not connected");
+    debugf_error("not connected\n");
     results |= (1 << 29);
   }
 

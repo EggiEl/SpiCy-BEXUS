@@ -1,0 +1,20 @@
+/b|Returns Battery Voltage and current
+/s|Read out Status
+/l|Sets the controller in sleep for ... ms.
+/r|Reboots. if followed by a 1 reboots in Boot Mode
+/m|Read out Memory Info
+/h x y| set heater pin x at prozent y .if x == -1 is given
+        will return pwm status of all pi_controlled heaters.
+/i|scans for i2c devices
+/f|changes the analogWrite frequency. 
+   For heater run one heating command and change then.
+/d|check connected peripherals
+/p|sends a test packet over lan
+/w|Sets Watchdog to ... ms. Cant be disables till reboot.
+/t|returns temperature value. 0-6 for external probes, 7 for uC one, -1 for all of them
+/x|prints barometer temperature and pressure
+/o|starts console to talk to PyroSience FD-OEM Oxygen Module
+/a|reads out light spectrometers
+/q|shut down microcontroller
+/c|[kp] [ki] [imax] [SET_TEMP_DEFAULT] sets pi controller gain values. 
+   Set SET_TEMP_DEFAULT = -1000000.0 to deactivate PI controller    and be abl

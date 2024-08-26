@@ -50,7 +50,7 @@ uint8_t temp_isconnected(uint8_t NTC)
  * @param nTimes dictates over how many measurement the values should be meaned. Set to 1 to just read out once.
  * @return temperature value or -1000000 if NTC is not connected/vaulty
  */
-float temp_read_one(uint8_t NTC, uint8_t nTimes)
+float temp_read_one(const uint8_t NTC, const uint8_t nTimes, const float spike_tolerance)
 {
     /*circuit design*/
     const float VCC_NTC = 3.0;     // reference voltage for the NTC Readout
@@ -62,7 +62,6 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
     /*thermistor stats*/
     const float NTC_B_AMPHENOL = 3977.0; // Beta parameter
     const float NTC_B_SMD = 3435.0;      // Beta parameter
-    const float NTC_B_FIX = 4000.0;      // TODO: this really shouldn matter. check measured resistance
     const float NTC_T0 = 298.15;         // Reference temperature in Kelvin (25°C)
     const float NTC_R0 = 10000.0;        // Resistance at reference temperature (10kΩ)
 
@@ -81,62 +80,46 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
     select_oxy_or_ntc(NTC);
 
     /* check if NTC connected*/
-    if (analogRead(PIN_TEMPADC) > ADC_MAX_READ * 0.05)
+    if (analogRead(PIN_TEMPADC) < ADC_MAX_READ * 0.05)
     {
         // error_handler(ERROR_NO_NTC_CONNECTED);
         return -1000000;
     }
-
-    /*old simple way
-    Read out ADC
-    float voltage_adc = 0;
-    for (int i = 0; i < nTimes; i++)
-    {
-        voltage_adc += (float)(analogRead(PIN_TEMPADC) / ADC_MAX_READ) * VCC_NTC;
-    }
-    voltage_adc = voltage_adc / nTimes;
-    if (voltage_adc < 0.02)
-    {
-        // error_handler(ERROR_NO_NTC_CONNECTED);
-        return -1000000;
-    }*/
 
     /*Read out ADC in a buffer and calculating adc_average*/
-    float adc_average = 0;
-    float adc_buffer[nTimes] = {0.0};
-    for (int i = 0; i < nTimes; i++)
+    int adc_buffer = 0;
+     for (int i = 0; i < nTimes; i++)
     {
-        float adc_redout = (float)analogRead(PIN_TEMPADC);
-        adc_buffer[i] = adc_redout;
-        adc_average += adc_redout;
+        adc_buffer += analogRead(PIN_TEMPADC);
     }
-    adc_average = adc_average / nTimes;
+    float adc_average = ((float)adc_buffer) / nTimes;
 
-    /*removing spikes in adc_buffer*/
-    const float tolerance = 0.2;
-    float voltage_adc;
-    unsigned int counter_spikes_removed = 0;
-    for (int i = 0; i < nTimes; i++)
-    {
-        if (!((1 - tolerance) * adc_average < adc_buffer[i] < adc_average * (1 + tolerance)))
-        // replaces adc_buffer values which dividate from the adc_average about more than tolerance
-        {
-            adc_buffer[i] = adc_average;
-            counter_spikes_removed++;
-        }
-    }
-    debugf_info("spikes removed:%u from %u samples\n", counter_spikes_removed, nTimes);
+    // /*removing spikes in adc_buffer*/
+    // float voltage_adc;
+    // unsigned int counter_spikes_removed = 0;
+    // for (int i = 0; i < nTimes; i++)
+    // {
+    //     // debugf(">error:%f\n",adc_average-adc_buffer[i]);
+    //     if (adc_buffer[i] > (adc_average + spike_tolerance) &&
+    //         adc_buffer[i] < (adc_average - spike_tolerance))
+    //     // replaces adc_buffer values which dividate from the adc_average about more than spike_tolerance
+    //     {
+    //         adc_buffer[i] = adc_average;
+    //         counter_spikes_removed++;
+    //     }
+    // }
+    // debugf("spikes removed:%u from %u samples\n", counter_spikes_removed, nTimes);
 
-    /*calculating new adc_average without spikes*/
-    float filtered_adc_average = 0;
-    for (int i = 0; i < nTimes; i++)
-    {
-        filtered_adc_average += adc_buffer[i];
-    }
-    filtered_adc_average = filtered_adc_average / nTimes;
+    // /*calculating new adc_average without spikes*/
+    // float filtered_adc_average = 0;
+    // for (int i = 0; i < nTimes; i++)
+    // {
+    //     filtered_adc_average += adc_buffer[i];
+    // }
+    // filtered_adc_average = filtered_adc_average / nTimes;
 
     /*calculating volgae form adc value*/
-    voltage_adc = (filtered_adc_average / ADC_MAX_READ) * VCC_NTC;
+    float voltage_adc = (adc_average / ADC_MAX_READ) * VCC_NTC;
 
     /*Converts the adc voltage after the opamp circuit to the voltage on the ntc*/
     float volt_ntc = voltage_adc * (1.0 / gain) + voffset;
@@ -152,7 +135,7 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
         NTC_B = NTC_B_SMD;
         break;
     case NTC_10kfix:
-        NTC_B = NTC_B_FIX;
+        return volt_ntc; //returns the voltage, as there its reasier to calculate tolerances 
         break;
     default:
         NTC_B = NTC_B_AMPHENOL;
@@ -164,7 +147,6 @@ float temp_read_one(uint8_t NTC, uint8_t nTimes)
 
     /*Convert temperature from Kelvin to Celsius*/
     float tempC = tempK - 273.15;
-    // debugf_info("VADC:%.2f VNTC:%.2f R:%.2f T:%.2f\n", voltage_adc, volt_ntc, resistance, tempC);
+    // debugf_info("VADC:%f VNTC:%f R:%f T:%f\n", voltage_adc, volt_ntc, resistance, tempC);
     return tempC;
 }
-

@@ -93,8 +93,8 @@ float get_batvoltage();
 float get_current();
 void check_serial_input();
 void status_led_blink(uint8_t LED);
-void free_ifnotnull(void *pointer);
 void print_memory_use();
+uint32_t check_peripherals();
 void read_out_BMP180();
 
 /*i2c scan*/
@@ -135,7 +135,7 @@ extern PI_CONTROLLER pi_probe5;
 
 void pi_update_all();
 void pi_print_controller(PI_CONTROLLER *pi);
-uint8_t pi_record_transfer_function(uint8_t Heater, uint8_t NTC, float T_START, float TIME_TILL_STOP);
+uint8_t pi_record_step_function(uint8_t PIN_HEATER, uint8_t PIN_NTC, float T_START, float TIME_TILL_STOP);
 
 typedef struct
 {
@@ -166,7 +166,7 @@ uint8_t pi_sweep_update(PI_CONTROLLER *pi, PID_ControllerSweepData *data);
 #define AMOUNT_NTC_THERMISTORS 8 // Number of NTC probes
 extern volatile char temp_init;
 void temp_setup();
-float temp_read_one(uint8_t NTC, uint8_t nTimes = 100);
+float temp_read_one(const uint8_t NTC, const uint8_t nTimes = 100, const float spike_tolerance = 1);
 void temp_read_all(float buffer[AMOUNT_NTC_THERMISTORS]);
 uint8_t temp_isconnected(uint8_t NTC = 255);
 
@@ -183,7 +183,6 @@ uint8_t oxy_isconnected(const int PROBE = 255);
 extern volatile char light_init;
 void light_setup();
 void light_read(float *buffer, bool with_flash = 0);
-uint8_t light_connected();
 
 /*error handeling*/
 enum ERROR_DESTINATION
@@ -192,6 +191,6 @@ enum ERROR_DESTINATION
     ERROR_DESTINATION_NO_SD,
     ERROR_DESTINATION_NO_TCP_SD
 };
-void error_handler(const unsigned int ErrorCode, int destination = 0);
+void error_handler(const int ErrorCode, int destination = 0);
 
 #endif

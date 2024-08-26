@@ -5,10 +5,10 @@
 #include "Arduino.h"
 
 /*Debug*/
-#define DEBUG_MODE 1 /**activates debug statements. \
-0 = disable                                         \
-1 = Serial                                          \
-2 = TCP -> dosn´t print error message but instead downlinks error codes\
+#define DEBUG_MODE 1 /**activates debug statements.                      \
+0 = disable                                                              \
+1 = Serial                                                               \
+2 = TCP -> dosn´t print error message but instead downlinks error codes \
 3 = Serial & TCP*/
 
 #define DEBUG_LEVEL 3 /*changes the debug console prints. \
@@ -35,7 +35,7 @@ const unsigned long TIMEOUT_LIGHT_SENSOR = 100;  // timeout i2c connection light
 const unsigned long TIMEOUT_OXY_SERIAL = 300;    // timeout usart oxygen
 
 /*Heating*/
-const float HEAT_VOLTAGE = 5;                                           // in V
+const float HEAT_VOLTAGE = 7.7459666;                                   // in V
 const float HEAT_RESISTANCE = 12;                                       // in Ohm
 const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE;              // current of a single Heater in A
 const float HEAT_POWER = HEAT_CURRENT * HEAT_CURRENT * HEAT_RESISTANCE; // max heating power of a single heater
@@ -51,6 +51,12 @@ const unsigned long PI_T = 1000;                      // time in ms till next PI
 const float SET_TEMP_DEFAULT = 34.0;                  // temperature target for PI controller. Set to -1000000.0 to disable Controller
 const unsigned long PI_SWEEP_PRINT_DELAY = 60 * 1000; // delay between printout of PI_SWEEP
 
+/*light sensors*/
+#include "Adafruit_LTR390.h"
+const ltr390_gain_t LIGHT_LTR390_GAIN = LTR390_GAIN_3;
+const float LIGHT_LTR390_WFAC = 1;
+const float LIGHT_LTR390_INT = 4;
+const float LIGHT_LTR390_UV_SENSITIFITY = 2300;
 /*Pin mapping*/
 typedef enum
 {

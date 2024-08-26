@@ -27,9 +27,9 @@ EthernetClient client;
 void tcp_setup_client()
 {
   // MESSURETIME_START
-  if (DEBUG_LEVEL == 2)
+  if (DEBUG_MODE == 1)
   {
-    debugf_status("tcp_setup_client>\n");
+    Serial.println("tcp_setup_client>\n");
   }
 
   if (TCP_init)
@@ -62,10 +62,12 @@ void tcp_setup_client()
     Ethernet.begin(MAC, CLIENTIP); // MAC, CLIENTIP, DNS, GATEWAY, SUBNET
     Ethernet.setSubnetMask(SUBNET);
   }
-  if (DEBUG_LEVEL == 2)
+
+  if (DEBUG_MODE == 1)
   {
     tcp_print_info();
   }
+
   if (Ethernet.hardwareStatus())
   {
     TCP_init = 1;
@@ -185,11 +187,11 @@ void tcp_check_command()
     return;
   }
 
-  for (int i = 0; i < sizeof(ByteStream); i++)
-  {
-    debugf("0x%02X/", ByteStream[i]);
-  }
-  debugln();
+  // for (int i = 0; i < sizeof(ByteStream); i++)
+  // {
+  //   debugf("0x%02X/", ByteStream[i]);
+  // }
+  // debugln();
 
   // convert values
   char command[3];
@@ -348,7 +350,6 @@ void tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPacket
 void tpc_send_error(const unsigned char error)
 {
   // debugf_status("sender_down_error:%u", error);
-
   if (!TCP_init)
   {
     tcp_setup_client();
@@ -461,7 +462,7 @@ void tpc_testmanually(int nPackets, unsigned int nTries)
   struct packet **packet_buf = (struct packet **)malloc(nPackets * sizeof(struct packet *));
   if (!packet_buf)
   {
-    error_handler(ERROR_TCP_DEBUG_MEMORY, ERROR_DESTINATION_NO_TCP);
+      error_handler(ERROR_TCP_DEBUG_MEMORY, ERROR_DESTINATION_NO_TCP);
     return;
   }
 
@@ -497,17 +498,12 @@ unsigned char tcp_link_status()
 void tcp_receive_OTA_update(int size_firmware)
 {
   const char filename[] = "/firmware.bin"; // before: blink.bin.gz
-  debugf_status("Over the air firmware update. Please reboot microcontroller manually after sucessful upload of firmware with /r.\n");
-  if (!TCP_init)
-  {
-    tcp_setup_client();
-  }
+  debugf_status("Over the air firmware update.\n");
 
   /*creates file*/
-
   if (!LittleFS.begin())
   {
-    Serial.println("An error has occurred while mounting LittleFS");
+    debugf_red("An error has occurred while mounting LittleFS\n");
     return;
   }
 
@@ -520,6 +516,11 @@ void tcp_receive_OTA_update(int size_firmware)
   }
 
   /*connects client*/
+  if (!TCP_init)
+  {
+    tcp_setup_client();
+  }
+
   if (!client.connected())
   {
     client.connect(SERVERIP, SERVERPORT);
@@ -527,7 +528,7 @@ void tcp_receive_OTA_update(int size_firmware)
   }
 
   /*checks if data avaliable*/
-  debugf_status("Waiting 7 seconds for server connection...");
+  debugf_info("Waiting 7 seconds for server connection...\n");
   rp2040.wdt_begin(8000);
   unsigned long timestamp = millis() + 7000;
   while (!client.available())
@@ -543,7 +544,7 @@ void tcp_receive_OTA_update(int size_firmware)
   }
 
   /*recieving file*/
-  debugf_status("Server connected, receiving OTA image...");
+  debugf_status("receiving OTA image...\n");
   rp2040.wdt_reset();
   while (client.available())
   {
@@ -557,28 +558,39 @@ void tcp_receive_OTA_update(int size_firmware)
       break;
     }
   }
-  f.close();
-  client.stop();
   debugf_sucess("File size of %zu received and saved\n", f.size());
 
   /*checks if size of recieved file checks out*/
   if (f.size() != size_firmware)
   {
-    debugf_error("Size of recieved data:%zu doesn´t match size the firmware should have:%d", f.size(), size_firmware);
-    // rp2040.wdt_begin(TIMEOUT_WATCHDOG);
-    // return;
+    debugf_red("Size of recieved data:%zu doesn´t match size the firmware should have:%d", f.size(), size_firmware);
+    rp2040.wdt_begin(TIMEOUT_WATCHDOG);
+    f.close();
+    return;
   }
+  debugf_sucess("Size of recieved data:%zu matchs the size the firmware should have:%d\n", f.size(), size_firmware);
+  f.close();
 
   /*perform OTA update*/
   debugf_info("Programming OTA commands...\n");
   rp2040.wdt_reset();
   picoOTA.begin();
-  picoOTA.addFile(filename);
-  picoOTA.commit();
+  if (!picoOTA.addFile(filename))
+  {
+    debugf_red("error adding firmware to OTA files.\n");
+    LittleFS.end();
+    return;
+  }
+  if (!picoOTA.commit())
+  {
+    debugf_red("error ota commiting firmware.\n");
+    LittleFS.end();
+    return;
+  }
   LittleFS.end();
-  debugf_info("OTA update completed. Reboot to apply. Reflash to retry.\n");
+  debugf_info("OTA update completed.\n");
 
   // /*rebooting*/
-  // debugf_status("Rebooting...\n");
-  // rp2040.reboot(); // should i do this manualy?
+  debugf_status("Rebooting...\n");
+  rp2040.reboot(); // should i do this manualy?
 }

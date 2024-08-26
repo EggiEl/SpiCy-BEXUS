@@ -24,11 +24,11 @@ void print_startup_message();
 void update_nResets();
 
 PID_ControllerSweepData sweep_0 = {
-    .TEMP_COOL = 31,
-    .TEMP_SET = 32,
+    .TEMP_COOL = 28,
+    .TEMP_SET = 31,
     .TIME_TILL_STOP = (unsigned long)(0.5 * (60 * 60 * 1000)),
     .nCYCLES = 5,
-    .kp_buf = {0.01, 0.1, 1, 5, 10},
+    .kp_buf = {10, 5, 1, 0.5, 0.1},
     .ki_buf = {0, 0, 0, 0, 0},
     .i_max_buf = {0, 0, 0, 0, 0}};
 //------------------------core1--------------------------------
@@ -36,23 +36,28 @@ PID_ControllerSweepData sweep_0 = {
 
 void setup()
 {
-  // rp2040.wdt_begin(TIMEOUT_WATCHDOG);
+  rp2040.wdt_begin(TIMEOUT_WATCHDOG);
   update_nResets();
-  print_startup_message();
+  if (!TCP_init)
+    tcp_setup_client();
   sd_setup();
-  tcp_setup_client();
-  debugln("OTA update sucessful\n");
+  print_startup_message();
+  check_peripherals();
+  // debugf_sucess("This updated breaks your garantie garantiert\n");
 }
 
 void periodic_tasks_core_0();
 void loop()
 {
   periodic_tasks_core_0();
+
+  // debugf(">temp0 : %f\n", temp_read_one(NTC_OR_OxY_1), 1,0);
+  // delay(10);
   // next_state();
-  // if (pi_record_transfer_function(PIN_H0, NTC_OR_OxY_0, 20, 1.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
-  // {
-  //   pi_sweep_update(&pi_probe0, &sweep_0);
-  // }
+  if (pi_record_step_function(PIN_H0, NTC_OR_OxY_0, 16, 0.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
+  {
+    pi_sweep_update(&pi_probe0, &sweep_0);
+  }
   // read_out_BMP180();
 }
 
@@ -154,18 +159,30 @@ void print_startup_message()
     }
   }
   delay(100);
-  #endif
+#else
+  delay(100);
+#endif
   // ghost
-  debugf_green("%s", F(
-                         "  .-')       _ (`-.                                       \n"
-                         " ( OO ).    ( (OO  )                                      \n"
-                         "(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.\n"
-                         "/    _ |  (__...--''   |  |OO)   '  .--./     \\  `.'  /  \n"
-                         "\\  :` `.   |  /  | |   |  |  \\   |  |('-.   .-')     /  \n"
-                         " '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /    \n"
-                         ".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_  \n"
-                         "\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__) \n"
-                         " `-----'   `--'        `--'       `-----'     `--'        \n"));
+  debugf_green("%s", F("  .-')       _ (`-.                                       \n"));
+  debugf_green("%s", F(" ( OO ).    ( (OO  )                                      \n"));
+  debugf_green("%s", F("(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.\n"));
+  debugf_green("%s", F("/    _ |  (__...--''   |  |OO)   '  .--./     \\  `.'  /  \n"));
+  debugf_green("%s", F("\\  :` `.   |  /  | |   |  |  \\   |  |('-.   .-')     /   \n"));
+  debugf_green("%s", F(" '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /    \n"));
+  debugf_green("%s", F(".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_  \n"));
+  debugf_green("%s", F("\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__) \n"));
+  debugf_green("%s", F(" `-----'   `--'        `--'       `-----'     `--'        \n"));
+
+  // debugf_green("%s", F(
+  //                        "  .-')       _ (`-.                                       \n"
+  //                        " ( OO ).    ( (OO  )                                      \n"
+  //                        "(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.\n"
+  //                        "/    _ |  (__...--''   |  |OO)   '  .--./     \\  `.'  /  \n"
+  //                        "\\  :` `.   |  /  | |   |  |  \\   |  |('-.   .-')     /  \n"
+  //                        " '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /    \n"
+  //                        ".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_  \n"
+  //                        "\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__) \n"
+  //                        " `-----'   `--'        `--'       `-----'     `--'        \n"));
   // graphiti
   // SET_COLOUR_GREEN
   // Serial.println(" _________        .__ _________                   _____  ");

@@ -19,11 +19,13 @@ PORT = 8888
 
 PACKET_LENTH = 472
 
-TIMEOUT_CLIENT = 2.0 #s timeout of client after no connetion
+TIMEOUT_CLIENT = 0.01 #s timeout of client after no connetion
 DELAY_DATALOG_LOOP = 0.1 #s slows datalogger loop to save performance
 DELAY_SERVER_LOOP = 0.01 #s slows server loop to save performance
 DELAY_CONSOLE_LOOP = 0.1 #s slows console loop to save performance
 DELAY_ERROR = 2 # delay to prevent errors to be spammed 
+
+#path to bin : 'C:\Users\fgewi\Documents\Fynn\Projekte\Balloon\GitHub\SpiCy-BEXUS\motherboard\Software\V4 _1_Motherboard_Firmware_BEXUS_SPICY\.pio\build\Motherboard_Firmware_BEXUS_SPICY\firmware.bin'
 
 class TCP_SERVER:
     """Connects in an extra thread a TCP server.\
@@ -49,10 +51,10 @@ class TCP_SERVER:
                 return server_socket
             
             except OSError as e:
-                if e.errno == 10048:print_red("Address already in use.\n", indent=1)
-                elif e.errno == 10049:print_red("Probably cable not connected.\n", indent=1)
-                elif e.errno == 10038:print_red("Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist. Probably no Ethernet dongle\n", indent=1)
-                else:print_red(f"Error:{e} ", indent=2)
+                if e.errno == 10048:print_red("Error connect server: Address already in use.\n", indent=1)
+                elif e.errno == 10049:print_red("Error connect server: Probably cable not connected.\n", indent=1)
+                elif e.errno == 10038:print_red("Error connect server: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist. Probably no Ethernet dongle\n", indent=1)
+                else:print_red(f"Error connect server:{e} ", indent=2)
                 time.sleep(DELAY_ERROR)
                 return None
                 
@@ -68,7 +70,7 @@ class TCP_SERVER:
                 client_socket, client_address = server_socket.accept()
                 client_socket.settimeout(TIMEOUT_CLIENT)
                 clear_console_line()
-                print_cyan(f"Verbindung hergestellt von:{client_address}\n", indent=1)
+                print_cyan(f"Verbindung hergestellt von:{client_address}", indent=1)
                 return client_socket
             
             except socket.timeout:
@@ -100,44 +102,43 @@ class TCP_SERVER:
                     #this is a packat being downlinked
                     if(len(received_data)==PACKET_LENTH):  
                         self.datalog.rawdata.append(received_data)
-                        print_green(f'recieved packet ID:"{ struct.unpack('<I', received_data[:4])[0]}"\n',indent =2)
+                        print_green(f'\nrecieved packet ID:"{ struct.unpack('<I', received_data[:4])[0]}"\n',indent =2)
                     #this is an error code being downlinked
                     elif(len(received_data) == 8 and received_data[0]==0b11111111 and received_data[1]==0b11111111 and received_data[2]==0b11111111 and received_data[3]==0b11111111): 
                             if(received_data[4] == received_data[5]): 
-                                print_red(f'recieved error code: "{received_data[4]}"\n',indent =2)
+                                print_red(f'\nrecieved error code: "{received_data[4]}"\n',indent =2)
                             else:
-                                print_red(f'recieved error codes corrupted. recieved: "{received_data[4]}" and "{received_data[5]}"\n',indent =2)
+                                print_red(f'\nrecieved error codes corrupted. recieved: "{received_data[4]}" and "{received_data[5]}"\n',indent =2)
                     #this is a debug message being downlinked.
                     else: 
-                            received_data = received_data.decode("utf-8",errors='ignore')
-                            # print_yellow('debug: ',indent =2)
-                            print(received_data,end="")
+                            if received_data != " ":
+                                received_data = received_data.decode("utf-8",errors='ignore')
+                                print(f'{received_data}',end="")                                
 
                 else:
-                    print_red("duno wtf this is\n", indent=2)
+                    print_red("\nduno wtf this is\n", indent=2)
                     print_cyan(f"Length of Recieved Data: {len(received_data)}\n")
                     print_cyan(f"data where error occured {received_data}\n")
                     success = 0
 
             except socket.timeout:
-                # print_cyan("Datastream stopped. Socket timed out\n", indent=2)
-                success = 0
+                # print_cyan("Client socket timed out, as not data tranfer for {TIMEOUT_CLIENT}seconds.", indent=2)
+                success = 1
 
             except ConnectionResetError:  # Handle connection reset by peer
-                print_red("\nConnectionResetError aka Stecker gezogen / uC Reset\n", indent=2)
-                client_socket.close()
+                print_red("\nError Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset\n", indent=2)
                 success = 0
 
             except OSError as e:     
-                if e.errno == 10038:print_cyan("WinError 10038: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist. Probably no Ethernet dongle\n", indent=0)
-                else:print_red(f"Error Recieve Data:{e} ", indent=2)
-                client_socket.close()
+                if e.errno == 10038:
+                    print_cyan("\nError Recieve Data: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist. Probably no Ethernet dongle\n", indent=0)
+                else:
+                    print_red(f"\nError Recieve Data:{e} ", indent=2)
                 time.sleep(DELAY_ERROR)
                 success = 0
                 
             except Exception as e:  # Handle other exceptions
-                print_red(f"Error Recieve Data:{e}\n", indent=2)
-                client_socket.close()
+                print_red(f"\nError Recieve Data:{e}\n", indent=2)
                 time.sleep(DELAY_ERROR)
                 success = 0
 
@@ -145,20 +146,23 @@ class TCP_SERVER:
 
         def send_command(client_socket):
             """Sends a command to the client"""
+            sucess = 1
             try:
                 # sends command
-                if len(self.uplink_buffer):
-                    print_white(f'send bytes: {self.uplink_buffer[0]}\n',indent=3)
-                    client_socket.sendall(self.uplink_buffer[0])
-                    self.uplink_buffer.pop(0)
+                if client_socket is not None:
+                    if len(self.uplink_buffer):
+                        print_white(f'\nsend {len(self.uplink_buffer[0])} bytes\n',indent=3)
+                        client_socket.sendall(self.uplink_buffer[0])
+                        self.uplink_buffer.pop(0)
 
             except OSError as e:     
                 if e.errno == 10038:print_cyan("senden WinError 10038: Ein Vorgang bezog sich auf ein Objekt, das kein Socket ist. Probably no Ethernet dongle\n", indent=0)
-                client_socket = None
+                sucess =  0
 
             except Exception as e:
                 print_red(f"Error sending:{e}\n", indent=1)
-                client_socket = None
+                sucess =  0
+            return sucess
 
         server_socket = None
         client_socket = None
@@ -180,15 +184,19 @@ class TCP_SERVER:
                     counter_client_points += 1
                     if counter_client_points > 3: counter_client_points = 0
                 else:
-                    ##[up link] sending command to client if there is one in the self.command buffer 
-                    if len(self.uplink_buffer):
-                        send_command(client_socket)
-
                     ##[down link] recieves data if theres one avaliable. Disconnects client if theres any issues besides a timeout
-                    while recieve_data(client_socket) and self.__isRunning:            
-                        if len(self.uplink_buffer): #here the possibility to send a command in bewtween downlinks
-                            send_command(client_socket)
+                    while self.__isRunning:
+                           
+                        if send_command(client_socket)  == 0:
+                            client_socket.close()
+                            client_socket = None    
+                            break    
 
+                        if recieve_data(client_socket) == 0:
+                            client_socket.close()
+                            client_socket = None    
+                            break    
+                        
                     # client_socket.close()  # geht ohne??
                     # client_socket = None
 
@@ -479,7 +487,8 @@ class INTERFACE:
                                     print_red(f"ota command not send after {TIMEOUT_COMMAND_WAIT/1000}s\n",indent=1)
                                     self.server.uplink_buffer = []
                                     return
-
+                        
+                            # time.sleep(1)
                         ## loads file into upload_buffer
                             print_yellow(f'send firmware file:{firmware_file_path} over tcp\n',indent=1)
 
@@ -497,8 +506,6 @@ class INTERFACE:
                                     self.server.uplink_buffer = []
                                     return
                                 
-                            print_green("done\n",indent=2)
-
                         except FileNotFoundError:
                             print_red(f"Error: The file at {firmware_file_path} was not found.\n",indent=1)
                         
