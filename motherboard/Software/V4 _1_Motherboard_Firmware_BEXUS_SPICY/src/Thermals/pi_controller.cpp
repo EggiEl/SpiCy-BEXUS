@@ -63,8 +63,6 @@ void pi_update_controller(PI_CONTROLLER *pi);
 void pi_update_all()
 {
     /*update controller*/
-    if (SET_TEMP_DEFAULT != -1000000.0)
-    {
         static long TimeStampPid = millis() + PI_T;
         if (millis() > TimeStampPid)
         {
@@ -77,7 +75,6 @@ void pi_update_all()
             pi_update_controller(&pi_probe4);
             pi_update_controller(&pi_probe5);
         }
-    }
 }
 
 /*prints relevant data from PI_CONTROLLER * pi points to*/

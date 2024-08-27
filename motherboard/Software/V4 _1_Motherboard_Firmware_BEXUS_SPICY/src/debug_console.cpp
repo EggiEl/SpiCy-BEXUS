@@ -61,28 +61,35 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   case '?':
   {
     debugf_status("%s", F("<help>\n"));
-    debugf_info("%s", F("/b|Returns Battery Voltage and current\n\
-/s|Read out Status\n\
-/l|Sets the controller in sleep for ... ms.\n\
-/r|Reboots. if followed by a 1 reboots in Boot Mode\n\
-/m|Read out Memory Info\n\
-/h x y| set heater pin x at prozent y .if x == -1 is given\n\
-        will return pwm status of all pi_controlled heaters.\n\
-/i|scans for i2c devices\n\
-/f|changes the analogWrite frequency. \n\
-   For heater run one heating command and change then.\n\
-/d|check connected peripherals\n\
-/p|sends a test packet over lan\n\
-/w|Sets Watchdog to ... ms. Cant be disables till reboot.\n\
-/t|returns temperature value. 0-6 for external probes, 7 for uC one, -1 for all of them\n\
-/x|prints barometer temperature and pressure\n\
-/o|starts console to talk to PyroSience FD-OEM Oxygen Module\n\
-/a|reads out light spectrometers\n\
-/q|shut down microcontroller\n\
-/c|[probe][kp] [ki] [imax] sets pi controller gain values. \n\
-  Set [kp] == -1 to print  PI controller\n\
-  and [kp] == -100000.0 be able to controller heater manually\n\
-/u|starts an over_the_air OTA update\n"));
+    rp2040.wdt_reset();
+    debugf_info("%s", F("/b|Returns Battery Voltage and current\n"));
+    debugf_info("%s", F("/s|Read out Status\n"));
+    debugf_info("%s", F("/l|Sets the controller in sleep for ... ms.\n"));
+    rp2040.wdt_reset();
+    debugf_info("%s", F("/r|Reboots. if followed by a 1 reboots in Boot Mode\n"));
+    debugf_info("%s", F("/m|Read out Memory Info\n"));
+    debugf_info("%s", F("/h x y| set heater pin x at percent y. If x == -1 is given\n"));
+    debugf_info("%s", F("        will return PWM status of all pi-controlled heaters.\n"));
+    debugf_info("%s", F("/i|Scans for I2C devices\n"));
+    rp2040.wdt_reset();
+    debugf_info("%s", F("/f|Changes the analogWrite frequency.\n"));
+    debugf_info("%s", F("   For heater, run one heating command and change then.\n"));
+    debugf_info("%s", F("/d|Check connected peripherals\n"));
+    debugf_info("%s", F("/p|Sends a test packet over LAN\n"));
+    rp2040.wdt_reset();
+    debugf_info("%s", F("/w|Sets Watchdog to ... ms. Can't be disabled until reboot.\n"));
+    debugf_info("%s", F("/t|Returns temperature value. 0-6 for external probes, 7 for uC one, -1 for all of them\n"));
+    debugf_info("%s", F("/x|Prints barometer temperature and pressure\n"));
+    debugf_info("%s", F("/o|Starts console to talk to PyroSience FD-OEM Oxygen Module\n"));
+    rp2040.wdt_reset();
+    debugf_info("%s", F("/a|Reads out light spectrometers\n"));
+    debugf_info("%s", F("/q|Shut down microcontroller\n"));
+    debugf_info("%s", F("/c|[probe][kp] [ki] [imax] sets PI controller gain values.\n"));
+    rp2040.wdt_reset();
+    debugf_info("%s", F("  Set [kp] == -1 to print PI controller\n"));
+    debugf_info("%s", F("  and [kp] == -100000.0 to disable and control the heater manually\n"));
+    debugf_info("%s", F("/u|Starts an over-the-air OTA update\n"));
+    rp2040.wdt_reset();
     break;
   }
   case 'b':
@@ -605,6 +612,7 @@ uint32_t check_peripherals()
   uint8_t cabletest_buff = tcp_link_status();
 
   /*prints*/
+  rp2040.wdt_reset();
   debugf_info("!For heater mesasurement y need to connect the jumper!\n");
   debugf_info("     |0|1|2|3|4|5|6|7|\n");
   debugf_info("NTCs: ");
@@ -613,12 +621,14 @@ uint32_t check_peripherals()
     debugf_info("%u|", (results & 0xFF) >> i & 1);
   }
 
+  rp2040.wdt_reset();
   debugf_info("\nOxyg: ");
   for (int i = 0; i < 6; i++)
   {
     debugf_info("%u|", ((results >> 8) & 0xFF) >> i & 1);
   }
 
+  rp2040.wdt_reset();
   debugf_info("\nHeat: ");
   for (int i = 0; i < 8; i++)
   {
@@ -626,6 +636,7 @@ uint32_t check_peripherals()
   }
   debugf_info("\n");
 
+  rp2040.wdt_reset();
   debugf_info("\nLight: ");
   switch (light_connection)
   {
@@ -649,6 +660,7 @@ uint32_t check_peripherals()
     break;
   }
 
+  rp2040.wdt_reset();
   debugf_info("\nRJ45 cable: ");
   switch (cabletest_buff)
   {
@@ -670,10 +682,12 @@ uint32_t check_peripherals()
     break;
   }
 
+  rp2040.wdt_reset();
   debugf_info("\nBattery ");
-  if (15.0 < get_batvoltage() < 30.0)
+  float bat_volt = get_batvoltage();
+  if (bat_volt > 15.0 && bat_volt < 31.0)
   {
-    debugf_sucess("%.2fV\n",get_batvoltage());
+    debugf_sucess("%.2fV\n", bat_volt);
     results |= (1 << 29);
   }
   else

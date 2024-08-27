@@ -42,8 +42,8 @@ void setup()
     tcp_setup_client();
   sd_setup();
   print_startup_message();
-  check_peripherals();
-  // debugf_sucess("This updated breaks your garantie garantiert\n");
+  // check_peripherals();
+  // debugf_sucess("oi\n");
 }
 
 void periodic_tasks_core_0();
@@ -53,7 +53,7 @@ void loop()
 
   // debugf(">temp0 : %f\n", temp_read_one(NTC_OR_OxY_1), 1,0);
   // delay(10);
-  // next_state();
+  next_state();
   // if (pi_record_step_function(PIN_H0, NTC_OR_OxY_0, 20, 0.5 * 60.0 * 60.0 * 1000.0)) // 1.5 * 60 * 60 * 1000
   // {
   //   pi_sweep_update(&pi_probe0, &sweep_0);
@@ -92,7 +92,7 @@ void loop1()
     flag_core1_isrunning = 1;
 
     periodic_tasks_core_1();
-    // pi_update_all();
+    pi_update_all();
 
     // debugf_blue(".");
     // delay(1);
@@ -165,13 +165,16 @@ void print_startup_message()
 #endif
   // ghost
   debugf_green("%s", F("  .-')       _ (`-.                                       \n"));
+  rp2040.wdt_reset();
   debugf_green("%s", F(" ( OO ).    ( (OO  )                                      \n"));
   debugf_green("%s", F("(_)---\\_)  _.`     \\   ,-.-')     .-----.    ,--.   ,--.\n"));
   debugf_green("%s", F("/    _ |  (__...--''   |  |OO)   '  .--./     \\  `.'  /  \n"));
+  rp2040.wdt_reset();
   debugf_green("%s", F("\\  :` `.   |  /  | |   |  |  \\   |  |('-.   .-')     /   \n"));
   debugf_green("%s", F(" '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \\   /    \n"));
   debugf_green("%s", F(".-._)   \\  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\\_  \n"));
   debugf_green("%s", F("\\       /  |  |      (_|  |    (_'  '--'\\   `-./  /.__) \n"));
+  rp2040.wdt_reset();
   debugf_green("%s", F(" `-----'   `--'        `--'       `-----'     `--'        \n"));
 
   // debugf_green("%s", F(
@@ -204,5 +207,5 @@ void print_startup_message()
   }
 
   debugf_info("\"/?\" for help\n");
-  rp2040.enableDoubleResetBootloader();
+  // rp2040.enableDoubleResetBootloader();
 }

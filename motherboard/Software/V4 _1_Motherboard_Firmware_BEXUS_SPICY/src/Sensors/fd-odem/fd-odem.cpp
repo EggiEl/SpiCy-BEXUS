@@ -315,28 +315,28 @@ uint8_t oxy_read_all(struct OxygenReadout measure_buffer[6])
     {
         oxy_serial_setup();
     }
-    debugf_status("oxy_readall ");
+    // debugf_status("oxy_readall ");
     uint success = 0;
-    debugf_status(". ");
+    // debugf_status(". ");
     rp2040.wdt_reset();
     success += oxy_meassure(NTC_OR_OxY_0, &measure_buffer[0]);
     rp2040.wdt_reset();
-    debugf_status(". ");
+    // debugf_status(". ");
     success += oxy_meassure(NTC_OR_OxY_1, &measure_buffer[1]);
     rp2040.wdt_reset();
-    debugf_status(". ");
-    // success += oxy_meassure(NTC_OR_OxY_2, &measure_buffer[2]);
+    // debugf_status(". ");
+    success += oxy_meassure(NTC_OR_OxY_2, &measure_buffer[2]);
     rp2040.wdt_reset();
-    debugf_status(". ");
-    // success += oxy_meassure(NTC_OR_OxY_3, &measure_buffer[3]);
+    // debugf_status(". ");
+    success += oxy_meassure(NTC_OR_OxY_3, &measure_buffer[3]);
     rp2040.wdt_reset();
-    debugf_status(". ");
-    // success += oxy_meassure(NTC_4, &measure_buffer[4]);
+    // debugf_status(". ");
+    success += oxy_meassure(NTC_4, &measure_buffer[4]);
     rp2040.wdt_reset();
-    debugf_status(". ");
-    // success += oxy_meassure(NTC_5, &measure_buffer[5]);
+    // debugf_status(". ");
+    success += oxy_meassure(NTC_5, &measure_buffer[5]);
     rp2040.wdt_reset();
-    debugf_status("done\n");
+    // debugf_status("done\n");
     return success;
 }
 

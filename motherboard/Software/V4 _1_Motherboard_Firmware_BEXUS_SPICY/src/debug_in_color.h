@@ -37,6 +37,7 @@ Error debug messages are disabled to prevent infinite error loopings, but all no
 #define debug(...)
 #define debugln(...)
 #define debugf(...)
+#define debugf_error_notcp(...)
 #define MESSURETIME_START
 #define MESSURETIME_STOP
 #endif
@@ -45,6 +46,7 @@ Error debug messages are disabled to prevent infinite error loopings, but all no
 #define debug(...) Serial.print(__VA_ARGS__)
 #define debugln(...) Serial.println(__VA_ARGS__) /*Can be a Serial.println, a tcp downlink or disabled in the config*/
 #define debugf(...) Serial.printf(__VA_ARGS__)   /*Can be a Serial.printf, a tcp downlink or disabled in the config*/
+#define debugf_error_notcp(...)  debugf_error(__VA_ARGS__)
 #define MESSURETIME_START        \
     unsigned long tb = 0;        \
     unsigned long ta = micros(); \
@@ -59,6 +61,7 @@ Error debug messages are disabled to prevent infinite error loopings, but all no
 #define debug(...)
 #define debugln(...)                       /*Can be a Serial.println, no tcp downlink or disabled in the config*/
 #define debugf(...) tcp_sendf(__VA_ARGS__) /*Can be a Serial.printf, a tcp downlink or disabled in the config*/
+#define debugf_error_notcp(...)
 #define MESSURETIME_START
 #define MESSURETIME_STOP
 #endif
@@ -68,6 +71,7 @@ Error debug messages are disabled to prevent infinite error loopings, but all no
 #define debugln(...) Serial.println(__VA_ARGS__) /*Can be a Serial.println, a tcp downlink or disabled in the config*/
 #define debugf(...)   Serial.printf(__VA_ARGS__); \
 tcp_sendf(__VA_ARGS__)         /*Can be a Serial.printf, a tcp downlink or disabled in the config*/
+#define debugf_error_notcp(...)
 #define MESSURETIME_START        \
     unsigned long tb = 0;        \
     unsigned long ta = micros(); \
@@ -80,7 +84,7 @@ tcp_sendf(__VA_ARGS__)         /*Can be a Serial.printf, a tcp downlink or disab
 
 /*-------Debug levels------------*/
 #ifdef DEBUG_LEVEL
-#if DEBUG_LEVEL >= 0 && DEBUG_MODE != 2
+#if DEBUG_LEVEL >= 0
 /*prints errors in red*/
 #define debugf_error(...) debugf_red(__VA_ARGS__)
 #else

@@ -5,7 +5,7 @@
 #include "Arduino.h"
 
 /*Debug*/
-#define DEBUG_MODE 1 /**activates debug statements.                      \
+#define DEBUG_MODE 2 /**activates debug statements.                      \
 0 = disable                                                              \
 1 = Serial                                                               \
 2 = TCP -> dosn´t print error message but instead downlinks error codes \

@@ -60,10 +60,10 @@ void next_state()
     case READ_OXY:
     {
         pause_Core1();
-        oxy_read_all(mesure_buffer);
-        // delay(1000);
+        // oxy_read_all(mesure_buffer);
+        delay(1000);
         resume_Core1();
-        memcpy(packet_dl.oxy_measure, mesure_buffer, sizeof(mesure_buffer));
+        // memcpy(packet_dl.oxy_measure, mesure_buffer, sizeof(mesure_buffer));
         state = READ_LIGHT;
         break;
     }
@@ -80,7 +80,7 @@ void next_state()
     case SAVESENDPACKET:
     {
         sd_writestruct(&packet_dl, sd_filepath);
-        // tcp_send_packet(&packet_dl);
+        tcp_send_packet(&packet_dl);
         state = CLEAR_PACKET;
         break;
     }
@@ -94,7 +94,7 @@ void next_state()
     }
     default:
         state = ERROR;
-        error_handler(ERROR_STATE);
+        // error_handler(ERROR_STATE);
         debugf_error("State out of bounds\n");
         break;
     }

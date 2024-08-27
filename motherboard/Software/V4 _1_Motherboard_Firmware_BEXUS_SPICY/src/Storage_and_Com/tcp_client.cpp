@@ -53,7 +53,7 @@ void tcp_setup_client()
     //----automatic ip allocation : ----
     if (!Ethernet.begin(MAC))
     {
-      debugf_error("DHCP configuration failed\n");
+      debugf_error_notcp("DHCP configuration failed\n");
     }
   }
   else
@@ -77,7 +77,7 @@ void tcp_setup_client()
   {
     TCP_init = 0;
     error_handler(ERROR_TCP_INI, ERROR_DESTINATION_NO_TCP);
-    debugf_error("TCP_init failed\n");
+    debugf_error_notcp("TCP_init failed\n");
   }
 }
 
@@ -97,7 +97,7 @@ void tcp_print_info()
   switch (hardwareStatus_buff)
   {
   case 0:
-    debugf_error("no /faulty Ic\n");
+    debugf_error_notcp("no /faulty Ic\n");
     break;
   case 1:
     debugf_sucess("W5100\n");
@@ -109,7 +109,7 @@ void tcp_print_info()
     debugf_sucess("W5500\n");
     break;
   default:
-    debugf_error("error in code. hardwareStatus() = %i\n", hardwareStatus_buff);
+    debugf_error_notcp("error in code. hardwareStatus() = %i\n", hardwareStatus_buff);
     break;
   }
   uint8_t cabletest_buff = Ethernet.linkStatus();
@@ -117,17 +117,17 @@ void tcp_print_info()
   switch (cabletest_buff)
   {
   case 0:
-    debugf_error("unknown\n");
+    debugf_error_notcp("unknown\n");
     break;
   case 1:
     debugf_sucess("connected\n");
     break;
   case 2:
-    debugf_error("not connected\n");
+    debugf_error_notcp("not connected\n");
     cabletest_buff = 0;
     break;
   default:
-    debugf_error("error in code. Ethernet.linkStatus() = %i\n", cabletest_buff);
+    debugf_error_notcp("error in code. Ethernet.linkStatus() = %i\n", cabletest_buff);
     cabletest_buff = 0;
     break;
   }
@@ -160,6 +160,11 @@ void tcp_check_command()
   if (!TCP_init)
   {
     tcp_setup_client();
+  }
+
+  if (!(Ethernet.linkStatus()) == 1)
+  {
+    return;
   }
 
   if (!client.connected())
@@ -238,16 +243,22 @@ void tcp_check_command()
 
 /**
  *converts a  packet in a char array and sends this as bitstream to a TCP Server
- *@return 1 for success, -1 for timeout, -2 invalid server, -3 and -4 truncated, -5 memory allocation failed
+ *@return 1 for success, -1 for timeout, -2 invalid server, -3 and -4 truncated, -5 memory allocation failed, -6 for no rj cable
  *and default case no response from server or hardware issue
  */
 char tcp_send_packet(struct packet *packet)
 {
-  debugf_status("sendpacket-id:%i", packet->id);
+  // debugf_status("sendpacket-id:%i", packet->id);
   if (!TCP_init)
   {
     tcp_setup_client();
   }
+
+  if (!(Ethernet.linkStatus()) == 1)
+  {
+    return (char)-6;
+  }
+
   char buffer[sizeof(struct packet)];
   packettochar(packet, buffer);
 
@@ -264,43 +275,43 @@ char tcp_send_packet(struct packet *packet)
     if (client.write(buffer, sizeof(struct packet)))
     {
       status = 1;
-      debugf_sucess(" success\n");
+      // debugf_sucess(" success\n");
     }
     else
     {
       status = -6;
       error_handler(ERROR_TCP_SEND_FAILED, ERROR_DESTINATION_NO_TCP);
-      debugf_error(" failed\n");
+      debugf_error_notcp("send_packet failed\n");
     }
     // client.flush();                               //waits till all is send //can be left out if TCP Server recives just 200bytes per package.unsave?
     break;
   case -1:
     error_handler(ERROR_TCP_SEND_TIMEOUT, ERROR_DESTINATION_NO_TCP);
-    debugf_error(" timeout\n");
+    debugf_error_notcp(" timeout\n");
     break;
   case -2:
     error_handler(ERROR_TCP_SERVER_INVALID, ERROR_DESTINATION_NO_TCP);
-    debugf_error(" invalid server\n");
+    debugf_error_notcp(" invalid server\n");
     break;
   case -3:
     error_handler(ERROR_TCP_TRUNCATED, ERROR_DESTINATION_NO_TCP);
-    debugf_error(" truncated\n");
+    debugf_error_notcp(" truncated\n");
     break;
   case -4:
     error_handler(ERROR_TCP_TRUNCATED_2, ERROR_DESTINATION_NO_TCP);
-    debugf_error(" truncated_2\n");
+    debugf_error_notcp(" truncated_2\n");
     break;
   default:
-    debugf_error("error %i: ", status);
+    debugf_error_notcp("error %i: ", status);
     if (Ethernet.linkStatus() == 2)
     {
       error_handler(ERROR_TCP_CABLE_DISCO, ERROR_DESTINATION_NO_TCP);
-      debugf_error(" cable disconnected\n");
+      debugf_error_notcp(" cable disconnected\n");
     }
     else
     {
       error_handler(ERROR_TCP_NO_RESPONSE, ERROR_DESTINATION_NO_TCP);
-      debugf_error(" no response\n");
+      debugf_error_notcp(" no response\n");
     }
     break;
   }
@@ -321,6 +332,10 @@ void tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPacket
     tcp_setup_client();
   }
 
+  if (!(Ethernet.linkStatus()) == 1)
+  {
+    return;
+  }
   // check if client ready and cnnected
 
   for (unsigned int i = 0; i < nPackets; i++)
@@ -353,6 +368,11 @@ void tpc_send_error(const unsigned char error)
   if (!TCP_init)
   {
     tcp_setup_client();
+  }
+
+  if (!(Ethernet.linkStatus()) == 1)
+  {
+    return;
   }
 
   uint8_t sizebuffer = 7 * (sizeof(char));
@@ -390,6 +410,11 @@ void tpc_send_string(const char string[])
     tcp_setup_client();
   }
 
+  if (!(Ethernet.linkStatus()) == 1)
+  {
+    return;
+  }
+
   uint8_t status = 1;
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
@@ -400,7 +425,7 @@ void tpc_send_string(const char string[])
   if (status)
   {
     client.write(string, strnlen(string, 1000));
-    client.flush(); // blocking? //TODO
+    // client.flush();
   }
 }
 
@@ -410,6 +435,11 @@ void tpc_send_string(const char string[])
  */
 void tcp_sendf(const char *__restrict format, ...)
 {
+  if (!(Ethernet.linkStatus()) == 1)
+  {
+    return;
+  }
+
   // TODO testing on memory savety
   va_list args;
   va_list args_copy;
@@ -431,7 +461,7 @@ void tcp_sendf(const char *__restrict format, ...)
   // Handle memory allocation failure
   {
     error_handler(ERROR_TCP_DEBUG_MEMORY, ERROR_DESTINATION_NO_TCP);
-    debugf_error("memory allocation failed tcp_sendf\n");
+    debugf_error_notcp("memory allocation failed tcp_sendf\n");
     va_end(args);
     va_end(args_copy);
     return;
@@ -462,7 +492,7 @@ void tpc_testmanually(int nPackets, unsigned int nTries)
   struct packet **packet_buf = (struct packet **)malloc(nPackets * sizeof(struct packet *));
   if (!packet_buf)
   {
-      error_handler(ERROR_TCP_DEBUG_MEMORY, ERROR_DESTINATION_NO_TCP);
+    error_handler(ERROR_TCP_DEBUG_MEMORY, ERROR_DESTINATION_NO_TCP);
     return;
   }
 
@@ -575,12 +605,14 @@ void tcp_receive_OTA_update(int size_firmware)
   debugf_info("Programming OTA commands...\n");
   rp2040.wdt_reset();
   picoOTA.begin();
+  rp2040.wdt_reset();
   if (!picoOTA.addFile(filename))
   {
     debugf_red("error adding firmware to OTA files.\n");
     LittleFS.end();
     return;
   }
+  rp2040.wdt_reset();
   if (!picoOTA.commit())
   {
     debugf_red("error ota commiting firmware.\n");
@@ -592,5 +624,6 @@ void tcp_receive_OTA_update(int size_firmware)
 
   // /*rebooting*/
   debugf_status("Rebooting...\n");
-  rp2040.reboot(); // should i do this manualy?
+  delay(5000);
+  rp2040.restart();
 }
