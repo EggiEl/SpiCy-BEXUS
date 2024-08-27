@@ -466,7 +466,7 @@ class INTERFACE:
                         ## prepares microcontroller to recieve update
                             print_yellow("Sends OTA update command to microcontroller\n",indent=1)
                         # clears uplink buffer
-                            self.server.uplink_buffer = [] 
+                            self.server.uplink_buffer = []
                         # sends ota command
                             comm = 'u'
                             param1 = float(len(firmware_data))

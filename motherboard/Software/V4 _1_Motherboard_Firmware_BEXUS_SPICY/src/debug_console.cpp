@@ -282,7 +282,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   case 'a':
   {
     float buffer[14];
-    light_read(buffer, 0);
+    light_read(buffer);
     break;
   }
   case 'q':

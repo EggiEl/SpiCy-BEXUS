@@ -182,7 +182,7 @@ uint8_t oxy_isconnected(const int PROBE = 255);
 /*light spectrometers*/
 extern volatile char light_init;
 void light_setup();
-void light_read(float *buffer, bool with_flash = 0);
+void light_read(float *buffer);
 
 /*error handeling*/
 enum ERROR_DESTINATION

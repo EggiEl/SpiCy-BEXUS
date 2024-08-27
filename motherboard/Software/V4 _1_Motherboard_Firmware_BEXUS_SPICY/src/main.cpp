@@ -26,14 +26,14 @@ void update_nResets();
 PID_ControllerSweepData sweep_0 = {
     .TEMP_COOL = 28,
     .TEMP_SET = 31,
-    .TIME_TILL_STOP = (unsigned long)(0.5 * (60 * 60 * 1000)),
+    .TIME_TILL_STOP = (unsigned long)(0.15 * (60 * 60 * 1000)),
     .nCYCLES = 5,
-    .kp_buf = {10, 5, 1, 0.5, 0.1},
-    .ki_buf = {0, 0, 0, 0, 0},
-    .i_max_buf = {0, 0, 0, 0, 0}};
+    .kp_buf = {4, 4, 4, 4, 4},
+    .ki_buf = {0, 5, 2, 1, 0.5},
+    .i_max_buf = {0, 2, 2, 2, 2}};
+
 //------------------------core1--------------------------------
 /*does all the data handeling*/
-
 void setup()
 {
   rp2040.wdt_begin(TIMEOUT_WATCHDOG);
@@ -54,10 +54,11 @@ void loop()
   // debugf(">temp0 : %f\n", temp_read_one(NTC_OR_OxY_1), 1,0);
   // delay(10);
   // next_state();
-  if (pi_record_step_function(PIN_H0, NTC_OR_OxY_0, 16, 0.5 * 60 * 60 * 1000)) // 1.5 * 60 * 60 * 1000
-  {
-    pi_sweep_update(&pi_probe0, &sweep_0);
-  }
+  // if (pi_record_step_function(PIN_H0, NTC_OR_OxY_0, 20, 0.5 * 60.0 * 60.0 * 1000.0)) // 1.5 * 60 * 60 * 1000
+  // {
+  //   pi_sweep_update(&pi_probe0, &sweep_0);
+  // }
+  // pi_sweep_update(&pi_probe0, &sweep_0);
   // read_out_BMP180();
 }
 

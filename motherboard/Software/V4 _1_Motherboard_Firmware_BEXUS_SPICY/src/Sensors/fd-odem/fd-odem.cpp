@@ -52,6 +52,7 @@ void oxy_console()
     unsigned char isrunning = 1;
     while (isrunning)
     {
+        rp2040.wdt_reset();
         select_oxy_or_ntc(NTC_OR_OxY_1);
 
         /*recives & prints data from FD-ODEM*/
@@ -63,7 +64,7 @@ void oxy_console()
         /*sends data to FD-ODEM*/
         if (Serial.available() >= 3)
         {
-
+            
             char buffer[COMMAND_LENGTH_MAX + 1] = {0};
             Serial.readBytesUntil('\n', buffer, COMMAND_LENGTH_MAX);
             buffer[COMMAND_LENGTH_MAX] = '\0';
@@ -85,7 +86,7 @@ void oxy_console()
                 }
                 case 'c':
                 {
-                    oxy_calibrateOxy_air((uint)buffer[2], (uint32_t)(temp_read_one((uint)buffer[2]) * 100), 965935UL, 46942UL);
+                    oxy_calibrateOxy_air((uint)buffer[2], (uint32_t) 2637, 965935UL, 46942UL);
                     break;
                 }
                 default:
@@ -317,17 +318,24 @@ uint8_t oxy_read_all(struct OxygenReadout measure_buffer[6])
     debugf_status("oxy_readall ");
     uint success = 0;
     debugf_status(". ");
+    rp2040.wdt_reset();
     success += oxy_meassure(NTC_OR_OxY_0, &measure_buffer[0]);
+    rp2040.wdt_reset();
     debugf_status(". ");
     success += oxy_meassure(NTC_OR_OxY_1, &measure_buffer[1]);
+    rp2040.wdt_reset();
     debugf_status(". ");
-    success += oxy_meassure(NTC_OR_OxY_2, &measure_buffer[2]);
+    // success += oxy_meassure(NTC_OR_OxY_2, &measure_buffer[2]);
+    rp2040.wdt_reset();
     debugf_status(". ");
-    success += oxy_meassure(NTC_OR_OxY_3, &measure_buffer[3]);
+    // success += oxy_meassure(NTC_OR_OxY_3, &measure_buffer[3]);
+    rp2040.wdt_reset();
     debugf_status(". ");
-    success += oxy_meassure(NTC_4, &measure_buffer[4]);
+    // success += oxy_meassure(NTC_4, &measure_buffer[4]);
+    rp2040.wdt_reset();
     debugf_status(". ");
-    success += oxy_meassure(NTC_5, &measure_buffer[5]);
+    // success += oxy_meassure(NTC_5, &measure_buffer[5]);
+    rp2040.wdt_reset();
     debugf_status("done\n");
     return success;
 }
