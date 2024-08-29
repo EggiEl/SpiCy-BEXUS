@@ -259,7 +259,7 @@ char tcp_send_packet(struct packet *packet)
     return (char)-6;
   }
 
-  char buffer[sizeof(struct packet)];
+  char buffer[sizeof(struct packet)]; 
   packettochar(packet, buffer);
 
   signed char status = 1;
@@ -302,7 +302,7 @@ char tcp_send_packet(struct packet *packet)
     debugf_error_notcp(" truncated_2\n");
     break;
   default:
-    debugf_error_notcp("error %i: ", status);
+    debugf_error_notcp("send tcp error %i: ", status);
     if (Ethernet.linkStatus() == 2)
     {
       error_handler(ERROR_TCP_CABLE_DISCO, ERROR_DESTINATION_NO_TCP);

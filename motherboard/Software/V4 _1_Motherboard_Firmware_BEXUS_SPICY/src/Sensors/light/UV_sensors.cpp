@@ -11,23 +11,19 @@ void light_setup()
 {
     debugf_status("setup light Sensors\n");
 
-    // pinMode(PIN_LIGHT_SDA_0, OUTPUT);
-    // pinMode(PIN_LIGHT_SCL_0, OUTPUT);
-    Wire.setSDA(PIN_LIGHT_SDA_0);
-    Wire.setSCL(PIN_LIGHT_SCL_0);
+    Wire.setSDA(PIN_LIGHT_SDA_1);
+    Wire.setSCL(PIN_LIGHT_SCL_1);
     Wire.setTimeout(TIMEOUT_LIGHT_SENSOR);
-    Wire.begin();
 
-    Wire1.setSDA(PIN_LIGHT_SDA_1);
-    Wire1.setSCL(PIN_LIGHT_SCL_1);
+    Wire1.setSDA(PIN_LIGHT_SDA_0);
+    Wire1.setSCL(PIN_LIGHT_SCL_0);
     Wire1.setTimeout(TIMEOUT_LIGHT_SENSOR);
-    Wire1.begin();
 
     if (!ltr.begin(&Wire))
     {
         if (!ltr.begin(&Wire1))
         {
-            debug("Couldn't find LTR sensor!");
+            debugf_info("Couldn't find LTR sensor!");
             light_init = 0;
             return;
         }
@@ -36,60 +32,63 @@ void light_setup()
     ltr.setMode(LTR390_MODE_UVS);
     if (ltr.getMode() == LTR390_MODE_ALS)
     {
-        debug("In ALS mode");
+        debugf_info("ALS mode|");
     }
     else
     {
-        debug("In UVS mode");
+        debugf_info("UVS mode|");
     }
 
     ltr.setGain(LIGHT_LTR390_GAIN);
-    debug("Gain : ");
+    debugf_info("Gain : ");
     switch (ltr.getGain())
     {
     case LTR390_GAIN_1:
-        debug(1);
+        debugf_info("1");
         break;
     case LTR390_GAIN_3:
-        debug(3);
+        debugf_info("3");
         break;
     case LTR390_GAIN_6:
-        debug(6);
+        debugf_info("6");
         break;
     case LTR390_GAIN_9:
-        debug(9);
+        debugf_info("9");
         break;
     case LTR390_GAIN_18:
-        debug(18);
+        debugf_info("18");
         break;
     }
+    debugf_info("|");
 
     ltr.setResolution(LTR390_RESOLUTION_20BIT);
-    debug("Resolution : ");
+    debugf_info("Resolution : ");
     switch (ltr.getResolution())
     {
     case LTR390_RESOLUTION_13BIT:
-        debug(13);
+        debugf_info("13");
         break;
     case LTR390_RESOLUTION_16BIT:
-        debug(16);
+        debugf_info("16");
         break;
     case LTR390_RESOLUTION_17BIT:
-        debug(17);
+        debugf_info("17");
         break;
     case LTR390_RESOLUTION_18BIT:
-        debug(18);
+        debugf_info("18");
         break;
     case LTR390_RESOLUTION_19BIT:
-        debug(19);
+        debugf_info("19");
         break;
     case LTR390_RESOLUTION_20BIT:
-        debug(20);
+        debugf_info("20");
         break;
     }
+    debugf_info("\n");
 
-    ltr.setThresholds(100, 1000);
-    ltr.configInterrupt(true, LTR390_MODE_UVS);
+    // ltr.setThresholds(100, 1000);
+    ltr.configInterrupt(false, LTR390_MODE_UVS);
+    light_init = 1;
 }
 
 /**
@@ -104,20 +103,30 @@ void light_read(float buffer[14])
         light_setup();
     }
 
-    debugf_status("Readout of light sensor ");
-
+    debugf_status("Readout of light sensor\n");
     if (ltr.newDataAvailable())
     {
         uint32_t readout_uv = ltr.readUVS(); // == 0xFFFFFFFF of failure
-        debugf_info("UV data: %.1f", (float)readout_uv);
-        buffer[0] = (LIGHT_LTR390_WFAC * (float)readout_uv) / (LIGHT_LTR390_UV_SENSITIFITY);
+        float uv_in_lux = (LIGHT_LTR390_WFAC * (float)readout_uv) / (LIGHT_LTR390_UV_SENSITIFITY);
+        debugf_info("UV data %f lux, %u raw\n", uv_in_lux, readout_uv);
+        buffer[0] = uv_in_lux;
         buffer[1] = (float)readout_uv;
         buffer[2] = readout_uv;
 
+/*
+        ltr.setMode(LTR390_MODE_UVS);
+        ltr.setResolution(LTR390_RESOLUTION_16BIT);
+        delay(25);
+
         uint32_t readout_als = ltr.readALS(); // == 0xFFFFFFFF of failure
-        debugf_info("UV data: %.1f", (float)readout_als);
-        buffer[3] = (LIGHT_LTR390_WFAC * 0.6 * (float)readout_als) / (LIGHT_LTR390_GAIN * LIGHT_LTR390_INT);
+        float afls_in_lix = (LIGHT_LTR390_WFAC * 0.6 * (float)readout_als) / (LIGHT_LTR390_GAIN * LIGHT_LTR390_INT);
+        debugf_info("ASL data: %f flux, %u raw\n", afls_in_lix, readout_als);
+        buffer[3] = afls_in_lix;
         buffer[4] = (float)readout_als;
         buffer[5] = readout_als;
+
+        ltr.setMode(LTR390_MODE_UVS);
+         ltr.setResolution(LTR390_RESOLUTION_20BIT);
+*/
     }
 }

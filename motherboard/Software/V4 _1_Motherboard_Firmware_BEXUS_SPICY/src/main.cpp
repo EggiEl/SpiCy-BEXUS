@@ -40,6 +40,11 @@ void setup()
   update_nResets();
   if (!TCP_init)
     tcp_setup_client();
+  if (TCP_init)
+  {
+    tcp_check_command();
+  }
+
   sd_setup();
   print_startup_message();
   // check_peripherals();
@@ -53,7 +58,7 @@ void loop()
 
   // debugf(">temp0 : %f\n", temp_read_one(NTC_OR_OxY_1), 1,0);
   // delay(10);
-  next_state();
+  // next_state();
   // if (pi_record_step_function(PIN_H0, NTC_OR_OxY_0, 20, 0.5 * 60.0 * 60.0 * 1000.0)) // 1.5 * 60 * 60 * 1000
   // {
   //   pi_sweep_update(&pi_probe0, &sweep_0);

@@ -5,7 +5,7 @@
 #include "Arduino.h"
 
 /*Debug*/
-#define DEBUG_MODE 2 /**activates debug statements.                      \
+#define DEBUG_MODE 1 /**activates debug statements.                      \
 0 = disable                                                              \
 1 = Serial                                                               \
 2 = TCP -> dosn´t print error message but instead downlinks error codes \
@@ -53,7 +53,7 @@ const unsigned long PI_SWEEP_PRINT_DELAY = 60 * 1000; // delay between printout 
 
 /*light sensors*/
 #include "Adafruit_LTR390.h"
-const ltr390_gain_t LIGHT_LTR390_GAIN = LTR390_GAIN_3;
+const ltr390_gain_t LIGHT_LTR390_GAIN = LTR390_GAIN_6;
 const float LIGHT_LTR390_WFAC = 1;
 const float LIGHT_LTR390_INT = 4;
 const float LIGHT_LTR390_UV_SENSITIFITY = 2300;
