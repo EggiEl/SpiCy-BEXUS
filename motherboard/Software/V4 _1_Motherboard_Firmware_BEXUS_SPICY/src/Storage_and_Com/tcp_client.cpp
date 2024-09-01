@@ -159,15 +159,22 @@ void tcp_check_command()
     tcp_setup_client();
   }
 
-  if (!(Ethernet.linkStatus() == 1))
+  if (Ethernet.linkStatus() != 1)
   {
     return;
   }
 
+  int status = 1;
   if (!client.connected())
-  {
+  { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
-    client.connect(SERVERIP, SERVERPORT);
+    status = client.connect(SERVERIP, SERVERPORT);
+  }
+
+  /*returns if client connection failed*/ // TODO testing!
+  if (!status)
+  {
+    return;
   }
 
   // checks whether  data is avaliable
@@ -180,7 +187,7 @@ void tcp_check_command()
   // reads the TCP_incomming_bytes_buffer in union
 
   byte ByteStream[35];
-  int status = client.readBytes(ByteStream, sizeof(ByteStream)); // Returns the numbers of bytes read, or 0 if no data found.
+  status = client.readBytes(ByteStream, sizeof(ByteStream)); // Returns the numbers of bytes read, or 0 if no data found.
 
   if (status == 0)
   {
@@ -251,7 +258,7 @@ char tcp_send_packet(struct packet *packet)
     tcp_setup_client();
   }
 
-  if (!(Ethernet.linkStatus() == 1))
+  if (Ethernet.linkStatus() != 1)
   {
     return (char)-6;
   }
@@ -259,7 +266,7 @@ char tcp_send_packet(struct packet *packet)
   char buffer[sizeof(struct packet)];
   packettochar(packet, buffer);
 
- int status = 1;
+  int status = 1;
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
@@ -295,14 +302,7 @@ char tcp_send_packet(struct packet *packet)
     break;
   default:
     debugf_error_notcp("send tcp error %i: ", status);
-    if (Ethernet.linkStatus() == 2)
-    {
-      debugf_error_notcp(" cable disconnected\n");
-    }
-    else
-    {
-      debugf_error_notcp(" no response\n");
-    }
+    debugf_error_notcp(Ethernet.linkStatus() == 2 ? " cable disconnected\n" : " no response\n");
     break;
   }
   return status;
@@ -322,7 +322,7 @@ void tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPacket
     tcp_setup_client();
   }
 
-  if (!(Ethernet.linkStatus() == 1))
+  if (Ethernet.linkStatus() != 1)
   {
     return;
   }
@@ -395,7 +395,7 @@ void tpc_send_string(const char string[])
     tcp_setup_client();
   }
 
-  if (!(Ethernet.linkStatus() == 1))
+  if (Ethernet.linkStatus() != 1)
   {
     return;
   }
@@ -420,7 +420,7 @@ void tpc_send_string(const char string[])
  */
 void tcp_sendf(const char *__restrict format, ...)
 {
-  if (!(Ethernet.linkStatus() == 1))
+  if (Ethernet.linkStatus() != 1)
   {
     return;
   }

@@ -1,8 +1,5 @@
-from bson import Binary
 import pymongo
 from colored_terminal import *  # I added some colors to the consol prints. Changed only print(). Fynn
-import random
-from datetime import datetime
 import struct
 
 class MongoDB:
@@ -130,7 +127,7 @@ class MongoDB:
             offset + 9 + 6 : offset + 9 + 6 + 3
         ]  # W (values normed)
 
-        print(decoded_data)
+        # print(decoded_data)
         ## save oxy
         # TODO
         ## save pressure

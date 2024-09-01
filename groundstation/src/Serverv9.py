@@ -8,7 +8,7 @@ from MongoDB import MongoDB
 import netifaces
 from colored_terminal import *
 
-#convertion to exe: pyinstaller --onefile --distpath ./compiled .\src\Serverv8.py
+#convertion to exe: pyinstaller --onefile --distpath ./compiled .\src\Serverv9.py
 
 # troubleshooting tools:
 # "ipconfig"
@@ -291,6 +291,10 @@ class INTERFACE:
             time.sleep(DELAY_CONSOLE_LOOP) #delay to conserve performance
             try:
                 self.Command(input())
+            except KeyboardInterrupt:
+                if self.server is not None:
+                    print_yellow("blocked keyboard interupt. Use /q to savely shutdown server\n")
+
             except Exception as e:
                 print(e)
                 break
