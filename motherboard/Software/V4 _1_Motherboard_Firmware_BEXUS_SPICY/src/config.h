@@ -5,7 +5,7 @@
 #include "Arduino.h"
 
 /*Debug*/
-#define DEBUG_MODE 1 /**activates debug statements.                      \
+#define DEBUG_MODE 2 /**activates debug statements.                      \
 0 = disable                                                              \
 1 = Serial                                                               \
 2 = TCP -> dosn´t print error message but instead downlinks error codes \
@@ -38,8 +38,7 @@ const unsigned long TIMEOUT_OXY_SERIAL = 300;    // timeout usart oxygen
 const float HEAT_VOLTAGE = 7.7459666;                                   // in V
 const float HEAT_RESISTANCE = 12;                                       // in Ohm
 const float HEAT_CURRENT = HEAT_VOLTAGE / HEAT_RESISTANCE;              // current of a single Heater in A
-const float HEAT_POWER = HEAT_CURRENT * HEAT_CURRENT * HEAT_RESISTANCE; // max heating power of a single heater
-const float PID_MAX = HEAT_POWER;                                       // max PID value. is normed on heating_power
+const float HEAT_POWER = HEAT_CURRENT * HEAT_CURRENT * HEAT_RESISTANCE; // max heating power of a single heater                        // max PID value. is normed on heating_power
 
 /*FD-OEM Oxygen sensor*/
 const unsigned long COMMAND_LENGTH_MAX = 100; // how long a command string can possibly be
@@ -47,8 +46,13 @@ const unsigned long RETURN_LENGTH_MAX = 100;  // how long a return string can po
 const unsigned long OXY_BAUD = 19200;         // baud of oxygen usart connection
 
 /*PI controller*/
+const float SET_TEMP_DEFAULT = 34.0; // temperature target for PI controller. Set to -1000000.0 to disable Controller
+
+const float KP_DEFAULT = -100000.0;                   // set to -100000.0 to disable heaters on startup
+const float KI_DEFAULT = 0.02;                        // default values for integral gain
+const float I_MAX_DEFAULT = 0.5;                      // default max value for integral
+const float PI_MAX_DEFAULT = HEAT_POWER;              // defalut max heating power for pi controller
 const unsigned long PI_T = 1000;                      // time in ms till next PID controller update. (1/Frequency of PI Controller)
-const float SET_TEMP_DEFAULT = 34.0;                  // temperature target for PI controller. Set to -1000000.0 to disable Controller
 const unsigned long PI_SWEEP_PRINT_DELAY = 60 * 1000; // delay between printout of PI_SWEEP
 
 /*light sensors*/

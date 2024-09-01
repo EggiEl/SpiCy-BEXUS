@@ -24,7 +24,6 @@ void next_state()
     static struct OxygenReadout mesure_buffer[6] = {0};
 
     static char sd_filepath[100];
-    static float buffer[20];
     state_print(state);
     switch (state)
     {
@@ -45,6 +44,7 @@ void next_state()
     case READ_TEMP:
     {
         pause_Core1();
+        float buffer[AMOUNT_NTC_THERMISTORS];
         temp_read_all(buffer);
         resume_Core1();
 
@@ -69,11 +69,24 @@ void next_state()
     }
     case READ_LIGHT:
     {
-        // light_read(buffer, 0);
+        // float buffer[20];
+        // light_read(buffer);
         // for (uint8_t i = 0; i < 6; i++)
         // {
         //     packet_dl.light[i] = buffer[i];
         // }
+        packet_dl.light[0] = pi_probe0.i_last;
+        packet_dl.light[1] = pi_probe1.i_last;
+        packet_dl.light[2] = pi_probe2.i_last;
+        packet_dl.light[3] = pi_probe3.i_last;
+        packet_dl.light[4] = pi_probe4.i_last;
+        packet_dl.light[5] = pi_probe5.i_last;
+        packet_dl.light[6] = pi_probe0.pi_last;
+        packet_dl.light[7] = pi_probe1.pi_last;
+        packet_dl.light[8] = pi_probe2.pi_last;
+        packet_dl.light[9] = pi_probe3.pi_last;
+        packet_dl.light[10] = pi_probe4.pi_last;
+        packet_dl.light[11] = pi_probe5.pi_last;
         state = SAVESENDPACKET;
         break;
     }

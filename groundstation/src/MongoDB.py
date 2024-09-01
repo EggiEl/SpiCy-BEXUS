@@ -130,6 +130,7 @@ class MongoDB:
             offset + 9 + 6 : offset + 9 + 6 + 3
         ]  # W (values normed)
 
+        print(decoded_data)
         ## save oxy
         # TODO
         ## save pressure

@@ -38,15 +38,14 @@ void setup()
 {
   rp2040.wdt_begin(TIMEOUT_WATCHDOG);
   update_nResets();
-  if (!TCP_init)
-    tcp_setup_client();
+  tcp_setup_client();
   if (TCP_init)
   {
     tcp_check_command();
   }
-
   sd_setup();
   print_startup_message();
+
   // check_peripherals();
   // debugf_sucess("oi\n");
 }
@@ -55,16 +54,9 @@ void periodic_tasks_core_0();
 void loop()
 {
   periodic_tasks_core_0();
-
-  // debugf(">temp0 : %f\n", temp_read_one(NTC_OR_OxY_1), 1,0);
-  // delay(10);
-  // next_state();
-  // if (pi_record_step_function(PIN_H0, NTC_OR_OxY_0, 20, 0.5 * 60.0 * 60.0 * 1000.0)) // 1.5 * 60 * 60 * 1000
-  // {
-  //   pi_sweep_update(&pi_probe0, &sweep_0);
-  // }
-  // pi_sweep_update(&pi_probe0, &sweep_0);
-  // read_out_BMP180();
+  rp2040.wdt_reset();
+  next_state();
+  rp2040.wdt_reset();
 }
 
 /*all things that should get checkt every loop of CPU0*/

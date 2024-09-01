@@ -114,6 +114,7 @@ void oxy_console()
  */
 char *oxy_commandhandler(const char command[], uint8_t returnValues)
 {
+    rp2040.wdt_reset();
     if (!oxy_serial_init)
     {
         oxy_serial_setup();
@@ -149,6 +150,8 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues)
 
     /*reads out return values*/
     unsigned int recievedbytes = oxySerial.readBytesUntil('\r', buffer, nReturn);
+
+    rp2040.wdt_reset();
 
     /*checks if still data avaliable*/
     if (oxySerial.available())
@@ -196,12 +199,16 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues)
 /*sending dummy byte. For syncronising the data line. returns 1 if sucessful aka sensor present, 0 if not*/
 uint8_t oxy_send_dummy()
 {
+    rp2040.wdt_reset();
+
     char buffer[2] = {0};
     oxySerial.write("\r");
     oxySerial.flush();
     // returns a error after 10ms
     oxySerial.readBytes(buffer, 1);
     delay(2); // this is necessary
+
+    rp2040.wdt_reset();
 
     if (buffer[0] == '\r')
     {
