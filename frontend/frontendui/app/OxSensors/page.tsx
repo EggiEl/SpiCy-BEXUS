@@ -1,10 +1,7 @@
 // app/OxSensors/page.tsx
 import React from 'react';
 import axios from 'axios';
-import SensorPlotOx from './OxComponents/SensorPlotOx';
-
-import PlotField from './OxComponents/plotfield';
-
+import Dataprovider from './UniversalComponents/dataprovider';
 
 const fetchData = async () => {
   try {
@@ -28,11 +25,11 @@ interface OxygenSensorData {
 
 
 const OxSensorsPage = async () => {
-    const data: OxygenSensorData[][] = await fetchData();
+    const oxygensensordata: OxygenSensorData[][] = await fetchData();
     
 
   // Render a loading state if data is not yet available
-  if (!data) {
+  if (!oxygensensordata) {
     return <div>Error fetching Data reload the side and check the backend...</div>;
   }
 
@@ -42,7 +39,8 @@ const OxSensorsPage = async () => {
   // Pass the fetched data to the client component
   return (
   <div >
-    <PlotField plotInitalData={data} />
+    <Dataprovider oxygenInitialData={oxygensensordata} /> 
+    
   </div>
   )
 };

@@ -1,10 +1,10 @@
 from bson import Binary
-import pymongo
 from colored_terminal import *  # I added some colors to the consol prints. Changed only print(). Fynn
 import random
 from datetime import datetime
 import struct
-
+import pymongo 
+import pymongo.errors 
 class MongoDB:
     def __init__(self, uri) -> None:
         self.uri = uri
@@ -129,11 +129,35 @@ class MongoDB:
         decoded_data["pid"] = unpacked_data[
             offset + 9 + 6 : offset + 9 + 6 + 3
         ]  # W (values normed)
-
+        print(decoded_data)
         ## save oxy
         # TODO
         ## save pressure
         # TODO
+
+
+
+        #Get the Temperature of struct : 
+        thermistor = decoded_data["thermistor"] 
+        print("Thermistor: ", thermistor)
+        for temp in range(len(thermistor)-3): 
+            self.safe_temp({"temperature": thermistor[temp], "timestamp_measurement": datetime.now()}, "BEXUS", f"TemperatureSensor{temp+1}")
+
+    def safe_temp(self, struct: dict, db_name, collection_name): 
+        if self.client:
+            try:
+                mydb = self.client[db_name]
+                mycol = mydb[collection_name]
+                insert_result = mycol.insert_one(struct)
+                print("Eingefügte ID:", insert_result.inserted_id)
+            except pymongo.errors.PyMongoError as e:
+                print("Error inserting Data", e)
+        else:
+            print("No connection to database.")
+            print(
+                "Make sure you used the MongoDB.connect() method before writing to the database."
+            )
+
 
     def safeOx(
         self, struct: dict, db_name, collection_name_fullstruct, collection_name_ox

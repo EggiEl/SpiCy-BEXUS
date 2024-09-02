@@ -102,7 +102,8 @@ class TCP_SERVER:
                     #this is a packat being downlinked
                     if(len(received_data)==PACKET_LENTH):  
                         self.datalog.rawdata.append(received_data)
-                        print_green(f'recieved packet ID:"{ struct.unpack('<I', received_data[:4])[0]}"',indent =2)
+                        print_green(f'received packet ID:"{ struct.unpack("<I", received_data[:4])[0]}"', indent=2)
+
                     #this is an error code being downlinked
                     elif(len(received_data) == 8 and received_data[0]==0b11111111 and received_data[1]==0b11111111 and received_data[2]==0b11111111 and received_data[3]==0b11111111): 
                             if(received_data[4] == received_data[5]): 
