@@ -1,14 +1,16 @@
 "use client";
 import { OxygenSensorData } from "../OxInterfaces/OxygenSensorData";
 import PlotField from "../OxComponents/plotfield";
+import TempPlotfield from "../TempComponents/TempPlotfield"
 import Navbar from "../OxComponents/navbar";
 import { useState } from "react";
-
+import TempSensorData from "../TempInterfaces/TempsensorData"
 interface DataproviderProps {
     oxygenInitialData: OxygenSensorData[][];
+    tempInitialData: TempSensorData[][]; 
 }
 
-export default function Dataprovider({ oxygenInitialData }: DataproviderProps) {
+export default function Dataprovider({ oxygenInitialData, tempInitialData }: DataproviderProps) {
     const [oxPlot, setOxPlot] = useState(true);
 
     const showOxPlot = () => {
@@ -25,7 +27,9 @@ export default function Dataprovider({ oxygenInitialData }: DataproviderProps) {
             <Navbar showOxPlot={showOxPlot} showTempPlot={showTempPlot} activePlot={oxPlot ? 'ox' : 'temp'} />
        
             {oxPlot && <PlotField plotInitalData={oxygenInitialData} />}
-            {!oxPlot && <div>Temp Plot</div>}
+            {!oxPlot && <TempPlotfield plotInitalData={tempInitialData} />}
+            
+
         </div>
     );
 }

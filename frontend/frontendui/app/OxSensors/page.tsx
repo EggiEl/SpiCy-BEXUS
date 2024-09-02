@@ -14,6 +14,17 @@ const fetchData = async () => {
   }
 };
 
+const fetchTempData = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8000/storedData`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
+}
+
+
 interface OxygenSensorData {
     _id: string;
     fullstruct_id: string;
@@ -21,11 +32,20 @@ interface OxygenSensorData {
     timestamp_measurement: string;
   }
   
+interface TempSensorData { 
+    _id: string;
+    temperature: number;
+    timestamp_measurement: string;
+} 
 
 
 
 const OxSensorsPage = async () => {
     const oxygensensordata: OxygenSensorData[][] = await fetchData();
+    const tempsensorData : TempSensorData[][]= await fetchTempData(); 
+    console.log(tempsensorData);
+
+
     
 
   // Render a loading state if data is not yet available
@@ -39,7 +59,7 @@ const OxSensorsPage = async () => {
   // Pass the fetched data to the client component
   return (
   <div >
-    <Dataprovider oxygenInitialData={oxygensensordata} /> 
+    <Dataprovider oxygenInitialData={oxygensensordata} tempInitialData={tempsensorData} /> 
     
   </div>
   )
