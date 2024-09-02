@@ -2,22 +2,22 @@ import {Schema, model } from 'mongoose';
 
 export interface IDataModel {
     temperature: number;
-    time: string;
+    timestamp_measurement: string;
 } 
 
 const createDataModel = (sensorId: string) => {
     const DataSchema = new Schema<IDataModel>({
         temperature: { type: Number, required: true },
-        time: { type: String, required: true }
+        timestamp_measurement: { type: String, required: true }
     }, { collection: sensorId }); // Hier wird der Name der Collection festgelegt
 
     return model<IDataModel>(sensorId, DataSchema);
 };
 
-export const Sensor1 = createDataModel("Sensor1");
-export const Sensor2 = createDataModel("Sensor2");
-export const Sensor3 = createDataModel("Sensor3");
-export const Sensor4 = createDataModel("Sensor4");
-export const Sensor5 = createDataModel("Sensor5");
-export const Sensor6 = createDataModel("Sensor6");
+export const TemperatureSensor1 = createDataModel("TemperatureSensor1");
+export const TemperatureSensor2 = createDataModel("TemperatureSensor2");
+export const TemperatureSensor3 = createDataModel("TemperatureSensor3");
+export const TemperatureSensor4 = createDataModel("TemperatureSensor4");
+export const TemperatureSensor5 = createDataModel("TemperatureSensor5");
+export const TemperatureSensor6 = createDataModel("TemperatureSensor6");
 
