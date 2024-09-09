@@ -121,6 +121,7 @@ class MongoDB:
             }
             decoded_data["oxy_measure"].append(oxy)
             offset += length_oxy_struct  # Move to the next OxygenReadout
+            self.safeOx(oxy, "BEXUS", f"fullstruct_Sensor{i+1}", f"percentOtwo_Sensor{i+1}")
 
         decoded_data["thermistor"] = unpacked_data[offset : offset + 9]  # °C
         decoded_data["heaterPWM"] = unpacked_data[

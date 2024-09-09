@@ -48,12 +48,16 @@ export async function get_latest_data(lastid : string , sensorname : string): Pr
   }
 }
 
-
+// This component is the parent of the sonsor plot and the slider 
+// It fetches new data from the backend and passes it to the sensor plot component
+// It also handles the slider and the range of the data shown in the plot
+// The data is fetched every second
 export default function SensorPlotTemp({ initialData, sensorname, measureTimeFeat }: TempDataClProps) {
   const [data, setData] = useState<TempSensorData[]>(initialData);
   const [range, setRange] = useState<number[]>([0, initialData.length]);
   const [sliderActive, setSliderActive] = useState(false);
 
+// Function to fetch new data from the backend
   const fetchNewData = async () => {
     const lastData = data[data.length - 1];
     if (lastData && lastData._id) {
@@ -69,25 +73,31 @@ export default function SensorPlotTemp({ initialData, sensorname, measureTimeFea
   };
 
 
-
+  //Function to fetch new data every second
   useEffect(() => {
     const intervalId = setInterval(fetchNewData, 1000);
     
     return () => clearInterval(intervalId);
   }, [data, sensorname]);
 
+
+  //Function to set the range of the slider to the last 10 entries
   useEffect(() => {
     if (!sliderActive) {
       const length = data.length;
-      setRange([Math.max(length - 10, 0), length]);
+      const plotLimit = 10 ; 
+      setRange([Math.max(length - plotLimit, 0), length]);
+
     }
     
   }, [data, sliderActive]);
 
+  
+//function to handle the change of the range of the slider
   const handleRangeChange = (newRange: number[]) => {
     setRange(newRange);
   };
-
+  //function to handle to toggle the slider
   const toggleSlider = () => {
     setSliderActive(!sliderActive);
     setRange([0, data.length]);
