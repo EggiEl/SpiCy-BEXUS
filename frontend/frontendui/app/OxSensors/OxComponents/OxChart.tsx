@@ -60,7 +60,7 @@ export default function OxChart({
       setFirstime("");
       setSecondTime("");
       setStandardDot({
-        r: 2,
+        r: 0,
         fill: "transparent",
         onClick: (e: any, payload: any) => handleDotClick(payload.payload),
       });

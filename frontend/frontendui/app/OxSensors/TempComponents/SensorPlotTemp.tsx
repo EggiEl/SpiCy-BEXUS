@@ -5,6 +5,61 @@ import TempChart from "./TempChart";
 import styled from "styled-components";
 import RangeSlider from "../OxComponents/newSlider";
 import TempSensorData, {TempDataClProps} from "../TempInterfaces/TempsensorData"
+import { Input } from "@nextui-org/react";
+// Neues Styled Component für das Input-Wrapper
+const InputWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 40px;
+  background: #f0f0f0; 
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+const StyledInput = styled(Input)`
+  width: 100%;
+  max-width: 220px;
+  padding: 10px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  border: 1px solid #ccc;
+
+  &:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &:focus-within {
+    border-color: #0070f3;
+    background: linear-gradient(135deg, #e0f7ff, #ccf0ff);
+    box-shadow: 0 0 12px rgba(0, 112, 243, 0.4);
+    transform: translateY(-4px);
+  }
+
+  /* Custom styling for the Input's label */
+  .nextui-input-label {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #666;
+    transition: color 0.3s ease;
+  }
+
+  &:focus-within .nextui-input-label {
+    color: #0070f3;
+  }
+
+  /* Style the placeholder for modern look */
+  input::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+`;
 
 const Container = styled.div.attrs((props) => ({
   style: {
@@ -56,6 +111,9 @@ export default function SensorPlotTemp({ initialData, sensorname, measureTimeFea
   const [data, setData] = useState<TempSensorData[]>(initialData);
   const [range, setRange] = useState<number[]>([0, initialData.length]);
   const [sliderActive, setSliderActive] = useState(false);
+  const [upperlimit, setUpperlimit] = useState(100);
+  const [lowerlimit, setLowerlimit] = useState(0);
+  const [dynamicplotlimit , setdynamicplotlimit] = useState(10);
 
 // Function to fetch new data from the backend
   const fetchNewData = async () => {
@@ -85,8 +143,8 @@ export default function SensorPlotTemp({ initialData, sensorname, measureTimeFea
   useEffect(() => {
     if (!sliderActive) {
       const length = data.length;
-      const plotLimit = 10 ; 
-      setRange([Math.max(length - plotLimit, 0), length]);
+
+      setRange([Math.max(length - dynamicplotlimit, 0), length]);
 
     }
     
@@ -108,6 +166,29 @@ export default function SensorPlotTemp({ initialData, sensorname, measureTimeFea
     <Container color="black">      
     <Header>{sensorname}</Header>
       <button onClick={toggleSlider}>Filter</button>
+      <InputWrapper>
+        <StyledInput
+          key={"default"}
+          type="number"
+          color={"default"}
+          label="Upper Limit"
+          onChange={(e) => setUpperlimit(parseInt(e.target.value))}
+        />
+        <StyledInput
+          key={"default"}
+          type="number"
+          color={"default"}
+          label="Lower Limit"
+          onChange={(e) => setLowerlimit(parseInt(e.target.value))}
+        />
+         <StyledInput
+          key={"default"}
+          type="number"
+          color={"default"}
+          label="Dynimic Plot Limit"
+          onChange={(e) => setdynamicplotlimit(parseInt(e.target.value))}
+        />
+      </InputWrapper>
       {sliderActive && (
         <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
           <div style={{ width: "80%" }}>
@@ -119,8 +200,8 @@ export default function SensorPlotTemp({ initialData, sensorname, measureTimeFea
       <ChartWrapper>
         <TempChart
           datalist={data}
-          upperlimit={100}
-          lowerlimit={40}
+          upperlimit={upperlimit}
+          lowerlimit={lowerlimit}
           limit={range[1]}
           measureTimeFeat={measureTimeFeat}
           lowerLimitChange={range[0]}
