@@ -157,7 +157,7 @@ export default function SensorPlotOx({ initialData, sensorname, measureTimeFeat 
           key={"default"}
           type="number"
           color={"default"}
-          label="Dynimic Plot Limit"
+          label="Dynamic Plot Limit"
           onChange={(e) => setdynamicplotlimit(parseInt(e.target.value))}
         />
       </InputWrapper>
