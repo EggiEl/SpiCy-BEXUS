@@ -74,6 +74,8 @@ bool sd_writestruct(struct packet *s_out, const char filepath[])
   if (!sd_init)
   {
     sd_setup();
+    if (!sd_init)
+      return 0;
   }
 
   char buffer[sizeof(struct packet)];
@@ -98,7 +100,7 @@ bool sd_writestruct(struct packet *s_out, const char filepath[])
 bool sd_readstruct(struct packet *data, const char filepath[], unsigned long position)
 {
   debugf("-{SD_readstru-file:");
-  debugf("%s",filepath);
+  debugf("%s", filepath);
   if (!sd_init)
   {
     sd_setup();
@@ -113,7 +115,7 @@ bool sd_readstruct(struct packet *data, const char filepath[], unsigned long pos
       debugf("}-\n");
       return 0;
     }
-    
+
     uint8_t *buffer = (uint8_t *)malloc(sizeof(struct packet));
 
     if (!myFile.seek(position * sizeof(struct packet)))
@@ -242,7 +244,6 @@ void sd_printinfo()
   // SDFS.info(fs_info);
   // debugf_info("Total bytes: %u", fs_info.totalBytes);
   // debugf_info("Used bytes: %u", +fs_info.usedBytes);
-  root = SD.open("/");
-  printDirectory(root, 0);
+  // root = SD.open("/");
+  // printDirectory(root, 0);
 }
-

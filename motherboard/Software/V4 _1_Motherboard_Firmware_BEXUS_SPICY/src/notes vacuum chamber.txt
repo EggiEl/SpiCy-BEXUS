@@ -10,34 +10,34 @@ Set up exel:
 
 
 print status
-/c h -1
-/c g
+/c h -1 0 0 0\n
+/c g 0 0 0 0\n
 
 Commands to switch to step response function:
 disable all pi controllers
-/c c 0 -100000.0  -1 -1
-/c c 1 -100000.0  -1 -1
-/c c 2 -100000.0  -1 -1
-/c c 3 -100000.0  -1 -1
-/c c 4 -100000.0  -1 -1
-/c c 5 -100000.0  -1 -1
-/c g
+/c c 0 -100000.0  -1 -1 \n
+/c c 1 -100000.0  -1 -1 \n
+/c c 2 -100000.0  -1 -1 \n
+/c c 3 -100000.0  -1 -1 \n
+/c c 4 -100000.0  -1 -1 \n
+/c c 5 -100000.0  -1 -1 \n
 
 set all heaters to 100
-/c h 0 100
-/c h 1 100
-/c h 2 100
-/c h 3 100
-/c h 4 100
-/c h 5 100
+/c h 0 100 \n
+/c h 1 100 \n
+/c h 2 100 \n
+/c h 3 100 \n
+/c h 4 100 \n
+/c h 5 100 \n
+
 
 reactivates pi controller with kp = 5
-/c c 0 5 -1 -1
-/c c 1 5 -1 -1
-/c c 2 5 -1 -1
-/c c 3 5 -1 -1
-/c c 4 5 -1 -1
-/c c 5 5 -1 -1
+/c c 0 5 -1 -1 \n
+/c c 1 5 -1 -1 \n
+/c c 2 5 -1 -1 \n
+/c c 3 5 -1 -1 \n
+/c c 4 5 -1 -1 \n
+/c c 5 5 -1 -1 \n
 
 sets pi controller
 /c c 0 ki i imax

@@ -276,6 +276,7 @@ char tcp_send_packet(struct packet *packet)
   switch (status) // client.connect returns different int values depending of the sucess of the operation
   {
   case 1: // Send packet
+    client.flush();
     if (client.write(buffer, sizeof(struct packet)))
     {
       status = 1;
@@ -410,7 +411,6 @@ void tpc_send_string(const char string[])
   if (status)
   {
     client.write(string, strnlen(string, 1000));
-    // client.flush();
   }
 }
 
@@ -536,10 +536,15 @@ void tcp_receive_OTA_update(int size_firmware)
     tcp_setup_client();
   }
 
+  int status = 1;
   if (!client.connected())
-  {
-    client.connect(SERVERIP, SERVERPORT);
+  { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
+    status = client.connect(SERVERIP, SERVERPORT);
+  }
+  if (!status)
+  {
+    return;
   }
 
   /*checks if data avaliable*/

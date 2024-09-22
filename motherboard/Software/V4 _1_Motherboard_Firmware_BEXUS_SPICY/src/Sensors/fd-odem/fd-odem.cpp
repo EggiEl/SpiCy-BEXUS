@@ -64,7 +64,7 @@ void oxy_console()
         /*sends data to FD-ODEM*/
         if (Serial.available() >= 3)
         {
-            
+
             char buffer[COMMAND_LENGTH_MAX + 1] = {0};
             Serial.readBytesUntil('\n', buffer, COMMAND_LENGTH_MAX);
             buffer[COMMAND_LENGTH_MAX] = '\0';
@@ -86,7 +86,7 @@ void oxy_console()
                 }
                 case 'c':
                 {
-                    oxy_calibrateOxy_air((uint)buffer[2], (uint32_t) 2637, 965935UL, 46942UL);
+                    oxy_calibrateOxy_air((uint)buffer[2], (uint32_t)2637, 965935UL, 46942UL);
                     break;
                 }
                 default:
@@ -395,7 +395,8 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
         // debugf_warn("oxy_read returned only %i from 11 values\n", numScanned);
     }
 
-    // Ausgabe der Strukturwerte
+// Ausgabe der Strukturwerte
+#if DEBUG_MODE == 1
     debugf_info("Error: %d\n", readout->error);
     debugf_info("Dphi: %.4f mrad\n", readout->dphi / 1000.0);
     debugf_info("Umolar: %.4f umol/l\n", readout->umolar / 1000.0);
@@ -411,6 +412,7 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
     debugf_info("PercentOtwo: %.4f %%\n", readout->percentOtwo / 1000.0);
 
     oxy_decode_mesurement_errors(readout->error); // if theres an error this will print a debug statement
+#endif
 
     free(buf_return);
     return 1;

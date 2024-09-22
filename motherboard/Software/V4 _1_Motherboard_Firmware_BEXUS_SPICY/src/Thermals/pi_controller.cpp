@@ -7,7 +7,7 @@ PI_CONTROLLER pi_probe0 = {
     .desired_temp = SET_TEMP_DEFAULT,
     .heater_pin = PIN_H0,
     .thermistor_pin = NTC_OR_OxY_0,
-    .kp = KP_DEFAULT,
+    .kp = -100000.0,
     .ki = KI_DEFAULT,
     .I_MAX = I_MAX_DEFAULT,
     .PI_MAX_PW = PI_MAX_DEFAULT};
@@ -16,7 +16,7 @@ PI_CONTROLLER pi_probe1 = {
     .desired_temp = SET_TEMP_DEFAULT,
     .heater_pin = PIN_H1,
     .thermistor_pin = NTC_OR_OxY_1,
-    .kp = KP_DEFAULT,
+    .kp = -100000.0,
     .ki = KI_DEFAULT,
     .I_MAX = I_MAX_DEFAULT,
     .PI_MAX_PW = PI_MAX_DEFAULT};
@@ -67,7 +67,7 @@ void pi_update_all()
     if (millis() > TimeStampPid)
     {
         TimeStampPid = millis() + PI_T;
-        // debugf_status("pi udate all\n");
+        // debugf_status("pi update all\n");
         pi_update_controller(&pi_probe0);
         pi_update_controller(&pi_probe1);
         pi_update_controller(&pi_probe2);
@@ -111,7 +111,8 @@ void pi_update_controller(PI_CONTROLLER *pi)
     /*dosn´t update controller if heater is not connectoed*/
     if (measured_temp == -1000000.00)
     {
-        debugf_error("NTC %u not connected",pi->thermistor_pin);
+        // debugf_error("NTC %u not connected\n",pi->thermistor_pin);
+        // delay(100);
         heat_updateone(pi->heater_pin, 0.0);
         return;
     }

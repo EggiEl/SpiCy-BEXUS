@@ -399,6 +399,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
     pi_print_controller(pi);
     break;
   }
+
   case 'e':
   {
     PI_CONTROLLER *pi = 0;
@@ -766,13 +767,24 @@ uint32_t check_peripherals()
   float bat_volt = get_batvoltage();
   if (bat_volt > 15.0 && bat_volt < 31.0)
   {
-    debugf_sucess("%.2fV\n", bat_volt);
+    debugf_sucess("%.2fV", bat_volt);
     results |= (1 << 29);
   }
   else
   {
-    debugf_error("not connected\n");
+    debugf_error("not connected");
     results |= (1 << 29);
+  }
+
+  debugf_info("\nSD:");
+  
+  if (sd_init)
+  {
+    debugf_sucess("sucess\n")
+  }
+  else
+  {
+    debugf_error("failed\n");
   }
 
   return results;

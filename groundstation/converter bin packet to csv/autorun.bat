@@ -3,9 +3,9 @@
 :loop
 cls
 
-converter.exe rawdata[Aug-30-13-14-56].bin
+converter.exe rawdata[Sep-5-13-23-31].bin
 
-echo Waiting for 10 seconds...
-timeout /t 10 /nobreak
+echo Waiting for 1 seconds...
+timeout /t 1 /nobreak
 
 goto loop

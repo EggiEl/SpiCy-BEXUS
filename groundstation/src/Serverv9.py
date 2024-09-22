@@ -19,7 +19,7 @@ PORT = 8888
 
 PACKET_LENTH = 472
 
-TIMEOUT_CLIENT = 5 #s timeout of client after no connetion
+TIMEOUT_CLIENT = 2 #s timeout of client after no connetion
 DELAY_DATALOG_LOOP = 0.1 #s slows datalogger loop to save performance
 DELAY_SERVER_LOOP = 0.01 #s slows server loop to save performance
 DELAY_CONSOLE_LOOP = 0.1 #s slows console loop to save performance
@@ -235,7 +235,7 @@ class DATALOGGER:
             if len(self.rawdata)>=1:
                 self.save_raw_mongo()
                 if self.save_raw_bin():
-                    print_white(f"saved {len(self.rawdata)} packages\n",indent=3)
+                    # print_white(f"saved {len(self.rawdata)} packages\n",indent=3)
                     self.rawdata = []
             else:
                 time.sleep(DELAY_DATALOG_LOOP) #delay to conserve performance

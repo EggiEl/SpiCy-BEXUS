@@ -36,7 +36,7 @@ PID_ControllerSweepData sweep_0 = {
 /*does all the data handeling*/
 void setup()
 {
-  rp2040.wdt_begin(TIMEOUT_WATCHDOG);
+  // rp2040.wdt_begin(TIMEOUT_WATCHDOG);
   update_nResets();
   tcp_setup_client();
   if (TCP_init)
@@ -47,7 +47,7 @@ void setup()
   print_startup_message();
 
   // check_peripherals();
-  // debugf_sucess("oi\n");
+  debugf_sucess("Firmware flight v1.2\n");
 }
 
 void periodic_tasks_core_0();
@@ -71,6 +71,7 @@ void periodic_tasks_core_0()
   {
     tcp_check_command();
   }
+   rp2040.wdt_reset();
   // tcp_check_command();
 }
 
@@ -81,14 +82,12 @@ void setup1()
   // rp2040.begin();
 }
 
-void periodic_tasks_core_1();
 void loop1()
 {
   if (!flag_pause_core1) // core 0 can raise this flag to pause core 1
   {
     flag_core1_isrunning = 1;
 
-    periodic_tasks_core_1();
     pi_update_all();
 
     // debugf_blue(".");
@@ -98,10 +97,6 @@ void loop1()
   {
     flag_core1_isrunning = 0;
   }
-}
-
-void periodic_tasks_core_1()
-{
 }
 
 unsigned long nMOTHERBOARD_BOOTUPS = 0;
