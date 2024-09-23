@@ -10,10 +10,10 @@ const NavbarWrapper = styled.div`
     padding: 20px;
     width: 100%;
     color: white;
-    z-index: 1;
+   
     background-color: #333;
     position: fixed;
-    margin-inline: 20px;
+    
 `;
 
 const Button = styled.button<{ isActive: boolean }>`

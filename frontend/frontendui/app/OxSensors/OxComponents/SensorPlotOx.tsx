@@ -135,8 +135,9 @@ export default function SensorPlotOx({ initialData, sensorname, measureTimeFeat 
   return (
     <Container color="black">
       <Header>{sensorname}</Header>
-      <button onClick={toggleSlider}>Filter</button>
-
+      <button style={{padding : 10, marginBottom: 20, fontSize : 20, borderRadius: 5}} onClick={toggleSlider}>
+  &#128269; Filter
+</button>
       {/* Input-Felder in einem flexiblen Layout */}
       <InputWrapper>
         <StyledInput
@@ -165,7 +166,7 @@ export default function SensorPlotOx({ initialData, sensorname, measureTimeFeat 
       {sliderActive && (
         <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
           <div style={{ width: "80%" }}>
-            <h1>Einträge zwischen {range[0]} und {range[1]}</h1>
+            <h1>Entries between {range[0]} and {range[1]}</h1>
             <RangeSlider min={0} max={data.length} step={1} onChange={handleRangeChange} />
           </div>
         </div>

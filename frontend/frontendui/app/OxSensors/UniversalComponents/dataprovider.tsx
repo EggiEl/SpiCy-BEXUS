@@ -22,12 +22,13 @@ export default function Dataprovider({ oxygenInitialData, tempInitialData }: Dat
     };
 
     return (
-        <div>
+        <div >
            
             <Navbar showOxPlot={showOxPlot} showTempPlot={showTempPlot} activePlot={oxPlot ? 'ox' : 'temp'} />
-       
+            <div style={{paddingTop : 40}}> 
             {oxPlot && <PlotField plotInitalData={oxygenInitialData} />}
             {!oxPlot && <TempPlotfield plotInitalData={tempInitialData} />}
+            </div>
             
 
         </div>
