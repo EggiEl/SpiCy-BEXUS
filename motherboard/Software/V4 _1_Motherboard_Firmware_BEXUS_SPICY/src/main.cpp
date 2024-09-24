@@ -39,15 +39,16 @@ void setup()
   // rp2040.wdt_begin(TIMEOUT_WATCHDOG);
   update_nResets();
   tcp_setup_client();
+  delay(10);
   if (TCP_init)
   {
     tcp_check_command();
   }
-  sd_setup();
   print_startup_message();
 
+  sd_setup();
   // check_peripherals();
-  debugf_sucess("Firmware flight v1.2\n");
+  debugf_sucess("Firmware flight v1.3\n");
 }
 
 void periodic_tasks_core_0();
@@ -71,7 +72,7 @@ void periodic_tasks_core_0()
   {
     tcp_check_command();
   }
-   rp2040.wdt_reset();
+  rp2040.wdt_reset();
   // tcp_check_command();
 }
 

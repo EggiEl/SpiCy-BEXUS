@@ -30,6 +30,7 @@ void oxy_serial_setup()
     oxySerial.begin(OXY_BAUD);
 
     // select_oxy_or_ntc(NTC_OR_OxY_0);
+    // delay(1);
     // oxy_send_dummy();
 
     debugf_sucess("oxy setup was succesfull\n");
@@ -54,6 +55,7 @@ void oxy_console()
     {
         rp2040.wdt_reset();
         select_oxy_or_ntc(NTC_OR_OxY_1);
+        delay(1);
 
         /*recives & prints data from FD-ODEM*/
         if (oxySerial.available())
@@ -234,6 +236,7 @@ uint8_t oxy_isconnected(const int PROBE)
     }
 
     select_oxy_or_ntc(PROBE);
+    delay(1);
 
     oxy_send_dummy();
     return oxy_send_dummy();
@@ -357,6 +360,7 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
 {
     /*chooses right oxygen Sensor*/
     select_oxy_or_ntc(Probe_Number);
+    delay(1);
 
     readout->timestamp_mesurement = millis();
 
@@ -496,6 +500,7 @@ void oxy_calibrateOxy_air(const uint8_t Probe_Number, const uint temp, const uin
     debugf_status("Calibrating OxySensor %u\n", Probe_Number);
     debugf_info("calibration values: temp= %.4f°C,pressure= %.4fmbar,humidity= %.6f%%\n", (float)(temp / 100.0), (float)(pressure / 100.0), (float)(humidity / 100.0));
     select_oxy_or_ntc(Probe_Number);
+    delay(1);
     oxySerial.setTimeout(7000);
 
     snprintf(buffer, COMMAND_LENGTH_MAX, "CHI %u %u %u %u", channel, temp, pressure, humidity);
