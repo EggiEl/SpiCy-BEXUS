@@ -23,7 +23,7 @@ void light_setup()
     {
         if (!ltr.begin(&Wire1))
         {
-            debugf_info("Couldn't find LTR sensor!");
+            debugf_warn("Couldn't find LTR sensor!\n");
             light_init = 0;
             return;
         }
