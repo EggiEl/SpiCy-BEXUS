@@ -11,10 +11,11 @@ from colored_terminal import *
 #convertion to exe: pyinstaller --onefile --distpath ./compiled .\src\Serverv9.py
 
 # troubleshooting tools:
+# change ip4 adress of ethernet adapter/port to the Server Ip
 # "ipconfig"
 # "netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
 
-IP_SERVER = ("169.254.218.4") # if of Ethernet-Adapter Ethernet 6 # ip_Desktop = '192.168.178.23'
+IP_SERVER = ("169.254.218.4")
 PORT = 8888
 
 PACKET_LENTH = 472
