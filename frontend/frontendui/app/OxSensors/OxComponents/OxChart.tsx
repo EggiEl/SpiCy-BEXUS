@@ -101,7 +101,7 @@ export default function OxChart({
           <LineChart data={dataToShow}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
             <XAxis dataKey="timestamp_measurement" stroke="#333" />
-            <YAxis stroke="#333" />
+            <YAxis  stroke="#333" />
             <Tooltip content={<CustomTooltip />} />
             <ReferenceLine
               y={upperlimit}

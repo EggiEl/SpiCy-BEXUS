@@ -5,9 +5,12 @@ import TempPlotfield from "../TempComponents/TempPlotfield"
 import Navbar from "../OxComponents/navbar";
 import { useState } from "react";
 import TempSensorData from "../TempInterfaces/TempsensorData"
+import ZoomableChart from "../testplot";
+
 interface DataproviderProps {
     oxygenInitialData: OxygenSensorData[][];
     tempInitialData: TempSensorData[][]; 
+
 }
 
 export default function Dataprovider({ oxygenInitialData, tempInitialData }: DataproviderProps) {
@@ -26,7 +29,12 @@ export default function Dataprovider({ oxygenInitialData, tempInitialData }: Dat
            
             <Navbar showOxPlot={showOxPlot} showTempPlot={showTempPlot} activePlot={oxPlot ? 'ox' : 'temp'} />
             <div style={{paddingTop : 40}}> 
-            {oxPlot && <PlotField plotInitalData={oxygenInitialData} />}
+            {oxPlot && 
+            <div > 
+            <PlotField plotInitalData={oxygenInitialData} />
+          
+            </div>
+            }
             {!oxPlot && <TempPlotfield plotInitalData={tempInitialData} />}
             </div>
             

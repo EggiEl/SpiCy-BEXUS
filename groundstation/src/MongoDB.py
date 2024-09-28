@@ -1,8 +1,10 @@
+from datetime import datetime
 from bson import Binary
 from colored_terminal import *  # I added some colors to the consol prints. Changed only print(). Fynn
 import struct
 import pymongo 
-import pymongo.errors 
+import pymongo.errors
+
 class MongoDB:
     def __init__(self, uri) -> None:
         self.uri = uri
