@@ -137,12 +137,16 @@ class MongoDB:
         # TODO
 
 
+        
 
+        
         #Get the Temperature of struct : 
         thermistor = decoded_data["thermistor"] 
+        # Get heaterPWM
+        heatPower = decoded_data["heaterPWM"]
         print("Thermistor: ", thermistor)
         for temp in range(len(thermistor)-3): 
-            self.safe_temp({"temperature": thermistor[temp], "timestamp_measurement": datetime.now()}, "BEXUS", f"TemperatureSensor{temp+1}")
+            self.safe_temp({"temperature": thermistor[temp], "timestamp_measurement": datetime.now(), "heaterPWM" : heatPower[temp],}, "BEXUS", f"TemperatureSensor{temp+1}")
 
     def safe_temp(self, struct: dict, db_name, collection_name): 
         if self.client:

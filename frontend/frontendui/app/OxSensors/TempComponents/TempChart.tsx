@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import TempSensorData, {TempDataClProps} from "../TempInterfaces/TempsensorData"
+import TempSensorData, { TempDataClProps } from "../TempInterfaces/TempsensorData";
 import CustomTooltipTemp from "./TempCustomTooltip"; 
 
 import {
@@ -20,14 +20,13 @@ const ChartContainer = styled.div`
 `;
 
 interface TempChartProps {
-    datalist: TempSensorData[];
-    limit: number;
-    upperlimit: number;
-    lowerlimit: number;
-    measureTimeFeat: boolean;
-    lowerLimitChange: number;
-    }
-
+  datalist: TempSensorData[];
+  limit: number;
+  upperlimit: number;
+  lowerlimit: number;
+  measureTimeFeat: boolean;
+  lowerLimitChange: number;
+}
 
 export default function TempChart({
   datalist,
@@ -87,9 +86,7 @@ export default function TempChart({
         if (prevTimePoints.length >= 1) {
           const timeBetween =
             (new Date(data.timestamp_measurement).getTime() -
-              new Date(
-                prevTimePoints[prevTimePoints.length - 1]
-              ).getTime()) /
+              new Date(prevTimePoints[prevTimePoints.length - 1]).getTime()) /
             1000;
 
           setSecondTime(prevTimePoints[prevTimePoints.length - 1]);
@@ -111,7 +108,14 @@ export default function TempChart({
           <LineChart data={dataToShow}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
             <XAxis dataKey="timestamp_measurement" stroke="#333" />
+            {/* Linke Y-Achse für Temperatur */}
             <YAxis stroke="#333" />
+            {/* Rechte Y-Achse für heaterPWM */}
+            <YAxis
+              yAxisId="right" // Eindeutige ID für die rechte Achse
+              orientation="right"
+              stroke="orange" // Farbe für heaterPWM
+            />
             <Tooltip content={<CustomTooltipTemp />} />
             <ReferenceLine
               y={upperlimit}
@@ -125,6 +129,7 @@ export default function TempChart({
               stroke="blue"
               strokeDasharray="3 3"
             />
+            {/* Linie für Temperatur */}
             <Line
               type="monotone"
               dataKey="temperature"
@@ -140,6 +145,16 @@ export default function TempChart({
               strokeWidth={2}
               dot={standardDot}
               activeDot={activeDot}
+            />
+            {/* Linie für heaterPWM, verbunden mit der rechten Y-Achse */}
+            <Line
+              type="monotone"
+              dataKey="heaterPWM"
+              stroke="orange"
+              strokeWidth={2}
+              dot={standardDot}
+              activeDot={activeDot}
+              yAxisId="right" // Verbindung mit der rechten Achse
             />
           </LineChart>
         </ResponsiveContainer>

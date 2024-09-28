@@ -36,6 +36,7 @@ interface TempSensorData {
     _id: string;
     temperature: number;
     timestamp_measurement: string;
+    heatPower : string 
 } 
 
 

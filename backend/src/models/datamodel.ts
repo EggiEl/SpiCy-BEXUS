@@ -3,12 +3,14 @@ import {Schema, model } from 'mongoose';
 export interface IDataModel {
     temperature: number;
     timestamp_measurement: string;
+    heaterPWM : number 
 } 
 
 const createDataModel = (sensorId: string) => {
     const DataSchema = new Schema<IDataModel>({
         temperature: { type: Number, required: true },
-        timestamp_measurement: { type: String, required: true }
+        timestamp_measurement: { type: String, required: true },
+        heaterPWM : {type : Number , required : true}
     }, { collection: sensorId }); // Hier wird der Name der Collection festgelegt
 
     return model<IDataModel>(sensorId, DataSchema);

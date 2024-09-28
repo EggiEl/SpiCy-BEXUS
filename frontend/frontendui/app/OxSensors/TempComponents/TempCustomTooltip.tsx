@@ -8,6 +8,7 @@ const CustomTooltipTemp= ({ active, payload }: any) => {
         <TooltipContainer>
           <p className="label">{`Time: ${data.timestamp_measurement}`}</p>
           <p className="intro">{`Temperatur Level: ${data.temperature}°C`}</p>
+        <p   className ="label">{`heaterPWM" : ${data.heaterPWM}` }  </p>  
         </TooltipContainer>
       );
     }
