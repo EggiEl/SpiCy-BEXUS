@@ -1,0 +1,1713 @@
+
+<<Interface TCP Server>>
+/? for help
+/r
+Verbunden mit der Datenbank
+ Saving bin to : ./rawdata[Sep-4-15-14-38].bin
+<<<<starting TCP server>>>>
+ip_adress: 169.254.218.4
+port: 8888
+time: Wed Sep  4 15:14:38 2024
+
+ Connnecting Socket...
+ Error connect server: Probably cable not connected.
+ Connnecting Socket...
+ Error connect server: Probably cable not connected.
+ Connnecting Socket...
+ Error connect server: Probably cable not connected.
+ Connnecting Socket...
+ Verbindung hergestellt von:('169.254.218.100', 49163)
+  recieved packet ID:"2"   saved 1 packages
+  recieved packet ID:"3"   saved 1 packages
+  recieved packet ID:"4"   saved 1 packages
+/c g
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"5"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.058721|pi0.668|err0.76|
+>3:>Pi|HE11|NT4|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.051478|pi0.558|err0.63|
+>4:>Pi|HE12|NT8|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.034231|pi0.408|err0.47|
+>5:>Pi|HE13|NT7|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.039782|pi0.463|err0.53|
+   saved 1 packages
+  recieved packet ID:"6"   saved 1 packages
+/e  recieved packet ID:"7"   saved 1 packages
+ 2   recieved packet ID:"8"   saved 1 packages
+-1 1  recieved packet ID:"9"   saved 1 packages
+
+Unknown Command e 2 -1 1
+/  recieved packet ID:"10"   saved 1 packages
+e   recieved packet ID:"11"   saved 1 packages
+3 -1 1  recieved packet ID:"12"   saved 1 packages
+
+Unknown Command e 3 -1 1
+  recieved packet ID:"13"   saved 1 packages
+  recieved packet ID:"14"   saved 1 packages
+  recieved packet ID:"15"   saved 1 packages
+  recieved packet ID:"16"   saved 1 packages
+/c e 2 -1 1
+Setting command for next uplink: ['e', '2', '-1', '1', '0']
+  recieved packet ID:"17"   send 35 bytes
+-TCP command recieved e|2.000000|-1.000000|1.000000|0.000000
+>Pi|HE10|NT3|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|   saved 1 packages
+i0.179238|pi0.783|err0.75|
+  recieved packet ID:"18"   saved 1 packages
+  recieved packet ID:"19"   saved 1 packages
+/c e 3 -1 1
+Setting command for next uplink: ['e', '3', '-1', '1', '0']
+  recieved packet ID:"20"   send 35 bytes
+-TCP command recieved e|3.000000|-1.000000|1.000000|0.000000
+>Pi|HE11|NT4|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.179365|pi0.630|err0.56|
+   saved 1 packages
+  recieved packet ID:"21"   saved 1 packages
+  recieved packet ID:"22"   saved 1 packages
+  recieved packet ID:"23"   saved 1 packages
+/c e 4 -1 1
+Setting command for next uplink: ['e', '4', '-1', '1', '0']
+  recieved packet ID:"24"   send 35 bytes
+-TCP command recieved e|4.000000|-1.000000|1.000000|0.000000
+>Pi|HE12|NT8|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.166338|pi0.606|err0.55|
+   saved 1 packages
+  recieved packet ID:"25"   saved 1 packages
+  recieved packet ID:"26"   saved 1 packages
+C:\  recieved packet ID:"27"   saved 1 packages
+
+  recieved packet ID:"28"   saved 1 packages
+  recieved packet ID:"29"   saved 1 packages
+  recieved packet ID:"30"   saved 1 packages
+  recieved packet ID:"31"   saved 1 packages
+/c g
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"32"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+   saved 1 packages
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.324887|pi0.877|err0.69|
+>3:>Pi|HE11|NT4|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.276623|pi0.758|err0.60|
+>4:>Pi|HE12|NT8|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.223690|pi0.590|err0.46|
+>5:>Pi|HE13|NT7|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.202457|pi0.488|err0.36|
+  recieved packet ID:"33"   saved 1 packages
+  recieved packet ID:"34"   saved 1 packages
+  recieved packet ID:"35"   saved 1 packages
+  recieved packet ID:"36"   saved 1 packages
+  recieved packet ID:"37"   saved 1 packages
+  recieved packet ID:"38"   saved 1 packages
+  recieved packet ID:"39"   saved 1 packages
+/c e 5 -1 1
+Setting command for next uplink: ['e', '5', '-1', '1', '0']
+  recieved packet ID:"40"   send 35 bytes
+-TCP command recieved e|5.000000|-1.000000|1.000000|0.000000
+>Pi|HE13|NT7|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.240006|pi0.494|err0.32|
+   saved 1 packages
+  recieved packet ID:"41"   saved 1 packages
+/c   recieved packet ID:"42"   saved 1 packages
+g
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"43"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.402042|pi0.713|err0.39|
+>3:>Pi|HE11|NT4|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.362999|pi0.786|err0.53|
+>4:>Pi|HE12|NT8|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.283721|pi0.530|err0.31|
+>5:>Pi|HE13|NT7|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.253410|pi0.524|err0.34|
+   saved 1 packages
+  recieved packet ID:"44"   saved 1 packages
+  recieved packet ID:"45"   saved 1 packages
+  recieved packet ID:"46"   saved 1 packages
+  recieved packet ID:"47"   saved 1 packages
+  recieved packet ID:"48"   saved 1 packages
+  recieved packet ID:"49"   saved 1 packages
+  recieved packet ID:"50"   saved 1 packages
+  recieved packet ID:"51"   saved 1 packages
+  recieved packet ID:"52"   saved 1 packages
+  recieved packet ID:"53"   saved 1 packages
+  recieved packet ID:"54"   saved 1 packages
+/c t   recieved packet ID:"55"   saved 1 packages
+-1
+Setting command for next uplink: ['t', '-1', '0', '0', '0']
+  recieved packet ID:"56"   send 35 bytes
+   saved 1 packages
+-TCP command recieved t|-1.000000|0.000000|0.000000|0.000000
+><Reading out Thermistors>
+Nr:0|-1000000.00°C
+Nr:1|-1000000.00°C
+Nr:2|27.19°C
+Nr:3|27.08°C
+Nr:4|27.11°C
+Nr:5|27.23°C
+Probe SMD|28.62°C
+Probe Check|0.994284V [should be ~ 1.01325V]
+uC|33.35°C
+  recieved packet ID:"57"   saved 1 packages
+  recieved packet ID:"58"   saved 1 packages
+  recieved packet ID:"59"   saved 1 packages
+  recieved packet ID:"60"   saved 1 packages
+  recieved packet ID:"61"   saved 1 packages
+/c g
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"62"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.486070|pi0.717|err0.29|
+>3:>Pi|HE11|NT4|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.493514|pi0.860|err0.46|
+>4:>Pi|HE12|NT8|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.389110|pi0.722|err0.42|
+>5:>Pi|HE13|NT7|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|   saved 1 packages
+i0.328844|pi0.547|err0.27|
+  recieved packet ID:"63"   saved 1 packages
+  recieved packet ID:"64"   saved 1 packages
+  recieved packet ID:"65"   saved 1 packages
+  recieved packet ID:"66"   saved 1 packages
+  recieved packet ID:"67"   saved 1 packages
+  recieved packet ID:"68"   saved 1 packages
+  recieved packet ID:"69"   saved 1 packages
+  recieved packet ID:"70"   saved 1 packages
+/c g
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"71"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.522783|pi0.729|err0.26|
+>3:>Pi|HE11|NT4|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.545965|pi0.884|err0.42|
+>4:>Pi|HE12|NT8|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.436977|pi0.735|err0.37|
+>5:>Pi|HE13|NT7|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.361596|pi0.594|err0.29|
+   saved 1 packages
+  recieved packet ID:"72"   saved 1 packages
+  recieved packet ID:"73"   saved 1 packages
+  recieved packet ID:"74"   saved 1 packages
+  recieved packet ID:"75"   saved 1 packages
+  recieved packet ID:"76"   saved 1 packages
+  recieved packet ID:"77"   saved 1 packages
+/c g
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"78"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.545808|pi0.758|err0.27|
+>   saved 1 packages
+3:>Pi|HE11|NT4|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.580163|pi0.869|err0.36|
+>4:>Pi|HE12|NT8|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.472482|pi0.758|err0.36|
+>5:>Pi|HE13|NT7|Kp0.80|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.387715|pi0.598|err0.26|
+  recieved packet ID:"79"   saved 1 packages
+  recieved packet ID:"80"   saved 1 packages
+  recieved packet ID:"81"   saved 1 packages
+  recieved packet ID:"82"   saved 1 packages
+  recieved packet ID:"83"   saved 1 packages
+  recieved packet ID:"84"   saved 1 packages
+  recieved packet ID:"85"   saved 1 packages
+  recieved packet ID:"86"   saved 1 packages
+  recieved packet ID:"87"   saved 1 packages
+  recieved packet ID:"88"   saved 1 packages
+  recieved packet ID:"89"   saved 1 packages
+  recieved packet ID:"90"   saved 1 packages
+  recieved packet ID:"91"   saved 1 packages
+  recieved packet ID:"92"   saved 1 packages
+  recieved packet ID:"93"   saved 1 packages
+  recieved packet ID:"94"   saved 1 packages
+  recieved packet ID:"95"   saved 1 packages
+  recieved packet ID:"96"   saved 1 packages
+  recieved packet ID:"97"   saved 1 packages
+  recieved packet ID:"98"   saved 1 packages
+  recieved packet ID:"99"   saved 1 packages
+  recieved packet ID:"100"   saved 1 packages
+  recieved packet ID:"101"   saved 1 packages
+  recieved packet ID:"102"   saved 1 packages
+  recieved packet ID:"103"   saved 1 packages
+  recieved packet ID:"104"   saved 1 packages
+  recieved packet ID:"105"   saved 1 packages
+  recieved packet ID:"106"   saved 1 packages
+  recieved packet ID:"107"   saved 1 packages
+  recieved packet ID:"108"   saved 1 packages
+  recieved packet ID:"109"   saved 1 packages
+  recieved packet ID:"110"   saved 1 packages
+/c c 2 3.301 0.0322
+Setting command for next uplink: ['c', '2', '3.301', '0.0322', '0']
+  recieved packet ID:"111"   send 35 bytes
+-TCP command recieved c|2.000000|3.301000|0.032200|0.000000
+>Pi|HE10|NT3|Kp3.30|Ki0.032200|I_MAX0.000000|TSET27.50|PI_PW1.000|i0.613383|pi0.671|err0.07|
+   saved 1 packages
+  recieved packet ID:"112"   saved 1 packages
+  recieved packet ID:"113"   saved 1 packages
+  recieved packet ID:"114"   saved 1 packages
+  recieved packet ID:"115"   saved 1 packages
+  recieved packet ID:"116"   saved 1 packages
+  recieved packet ID:"117"   saved 1 packages
+  recieved packet ID:"118"   saved 1 packages
+  recieved packet ID:"119"   saved 1 packages
+  recieved packet ID:"120"   saved 1 packages
+  recieved packet ID:"121"   saved 1 packages
+  recieved packet ID:"122"   saved 1 packages
+/c c 3 0.7047 0.0014
+Setting command for next uplink: ['c', '3', '0.7047', '0.0014', '0']
+  recieved packet ID:"123"   send 35 bytes
+-TCP command recieved c|3.000000|0.704700|0.001400|0.000000
+>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX0.000000|TSET27.50|PI_PW1.000|i0.698994|pi0.792|err0.12|
+   saved 1 packages
+  recieved packet ID:"124"   saved 1 packages
+  recieved packet ID:"125"   saved 1 packages
+  recieved packet ID:"126"   saved 1 packages
+  recieved packet ID:"127"   saved 1 packages
+  recieved packet ID:"128"   saved 1 packages
+  recieved packet ID:"129"   saved 1 packages
+/c c 4 1.0011 0.0019
+Setting command for next uplink: ['c', '4', '1.0011', '0.0019', '0']
+  recieved packet ID:"130"   send 35 bytes
+-TCP command recieved c|4.000000|1.001100|0.001900|0.000000
+>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX0.000000|TSET27.50|PI_PW1.000|i0.648356|pi0.739|err0.11|
+   saved 1 packages
+  recieved packet ID:"131"   saved 1 packages
+  recieved packet ID:"132"   saved 1 packages
+  recieved packet ID:"133"   saved 1 packages
+  recieved packet ID:"134"   saved 1 packages
+  recieved packet ID:"135"   saved 1 packages
+  recieved packet ID:"136"   saved 1 packages
+  recieved packet ID:"137"   saved 1 packages
+/c c 5 1.9067 0.0069
+Setting command for next uplink: ['c', '5', '1.9067', '0.0069', '0']
+  recieved packet ID:"138"   send 35 bytes
+-TCP command recieved c|5.000000|1.906700|0.006900|0.000000
+>Pi|HE13|NT7|Kp1.91|Ki0.006900|I_MAX0.000000|TSET27.50|PI_PW1.000|i0.536269|pi0.607|err0.09|
+   saved 1 packages
+  recieved packet ID:"139"   saved 1 packages
+  recieved packet ID:"140"   saved 1 packages
+/c t  recieved packet ID:"141"   saved 1 packages
+ -1
+Setting command for next uplink: ['t', '-1', '0', '0', '0']
+  recieved packet ID:"142"   send 35 bytes
+-TCP command recieved t|-1.000000|0.000000|0.000000|0.000000
+><Reading out Thermistors>
+Nr:0|-1000000.00°C
+Nr:1|-1000000.00°C
+Nr:2|27.48°C
+Nr:3|27.55°C
+Nr:4|27.46°C
+Nr:5|27.43°C
+Probe SMD|30.15°C
+Probe Check|0.994637V [should be ~ 1.01325V]
+uC|34.63°C
+   saved 1 packages
+  recieved packet ID:"143"   saved 1 packages
+/c g  recieved packet ID:"144"   saved 1 packages
+
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"145"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp3.30|Ki0.032200|I_MAX0.000000|TSET27.50|PI_PW1.000|i0.000000|pi0.266|err0.08|
+>3:>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX0.000000|TSET27.50|PI_PW1.000|i0.000000|pi0.005|err0.01|
+>4:>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX0.000000|TSET27.50|PI_PW1.000|i0.000000|pi0.059|err0.06|
+   saved 1 packages
+>5:>Pi|HE13|NT7|Kp1.91|Ki0.006900|I_MAX0.000000|TSET27.50|PI_PW1.000|i0.000000|pi0.107|err0.06|
+  recieved packet ID:"146"   saved 1 packages
+  recieved packet ID:"147"   saved 1 packages
+  recieved packet ID:"148"   saved 1 packages
+  recieved packet ID:"149"   saved 1 packages
+  recieved packet ID:"150"   saved 1 packages
+  recieved packet ID:"151"   saved 1 packages
+/c c 5 1.9067 0.0069 1  recieved packet ID:"152"   saved 1 packages
+
+Setting command for next uplink: ['c', '5', '1.9067', '0.0069', '1']
+  recieved packet ID:"153"   send 35 bytes
+-TCP command recieved c|5.000000|1.906700|0.006900|1.000000
+>Pi|HE13|NT7|Kp1.91|Ki0.006900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.000000|pi0.049|err0.03|
+   saved 1 packages
+  recieved packet ID:"154"   saved 1 packages
+  recieved packet ID:"155"   saved 1 packages
+  recieved packet ID:"156"   saved 1 packages
+C/c c 4 1.0011 0.0019 1  recieved packet ID:"157"   saved 1 packages
+
+  recieved packet ID:"158"   saved 1 packages
+  recieved packet ID:"159"   saved 1 packages
+  recieved packet ID:"160"   saved 1 packages
+/c c 4 1.0011 0.0019 1
+Setting command for next uplink: ['c', '4', '1.0011', '0.0019', '1']
+  recieved packet ID:"161"   send 35 bytes
+-TCP command recieved c|4.000000|1.001100|0.001900|1.000000
+>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX1.000000|TSET27.50|PI_PW1.000|i-0.000000|pi-0.009|err-0.01|
+   saved 1 packages
+  recieved packet ID:"162"   saved 1 packages
+  recieved packet ID:"163"   saved 1 packages
+  recieved packet ID:"164"   saved 1 packages
+  recieved packet ID:"165"   saved 1 packages
+/c c 3 0.7047 0.0014
+Setting command for next uplink: ['c', '3', '0.7047', '0.0014', '0']
+  recieved packet ID:"166"   send 35 bytes
+-TCP command recieved c|3.000000|0.704700|0.001400|0.000000
+>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX0.000000|TSET27.50|PI_PW1.000|i0.000000|pi0.006|err0.01|
+   saved 1 packages
+  recieved packet ID:"167"   saved 1 packages
+  recieved packet ID:"168"   saved 1 packages
+  recieved packet ID:"169"   saved 1 packages
+  recieved packet ID:"170"   saved 1 packages
+/c c 2 3.301 0.0322 1
+Setting command for next uplink: ['c', '2', '3.301', '0.0322', '1']
+  recieved packet ID:"171"   send 35 bytes
+-TCP command recieved c|2.000000|3.301000|0.032200|1.000000
+>Pi|HE10|NT3|Kp3.30|Ki0.032200|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.000000|pi0.261|err0.08|
+   saved 1 packages
+/c  recieved packet ID:"172"   saved 1 packages
+ g
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"173"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+   saved 1 packages
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp3.30|Ki0.032200|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.009151|pi0.230|err0.07|
+>3:>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX0.000000|TSET27.50|PI_PW1.000|i-0.000000|pi0.006|err0.01|
+>4:>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX1.000000|TSET27.50|PI_PW1.000|i-0.000648|pi-0.027|err-0.03|
+>5:>Pi|HE13|NT7|Kp1.91|Ki0.006900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.001599|pi-0.042|err-0.02|
+  recieved packet ID:"174"   saved 1 packages
+  recieved packet ID:"175"   saved 1 packages
+  recieved packet ID:"176"   saved 1 packages
+  recieved packet ID:"177"   saved 1 packages
+  recieved packet ID:"178"   saved 1 packages
+  recieved packet ID:"179"   saved 1 packages
+  recieved packet ID:"180"   saved 1 packages
+  recieved packet ID:"181"   saved 1 packages
+  recieved packet ID:"182"   saved 1 packages
+  recieved packet ID:"183"   saved 1 packages
+/c c 4 1.0011 0.0019 1
+Setting command for next uplink: ['c', '4', '1.0011', '0.0019', '1']
+  recieved packet ID:"184"   send 35 bytes
+-TCP command recieved c|4.000000|1.001100|0.001900|1.000000
+>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX1.000000|TSET27.50|PI_PW1.000|i-0.001184|pi-0.023|err-0.02|
+   saved 1 packages
+/c   recieved packet ID:"185"   saved 1 packages
+g
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"186"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp3.30|Ki0.032200|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.038912|pi0.134|err0.03|
+>3:>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX0.000000|TSET27.50|PI_PW1.000|i0.000000|pi0.011|err0.02|
+>4:>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX1.000000|TSET27.50|PI_PW1.000|i-0.001252|pi-0.013|err-0.01|
+>5:>Pi|HE13|NT7|Kp1.91|Ki0.006900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.001794|pi0.034|err0.02|
+   saved 1 packages
+  recieved packet ID:"187"   saved 1 packages
+  recieved packet ID:"188"   saved 1 packages
+  recieved packet ID:"189"   saved 1 packages
+  recieved packet ID:"190"   saved 1 packages
+  recieved packet ID:"191"   saved 1 packages
+  recieved packet ID:"192"/c c 3 0.7047 0.0014 1   saved 1 packages
+
+Setting command for next uplink: ['c', '3', '0.7047', '0.0014', '1']
+  recieved packet ID:"193"   send 35 bytes
+-TCP command recieved c|3.000000|0.704700|0.001400|1.000000
+>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.000000|pi0.027|err0.04|
+   saved 1 packages
+  recieved packet ID:"194"   saved 1 packages
+  recieved packet ID:"195"   saved 1 packages
+  recieved packet ID:"196"   saved 1 packages
+  recieved packet ID:"197"   saved 1 packages
+  recieved packet ID:"198"   saved 1 packages
+/c g  recieved packet ID:"199"   saved 1 packages
+
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"200"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp3.30|Ki0.032200|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.074528|pi0.189|err0.03|
+>3:>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.000832|pi0.035|err0.05|
+>4:>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX1.000000|TSET27.50|PI_PW1.000|i-0.001834|pi-0.020|err-0.02|
+>5:>Pi|HE13|NT7|Kp1.91|Ki0.006900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.005690|pi0.070|err0.03|
+   saved 1 packages
+  recieved packet ID:"201"   saved 1 packages
+  recieved packet ID:"202"   saved 1 packages
+  recieved packet ID:"203"   saved 1 packages
+  recieved packet ID:"204"   saved 1 packages
+  recieved packet ID:"205"   saved 1 packages
+  recieved packet ID:"206"   saved 1 packages
+  recieved packet ID:"207"   saved 1 packages
+  recieved packet ID:"208"   saved 1 packages
+  recieved packet ID:"209"   saved 1 packages
+  recieved packet ID:"210"   saved 1 packages
+  recieved packet ID:"211"   saved 1 packages
+  recieved packet ID:"212"   saved 1 packages
+  recieved packet ID:"213"   saved 1 packages
+  recieved packet ID:"214"   saved 1 packages
+  recieved packet ID:"215"   saved 1 packages
+  recieved packet ID:"216"   saved 1 packages
+  recieved packet ID:"217"   saved 1 packages
+  recieved packet ID:"218"   saved 1 packages
+  recieved packet ID:"219"   saved 1 packages
+  recieved packet ID:"220"   saved 1 packages
+  recieved packet ID:"221"   saved 1 packages
+  recieved packet ID:"222"   saved 1 packages
+  recieved packet ID:"223"   saved 1 packages
+  recieved packet ID:"224"   saved 1 packages
+  recieved packet ID:"225"   saved 1 packages
+  recieved packet ID:"226"   saved 1 packages
+  recieved packet ID:"227"   saved 1 packages
+  recieved packet ID:"228"   saved 1 packages
+  recieved packet ID:"229"   saved 1 packages
+  recieved packet ID:"230"   saved 1 packages
+  recieved packet ID:"231"   saved 1 packages
+  recieved packet ID:"232"   saved 1 packages
+  recieved packet ID:"233"   saved 1 packages
+  recieved packet ID:"234"   saved 1 packages
+  recieved packet ID:"235"   saved 1 packages
+  recieved packet ID:"236"   saved 1 packages
+  recieved packet ID:"237"   saved 1 packages
+  recieved packet ID:"238"   saved 1 packages
+  recieved packet ID:"239"   saved 1 packages
+  recieved packet ID:"240"   saved 1 packages
+  recieved packet ID:"241"   saved 1 packages
+  recieved packet ID:"242"   saved 1 packages
+  recieved packet ID:"243"   saved 1 packages
+  recieved packet ID:"244"   saved 1 packages
+  recieved packet ID:"245"   saved 1 packages
+  recieved packet ID:"246"   saved 1 packages
+  recieved packet ID:"247"   saved 1 packages
+  recieved packet ID:"248"   saved 1 packages
+  recieved packet ID:"249"   saved 1 packages
+  recieved packet ID:"250"   saved 1 packages
+  recieved packet ID:"251"   saved 1 packages
+  recieved packet ID:"252"   saved 1 packages
+  recieved packet ID:"253"   saved 1 packages
+  recieved packet ID:"254"   saved 1 packages
+  recieved packet ID:"255"   saved 1 packages
+  recieved packet ID:"256"   saved 1 packages
+  recieved packet ID:"257"   saved 1 packages
+  recieved packet ID:"258"   saved 1 packages
+  recieved packet ID:"259"   saved 1 packages
+  recieved packet ID:"260"   saved 1 packages
+  recieved packet ID:"261"   saved 1 packages
+  recieved packet ID:"262"   saved 1 packages
+  recieved packet ID:"263"   saved 1 packages
+  recieved packet ID:"264"   saved 1 packages
+  recieved packet ID:"265"   saved 1 packages
+  recieved packet ID:"266"   saved 1 packages
+  recieved packet ID:"267"   saved 1 packages
+  recieved packet ID:"268"   saved 1 packages
+  recieved packet ID:"269"   saved 1 packages
+  recieved packet ID:"270"   saved 1 packages
+  recieved packet ID:"271"   saved 1 packages
+  recieved packet ID:"272"   saved 1 packages
+  recieved packet ID:"273"   saved 1 packages
+  recieved packet ID:"274"   saved 1 packages
+  recieved packet ID:"275"   saved 1 packages
+  recieved packet ID:"276"   saved 1 packages
+  recieved packet ID:"277"   saved 1 packages
+  recieved packet ID:"278"   saved 1 packages
+  recieved packet ID:"279"   saved 1 packages
+  recieved packet ID:"280"   saved 1 packages
+  recieved packet ID:"281"   saved 1 packages
+  recieved packet ID:"282"   saved 1 packages
+  recieved packet ID:"283"   saved 1 packages
+  recieved packet ID:"284"   saved 1 packages
+  recieved packet ID:"285"   saved 1 packages
+  recieved packet ID:"286"   saved 1 packages
+  recieved packet ID:"287"   saved 1 packages
+  recieved packet ID:"288"   saved 1 packages
+  recieved packet ID:"289"   saved 1 packages
+  recieved packet ID:"290"   saved 1 packages
+  recieved packet ID:"291"   saved 1 packages
+  recieved packet ID:"292"   saved 1 packages
+/c g  recieved packet ID:"293"   saved 1 packages
+
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"294"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp3.30|Ki0.032200|I_MAX1.000000|TSET27.50|PI_PW1.000|i-0.002790|pi-0.279|err-0.08|
+>3:>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.035122|pi0.149|err0.16|
+>4:>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.025581|pi0.195|err0.17|
+>5:>Pi|HE13|NT7|Kp1.91|Ki0.006900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.094823|pi0.247|err0.08|
+   saved 1 packages
+  recieved packet ID:"295"   saved 1 packages
+  recieved packet ID:"296"   saved 1 packages
+  recieved packet ID:"297"   saved 1 packages
+  recieved packet ID:"298"   saved 1 packages
+  recieved packet ID:"299"   saved 1 packages
+  recieved packet ID:"300"   saved 1 packages
+  recieved packet ID:"301"   saved 1 packages
+/c g  recieved packet ID:"302"   saved 1 packages
+
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"303"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp3.30|Ki0.032200|I_MAX1.000000|TSET27.50|PI_PW1.000|i-0.030998|pi-0.110|err-0.02|
+>3:>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.040211|pi0.191|err0.21|
+>4:>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.032008|pi0.207|err0.18|
+>5:>Pi|HE13|NT7|Kp1.91|Ki0.006900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.102546|pi0.200|err0.05|
+   saved 1 packages
+  recieved packet ID:"304"   saved 1 packages
+  recieved packet ID:"305"   saved 1 packages
+  recieved packet ID:"306"   saved 1 packages
+/c g  recieved packet ID:"307"   saved 1 packages
+
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"308"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp3.30|Ki0.032200|I_MAX1.000000|TSET27.50|PI_PW1.000|i-0.027633|pi0.028|err0.02|
+>3:>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.043015|pi0.151|err0.15|
+>4:>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.035817|pi0.238|err0.20|
+>5:>Pi|HE13|NT7|Kp1.91|Ki0.006900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.106507|pi0.203|err0.05|
+   saved 1 packages
+  recieved packet ID:"309"   saved 1 packages
+  recieved packet ID:"310"   saved 1 packages
+  recieved packet ID:"311"   saved 1 packages
+  recieved packet ID:"312"   saved 1 packages
+  recieved packet ID:"313"   saved 1 packages
+  recieved packet ID:"314"   saved 1 packages
+  recieved packet ID:"315"   saved 1 packages
+  recieved packet ID:"316"   saved 1 packages
+  recieved packet ID:"317"   saved 1 packages
+  recieved packet ID:"318"   saved 1 packages
+  recieved packet ID:"319"   saved 1 packages
+  recieved packet ID:"320"   saved 1 packages
+  recieved packet ID:"321"   saved 1 packages
+  recieved packet ID:"322"   saved 1 packages
+  recieved packet ID:"323"   saved 1 packages
+  recieved packet ID:"324"   saved 1 packages
+  recieved packet ID:"325"   saved 1 packages
+  recieved packet ID:"326"   saved 1 packages
+  recieved packet ID:"327"   saved 1 packages
+  recieved packet ID:"328"   saved 1 packages
+  recieved packet ID:"329"   saved 1 packages
+  recieved packet ID:"330"   saved 1 packages
+  recieved packet ID:"331"   saved 1 packages
+  recieved packet ID:"332"   saved 1 packages
+  recieved packet ID:"333"   saved 1 packages
+  recieved packet ID:"334"   saved 1 packages
+  recieved packet ID:"335"   saved 1 packages
+  recieved packet ID:"336"   saved 1 packages
+  recieved packet ID:"337"   saved 1 packages
+  recieved packet ID:"338"   saved 1 packages
+  recieved packet ID:"339"   saved 1 packages
+  recieved packet ID:"340"   saved 1 packages
+  recieved packet ID:"341"   saved 1 packages
+  recieved packet ID:"342"   saved 1 packages
+  recieved packet ID:"343"   saved 1 packages
+  recieved packet ID:"344"   saved 1 packages
+  recieved packet ID:"345"   saved 1 packages
+  recieved packet ID:"346"   saved 1 packages
+  recieved packet ID:"347"   saved 1 packages
+  recieved packet ID:"348"   saved 1 packages
+  recieved packet ID:"349"   saved 1 packages
+  recieved packet ID:"350"   saved 1 packages
+  recieved packet ID:"351"   saved 1 packages
+  recieved packet ID:"352"   saved 1 packages
+  recieved packet ID:"353"   saved 1 packages
+  recieved packet ID:"354"   saved 1 packages
+  recieved packet ID:"355"   saved 1 packages
+  recieved packet ID:"356"   saved 1 packages
+  recieved packet ID:"357"   saved 1 packages
+  recieved packet ID:"358"   saved 1 packages
+  recieved packet ID:"359"   saved 1 packages
+  recieved packet ID:"360"   saved 1 packages
+  recieved packet ID:"361"   saved 1 packages
+  recieved packet ID:"362"   saved 1 packages
+  recieved packet ID:"363"   saved 1 packages
+  recieved packet ID:"364"   saved 1 packages
+  recieved packet ID:"365"   saved 1 packages
+  recieved packet ID:"366"   saved 1 packages
+  recieved packet ID:"367"   saved 1 packages
+  recieved packet ID:"368"   saved 1 packages
+  recieved packet ID:"369"   saved 1 packages
+  recieved packet ID:"370"   saved 1 packages
+  recieved packet ID:"371"   saved 1 packages
+  recieved packet ID:"372"   saved 1 packages
+  recieved packet ID:"373"   saved 1 packages
+  recieved packet ID:"374"   saved 1 packages
+  recieved packet ID:"375"   saved 1 packages
+  recieved packet ID:"376"   saved 1 packages
+  recieved packet ID:"377"   saved 1 packages
+  recieved packet ID:"378"   saved 1 packages
+  recieved packet ID:"379"   saved 1 packages
+  recieved packet ID:"380"   saved 1 packages
+  recieved packet ID:"381"   saved 1 packages
+  recieved packet ID:"382"   saved 1 packages
+  recieved packet ID:"383"   saved 1 packages
+  recieved packet ID:"384"   saved 1 packages
+  recieved packet ID:"385"   saved 1 packages
+  recieved packet ID:"386"   saved 1 packages
+  recieved packet ID:"387"   saved 1 packages
+  recieved packet ID:"388"   saved 1 packages
+  recieved packet ID:"389"   saved 1 packages
+  recieved packet ID:"390"   saved 1 packages
+  recieved packet ID:"391"   saved 1 packages
+  recieved packet ID:"392"   saved 1 packages
+  recieved packet ID:"393"   saved 1 packages
+  recieved packet ID:"394"   saved 1 packages
+  recieved packet ID:"395"   saved 1 packages
+  recieved packet ID:"396"   saved 1 packages
+  recieved packet ID:"397"   saved 1 packages
+  recieved packet ID:"398"   saved 1 packages
+  recieved packet ID:"399"   saved 1 packages
+  recieved packet ID:"400"   saved 1 packages
+  recieved packet ID:"401"   saved 1 packages
+  recieved packet ID:"402"   saved 1 packages
+  recieved packet ID:"403"   saved 1 packages
+  recieved packet ID:"404"   saved 1 packages
+  recieved packet ID:"405"   saved 1 packages
+  recieved packet ID:"406"   saved 1 packages
+  recieved packet ID:"407"   saved 1 packages
+  recieved packet ID:"408"   saved 1 packages
+  recieved packet ID:"409"   saved 1 packages
+  recieved packet ID:"410"   saved 1 packages
+  recieved packet ID:"411"   saved 1 packages
+  recieved packet ID:"412"   saved 1 packages
+  recieved packet ID:"413"   saved 1 packages
+  recieved packet ID:"414"   saved 1 packages
+  recieved packet ID:"415"   saved 1 packages
+  recieved packet ID:"416"   saved 1 packages
+  recieved packet ID:"417"   saved 1 packages
+/c g
+Setting command for next uplink: ['g', '0', '0', '0', '0']
+  recieved packet ID:"418"   send 35 bytes
+-TCP command recieved g|0.000000|0.000000|0.000000|0.000000
+>0:!disabled!:>Pi|HE8|NT1|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>1:!disabled!:>Pi|HE9|NT2|Kp-100000.00|Ki0.006500|I_MAX1.000000|TSET27.50|PI_PW5.000|i0.000000|pi0.000|err0.00|
+>2:>Pi|HE10|NT3|Kp3.30|Ki0.032200|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.299946|pi0.701|err0.12|
+>3:>Pi|HE11|NT4|Kp0.70|Ki0.001400|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.119151|pi0.297|err0.25|
+>4:>Pi|HE12|NT8|Kp1.00|Ki0.001900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.106394|pi0.302|err0.20|
+>5:>Pi|HE13|NT7|Kp1.91|Ki0.006900|I_MAX1.000000|TSET27.50|PI_PW1.000|i0.235083|pi0.417|err0.10|
+   saved 1 packages
+  recieved packet ID:"419"   saved 1 packages
+  recieved packet ID:"420"   saved 1 packages
+  recieved packet ID:"421"   saved 1 packages
+  recieved packet ID:"422"   saved 1 packages
+  recieved packet ID:"423"   saved 1 packages
+  recieved packet ID:"424"   saved 1 packages
+  recieved packet ID:"425"   saved 1 packages
+  recieved packet ID:"426"   saved 1 packages
+  recieved packet ID:"427"   saved 1 packages
+  recieved packet ID:"428"   saved 1 packages
+  recieved packet ID:"429"   saved 1 packages
+  recieved packet ID:"430"   saved 1 packages
+  recieved packet ID:"431"   saved 1 packages
+  recieved packet ID:"432"   saved 1 packages
+  recieved packet ID:"433"   saved 1 packages
+  recieved packet ID:"434"   saved 1 packages
+  recieved packet ID:"435"   saved 1 packages
+  recieved packet ID:"436"   saved 1 packages
+  recieved packet ID:"437"   saved 1 packages
+  recieved packet ID:"438"   saved 1 packages
+  recieved packet ID:"439"   saved 1 packages
+  recieved packet ID:"440"   saved 1 packages
+  recieved packet ID:"441"   saved 1 packages
+  recieved packet ID:"442"   saved 1 packages
+  recieved packet ID:"443"   saved 1 packages
+  recieved packet ID:"444"   saved 1 packages
+  recieved packet ID:"445"   saved 1 packages
+  recieved packet ID:"446"   saved 1 packages
+  recieved packet ID:"447"   saved 1 packages
+  recieved packet ID:"448"   saved 1 packages
+  recieved packet ID:"449"   saved 1 packages
+  recieved packet ID:"450"   saved 1 packages
+  recieved packet ID:"451"   saved 1 packages
+  recieved packet ID:"452"   saved 1 packages
+  recieved packet ID:"453"   saved 1 packages
+  recieved packet ID:"454"   saved 1 packages
+  recieved packet ID:"455"   saved 1 packages
+  recieved packet ID:"456"   saved 1 packages
+  recieved packet ID:"457"   saved 1 packages
+  recieved packet ID:"458"   saved 1 packages
+  recieved packet ID:"459"   saved 1 packages
+  recieved packet ID:"460"   saved 1 packages
+  recieved packet ID:"461"   saved 1 packages
+  recieved packet ID:"462"   saved 1 packages
+  recieved packet ID:"463"   saved 1 packages
+  recieved packet ID:"464"   saved 1 packages
+  recieved packet ID:"465"   saved 1 packages
+  recieved packet ID:"466"   saved 1 packages
+  recieved packet ID:"467"   saved 1 packages
+  recieved packet ID:"468"   saved 1 packages
+  recieved packet ID:"469"   saved 1 packages
+  recieved packet ID:"470"   saved 1 packages
+  recieved packet ID:"471"   saved 1 packages
+  recieved packet ID:"472"   saved 1 packages
+  recieved packet ID:"473"   saved 1 packages
+  recieved packet ID:"474"   saved 1 packages
+  recieved packet ID:"475"   saved 1 packages
+  recieved packet ID:"476"   saved 1 packages
+  recieved packet ID:"477"   saved 1 packages
+  recieved packet ID:"478"   saved 1 packages
+  recieved packet ID:"479"   saved 1 packages
+  recieved packet ID:"480"   saved 1 packages
+  recieved packet ID:"481"   saved 1 packages
+  recieved packet ID:"482"   saved 1 packages
+  recieved packet ID:"483"   saved 1 packages
+  recieved packet ID:"484"   saved 1 packages
+  recieved packet ID:"485"   saved 1 packages
+  recieved packet ID:"486"   saved 1 packages
+  recieved packet ID:"487"   saved 1 packages
+  recieved packet ID:"488"   saved 1 packages
+  recieved packet ID:"489"   saved 1 packages
+  recieved packet ID:"490"   saved 1 packages
+  recieved packet ID:"491"   saved 1 packages
+  recieved packet ID:"492"   saved 1 packages
+  recieved packet ID:"493"   saved 1 packages
+  recieved packet ID:"494"   saved 1 packages
+  recieved packet ID:"495"   saved 1 packages
+  recieved packet ID:"496"   saved 1 packages
+  recieved packet ID:"497"   saved 1 packages
+  recieved packet ID:"498"   saved 1 packages
+  recieved packet ID:"499"   saved 1 packages
+  recieved packet ID:"500"   saved 1 packages
+  recieved packet ID:"501"   saved 1 packages
+  recieved packet ID:"502"   saved 1 packages
+  recieved packet ID:"503"   saved 1 packages
+  recieved packet ID:"504"   saved 1 packages
+  recieved packet ID:"505"   saved 1 packages
+  recieved packet ID:"506"   saved 1 packages
+  recieved packet ID:"507"   saved 1 packages
+  recieved packet ID:"508"   saved 1 packages
+  recieved packet ID:"509"   saved 1 packages
+  recieved packet ID:"510"   saved 1 packages
+  recieved packet ID:"511"   saved 1 packages
+  recieved packet ID:"512"   saved 1 packages
+  recieved packet ID:"513"   saved 1 packages
+  recieved packet ID:"514"   saved 1 packages
+  recieved packet ID:"515"   saved 1 packages
+  recieved packet ID:"516"   saved 1 packages
+  recieved packet ID:"517"   saved 1 packages
+  recieved packet ID:"518"   saved 1 packages
+  recieved packet ID:"519"   saved 1 packages
+  recieved packet ID:"520"   saved 1 packages
+  recieved packet ID:"521"   saved 1 packages
+  recieved packet ID:"522"   saved 1 packages
+  recieved packet ID:"523"   saved 1 packages
+  recieved packet ID:"524"   saved 1 packages
+  recieved packet ID:"525"   saved 1 packages
+  recieved packet ID:"526"   saved 1 packages
+  recieved packet ID:"527"   saved 1 packages
+  recieved packet ID:"528"   saved 1 packages
+  recieved packet ID:"529"   saved 1 packages
+  recieved packet ID:"530"   saved 1 packages
+  recieved packet ID:"531"   saved 1 packages
+  recieved packet ID:"532"   saved 1 packages
+  recieved packet ID:"533"   saved 1 packages
+  recieved packet ID:"534"   saved 1 packages
+  recieved packet ID:"535"   saved 1 packages
+  recieved packet ID:"536"   saved 1 packages
+  recieved packet ID:"537"   saved 1 packages
+  recieved packet ID:"538"   saved 1 packages
+  recieved packet ID:"539"   saved 1 packages
+  recieved packet ID:"540"   saved 1 packages
+  recieved packet ID:"541"   saved 1 packages
+  recieved packet ID:"542"   saved 1 packages
+  recieved packet ID:"543"   saved 1 packages
+  recieved packet ID:"544"   saved 1 packages
+  recieved packet ID:"545"   saved 1 packages
+  recieved packet ID:"546"   saved 1 packages
+  recieved packet ID:"547"   saved 1 packages
+  recieved packet ID:"548"   saved 1 packages
+  recieved packet ID:"549"   saved 1 packages
+  recieved packet ID:"550"   saved 1 packages
+  recieved packet ID:"551"   saved 1 packages
+  recieved packet ID:"552"   saved 1 packages
+  recieved packet ID:"553"   saved 1 packages
+  recieved packet ID:"554"   saved 1 packages
+  recieved packet ID:"555"   saved 1 packages
+  recieved packet ID:"556"   saved 1 packages
+  recieved packet ID:"557"   saved 1 packages
+  recieved packet ID:"558"   saved 1 packages
+  recieved packet ID:"559"   saved 1 packages
+  recieved packet ID:"560"   saved 1 packages
+  recieved packet ID:"561"   saved 1 packages
+  recieved packet ID:"562"   saved 1 packages
+  recieved packet ID:"563"   saved 1 packages
+  recieved packet ID:"564"   saved 1 packages
+  recieved packet ID:"565"   saved 1 packages
+  recieved packet ID:"566"   saved 1 packages
+  recieved packet ID:"567"   saved 1 packages
+  recieved packet ID:"568"   saved 1 packages
+  recieved packet ID:"569"   saved 1 packages
+  recieved packet ID:"570"   saved 1 packages
+  recieved packet ID:"571"   saved 1 packages
+  recieved packet ID:"572"   saved 1 packages
+  recieved packet ID:"573"   saved 1 packages
+  recieved packet ID:"574"   saved 1 packages
+  recieved packet ID:"575"   saved 1 packages
+  recieved packet ID:"576"   saved 1 packages
+  recieved packet ID:"577"   saved 1 packages
+  recieved packet ID:"578"   saved 1 packages
+  recieved packet ID:"579"   saved 1 packages
+  recieved packet ID:"580"   saved 1 packages
+  recieved packet ID:"581"   saved 1 packages
+  recieved packet ID:"582"   saved 1 packages
+  recieved packet ID:"583"   saved 1 packages
+  recieved packet ID:"584"   saved 1 packages
+  recieved packet ID:"585"   saved 1 packages
+  recieved packet ID:"586"   saved 1 packages
+  recieved packet ID:"587"   saved 1 packages
+  recieved packet ID:"588"   saved 1 packages
+  recieved packet ID:"589"   saved 1 packages
+  recieved packet ID:"590"   saved 1 packages
+  recieved packet ID:"591"   saved 1 packages
+  recieved packet ID:"592"   saved 1 packages
+  recieved packet ID:"593"   saved 1 packages
+  recieved packet ID:"594"   saved 1 packages
+  recieved packet ID:"595"   saved 1 packages
+  recieved packet ID:"596"   saved 1 packages
+  recieved packet ID:"597"   saved 1 packages
+  recieved packet ID:"598"   saved 1 packages
+  recieved packet ID:"599"   saved 1 packages
+  recieved packet ID:"600"   saved 1 packages
+  recieved packet ID:"601"   saved 1 packages
+  recieved packet ID:"602"   saved 1 packages
+  recieved packet ID:"603"   saved 1 packages
+  recieved packet ID:"604"   saved 1 packages
+  recieved packet ID:"605"   saved 1 packages
+  recieved packet ID:"606"   saved 1 packages
+  recieved packet ID:"607"   saved 1 packages
+  recieved packet ID:"608"   saved 1 packages
+  recieved packet ID:"609"   saved 1 packages
+  recieved packet ID:"610"   saved 1 packages
+  recieved packet ID:"611"   saved 1 packages
+  recieved packet ID:"612"   saved 1 packages
+  recieved packet ID:"613"   saved 1 packages
+  recieved packet ID:"614"   saved 1 packages
+  recieved packet ID:"615"   saved 1 packages
+  recieved packet ID:"616"   saved 1 packages
+  recieved packet ID:"617"   saved 1 packages
+  recieved packet ID:"618"   saved 1 packages
+  recieved packet ID:"619"   saved 1 packages
+  recieved packet ID:"620"   saved 1 packages
+  recieved packet ID:"621"   saved 1 packages
+  recieved packet ID:"622"   saved 1 packages
+  recieved packet ID:"623"   saved 1 packages
+  recieved packet ID:"624"   saved 1 packages
+  recieved packet ID:"625"   saved 1 packages
+  recieved packet ID:"626"   saved 1 packages
+  recieved packet ID:"627"   saved 1 packages
+  recieved packet ID:"628"   saved 1 packages
+  recieved packet ID:"629"   saved 1 packages
+  recieved packet ID:"630"   saved 1 packages
+  recieved packet ID:"631"   saved 1 packages
+  recieved packet ID:"632"   saved 1 packages
+  recieved packet ID:"633"   saved 1 packages
+  recieved packet ID:"634"   saved 1 packages
+  recieved packet ID:"635"   saved 1 packages
+  recieved packet ID:"636"   saved 1 packages
+  recieved packet ID:"637"   saved 1 packages
+  recieved packet ID:"638"   saved 1 packages
+  recieved packet ID:"639"   saved 1 packages
+  recieved packet ID:"640"   saved 1 packages
+  recieved packet ID:"641"   saved 1 packages
+  recieved packet ID:"642"   saved 1 packages
+  recieved packet ID:"643"   saved 1 packages
+  recieved packet ID:"644"   saved 1 packages
+  recieved packet ID:"645"   saved 1 packages
+  recieved packet ID:"646"   saved 1 packages
+  recieved packet ID:"647"   saved 1 packages
+  recieved packet ID:"648"   saved 1 packages
+  recieved packet ID:"649"   saved 1 packages
+  recieved packet ID:"650"   saved 1 packages
+  recieved packet ID:"651"   saved 1 packages
+  recieved packet ID:"652"   saved 1 packages
+  recieved packet ID:"653"   saved 1 packages
+  recieved packet ID:"654"   saved 1 packages
+  recieved packet ID:"655"   saved 1 packages
+  recieved packet ID:"656"   saved 1 packages
+  recieved packet ID:"657"   saved 1 packages
+  recieved packet ID:"658"   saved 1 packages
+  recieved packet ID:"659"   saved 1 packages
+  recieved packet ID:"660"   saved 1 packages
+  recieved packet ID:"661"   saved 1 packages
+  recieved packet ID:"662"   saved 1 packages
+  recieved packet ID:"663"   saved 1 packages
+  recieved packet ID:"664"   saved 1 packages
+  recieved packet ID:"665"   saved 1 packages
+  recieved packet ID:"666"   saved 1 packages
+  recieved packet ID:"667"   saved 1 packages
+  recieved packet ID:"668"   saved 1 packages
+  recieved packet ID:"669"   saved 1 packages
+  recieved packet ID:"670"   saved 1 packages
+  recieved packet ID:"671"   saved 1 packages
+  recieved packet ID:"672"   saved 1 packages
+  recieved packet ID:"673"   saved 1 packages
+  recieved packet ID:"674"   saved 1 packages
+  recieved packet ID:"675"   saved 1 packages
+  recieved packet ID:"676"   saved 1 packages
+  recieved packet ID:"677"   saved 1 packages
+  recieved packet ID:"678"   saved 1 packages
+  recieved packet ID:"679"   saved 1 packages
+  recieved packet ID:"680"   saved 1 packages
+  recieved packet ID:"681"   saved 1 packages
+  recieved packet ID:"682"   saved 1 packages
+  recieved packet ID:"683"   saved 1 packages
+  recieved packet ID:"684"   saved 1 packages
+  recieved packet ID:"685"   saved 1 packages
+  recieved packet ID:"686"   saved 1 packages
+  recieved packet ID:"687"   saved 1 packages
+  recieved packet ID:"688"   saved 1 packages
+  recieved packet ID:"689"   saved 1 packages
+  recieved packet ID:"690"   saved 1 packages
+  recieved packet ID:"691"   saved 1 packages
+  recieved packet ID:"692"   saved 1 packages
+  recieved packet ID:"693"   saved 1 packages
+  recieved packet ID:"694"   saved 1 packages
+  recieved packet ID:"695"   saved 1 packages
+  recieved packet ID:"696"   saved 1 packages
+  recieved packet ID:"697"   saved 1 packages
+  recieved packet ID:"698"   saved 1 packages
+  recieved packet ID:"699"   saved 1 packages
+  recieved packet ID:"700"   saved 1 packages
+  recieved packet ID:"701"   saved 1 packages
+  recieved packet ID:"702"   saved 1 packages
+  recieved packet ID:"703"   saved 1 packages
+  recieved packet ID:"704"   saved 1 packages
+  recieved packet ID:"705"   saved 1 packages
+  recieved packet ID:"706"   saved 1 packages
+  recieved packet ID:"707"   saved 1 packages
+  recieved packet ID:"708"   saved 1 packages
+  recieved packet ID:"709"   saved 1 packages
+  recieved packet ID:"710"   saved 1 packages
+  recieved packet ID:"711"   saved 1 packages
+  recieved packet ID:"712"   saved 1 packages
+  recieved packet ID:"713"   saved 1 packages
+  recieved packet ID:"714"   saved 1 packages
+  recieved packet ID:"715"   saved 1 packages
+  recieved packet ID:"716"   saved 1 packages
+  recieved packet ID:"717"   saved 1 packages
+  recieved packet ID:"718"   saved 1 packages
+  recieved packet ID:"719"   saved 1 packages
+  recieved packet ID:"720"   saved 1 packages
+  recieved packet ID:"721"   saved 1 packages
+  recieved packet ID:"722"   saved 1 packages
+  recieved packet ID:"723"   saved 1 packages
+  recieved packet ID:"724"   saved 1 packages
+  recieved packet ID:"725"   saved 1 packages
+  recieved packet ID:"726"   saved 1 packages
+  recieved packet ID:"727"   saved 1 packages
+  recieved packet ID:"728"   saved 1 packages
+  recieved packet ID:"729"   saved 1 packages
+  recieved packet ID:"730"   saved 1 packages
+  recieved packet ID:"731"   saved 1 packages
+  recieved packet ID:"732"   saved 1 packages
+  recieved packet ID:"733"   saved 1 packages
+  recieved packet ID:"734"   saved 1 packages
+  recieved packet ID:"735"   saved 1 packages
+  recieved packet ID:"736"   saved 1 packages
+  recieved packet ID:"737"   saved 1 packages
+  recieved packet ID:"738"   saved 1 packages
+  recieved packet ID:"739"   saved 1 packages
+  recieved packet ID:"740"   saved 1 packages
+  recieved packet ID:"741"   saved 1 packages
+  recieved packet ID:"742"   saved 1 packages
+  recieved packet ID:"743"   saved 1 packages
+  recieved packet ID:"744"   saved 1 packages
+  recieved packet ID:"745"   saved 1 packages
+  recieved packet ID:"746"   saved 1 packages
+  recieved packet ID:"747"   saved 1 packages
+  recieved packet ID:"748"   saved 1 packages
+  recieved packet ID:"749"   saved 1 packages
+  recieved packet ID:"750"   saved 1 packages
+  recieved packet ID:"751"   saved 1 packages
+  recieved packet ID:"752"   saved 1 packages
+  recieved packet ID:"753"   saved 1 packages
+  recieved packet ID:"754"   saved 1 packages
+  recieved packet ID:"755"   saved 1 packages
+  recieved packet ID:"756"   saved 1 packages
+  recieved packet ID:"757"   saved 1 packages
+  recieved packet ID:"758"   saved 1 packages
+  recieved packet ID:"759"   saved 1 packages
+  recieved packet ID:"760"   saved 1 packages
+  recieved packet ID:"761"   saved 1 packages
+  recieved packet ID:"762"   saved 1 packages
+  recieved packet ID:"763"   saved 1 packages
+  recieved packet ID:"764"   saved 1 packages
+  recieved packet ID:"765"   saved 1 packages
+  recieved packet ID:"766"   saved 1 packages
+  recieved packet ID:"767"   saved 1 packages
+  recieved packet ID:"768"   saved 1 packages
+  recieved packet ID:"769"   saved 1 packages
+  recieved packet ID:"770"   saved 1 packages
+  recieved packet ID:"771"   saved 1 packages
+  recieved packet ID:"772"   saved 1 packages
+  recieved packet ID:"773"   saved 1 packages
+  recieved packet ID:"774"   saved 1 packages
+  recieved packet ID:"775"   saved 1 packages
+  recieved packet ID:"776"   saved 1 packages
+  recieved packet ID:"777"   saved 1 packages
+  recieved packet ID:"778"   saved 1 packages
+  recieved packet ID:"779"   saved 1 packages
+  recieved packet ID:"780"   saved 1 packages
+  recieved packet ID:"781"   saved 1 packages
+  recieved packet ID:"782"   saved 1 packages
+  recieved packet ID:"783"   saved 1 packages
+  recieved packet ID:"784"   saved 1 packages
+  recieved packet ID:"785"   saved 1 packages
+  recieved packet ID:"786"   saved 1 packages
+  recieved packet ID:"787"   saved 1 packages
+  recieved packet ID:"788"   saved 1 packages
+  recieved packet ID:"789"   saved 1 packages
+  recieved packet ID:"790"   saved 1 packages
+  recieved packet ID:"791"   saved 1 packages
+  recieved packet ID:"792"   saved 1 packages
+  recieved packet ID:"793"   saved 1 packages
+  recieved packet ID:"794"   saved 1 packages
+  recieved packet ID:"795"   saved 1 packages
+  recieved packet ID:"796"   saved 1 packages
+  recieved packet ID:"797"   saved 1 packages
+  recieved packet ID:"798"   saved 1 packages
+  recieved packet ID:"799"   saved 1 packages
+  recieved packet ID:"800"   saved 1 packages
+  recieved packet ID:"801"   saved 1 packages
+  recieved packet ID:"802"   saved 1 packages
+  recieved packet ID:"803"   saved 1 packages
+  recieved packet ID:"804"   saved 1 packages
+  recieved packet ID:"805"   saved 1 packages
+  recieved packet ID:"806"   saved 1 packages
+  recieved packet ID:"807"   saved 1 packages
+  recieved packet ID:"808"   saved 1 packages
+  recieved packet ID:"809"   saved 1 packages
+  recieved packet ID:"810"   saved 1 packages
+  recieved packet ID:"811"   saved 1 packages
+  recieved packet ID:"812"   saved 1 packages
+  recieved packet ID:"813"   saved 1 packages
+  recieved packet ID:"814"   saved 1 packages
+  recieved packet ID:"815"   saved 1 packages
+  recieved packet ID:"816"   saved 1 packages
+  recieved packet ID:"817"   saved 1 packages
+  recieved packet ID:"818"   saved 1 packages
+  recieved packet ID:"819"   saved 1 packages
+  recieved packet ID:"820"   saved 1 packages
+  recieved packet ID:"821"   saved 1 packages
+  recieved packet ID:"822"   saved 1 packages
+  recieved packet ID:"823"   saved 1 packages
+  recieved packet ID:"824"   saved 1 packages
+  recieved packet ID:"825"   saved 1 packages
+  recieved packet ID:"826"   saved 1 packages
+  recieved packet ID:"827"   saved 1 packages
+  recieved packet ID:"828"   saved 1 packages
+  recieved packet ID:"829"   saved 1 packages
+  recieved packet ID:"830"   saved 1 packages
+  recieved packet ID:"831"   saved 1 packages
+  recieved packet ID:"832"   saved 1 packages
+  recieved packet ID:"833"   saved 1 packages
+  recieved packet ID:"834"   saved 1 packages
+  recieved packet ID:"835"   saved 1 packages
+  recieved packet ID:"836"   saved 1 packages
+  recieved packet ID:"837"   saved 1 packages
+  recieved packet ID:"838"   saved 1 packages
+  recieved packet ID:"839"   saved 1 packages
+  recieved packet ID:"840"   saved 1 packages
+  recieved packet ID:"841"   saved 1 packages
+  recieved packet ID:"842"   saved 1 packages
+  recieved packet ID:"843"   saved 1 packages
+  recieved packet ID:"844"   saved 1 packages
+  recieved packet ID:"845"   saved 1 packages
+  recieved packet ID:"846"   saved 1 packages
+  recieved packet ID:"847"   saved 1 packages
+  recieved packet ID:"848"   saved 1 packages
+  recieved packet ID:"849"   saved 1 packages
+  recieved packet ID:"850"   saved 1 packages
+  recieved packet ID:"851"   saved 1 packages
+  recieved packet ID:"852"   saved 1 packages
+  recieved packet ID:"853"   saved 1 packages
+  recieved packet ID:"854"   saved 1 packages
+  recieved packet ID:"855"   saved 1 packages
+  recieved packet ID:"856"   saved 1 packages
+  recieved packet ID:"857"   saved 1 packages
+  recieved packet ID:"858"   saved 1 packages
+  recieved packet ID:"859"   saved 1 packages
+  recieved packet ID:"860"   saved 1 packages
+  recieved packet ID:"861"   saved 1 packages
+  recieved packet ID:"862"   saved 1 packages
+  recieved packet ID:"863"   saved 1 packages
+  recieved packet ID:"864"   saved 1 packages
+  recieved packet ID:"865"   saved 1 packages
+  recieved packet ID:"866"   saved 1 packages
+  recieved packet ID:"867"   saved 1 packages
+  recieved packet ID:"868"   saved 1 packages
+  recieved packet ID:"869"   saved 1 packages
+  recieved packet ID:"870"   saved 1 packages
+  recieved packet ID:"871"   saved 1 packages
+  recieved packet ID:"872"   saved 1 packages
+  recieved packet ID:"873"   saved 1 packages
+  Client timed out
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49154)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49155)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49156)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49157)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49158)
+><sd_init>
+SD init succesfulll
+  .-')       _ (`-.
+ ( OO ).    ( (OO  )
+(_)---\_)  _.`     \   ,-.-')     .-----.    ,--.   ,--.
+/    _ |  (__...--''   |  |OO)   '  .--./     \  `.'  /
+\  :` `.   |  /  | |   |  |  \   |  |('-.   .-')     /
+ '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \   /
+.-._)   \  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\_
+\       /  |  |      (_|  |    (_'  '--'\   `-./  /.__)
+ `-----'   `--'        `--'       `-----'     `--'
+>>[MotherboardV4.ino] is running on Chip 536885109 Core 0 |Freq 133.0 MHz|nResets 458 <<
+"/?" for help
+Firmware flight v1.1
+>oxy_serial_setup - warnuptime of 3min not reached -oxy setup was succesfull
+  recieved packet ID:"0"   saved 1 packages
+  recieved packet ID:"1"   saved 1 packages
+  recieved packet ID:"2"   saved 1 packages
+  recieved packet ID:"3"   saved 1 packages
+  recieved packet ID:"4"   saved 1 packages
+  recieved packet ID:"5"   saved 1 packages
+  recieved packet ID:"6"   saved 1 packages
+  recieved packet ID:"7"   saved 1 packages
+  recieved packet ID:"8"   saved 1 packages
+  recieved packet ID:"9"   saved 1 packages
+  recieved packet ID:"10"   saved 1 packages
+  recieved packet ID:"11"   saved 1 packages
+  recieved packet ID:"12"   saved 1 packages
+  recieved packet ID:"13"   saved 1 packages
+  recieved packet ID:"14"   saved 1 packages
+  recieved packet ID:"15"   saved 1 packages
+  recieved packet ID:"16"   saved 1 packages
+  recieved packet ID:"17"   saved 1 packages
+  recieved packet ID:"18"   saved 1 packages
+  recieved packet ID:"19"   saved 1 packages
+  recieved packet ID:"20"   saved 1 packages
+  recieved packet ID:"21"   saved 1 packages
+  recieved packet ID:"22"   saved 1 packages
+  recieved packet ID:"23"   saved 1 packages
+  recieved packet ID:"24"   saved 1 packages
+  recieved packet ID:"25"   saved 1 packages
+  recieved packet ID:"26"   saved 1 packages
+  recieved packet ID:"27"   saved 1 packages
+  recieved packet ID:"28"   saved 1 packages
+  recieved packet ID:"29"   saved 1 packages
+  recieved packet ID:"30"   saved 1 packages
+  recieved packet ID:"31"   saved 1 packages
+  recieved packet ID:"32"   saved 1 packages
+  recieved packet ID:"33"   saved 1 packages
+  recieved packet ID:"34"   saved 1 packages
+  recieved packet ID:"35"   saved 1 packages
+  recieved packet ID:"36"   saved 1 packages
+  recieved packet ID:"37"   saved 1 packages
+  recieved packet ID:"38"   saved 1 packages
+  recieved packet ID:"39"   saved 1 packages
+  recieved packet ID:"40"   saved 1 packages
+  recieved packet ID:"41"   saved 1 packages
+  recieved packet ID:"42"   saved 1 packages
+  recieved packet ID:"43"   saved 1 packages
+  recieved packet ID:"44"   saved 1 packages
+  recieved packet ID:"45"   saved 1 packages
+  recieved packet ID:"46"   saved 1 packages
+  recieved packet ID:"47"   saved 1 packages
+  recieved packet ID:"48"   saved 1 packages
+  recieved packet ID:"49"   saved 1 packages
+  recieved packet ID:"50"   saved 1 packages
+  recieved packet ID:"51"   saved 1 packages
+  recieved packet ID:"52"   saved 1 packages
+  recieved packet ID:"53"   saved 1 packages
+  recieved packet ID:"54"   saved 1 packages
+  recieved packet ID:"55"   saved 1 packages
+  recieved packet ID:"56"   saved 1 packages
+  recieved packet ID:"57"   saved 1 packages
+  recieved packet ID:"58"   saved 1 packages
+  recieved packet ID:"59"   saved 1 packages
+  recieved packet ID:"60"   saved 1 packages
+  recieved packet ID:"61"   saved 1 packages
+  recieved packet ID:"62"   saved 1 packages
+  recieved packet ID:"63"   saved 1 packages
+  recieved packet ID:"64"   saved 1 packages
+  recieved packet ID:"65"   saved 1 packages
+  recieved packet ID:"66"   saved 1 packages
+  recieved packet ID:"67"   saved 1 packages
+  recieved packet ID:"68"   saved 1 packages
+  recieved packet ID:"69"   saved 1 packages
+  recieved packet ID:"70"   saved 1 packages
+  recieved packet ID:"71"   saved 1 packages
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49159)
+<sd_init>
+SD init succesfulll
+  .-')       _ (`-.
+ ( OO ).    ( (OO  )
+(_)---\_)  _.`     \   ,-.-')     .-----.    ,--.   ,--.
+/    _ |  (__...--''   |  |OO)   '  .--./     \  `.'  /
+\  :` `.   |  /  | |   |  |  \   |  |('-.   .-')     /
+ '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \   /
+.-._)   \  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\_
+\       /  |  |      (_|  |    (_'  '--'\   `-./  /.__)
+ `-----'   `--'        `--'       `-----'     `--'
+>>[MotherboardV4.ino] is running on Chip 536885109 Core 0 |Freq 133.0 MHz|nResets 460 <<
+"/?" for help
+Firmware flight v1.1
+>oxy_serial_setup - warnuptime of 3min not reached -oxy setup was succesfull
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49160)
+<sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49161)
+<sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49162)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49154)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49155)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49156)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49157)
+><sd_init>
+SD init succesfulll
+  .-')       _ (`-.
+ ( OO ).    ( (OO  )
+(_)---\_)  _.`     \   ,-.-')     .-----.    ,--.   ,--.
+/    _ |  (__...--''   |  |OO)   '  .--./     \  `.'  /
+\  :` `.   |  /  | |   |  |  \   |  |('-.   .-')     /
+ '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \   /
+.-._)   \  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\_
+\       /  |  |      (_|  |    (_'  '--'\   `-./  /.__)
+ `-----'   `--'        `--'       `-----'     `--'
+>>[MotherboardV4.ino] is running on Chip 536885109 Core 0 |Freq 133.0 MHz|nResets 476 <<
+"/?" for help
+Firmware flight v1.1
+>oxy_serial_setup - warnuptime of 3min not reached -oxy setup was succesfull
+  recieved packet ID:"0"   saved 1 packages
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49158)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49159)
+<sd_init>
+SD init succesfulll
+  .-')       _ (`-.
+ ( OO ).    ( (OO  )
+(_)---\_)  _.`     \   ,-.-')     .-----.    ,--.   ,--.
+/    _ |  (__...--''   |  |OO)   '  .--./     \  `.'  /
+\  :` `.   |  /  | |   |  |  \   |  |('-.   .-')     /
+ '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \   /
+.-._)   \  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\_
+\       /  |  |      (_|  |    (_'  '--'\   `-./  /.__)
+ `-----'   `--'        `--'       `-----'     `--'
+>>[MotherboardV4.ino] is running on Chip 536885109 Core 0 |Freq 133.0 MHz|nResets 480 <<
+"/?" for help
+Firmware flight v1.1
+>oxy_serial_setup - warnuptime of 3min not reached -oxy setup was succesfull
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49160)
+<sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49161)
+<sd_init>
+SD init succesfulll
+  .-')       _ (`-.
+ ( OO ).    ( (OO  )
+(_)---\_)  _.`     \   ,-.-')     .-----.    ,--.   ,--.
+/    _ |  (__...--''   |  |OO)   '  .--./     \  `.'  /
+\  :` `.   |  /  | |   |  |  \   |  |('-.   .-')     /
+ '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \   /
+.-._)   \  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\_
+\       /  |  |      (_|  |    (_'  '--'\   `-./  /.__)
+ `-----'   `--'        `--'       `-----'     `--'
+>>[MotherboardV4.ino] is running on Chip 536885109 Core 0 |Freq 133.0 MHz|nResets 484 <<
+"/?" for help
+Firmware flight v1.1
+>oxy_serial_setup - warnuptime of 3min not reached -oxy setup was succesfull
+  recieved packet ID:"0"   saved 1 packages
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49162)
+  Client timed out
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+  recieved packet ID:"842226459"  recieved packet ID:"538991648"  recieved packet ID:"1668641568"  recieved packet ID:"0"b%P;?   saved 4 packages
+  recieved packet ID:"2"   saved 1 packages
+  recieved packet ID:"3"   saved 1 packages
+  recieved packet ID:"4"   saved 1 packages
+  recieved packet ID:"5"   saved 1 packages
+  recieved packet ID:"6"   saved 1 packages
+  recieved packet ID:"7"   saved 1 packages
+  recieved packet ID:"8"   saved 1 packages
+  recieved packet ID:"9"   saved 1 packages
+  recieved packet ID:"10"   saved 1 packages
+  recieved packet ID:"11"   saved 1 packages
+  recieved packet ID:"12"   saved 1 packages
+  recieved packet ID:"13"   saved 1 packages
+  recieved packet ID:"14"   saved 1 packages
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49154)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49155)
+><sd_init>
+SD init succesfulll
+  .-')       _ (`-.
+ ( OO ).    ( (OO  )
+(_)---\_)  _.`     \   ,-.-')     .-----.    ,--.   ,--.
+/    _ |  (__...--''   |  |OO)   '  .--./     \  `.'  /
+\  :` `.   |  /  | |   |  |  \   |  |('-.   .-')     /
+ '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \   /
+.-._)   \  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\_
+\       /  |  |      (_|  |    (_'  '--'\   `-./  /.__)
+ `-----'   `--'        `--'       `-----'     `--'
+>>[MotherboardV4.ino] is running on Chip 536885109 Core 0 |Freq 133.0 MHz|nResets 490 <<
+"/?" for help
+Firmware flight v1.1
+>oxy_serial_setup - warnuptime of 3min not reached -oxy setup was succesfull
+  recieved packet ID:"0"   saved 1 packages
+  Client timed out
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+  recieved packet ID:"842226459"  recieved packet ID:"538991648"  recieved packet ID:"1668641568"P;?   saved 3 packages
+  recieved packet ID:"1"   saved 1 packages
+  recieved packet ID:"2"   saved 1 packages
+  recieved packet ID:"3"   saved 1 packages
+  recieved packet ID:"4"   saved 1 packages
+  recieved packet ID:"5"   saved 1 packages
+  recieved packet ID:"6"   saved 1 packages
+  recieved packet ID:"7"   saved 1 packages
+  recieved packet ID:"8"   saved 1 packages
+  recieved packet ID:"9"   saved 1 packages
+  recieved packet ID:"10"   saved 1 packages
+  recieved packet ID:"11"   saved 1 packages
+  recieved packet ID:"12"   saved 1 packages
+  recieved packet ID:"13"   saved 1 packages
+  recieved packet ID:"14"   saved 1 packages
+  recieved packet ID:"15"   saved 1 packages
+  recieved packet ID:"16"   saved 1 packages
+  recieved packet ID:"17"   saved 1 packages
+  recieved packet ID:"18"   saved 1 packages
+  recieved packet ID:"19"   saved 1 packages
+  recieved packet ID:"20"   saved 1 packages
+  recieved packet ID:"21"   saved 1 packages
+  recieved packet ID:"22"   saved 1 packages
+  recieved packet ID:"23"   saved 1 packages
+  recieved packet ID:"24"   saved 1 packages
+  recieved packet ID:"25"   saved 1 packages
+  recieved packet ID:"26"   saved 1 packages
+  recieved packet ID:"27"   saved 1 packages
+  recieved packet ID:"28"   saved 1 packages
+  recieved packet ID:"29"   saved 1 packages
+  recieved packet ID:"30"   saved 1 packages
+  recieved packet ID:"31"   saved 1 packages
+  recieved packet ID:"32"   saved 1 packages
+  recieved packet ID:"33"   saved 1 packages
+  recieved packet ID:"34"   saved 1 packages
+  recieved packet ID:"35"   saved 1 packages
+  recieved packet ID:"36"   saved 1 packages
+  recieved packet ID:"37"   saved 1 packages
+  recieved packet ID:"38"   saved 1 packages
+  recieved packet ID:"39"   saved 1 packages
+  recieved packet ID:"40"   saved 1 packages
+  recieved packet ID:"41"   saved 1 packages
+  recieved packet ID:"42"   saved 1 packages
+  recieved packet ID:"43"   saved 1 packages
+  recieved packet ID:"44"   saved 1 packages
+  recieved packet ID:"45"   saved 1 packages
+  recieved packet ID:"46"   saved 1 packages
+  recieved packet ID:"47"   saved 1 packages
+  recieved packet ID:"48"   saved 1 packages
+  recieved packet ID:"49"   saved 1 packages
+  recieved packet ID:"50"   saved 1 packages
+  recieved packet ID:"51"   saved 1 packages
+  recieved packet ID:"52"   saved 1 packages
+  recieved packet ID:"53"   saved 1 packages
+  recieved packet ID:"54"   saved 1 packages
+  recieved packet ID:"55"   saved 1 packages
+  recieved packet ID:"56"   saved 1 packages
+  recieved packet ID:"57"   saved 1 packages
+  recieved packet ID:"58"   saved 1 packages
+  recieved packet ID:"59"   saved 1 packages
+  recieved packet ID:"60"   saved 1 packages
+  recieved packet ID:"61"   saved 1 packages
+  recieved packet ID:"62"   saved 1 packages
+  recieved packet ID:"63"   saved 1 packages
+  recieved packet ID:"64"   saved 1 packages
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49154)
+TCP_init_success
+><sd_init>
+SD init succesfulll
+  .-')       _ (`-.
+ ( OO ).    ( (OO  )
+(_)---\_)  _.`     \   ,-.-')     .-----.    ,--.   ,--.
+/    _ |  (__...--''   |  |OO)   '  .--./     \  `.'  /
+\  :` `.   |  /  | |   |  |  \   |  |('-.   .-')     /
+ '..`''.)  |  |_.' |   |  |(_/  /_) |OO  ) (OO  \   /
+.-._)   \  |  .___.'  ,|  |_.'  ||  |`-'|   |   /  /\_
+\       /  |  |      (_|  |    (_'  '--'\   `-./  /.__)
+ `-----'   `--'        `--'       `-----'     `--'
+>>[MotherboardV4.ino] is running on Chip 536885109 Core 0 |Freq 133.0 MHz|nResets 492 <<
+"/?" for help
+Firmware flight v1.1
+>oxy_serial_setup - warnuptime of 3min not reached -oxy setup was succesfull
+  recieved packet ID:"0"   saved 1 packages
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49155)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49156)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49157)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49158)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49159)
+<sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49160)
+<sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49161)
+<sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49162)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49154)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49155)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49156)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49157)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49158)
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49159)
+<sd_init>
+  Client timed out
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49154)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49155)
+><sd_init>
+  Client timed out
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49154)
+TCP_init_success
+><sd_init>
+  Client timed out
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+TCP_init_success
+><sd_init>
+
+Error Recieve Data: ConnectionResetError aka Stecker gezogen / uC Reset
+ Verbindung hergestellt von:('169.254.218.100', 49155)
+><sd_init>
+  Client timed out
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+TCP_init_success
+><sd_init>
+  Client timed out
+ Verbindung hergestellt von:('169.254.218.100', 49153)
+  Client timed out
+ waiting for a connection[...]
+ waiting for a connection[]
+<shutdown of server>
+ waiting for a connection[.] <Server down>
+ <shutting down Datalogger>
+ <Datalogger down>
+/r
+Verbunden mit der Datenbank
+ Saving bin to : ./rawdata[Sep-4-16-08-23].bin
+<<<<starting TCP server>>>>
+ip_adress: 169.254.218.4
+port: 8888
+time: Wed Sep  4 16:08:23 2024
+
+ Connnecting Socket...
+ waiting for a connection[..]
+ waiting for a connection[...]/s
+<shutdown of server>
+ waiting for a connection[] <Server down>
+ <shutting down Datalogger>
+ <Datalogger down>

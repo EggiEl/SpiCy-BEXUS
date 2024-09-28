@@ -29,12 +29,12 @@ struct packet *packet_create()
     a->timestampPacket = millis();
     a->power[0] = get_batvoltage();
     a->power[1] = get_current();
-    a->heaterPWM[0] = pi_probe0.heat;
-    a->heaterPWM[1] = pi_probe1.heat;
-    a->heaterPWM[2] = pi_probe2.heat;
-    a->heaterPWM[3] = pi_probe3.heat;
-    a->heaterPWM[4] = pi_probe4.heat;
-    a->heaterPWM[5] = pi_probe5.heat;
+    a->heaterPWM[0] = pi_probe0.pi_last;
+    a->heaterPWM[1] = pi_probe1.pi_last;
+    a->heaterPWM[2] = pi_probe2.pi_last;
+    a->heaterPWM[3] = pi_probe3.pi_last;
+    a->heaterPWM[4] = pi_probe4.pi_last;
+    a->heaterPWM[5] = pi_probe5.pi_last;
   }
   else
   {

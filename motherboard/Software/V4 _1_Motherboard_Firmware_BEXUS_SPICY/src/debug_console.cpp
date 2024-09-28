@@ -63,22 +63,26 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
     debugf_status("%s", F("<help>\n"));
     rp2040.wdt_reset();
     debugf_info("%s", F("/b|Returns Battery Voltage and current\n"));
+    rp2040.wdt_reset();
     debugf_info("%s", F("/s|Read out Status\n"));
     debugf_info("%s", F("/l|Sets the controller in sleep for ... ms.\n"));
     rp2040.wdt_reset();
     debugf_info("%s", F("/r|Reboots. if followed by a 1 reboots in Boot Mode\n"));
     debugf_info("%s", F("/m|Read out Memory Info\n"));
+    rp2040.wdt_reset();
     debugf_info("%s", F("/h x y| set heater pin x at percent y. If x == -1 is given\n"));
     debugf_info("%s", F("        will return PWM status of all pi-controlled heaters.\n"));
     debugf_info("%s", F("/i|Scans for I2C devices\n"));
     rp2040.wdt_reset();
     debugf_info("%s", F("/f|Changes the analogWrite frequency.\n"));
     debugf_info("%s", F("   For heater, run one heating command and change then.\n"));
+    rp2040.wdt_reset();
     debugf_info("%s", F("/d|Check connected peripherals\n"));
     debugf_info("%s", F("/p|Sends a test packet over LAN\n"));
     rp2040.wdt_reset();
     debugf_info("%s", F("/w|Sets Watchdog to ... ms. Can't be disabled until reboot.\n"));
     debugf_info("%s", F("/t|Returns temperature value. 0-6 for external probes, 7 for uC one, -1 for all of them\n"));
+    rp2040.wdt_reset();
     debugf_info("%s", F("/x|Prints barometer temperature and pressure\n"));
     debugf_info("%s", F("/o|Starts console to talk to PyroSience FD-OEM Oxygen Module\n"));
     rp2040.wdt_reset();
@@ -86,15 +90,18 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
     debugf_info("%s", F("/q|Shut down microcontroller\n"));
     debugf_info("%s", F("/c|[probe][kp] [ki] [imax] sets PI controller gain values.\n"));
     rp2040.wdt_reset();
-    debugf_info("%s", F("  Set [kp] == -1 to print PI controller\n"));
+    debugf_info("%s", F("  Set [kp] == -2 to print PI controller\n"));
     debugf_info("%s", F("  and [kp] == -100000.0 to disable and control the heater manually\n"));
+    rp2040.wdt_reset();
+    debugf_info("%s", F("/e|[probe][SetTemp][PiMaxPower] sets even more PI controller values.\n"));
+    debugf_info("%s", F("/g|prints all PI controllers.\n"));
     debugf_info("%s", F("/u|Starts an over-the-air OTA update\n"));
     rp2040.wdt_reset();
     break;
   }
   case 'b':
   {
-    debugf_status("BatteryVoltage: %.4f V| Current: %.4f mA, %.2f A\n", get_batvoltage(), get_current() * 1000, get_current());
+    debugf_status("V_bat: %.4f V| I_bat: %.4f mA, %.2f A\n", get_batvoltage(), get_current() * 1000, get_current());
     break;
   }
   case 's':
@@ -107,9 +114,11 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   {
     if (param1 == 1)
     {
+#if DEBUG_MODE == 1
       debugf_magenta("<Reboot in Boot Mode>\n");
-      debugf_error("disabled do to danger of loosing controll midflight\n");
-      // rp2040.rebootToBootloader();
+      rp2040.rebootToBootloader();
+#endif
+      debugf_error("disabled doe to danger of loosing controll midflight\n");
       break;
     }
     else
@@ -121,6 +130,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   }
   case 'l':
   {
+#if DEBUG_MODE == 1
     rp2040.idleOtherCore();
     debugf_status("RP2040 sleepy for %.2fs.", param1 / 1000.0);
     // uint64_t microseconds = (uint64_t)buffer * 1000;
@@ -139,6 +149,7 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
     delay(param1);
     debugf("Awake Again\nn");
     rp2040.resumeOtherCore();
+#endif
     break;
   }
   case 'm':
@@ -150,8 +161,8 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   {
     if (param1 == -1)
     {
-      debugf_info("heating status of pi controller: \
-      p0:%f p1:%f p2:%f p3:%f p4:%f p5:%f \n",
+      debugf_info("heating status of pi controller:\n");
+      debugf_info("p0:%f p1:%f p2:%f p3:%f p4:%f p5:%f \n",
                   pi_probe0.heat, pi_probe1.heat, pi_probe2.heat, pi_probe3.heat, pi_probe4.heat, pi_probe5.heat);
       break;
     }
@@ -200,7 +211,9 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   }
   case 'i':
   {
+#if DEBUG_NODE == 1
     scan_wire();
+#endif
     break;
   }
   case 'f':
@@ -260,10 +273,11 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
       temp_read_all(buf);
       for (int i = 0; i < 6; i++)
       {
-        debugf_info("Probe Nr:%i|%.2f°C\n", i, buf[i]);
+        debugf_info("Nr:%i|%.2f°C\n", i, buf[i]);
       }
       debugf_info("Probe SMD|%.2f°C\n", buf[6]);
       debugf_info("Probe Check|%fV [should be ~ 1.01325V]\n", buf[7]);
+      debugf_info("uC|%.2f°C\n", analogReadTemp(ADC_REF));
     }
     else
     {
@@ -274,21 +288,24 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   }
   case 'x':
   {
-    debugf_status("<Reads out Barometer> WIP\n");
-
 #if BAROMETER_TEATING == 1
+    debugf_status("<Reads out Barometer> WIP\n");
     pressure_read();
 #endif
     break;
   }
   case 'o':
   {
+#if DEBUG_MODE == 1
     oxy_console();
+#else
+    debugf_error("oxy console disabled during launch\n");
+#endif
     break;
   }
   case 'a':
   {
-    float buffer[14];
+    float buffer[20];
     light_read(buffer);
     break;
   }
@@ -296,13 +313,22 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
   {
     debugf_status("Shutting down microcontroller\n");
     pause_Core1();
-    float buffer[20] = {0};
+    float buffer[20] = {0.0};
     heat_updateall(buffer);
     while (1)
     {
       rp2040.wdt_reset();
       check_serial_input();
+      if (TCP_init)
+      {
+        tcp_check_command();
+      }
     }
+    break;
+  }
+  case 'u':
+  {
+    tcp_receive_OTA_update(int(param1));
     break;
   }
   case 'c':
@@ -312,10 +338,6 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
     /*select controller*/
     switch ((int)param1)
     {
-    case -1:
-
-      break;
-
     case 0:
       pi = &pi_probe0;
       break;
@@ -345,6 +367,14 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
       return;
     }
 
+    /*just print it*/
+    if (param2 == -2)
+    {
+      pi_print_controller(pi);
+      return;
+    }
+
+    /*change kp*/
     if (param2 != -1)
     {
       pi->kp = param2;
@@ -353,31 +383,96 @@ void handle_command(char buffer_comand, float param1, float param2, float param3
         debugf_info("pi controller disabled\n")
       }
     }
-    else
-    {
-      pi_print_controller(pi);
-      return;
-    }
 
+    /*change ki*/
     if (param3 != -1)
     {
       pi->ki = param3;
     }
 
+    /*change I_MAX*/
     if (param4 != -1)
     {
       pi->I_MAX = param4;
     }
 
-    debugf_info("Set pi controller:%u p:%f i:%f i_max:%f", (unsigned int)param1, pi->kp, pi->ki, pi->I_MAX);
+    pi_print_controller(pi);
+    break;
+  }
+
+  case 'e':
+  {
+    PI_CONTROLLER *pi = 0;
+
+    /*select controller*/
+    switch ((int)param1)
+    {
+
+    case 0:
+      pi = &pi_probe0;
+      break;
+
+    case 1:
+      pi = &pi_probe1;
+      break;
+
+    case 2:
+      pi = &pi_probe2;
+      break;
+
+    case 3:
+      pi = &pi_probe3;
+      break;
+
+    case 4:
+      pi = &pi_probe4;
+      break;
+
+    case 5:
+      pi = &pi_probe5;
+      break;
+
+    default:
+      debugf_error("no vaid controller\n");
+      return;
+    }
+
+    /*change temp*/
+    if (param2 != -1)
+    {
+      pi->desired_temp = param2;
+    }
+
+    /*change max heating power*/
+    if (param3 != -1)
+    {
+      pi->PI_MAX_PW = param3;
+    }
+
+    pi_print_controller(pi);
 
     break;
   }
-  case 'u':
+  case 'g':
   {
-    tcp_receive_OTA_update(int(param1));
+    rp2040.wdt_reset();
+    debugf_status("0:");
+    pi_print_controller(&pi_probe0);
+    debugf_status("1:");
+    pi_print_controller(&pi_probe1);
+    rp2040.wdt_reset();
+    debugf_status("2:");
+    pi_print_controller(&pi_probe2);
+    debugf_status("3:");
+    pi_print_controller(&pi_probe3);
+    rp2040.wdt_reset();
+    debugf_status("4:");
+    pi_print_controller(&pi_probe4);
+    debugf_status("5:");
+    pi_print_controller(&pi_probe5);
     break;
   }
+
   default:
   {
     debugf_error("dafuck is \"/%c\" ?!?! try \"/?\".\n", buffer_comand);
@@ -478,21 +573,6 @@ void print_memory_use()
 {
   debugf_info("-freeStack: %.2f kbytes\n", (float)rp2040.getFreeStack() * 0.001);
   debugf_info("-freeHeadp: %.2f kbytes | usedHeap: %.2f kbytes\n", (float)rp2040.getFreeHeap() * 0.001, (float)rp2040.getUsedHeap() * 0.001);
-}
-
-/*frees given pointer it it isnt NULL, then sets it to NULL.
- If it is NULL, throws error*/
-void free_ifnotnull(void **pointer) // TODO:check this
-{
-  if (pointer != NULL && *pointer != NULL)
-  {
-    free(*pointer);
-    *pointer = NULL;
-  }
-  else
-  {
-    debugf_warn("Tried to free pointer wich was freed bevore\n");
-  }
 }
 
 /**
@@ -596,10 +676,10 @@ uint32_t check_peripherals()
     buff_heat[i] = 0.0;
 
     /* checks if current increased*/
-    if ((HEAT_CURRENT_ON_BATTERY * 0.5 < cur_one))
+    if ((HEAT_CURRENT_ON_BATTERY * 0.8 < cur_one))
     {
       results |= (1 << 16 + i);
-      // debugf("%f",cur_one);
+      // debugf_info("%f ",cur_one);
     }
   }
   resume_Core1();
@@ -687,13 +767,24 @@ uint32_t check_peripherals()
   float bat_volt = get_batvoltage();
   if (bat_volt > 15.0 && bat_volt < 31.0)
   {
-    debugf_sucess("%.2fV\n", bat_volt);
+    debugf_sucess("%.2fV", bat_volt);
     results |= (1 << 29);
   }
   else
   {
-    debugf_error("not connected\n");
+    debugf_error("not connected");
     results |= (1 << 29);
+  }
+
+  debugf_info("\nSD:");
+  
+  if (sd_init)
+  {
+    debugf_sucess("sucess\n")
+  }
+  else
+  {
+    debugf_error("failed\n");
   }
 
   return results;

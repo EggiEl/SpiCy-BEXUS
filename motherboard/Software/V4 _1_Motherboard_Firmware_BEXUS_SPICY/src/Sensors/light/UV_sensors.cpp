@@ -23,7 +23,7 @@ void light_setup()
     {
         if (!ltr.begin(&Wire1))
         {
-            debugf_info("Couldn't find LTR sensor!");
+            debugf_warn("Couldn't find LTR sensor!\n");
             light_init = 0;
             return;
         }
@@ -103,6 +103,11 @@ void light_read(float buffer[14])
         light_setup();
     }
 
+    if (!light_init)
+    {
+        return;
+    }
+
     debugf_status("Readout of light sensor\n");
     if (ltr.newDataAvailable())
     {
@@ -113,20 +118,22 @@ void light_read(float buffer[14])
         buffer[1] = (float)readout_uv;
         buffer[2] = readout_uv;
 
-/*
-        ltr.setMode(LTR390_MODE_UVS);
-        ltr.setResolution(LTR390_RESOLUTION_16BIT);
-        delay(25);
+        /*
+                ltr.setMode(LTR390_MODE_UVS);
+                ltr.setResolution(LTR390_RESOLUTION_16BIT);
+                delay(25);
 
-        uint32_t readout_als = ltr.readALS(); // == 0xFFFFFFFF of failure
-        float afls_in_lix = (LIGHT_LTR390_WFAC * 0.6 * (float)readout_als) / (LIGHT_LTR390_GAIN * LIGHT_LTR390_INT);
-        debugf_info("ASL data: %f flux, %u raw\n", afls_in_lix, readout_als);
-        buffer[3] = afls_in_lix;
-        buffer[4] = (float)readout_als;
-        buffer[5] = readout_als;
+                uint32_t readout_als = ltr.readALS(); // == 0xFFFFFFFF of failure
+                float afls_in_lix = (LIGHT_LTR390_WFAC * 0.6 * (float)readout_als) / (LIGHT_LTR390_GAIN * LIGHT_LTR390_INT);
+                debugf_info("ASL data: %f flux, %u raw\n", afls_in_lix, readout_als);
+                buffer[3] = afls_in_lix;
+                buffer[4] = (float)readout_als;
+                buffer[5] = readout_als;
 
-        ltr.setMode(LTR390_MODE_UVS);
-         ltr.setResolution(LTR390_RESOLUTION_20BIT);
-*/
+                ltr.setMode(LTR390_MODE_UVS);
+                 ltr.setResolution(LTR390_RESOLUTION_20BIT);
+        */
     }
 }
+
+

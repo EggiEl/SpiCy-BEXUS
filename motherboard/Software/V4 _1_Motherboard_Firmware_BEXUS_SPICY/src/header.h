@@ -114,9 +114,10 @@ typedef struct
     float desired_temp = SET_TEMP_DEFAULT;
     uint8_t heater_pin = 0;
     uint8_t thermistor_pin = 0;
-    float kp = 0;
-    float ki = 0;
-    float I_MAX = 0;
+    float kp = KP_DEFAULT;
+    float ki = KI_DEFAULT;
+    float I_MAX = I_MAX_DEFAULT;
+    float PI_MAX_PW = PI_MAX_DEFAULT; // in W
 
     /*static values*/
     float i_last = 0;

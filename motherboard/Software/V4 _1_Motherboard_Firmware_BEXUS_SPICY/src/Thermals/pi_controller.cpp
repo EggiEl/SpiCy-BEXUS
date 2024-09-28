@@ -7,55 +7,55 @@ PI_CONTROLLER pi_probe0 = {
     .desired_temp = SET_TEMP_DEFAULT,
     .heater_pin = PIN_H0,
     .thermistor_pin = NTC_OR_OxY_0,
-    .kp = 10,
-    .ki = 0.1,
-    .I_MAX = 3,
-};
+    .kp = -100000.0,
+    .ki = KI_DEFAULT,
+    .I_MAX = I_MAX_DEFAULT,
+    .PI_MAX_PW = PI_MAX_DEFAULT};
 
 PI_CONTROLLER pi_probe1 = {
     .desired_temp = SET_TEMP_DEFAULT,
     .heater_pin = PIN_H1,
     .thermistor_pin = NTC_OR_OxY_1,
-    .kp = 10,
-    .ki = 0.1,
-    .I_MAX = 3,
-};
+    .kp = -100000.0,
+    .ki = KI_DEFAULT,
+    .I_MAX = I_MAX_DEFAULT,
+    .PI_MAX_PW = PI_MAX_DEFAULT};
 
 PI_CONTROLLER pi_probe2 = {
     .desired_temp = SET_TEMP_DEFAULT,
     .heater_pin = PIN_H2,
     .thermistor_pin = NTC_OR_OxY_2,
-    .kp = 10,
-    .ki = 0.1,
-    .I_MAX = 3,
-};
+    .kp = KP_DEFAULT,
+    .ki = KI_DEFAULT,
+    .I_MAX = I_MAX_DEFAULT,
+    .PI_MAX_PW = PI_MAX_DEFAULT};
 
 PI_CONTROLLER pi_probe3 = {
     .desired_temp = SET_TEMP_DEFAULT,
     .heater_pin = PIN_H3,
     .thermistor_pin = NTC_OR_OxY_3,
-    .kp = 10,
-    .ki = 0.1,
-    .I_MAX = 3,
-};
+    .kp = KP_DEFAULT,
+    .ki = KI_DEFAULT,
+    .I_MAX = I_MAX_DEFAULT,
+    .PI_MAX_PW = PI_MAX_DEFAULT};
 
 PI_CONTROLLER pi_probe4 = {
     .desired_temp = SET_TEMP_DEFAULT,
     .heater_pin = PIN_H4,
     .thermistor_pin = NTC_4,
-    .kp = 10,
-    .ki = 0.1,
-    .I_MAX = 3,
-};
+    .kp = KP_DEFAULT,
+    .ki = KI_DEFAULT,
+    .I_MAX = I_MAX_DEFAULT,
+    .PI_MAX_PW = PI_MAX_DEFAULT};
 
 PI_CONTROLLER pi_probe5 = {
     .desired_temp = SET_TEMP_DEFAULT,
     .heater_pin = PIN_H5,
     .thermistor_pin = NTC_5,
-    .kp = 10,
-    .ki = 0.1,
-    .I_MAX = 3,
-};
+    .kp = KP_DEFAULT,
+    .ki = KI_DEFAULT,
+    .I_MAX = I_MAX_DEFAULT,
+    .PI_MAX_PW = PI_MAX_DEFAULT};
 
 void pi_update_controller(PI_CONTROLLER *pi);
 
@@ -63,26 +63,30 @@ void pi_update_controller(PI_CONTROLLER *pi);
 void pi_update_all()
 {
     /*update controller*/
-        static long TimeStampPid = millis() + PI_T;
-        if (millis() > TimeStampPid)
-        {
-            TimeStampPid = millis() + PI_T;
-            // debugf_status("pi udate all\n");
-            pi_update_controller(&pi_probe0);
-            pi_update_controller(&pi_probe1);
-            pi_update_controller(&pi_probe2);
-            pi_update_controller(&pi_probe3);
-            pi_update_controller(&pi_probe4);
-            pi_update_controller(&pi_probe5);
-        }
+    static long TimeStampPid = millis() + PI_T;
+    if (millis() > TimeStampPid)
+    {
+        TimeStampPid = millis() + PI_T;
+        // debugf_status("pi update all\n");
+        pi_update_controller(&pi_probe0);
+        pi_update_controller(&pi_probe1);
+        pi_update_controller(&pi_probe2);
+        pi_update_controller(&pi_probe3);
+        pi_update_controller(&pi_probe4);
+        pi_update_controller(&pi_probe5);
+    }
 }
 
 /*prints relevant data from PI_CONTROLLER * pi points to*/
 void pi_print_controller(PI_CONTROLLER *pi)
 {
-    debugf_status("Pi controller h:%u t:%u T_SET:%.2f ", pi->heater_pin, pi->thermistor_pin, pi->desired_temp);
-    debugf_warn("Kp:%f Ki:%f I_MAX:%f ", pi->kp, pi->ki, pi->I_MAX);
-    debugf_info("error:%f i:%f pi:%f\n", pi->error_last, pi->i_last, pi->pi_last);
+    if (pi->kp == -100000.0)
+    {
+        debugf_warn("!disabled!:");
+    }
+    debugf_status("Pi|HE%u|NT%u|", pi->heater_pin, pi->thermistor_pin);
+    debugf_info("Kp%.2f|Ki%f|I_MAX%f|TSET%.2f|PI_PW%.3f|", pi->kp, pi->ki, pi->I_MAX, pi->desired_temp, pi->PI_MAX_PW);
+    debugf_info("i%f|pi%.3f|err%.2f|\n", pi->i_last, pi->pi_last, pi->error_last);
 }
 
 /**
@@ -104,6 +108,15 @@ void pi_update_controller(PI_CONTROLLER *pi)
     /*Variables.*/
     unsigned long time_curr = millis();
     float measured_temp = temp_read_one(pi->thermistor_pin);
+    /*dosn´t update controller if heater is not connectoed*/
+    if (measured_temp == -1000000.00)
+    {
+        // debugf_error("NTC %u not connected\n",pi->thermistor_pin);
+        // delay(100);
+        heat_updateone(pi->heater_pin, 0.0);
+        return;
+    }
+
     float error = pi->desired_temp - measured_temp;
     float dt = (time_curr - pi->time_last) / 1000.0f; // divided by 1000 because then its in s and not ms
     /*p*/
@@ -112,7 +125,7 @@ void pi_update_controller(PI_CONTROLLER *pi)
     float i = 0.5f * pi->ki * dt * (error + pi->error_last);
 
     /* Anti-wind-up */
-    if (pi->pi_last == PID_MAX)
+    if (pi->pi_last == pi->PI_MAX_PW)
     // clamps integral when Controller is in positive saturation
     //  and i is still increasing (making things worse)
     {
@@ -121,7 +134,7 @@ void pi_update_controller(PI_CONTROLLER *pi)
             i = pi->i_last;
         }
     }
-    else if (pi->pi_last == (-1 * PID_MAX))
+    else if (pi->pi_last == (-1 * pi->PI_MAX_PW))
     // clamps integral when Controller is in negative saturation
     //  and i is still decreasing (making things worse)
     {
@@ -152,18 +165,18 @@ void pi_update_controller(PI_CONTROLLER *pi)
     float pid = p + i;
 
     /*clamping PID output*/
-    if (pid > PID_MAX)
+    if (pid > pi->PI_MAX_PW)
     /*This is needed as the heating power provided can´t be infinite large*/
     {
-        pid = PID_MAX;
+        pid = pi->PI_MAX_PW;
     }
-    else if (pid <= -PID_MAX)
+    else if (pid <= -pi->PI_MAX_PW)
     {
-        pid = -PID_MAX;
+        pid = -pi->PI_MAX_PW;
     }
 
     /*converting PID to dutycycle for heater*/
-    float heat = (100 * pid / PID_MAX);
+    float heat = (100 * pid / HEAT_POWER);
 
     /*clamping heat*/
     if (heat <= 0)

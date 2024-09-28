@@ -27,14 +27,13 @@ EthernetClient client;
 void tcp_setup_client()
 {
   // MESSURETIME_START
-  if (DEBUG_MODE == 1)
-  {
-    Serial.println("tcp_setup_client>\n");
-  }
+#if DEBUG_MODE == 1
+  Serial.println("tcp_setup_client>\n");
+#endif
 
   if (TCP_init)
   {
-    debugf("tcp_client_already_initialised\n");
+    debugf_warn("tcp_client_already_initialised\n");
     return;
   }
 
@@ -63,10 +62,9 @@ void tcp_setup_client()
     Ethernet.setSubnetMask(SUBNET);
   }
 
-  if (DEBUG_MODE == 1)
-  {
-    tcp_print_info();
-  }
+#if DEBUG_MODE == 1
+  tcp_print_info();
+#endif
 
   if (Ethernet.hardwareStatus())
   {
@@ -76,7 +74,6 @@ void tcp_setup_client()
   else
   {
     TCP_init = 0;
-    error_handler(ERROR_TCP_INI, ERROR_DESTINATION_NO_TCP);
     debugf_error_notcp("TCP_init failed\n");
   }
 }
@@ -162,15 +159,22 @@ void tcp_check_command()
     tcp_setup_client();
   }
 
-  if (!(Ethernet.linkStatus()) == 1)
+  if (Ethernet.linkStatus() != 1)
   {
     return;
   }
 
+  int status = 1;
   if (!client.connected())
-  {
-    client.connect(SERVERIP, SERVERPORT);
+  { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
+    status = client.connect(SERVERIP, SERVERPORT);
+  }
+
+  /*returns if client connection failed*/ // TODO testing!
+  if (!status)
+  {
+    return;
   }
 
   // checks whether  data is avaliable
@@ -183,7 +187,7 @@ void tcp_check_command()
   // reads the TCP_incomming_bytes_buffer in union
 
   byte ByteStream[35];
-  int status = client.readBytes(ByteStream, sizeof(ByteStream)); // Returns the numbers of bytes read, or 0 if no data found.
+  status = client.readBytes(ByteStream, sizeof(ByteStream)); // Returns the numbers of bytes read, or 0 if no data found.
 
   if (status == 0)
   {
@@ -254,24 +258,25 @@ char tcp_send_packet(struct packet *packet)
     tcp_setup_client();
   }
 
-  if (!(Ethernet.linkStatus()) == 1)
+  if (Ethernet.linkStatus() != 1)
   {
     return (char)-6;
   }
 
-  char buffer[sizeof(struct packet)]; 
+  char buffer[sizeof(struct packet)];
   packettochar(packet, buffer);
 
-  signed char status = 1;
+  int status = 1;
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
-    status = client.connect(SERVERIP, SERVERPORT);
     client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
+    status = client.connect(SERVERIP, SERVERPORT);
   }
 
   switch (status) // client.connect returns different int values depending of the sucess of the operation
   {
   case 1: // Send packet
+    client.flush();
     if (client.write(buffer, sizeof(struct packet)))
     {
       status = 1;
@@ -280,39 +285,25 @@ char tcp_send_packet(struct packet *packet)
     else
     {
       status = -6;
-      error_handler(ERROR_TCP_SEND_FAILED, ERROR_DESTINATION_NO_TCP);
       debugf_error_notcp("send_packet failed\n");
     }
     // client.flush();                               //waits till all is send //can be left out if TCP Server recives just 200bytes per package.unsave?
     break;
   case -1:
-    error_handler(ERROR_TCP_SEND_TIMEOUT, ERROR_DESTINATION_NO_TCP);
     debugf_error_notcp(" timeout\n");
     break;
   case -2:
-    error_handler(ERROR_TCP_SERVER_INVALID, ERROR_DESTINATION_NO_TCP);
     debugf_error_notcp(" invalid server\n");
     break;
   case -3:
-    error_handler(ERROR_TCP_TRUNCATED, ERROR_DESTINATION_NO_TCP);
     debugf_error_notcp(" truncated\n");
     break;
   case -4:
-    error_handler(ERROR_TCP_TRUNCATED_2, ERROR_DESTINATION_NO_TCP);
     debugf_error_notcp(" truncated_2\n");
     break;
   default:
     debugf_error_notcp("send tcp error %i: ", status);
-    if (Ethernet.linkStatus() == 2)
-    {
-      error_handler(ERROR_TCP_CABLE_DISCO, ERROR_DESTINATION_NO_TCP);
-      debugf_error_notcp(" cable disconnected\n");
-    }
-    else
-    {
-      error_handler(ERROR_TCP_NO_RESPONSE, ERROR_DESTINATION_NO_TCP);
-      debugf_error_notcp(" no response\n");
-    }
+    debugf_error_notcp(Ethernet.linkStatus() == 2 ? " cable disconnected\n" : " no response\n");
     break;
   }
   return status;
@@ -332,7 +323,7 @@ void tcp_send_multible_packets(struct packet **packet_buff, unsigned int nPacket
     tcp_setup_client();
   }
 
-  if (!(Ethernet.linkStatus()) == 1)
+  if (Ethernet.linkStatus() != 1)
   {
     return;
   }
@@ -370,11 +361,6 @@ void tpc_send_error(const unsigned char error)
     tcp_setup_client();
   }
 
-  if (!(Ethernet.linkStatus()) == 1)
-  {
-    return;
-  }
-
   uint8_t sizebuffer = 7 * (sizeof(char));
   char *buffer = (char *)calloc(sizebuffer, 1);
   if (buffer == NULL)
@@ -390,11 +376,11 @@ void tpc_send_error(const unsigned char error)
   buffer[5] = error;
   buffer[6] = '\0';
 
-  uint8_t status = 1;
+  int status = 1;
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
-    status = client.connect(SERVERIP, SERVERPORT);
     client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
+    status = client.connect(SERVERIP, SERVERPORT);
   }
 
   if (status)
@@ -410,22 +396,21 @@ void tpc_send_string(const char string[])
     tcp_setup_client();
   }
 
-  if (!(Ethernet.linkStatus()) == 1)
+  if (Ethernet.linkStatus() != 1)
   {
     return;
   }
 
-  uint8_t status = 1;
+  int status = 1;
   if (!client.connected())
   { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
-    status = client.connect(SERVERIP, SERVERPORT);
     client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
+    status = client.connect(SERVERIP, SERVERPORT);
   }
 
   if (status)
   {
     client.write(string, strnlen(string, 1000));
-    // client.flush();
   }
 }
 
@@ -435,7 +420,7 @@ void tpc_send_string(const char string[])
  */
 void tcp_sendf(const char *__restrict format, ...)
 {
-  if (!(Ethernet.linkStatus()) == 1)
+  if (Ethernet.linkStatus() != 1)
   {
     return;
   }
@@ -551,10 +536,15 @@ void tcp_receive_OTA_update(int size_firmware)
     tcp_setup_client();
   }
 
+  int status = 1;
   if (!client.connected())
-  {
-    client.connect(SERVERIP, SERVERPORT);
+  { // Whether or not the client is connected. Note that a client is considered connected if the connection has been closed but there is still unread packet.
     client.setConnectionTimeout(TIMEOUT_TCP_CONNECTION);
+    status = client.connect(SERVERIP, SERVERPORT);
+  }
+  if (!status)
+  {
+    return;
   }
 
   /*checks if data avaliable*/

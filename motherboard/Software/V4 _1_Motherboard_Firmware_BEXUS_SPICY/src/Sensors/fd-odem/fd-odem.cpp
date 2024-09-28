@@ -30,6 +30,7 @@ void oxy_serial_setup()
     oxySerial.begin(OXY_BAUD);
 
     // select_oxy_or_ntc(NTC_OR_OxY_0);
+    // delay(1);
     // oxy_send_dummy();
 
     debugf_sucess("oxy setup was succesfull\n");
@@ -54,6 +55,7 @@ void oxy_console()
     {
         rp2040.wdt_reset();
         select_oxy_or_ntc(NTC_OR_OxY_1);
+        delay(1);
 
         /*recives & prints data from FD-ODEM*/
         if (oxySerial.available())
@@ -64,7 +66,7 @@ void oxy_console()
         /*sends data to FD-ODEM*/
         if (Serial.available() >= 3)
         {
-            
+
             char buffer[COMMAND_LENGTH_MAX + 1] = {0};
             Serial.readBytesUntil('\n', buffer, COMMAND_LENGTH_MAX);
             buffer[COMMAND_LENGTH_MAX] = '\0';
@@ -86,7 +88,7 @@ void oxy_console()
                 }
                 case 'c':
                 {
-                    oxy_calibrateOxy_air((uint)buffer[2], (uint32_t) 2637, 965935UL, 46942UL);
+                    oxy_calibrateOxy_air((uint)buffer[2], (uint32_t)2637, 965935UL, 46942UL);
                     break;
                 }
                 default:
@@ -114,6 +116,7 @@ void oxy_console()
  */
 char *oxy_commandhandler(const char command[], uint8_t returnValues)
 {
+    rp2040.wdt_reset();
     if (!oxy_serial_init)
     {
         oxy_serial_setup();
@@ -149,6 +152,8 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues)
 
     /*reads out return values*/
     unsigned int recievedbytes = oxySerial.readBytesUntil('\r', buffer, nReturn);
+
+    rp2040.wdt_reset();
 
     /*checks if still data avaliable*/
     if (oxySerial.available())
@@ -196,12 +201,16 @@ char *oxy_commandhandler(const char command[], uint8_t returnValues)
 /*sending dummy byte. For syncronising the data line. returns 1 if sucessful aka sensor present, 0 if not*/
 uint8_t oxy_send_dummy()
 {
+    rp2040.wdt_reset();
+
     char buffer[2] = {0};
     oxySerial.write("\r");
     oxySerial.flush();
     // returns a error after 10ms
     oxySerial.readBytes(buffer, 1);
     delay(2); // this is necessary
+
+    rp2040.wdt_reset();
 
     if (buffer[0] == '\r')
     {
@@ -227,6 +236,7 @@ uint8_t oxy_isconnected(const int PROBE)
     }
 
     select_oxy_or_ntc(PROBE);
+    delay(1);
 
     oxy_send_dummy();
     return oxy_send_dummy();
@@ -350,6 +360,7 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
 {
     /*chooses right oxygen Sensor*/
     select_oxy_or_ntc(Probe_Number);
+    delay(1);
 
     readout->timestamp_mesurement = millis();
 
@@ -388,7 +399,8 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
         // debugf_warn("oxy_read returned only %i from 11 values\n", numScanned);
     }
 
-    // Ausgabe der Strukturwerte
+// Ausgabe der Strukturwerte
+#if DEBUG_MODE == 1
     debugf_info("Error: %d\n", readout->error);
     debugf_info("Dphi: %.4f mrad\n", readout->dphi / 1000.0);
     debugf_info("Umolar: %.4f umol/l\n", readout->umolar / 1000.0);
@@ -404,6 +416,7 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
     debugf_info("PercentOtwo: %.4f %%\n", readout->percentOtwo / 1000.0);
 
     oxy_decode_mesurement_errors(readout->error); // if theres an error this will print a debug statement
+#endif
 
     free(buf_return);
     return 1;
@@ -487,6 +500,7 @@ void oxy_calibrateOxy_air(const uint8_t Probe_Number, const uint temp, const uin
     debugf_status("Calibrating OxySensor %u\n", Probe_Number);
     debugf_info("calibration values: temp= %.4f°C,pressure= %.4fmbar,humidity= %.6f%%\n", (float)(temp / 100.0), (float)(pressure / 100.0), (float)(humidity / 100.0));
     select_oxy_or_ntc(Probe_Number);
+    delay(1);
     oxySerial.setTimeout(7000);
 
     snprintf(buffer, COMMAND_LENGTH_MAX, "CHI %u %u %u %u", channel, temp, pressure, humidity);

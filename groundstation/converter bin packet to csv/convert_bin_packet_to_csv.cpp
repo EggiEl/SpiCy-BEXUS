@@ -129,19 +129,21 @@ void convert_bin_to_csv(const char *bin_filename, const char *csv_filename)
 
     fprintf(csv_file, "\n");
 
-    printf("header done\n");
-    
+    // printf("header done\n");
+
     /*writing data*/
+    unsigned int counter = 0;
     struct packet pkt;
     while (fread(&pkt, sizeof(struct packet), 1, bin_file) == 1)
     {
-        static int a = 0;
-        if (a != 0)
-        {
-            printf("\r");
-        }
-        printf("writing line %d", a);
-        a++;
+        // static int a = 0;
+        // if (a != 0)
+        // {
+        //     printf("\r");
+        // }
+        counter++;
+        // printf("writing line %d", a);
+        // a++;
 
         fprintf(csv_file, "%u,%u,%f,%f,", pkt.id, pkt.timestampPacket, pkt.power[0], pkt.power[1]);
 
@@ -185,7 +187,7 @@ void convert_bin_to_csv(const char *bin_filename, const char *csv_filename)
         fprintf(csv_file, "\n");
     }
 
-    printf("\ndata done\n");
+    printf("wrote lines: %u\n", counter);
     fclose(bin_file);
     fclose(csv_file);
 }

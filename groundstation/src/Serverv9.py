@@ -8,18 +8,19 @@ from MongoDB import MongoDB
 import netifaces
 from colored_terminal import *
 
-#convertion to exe: pyinstaller --onefile --distpath ./compiled .\src\Serverv8.py
+#convertion to exe: pyinstaller --onefile --distpath ./compiled .\src\Serverv9.py
 
 # troubleshooting tools:
+# change ip4 adress of ethernet adapter/port to the Server Ip
 # "ipconfig"
 # "netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
 
-IP_SERVER = ("169.254.218.4") # if of Ethernet-Adapter Ethernet 6 # ip_Desktop = '192.168.178.23'
+IP_SERVER = ("169.254.218.4")
 PORT = 8888
 
 PACKET_LENTH = 472
 
-TIMEOUT_CLIENT = 5 #s timeout of client after no connetion
+TIMEOUT_CLIENT = 2 #s timeout of client after no connetion
 DELAY_DATALOG_LOOP = 0.1 #s slows datalogger loop to save performance
 DELAY_SERVER_LOOP = 0.01 #s slows server loop to save performance
 DELAY_CONSOLE_LOOP = 0.1 #s slows console loop to save performance
@@ -236,7 +237,7 @@ class DATALOGGER:
             if len(self.rawdata)>=1:
                 self.save_raw_mongo()
                 if self.save_raw_bin():
-                    print_white(f"saved {len(self.rawdata)} packages\n",indent=3)
+                    # print_white(f"saved {len(self.rawdata)} packages\n",indent=3)
                     self.rawdata = []
             else:
                 time.sleep(DELAY_DATALOG_LOOP) #delay to conserve performance
@@ -292,6 +293,10 @@ class INTERFACE:
             time.sleep(DELAY_CONSOLE_LOOP) #delay to conserve performance
             try:
                 self.Command(input())
+            except KeyboardInterrupt:
+                if self.server is not None:
+                    print_yellow("blocked keyboard interupt. Use /q to savely shutdown server\n")
+
             except Exception as e:
                 print(e)
                 break

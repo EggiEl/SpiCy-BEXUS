@@ -24,7 +24,6 @@ void next_state()
     static struct OxygenReadout mesure_buffer[6] = {0};
 
     static char sd_filepath[100];
-    static float buffer[20];
     state_print(state);
     switch (state)
     {
@@ -44,7 +43,9 @@ void next_state()
     }
     case READ_TEMP:
     {
+        /*temp*/
         pause_Core1();
+        float buffer[AMOUNT_NTC_THERMISTORS];
         temp_read_all(buffer);
         resume_Core1();
 
@@ -52,6 +53,7 @@ void next_state()
         {
             packet_dl.thermistor[i] = buffer[i];
         }
+
         packet_dl.thermistor[8] = analogReadTemp(ADC_REF);
 
         state = READ_OXY;
@@ -60,20 +62,35 @@ void next_state()
     case READ_OXY:
     {
         pause_Core1();
-        // oxy_read_all(mesure_buffer);
-        delay(1000);
+        oxy_read_all(mesure_buffer);
         resume_Core1();
-        // memcpy(packet_dl.oxy_measure, mesure_buffer, sizeof(mesure_buffer));
+        memcpy(packet_dl.oxy_measure, mesure_buffer, sizeof(mesure_buffer));
         state = READ_LIGHT;
         break;
     }
     case READ_LIGHT:
     {
-        // light_read(buffer, 0);
-        // for (uint8_t i = 0; i < 6; i++)
-        // {
-        //     packet_dl.light[i] = buffer[i];
-        // }
+        float buffer[20];
+        light_read(buffer);
+        for (uint8_t i = 0; i < 6; i++)
+        {
+            packet_dl.light[i] = buffer[i];
+        }
+        // packet_dl.pid[0] = pi_probe0.kp;
+        // packet_dl.pid[1] = pi_probe0.ki;
+        // packet_dl.pid[2] = pi_probe0.I_MAX;
+        // packet_dl.light[0] = pi_probe0.i_last;
+        // packet_dl.light[1] = pi_probe1.i_last;
+        // packet_dl.light[2] = pi_probe2.i_last;
+        // packet_dl.light[3] = pi_probe3.i_last;
+        // packet_dl.light[4] = pi_probe4.i_last;
+        // packet_dl.light[5] = pi_probe5.i_last;
+        // packet_dl.light[6] = pi_probe1.ki;
+        // packet_dl.light[7] = pi_probe1.kp;
+        // packet_dl.light[8] = pi_probe2.ki;
+        // packet_dl.light[9] = pi_probe2.kp;
+        // packet_dl.light[10] = pi_probe3.ki;
+        // packet_dl.light[11] = pi_probe3.kp;
         state = SAVESENDPACKET;
         break;
     }

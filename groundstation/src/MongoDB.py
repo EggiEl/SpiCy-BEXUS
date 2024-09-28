@@ -1,7 +1,5 @@
 from bson import Binary
 from colored_terminal import *  # I added some colors to the consol prints. Changed only print(). Fynn
-import random
-from datetime import datetime
 import struct
 import pymongo 
 import pymongo.errors 
