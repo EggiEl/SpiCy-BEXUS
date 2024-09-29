@@ -1,23 +1,50 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GiChemicalTank, GiChemicalDrop, GiChemicalArrow, GiChemicalBolt } from 'react-icons/gi';
 import { MdOutlineScience, MdOutlineSensors } from 'react-icons/md';
 import { FaBars } from 'react-icons/fa';
 import styles from "../oxStyles/PlotField.module.css";
 import { OtherDataProps } from "./OtherPlotInterface";
+import OtherPlot from "./OtherPlot";
+import { get_latest_otherData } from "@/functions/get_latest_other";
+
 
 interface InitialData {
-  plotInitalData: OtherDataProps[][];
+  plotInitalData: OtherDataProps[];
 }
 
 export default function OtherPlotField({ plotInitalData }: InitialData) {
-  const TempSensor1 = plotInitalData[0];
-  const TempSensor2 = plotInitalData[1];
-  const TempSensor3 = plotInitalData[2];
-  const TempSensor4 = plotInitalData[3];
-  const TempSensor5 = plotInitalData[4];
-  const TempSensor6 = plotInitalData[5];
+
+  const [OtherData, setOtherData] = useState<OtherDataProps[]>(plotInitalData);
+
+  useEffect(() => {
+    console.log(OtherData);
+  }, [] ); 
+
+  const fetchNewData = async () => {
+    const lastData = OtherData[OtherData.length - 1];
+    if (lastData && lastData._id) {
+      const newData: [OtherDataProps] = await get_latest_otherData(lastData._id);
+      console.log(newData);
+      setOtherData((prevData) => [...prevData, ...newData]);
+    } else {
+      const firstData = await get_latest_otherData("0");
+      console.log(firstData);
+      setOtherData(firstData);
+    }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(fetchNewData, 1000);
+    
+    
+
+    return () => clearInterval(intervalId);
+  }, [OtherData]);
+
+
+
 
   const [showPlot1, setShowPlot1] = useState(true);
   const [showPlot2, setShowPlot2] = useState(false);
@@ -100,30 +127,17 @@ export default function OtherPlotField({ plotInitalData }: InitialData) {
         >
           <GiChemicalArrow /> Sensor 4
         </button>
-        <button
-          onClick={() => handleButtonClick("Sensor5")}
-          className={showPlot5 ? styles.active : ""}
-        >
-          <GiChemicalBolt /> Sensor 5
-        </button>
-        <button
-          onClick={() => handleButtonClick("Sensor6")}
-          className={showPlot6 ? styles.active : ""}
-        >
-          <MdOutlineScience /> Sensor 6
-        </button>
+      
+        
       </div>
       <div className={`${styles.content} ${sidebarCollapsed ? styles.expanded : ''}`}>
-   
+
+        {showPlot1 && <OtherPlot datakeyValue={"TemperaturMotherboard"} otherDataList={OtherData} measureTimeFeat={false} sensorname="Temperatur Motherboard"/> }
+        {showPlot2 && <OtherPlot datakeyValue={"TemperaturCPU"} otherDataList={OtherData} measureTimeFeat={false} sensorname="TemperatureCPU"/> }
+        {showPlot3 && <OtherPlot datakeyValue={"BatteryVoltage"} otherDataList={OtherData} measureTimeFeat={false} sensorname="BatteryVoltage"/> }
+        {showPlot4 && <OtherPlot datakeyValue={"BatteryCurrent"} otherDataList={OtherData} measureTimeFeat={false} sensorname="BatteryCurrent"/> }
       
-    {/*  Add the plots here: 
-    {showPlot1 && <SensorPlotTemp initialData={TempSensor1} sensorname="Sensor1" measureTimeFeat={timeMeasurementFeat} />}
-    {showPlot2 && <SensorPlotTemp initialData={TempSensor2} sensorname="Sensor2" measureTimeFeat={timeMeasurementFeat} />}
-    {showPlot3 && <SensorPlotTemp initialData={TempSensor3} sensorname="Sensor3" measureTimeFeat={timeMeasurementFeat} />}
-    {showPlot4 && <SensorPlotTemp initialData={TempSensor4} sensorname="Sensor4" measureTimeFeat={timeMeasurementFeat} />}
-    {showPlot5 && <SensorPlotTemp initialData={TempSensor5} sensorname="Sensor5" measureTimeFeat={timeMeasurementFeat} />}
-    {showPlot6 && <SensorPlotTemp initialData={TempSensor6} sensorname="Sensor6" measureTimeFeat={timeMeasurementFeat} />}
-    */}
+    
 </div>
 
     </div>

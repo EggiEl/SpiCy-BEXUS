@@ -12,12 +12,13 @@ import { OtherDataProps } from "../OtherPlots/OtherPlotInterface";
 interface DataproviderProps {
     oxygenInitialData: OxygenSensorData[][];
     tempInitialData: TempSensorData[][]; 
-    otherPlotInitialData : OtherDataProps[][]
+    otherPlotInitialData : OtherDataProps[]
 
 }
 
 export default function Dataprovider({ oxygenInitialData, tempInitialData, otherPlotInitialData }: DataproviderProps) {
     const [oxPlot, setOxPlot] = useState(1);
+
 
     
 

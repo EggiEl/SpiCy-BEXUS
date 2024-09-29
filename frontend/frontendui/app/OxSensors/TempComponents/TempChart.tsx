@@ -44,7 +44,7 @@ export default function TempChart({
     onClick: (e: any, payload: any) => handleDotClick(payload.payload),
   });
   const [activeDot, setActiveDot] = useState({
-    r: 20,
+    r: 5,
     fill: "red",
     onClick: (e: any, payload: any) => handleDotClick(payload.payload),
   });

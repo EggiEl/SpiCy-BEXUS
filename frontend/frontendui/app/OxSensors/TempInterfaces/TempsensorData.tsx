@@ -12,3 +12,4 @@ export interface TempDataClProps {
     sensorname: string;
     measureTimeFeat : boolean ; 
   }
+

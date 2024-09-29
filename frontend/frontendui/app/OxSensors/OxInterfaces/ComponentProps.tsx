@@ -8,6 +8,7 @@ export interface OxChartProps {
     lowerlimit: number;
     measureTimeFeat: boolean; 
     lowerLimitChange: number;
+    
   }
 
 

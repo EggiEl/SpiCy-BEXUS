@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { OxygenSensorData } from "../OxInterfaces/OxygenSensorData";
-import CustomTooltip from "./CustomTooltip";
 import { OxChartProps } from "../OxInterfaces/ComponentProps";
+import CustomTooltip from "../OxComponents/CustomTooltip";
 import {
   LineChart,
   Line,
@@ -13,20 +13,22 @@ import {
   ReferenceLine,
 } from "recharts";
 import styled from "styled-components";
+import { OtherDataProps } from "./OtherPlotInterface";
 
 const ChartContainer = styled.div`
   width: 100%;
   height: 400px;
 `;
 
-export default function OxChart({
+export default function OtherChart({
   datalist,
   limit,
   upperlimit,
   lowerlimit,
   measureTimeFeat,
   lowerLimitChange,
-}: OxChartProps) {
+  datakeyValue,
+}: OtherDataProps) {
   const [timesBetween, setTimeBetween] = useState(0);
   const [timePoints, setTimePoints] = useState<string[]>([]);
   const [standardDot, setStandardDot] = useState({
@@ -35,7 +37,7 @@ export default function OxChart({
     onClick: (e: any, payload: any) => handleDotClick(payload.payload),
   });
   const [activeDot, setActiveDot] = useState({
-    r: 5,
+    r: 8, // Hier kleinerer Radius für Hoverpunkt
     fill: "red",
     onClick: (e: any, payload: any) => handleDotClick(payload.payload),
   });
@@ -45,6 +47,8 @@ export default function OxChart({
 
   // Nur Daten im Bereich zwischen lowerLimitChange und limit anzeigen
   const dataToShow = datalist.slice(lowerLimitChange, limit);
+
+  // Berechnung des minimalen und maximalen Werts für die Y-Achse
 
   // Update the timeFeatureRef when the measureTimeFeat changes and update the dot size and color
   useEffect(() => {
@@ -101,7 +105,10 @@ export default function OxChart({
           <LineChart data={dataToShow}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
             <XAxis dataKey="timestamp_measurement" stroke="#333" />
-            <YAxis  stroke="#333" />
+            <YAxis 
+              stroke="#333" 
+             // Achse auf min und max Werte der Daten einstellen
+            />
             <Tooltip content={<CustomTooltip />} />
             <ReferenceLine
               y={upperlimit}
@@ -117,15 +124,9 @@ export default function OxChart({
             />
             <Line
               type="monotone"
-              dataKey="percentOtwo"
+              dataKey={datakeyValue}
               stroke={
-                dataToShow.length > 0
-                  ? dataToShow[dataToShow.length - 1].percentOtwo > upperlimit
-                    ? "red"
-                    : dataToShow[dataToShow.length - 1].percentOtwo < lowerlimit
-                    ? "blue"
-                    : "green"
-                  : "green"
+                "orange"
               }
               strokeWidth={2}
               dot={standardDot}

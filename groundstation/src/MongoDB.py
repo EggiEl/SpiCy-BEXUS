@@ -142,19 +142,26 @@ class MongoDB:
 
 
 
+        print(decoded_data["power"])
+        print(decoded_data["power"][0])
+        print(decoded_data["power"][1])
+
         
+        thermistor = decoded_data["thermistor"] 
+
+        otherData = {"TemperaturMotherboard" : thermistor[6], "TemperaturCPU" : thermistor[8], "BatteryVoltage" : decoded_data["power"][0], "BatteryCurrent" : decoded_data["power"][1],  "timestamp_measurement": datetime.now()}
+        self.safe_otherPlotData(otherData, "BEXUS", "otherData")
+
 
         
         #Get the Temperature of struct : 
-        thermistor = decoded_data["thermistor"] 
         # Get heaterPWM
         heatPower = decoded_data["heaterPWM"]
         # Save the temperature of the thermistors in the database
         for temp in range(len(thermistor)-3): 
             self.safe_temp({"temperature": thermistor[temp], "timestamp_measurement": datetime.now(), "heaterPWM" : heatPower[temp],}, "BEXUS", f"TemperatureSensor{temp+1}")
 
-        otherData = {"TemperaturMotherboard" : thermistor[6], "TemperaturCPU" : thermistor[8], "BatteryVoltage" : decoded_data["power"][0], "BatteryCurrent" : decoded_data["power"][1],  "timestamp_measurement": datetime.now()}
-        self.safe_otherPlotData(otherData, "BEXUS", "otherData")
+        
 
 
     def safe_otherPlotData(self, struct: dict, db_name, collection_name):

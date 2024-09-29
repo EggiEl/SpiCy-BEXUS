@@ -1,11 +1,39 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import TempChart from "./TempChart";
 import styled from "styled-components";
-import RangeSlider from "../OxComponents/newSlider";
-import TempSensorData, {TempDataClProps} from "../TempInterfaces/TempsensorData"
+import { OxygenSensorData } from "../OxInterfaces/OxygenSensorData";
 import { Input } from "@nextui-org/react";
+import RangeSlider from "../OxComponents/newSlider";
+import OtherChart from "./OtherChart";
+import { OtherDataProps } from "./OtherPlotInterface";
+import { otherDataChartProps, otherDataClProps } from "./InterfaceOtherData";
+import { get_latest_otherData } from "@/functions/get_latest_other";
+const Container = styled.div.attrs((props) => ({
+  style: {
+    backgroundColor: "white", // Dynamischer Hintergrund
+    color: props.color || "black", // Dynamische Farbe
+  },
+}))`
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  margin: 20px auto;
+`;
+
+const Header = styled.h1`
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 80px;
+  color: #333;
+`;
+
+const ChartWrapper = styled.div`
+  height: 500px;
+  margin-top: 20px;
+`;
+
 // Neues Styled Component für das Input-Wrapper
 const InputWrapper = styled.div`
   display: flex;
@@ -61,113 +89,47 @@ const StyledInput = styled(Input)`
   }
 `;
 
-const Container = styled.div.attrs((props) => ({
-  style: {
-    backgroundColor:  "white", // Dynamischer Hintergrund
-    color: props.color || "black", // Dynamische Farbe
-  },
-}))`
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 100%;
-  margin: 20px auto;
-`;
 
-const Header = styled.h1`
-  text-align: center;
-  font-size: 2em;
-  margin-bottom: 80px;
-  color: #333;
-`;
+export default function OtherPlot({ otherDataList, sensorname, measureTimeFeat, datakeyValue }: otherDataClProps) {
 
-const ChartWrapper = styled.div`
-  height: 500px;
-  margin-top: 20px;
-`;
-
-
-import axios from 'axios';
-
-
-export async function get_latest_data(lastid : string , sensorname : string): Promise<[TempSensorData]> {
-  try {
-    const response = await axios.get(`http://localhost:8000/storedData_latest/${sensorname}/${lastid}`);
     
-    return response.data;
-  } catch (error: any) {
-    if (error.response?.status === 404) {
-      throw new Error('Data not found');
-    }
-    throw new Error('Failed to get data');
-  }
-}
-
-// This component is the parent of the sonsor plot and the slider 
-// It fetches new data from the backend and passes it to the sensor plot component
-// It also handles the slider and the range of the data shown in the plot
-// The data is fetched every second
-export default function SensorPlotTemp({ initialData, sensorname, measureTimeFeat }: TempDataClProps) {
-  const [data, setData] = useState<TempSensorData[]>(initialData);
-  const [range, setRange] = useState<number[]>([0, initialData.length]);
+  const [data, setData] = useState<OtherDataProps[]>(otherDataList);
+  const [range, setRange] = useState<number[]>([0, otherDataList.length]);
   const [sliderActive, setSliderActive] = useState(false);
   const [upperlimit, setUpperlimit] = useState(100);
   const [lowerlimit, setLowerlimit] = useState(0);
   const [dynamicplotlimit , setdynamicplotlimit] = useState(10);
 
-// Function to fetch new data from the backend
-  const fetchNewData = async () => {
-    const lastData = data[data.length - 1];
-    if (lastData && lastData._id) {
-      const newData: [TempSensorData] = await get_latest_data(lastData._id, sensorname);
-      console.log(newData)
-      setData(prevData => [...prevData, ...newData]);
-    }
-    else {
-      const firstData = await get_latest_data("0", sensorname);
-      console.log(firstData);
-      setData(firstData);
-    }
-  };
-
-
-  //Function to fetch new data every second
   useEffect(() => {
-    const intervalId = setInterval(fetchNewData, 1000);
-    
-    return () => clearInterval(intervalId);
-  }, [data, sensorname]);
+    setData(otherDataList);
+    }, [otherDataList]);
 
 
-  //Function to set the range of the slider to the last 10 entries
+
   useEffect(() => {
     if (!sliderActive) {
       const length = data.length;
-
       setRange([Math.max(length - dynamicplotlimit, 0), length]);
-
     }
-    
   }, [data, sliderActive]);
 
-  
-//function to handle the change of the range of the slider
   const handleRangeChange = (newRange: number[]) => {
     setRange(newRange);
   };
-  //function to handle to toggle the slider
+
   const toggleSlider = () => {
     setSliderActive(!sliderActive);
     setRange([0, data.length]);
-    
   };
 
   return (
-    <Container color="black">      
-    <Header>{sensorname}</Header>
+    <Container color="black">
+      <Header>{sensorname}</Header>
       <button style={{padding : 10, marginBottom: 20, fontSize : 20, borderRadius: 5}} onClick={toggleSlider}>
   &#128269; Filter
-</button>  <InputWrapper>
+</button>
+      {/* Input-Felder in einem flexiblen Layout */}
+      <InputWrapper>
         <StyledInput
           key={"default1"}
           type="number"
@@ -190,6 +152,7 @@ export default function SensorPlotTemp({ initialData, sensorname, measureTimeFea
           onChange={(e) => setdynamicplotlimit(parseInt(e.target.value))}
         />
       </InputWrapper>
+
       {sliderActive && (
         <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
           <div style={{ width: "80%" }}>
@@ -199,7 +162,8 @@ export default function SensorPlotTemp({ initialData, sensorname, measureTimeFea
         </div>
       )}
       <ChartWrapper>
-        <TempChart
+        <OtherChart
+        datakeyValue={datakeyValue}
           datalist={data}
           upperlimit={upperlimit}
           lowerlimit={lowerlimit}

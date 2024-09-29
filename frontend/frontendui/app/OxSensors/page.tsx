@@ -55,7 +55,7 @@ interface TempSensorData {
 const OxSensorsPage = async () => {
     const oxygensensordata: OxygenSensorData[][] = await fetchData();
     const tempsensorData : TempSensorData[][]= await fetchTempData(); 
-    const otherData : OtherDataProps[][] = await fetchotherData(); 
+    const otherData : OtherDataProps[] = await fetchotherData(); 
     console.log(tempsensorData);
 
 

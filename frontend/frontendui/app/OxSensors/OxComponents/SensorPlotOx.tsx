@@ -97,6 +97,8 @@ export default function SensorPlotOx({ initialData, sensorname, measureTimeFeat 
   const [upperlimit, setUpperlimit] = useState(100);
   const [lowerlimit, setLowerlimit] = useState(0);
   const [dynamicplotlimit , setdynamicplotlimit] = useState(10);
+
+
   const fetchNewData = async () => {
     const lastData = data[data.length - 1];
     if (lastData && lastData._id) {
@@ -141,21 +143,21 @@ export default function SensorPlotOx({ initialData, sensorname, measureTimeFeat 
       {/* Input-Felder in einem flexiblen Layout */}
       <InputWrapper>
         <StyledInput
-          key={"default"}
+          key={"default1"}
           type="number"
           color={"default"}
           label="Upper Limit"
           onChange={(e) => setUpperlimit(parseInt(e.target.value))}
         />
         <StyledInput
-          key={"default"}
+          key={"default2"}
           type="number"
           color={"default"}
           label="Lower Limit"
           onChange={(e) => setLowerlimit(parseInt(e.target.value))}
         />
          <StyledInput
-          key={"default"}
+          key={"default3"}
           type="number"
           color={"default"}
           label="Dynamic Plot Limit"
