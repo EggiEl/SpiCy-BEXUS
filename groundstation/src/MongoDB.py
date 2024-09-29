@@ -120,6 +120,7 @@ class MongoDB:
                 "percentOtwo": unpacked_data[offset + 12],
                 "timestamp_measurement": unpacked_data[offset + 13],  # in ms
             }
+            oxy["timestamp_measurement"] = datetime.now()
             decoded_data["oxy_measure"].append(oxy)
             offset += length_oxy_struct  # Move to the next OxygenReadout
             self.safeOx(oxy, "BEXUS", f"fullstruct_Sensor{i+1}", f"percentOtwo_Sensor{i+1}")
@@ -146,7 +147,7 @@ class MongoDB:
         print(decoded_data["power"][0])
         print(decoded_data["power"][1])
 
-        
+
         thermistor = decoded_data["thermistor"] 
 
         otherData = {"TemperaturMotherboard" : thermistor[6], "TemperaturCPU" : thermistor[8], "BatteryVoltage" : decoded_data["power"][0], "BatteryCurrent" : decoded_data["power"][1],  "timestamp_measurement": datetime.now()}
