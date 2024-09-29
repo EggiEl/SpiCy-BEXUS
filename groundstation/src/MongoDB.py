@@ -34,7 +34,7 @@ class MongoDB:
             )
 
     def get_raw_data(self, binary_data: bytes):
-        print(len(binary_data))
+        
         """gets called by the DATA_LOGGER
         and recieves a C "struct packet" in form of bytes.\n
         These bytes are saved in a mongo database
@@ -141,13 +141,6 @@ class MongoDB:
         # TODO
 
 
-
-
-        print(decoded_data["power"])
-        print(decoded_data["power"][0])
-        print(decoded_data["power"][1])
-
-
         thermistor = decoded_data["thermistor"] 
 
         otherData = {"TemperaturMotherboard" : thermistor[6], "TemperaturCPU" : thermistor[8], "BatteryVoltage" : decoded_data["power"][0], "BatteryCurrent" : decoded_data["power"][1],  "timestamp_measurement": datetime.now()}
@@ -171,7 +164,7 @@ class MongoDB:
                 mydb = self.client[db_name]
                 mycol = mydb[collection_name]
                 insert_result = mycol.insert_one(struct)
-                print("Eingefügte ID:", insert_result.inserted_id)
+              
             except pymongo.errors.PyMongoError as e:
                 print("Error inserting Data", e)
         else:
@@ -212,7 +205,7 @@ class MongoDB:
                         "fullstruct_id": insert_result_full.inserted_id,
                     }
                 )
-                print("Eingefügte ID:", insert_result_full.inserted_id)
+                
             except pymongo.errors.PyMongoError as e:
                 print("Error inserting Data", e)
         else:
