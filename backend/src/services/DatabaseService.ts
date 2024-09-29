@@ -5,8 +5,45 @@ import {
 import { Models, Schema, model } from 'mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Oxmodel1, Oxmodel2, Oxmodel3, Oxmodel4, Oxmodel5, Oxmodel6 } from "../models/Oxmodel";
+import { otherData } from "../models/otherDataModel";
 
 export type SensorType = "Sensor1" | "Sensor2" | "Sensor3" | "Sensor4" | "Sensor5" | "Sensor6";
+
+
+export const getAllOtherData = async () => {
+    try {
+    console.log("ConstrollerHitOtherData")
+    const dataResp = await otherData.find().lean()
+    console.log(dataResp)
+    return dataResp } 
+    catch (error) {
+        console.error(error)
+    }
+}
+
+export const getNewerEntriesOtherData = async (id: string) => {
+    try {
+        if (id === "0") {
+            const first = await otherData.find().lean()
+            console.log("first entry")
+            return first;
+
+        }
+        else {
+            console.log(id)
+            const newerEntries = await otherData.find({ _id: { $gt: id } }).lean().exec();
+            console.log("newer entry")
+            return newerEntries;
+
+        }
+    } catch (error) {
+        console.error('Error retrieving newer entries:', error);
+        return []
+
+    }
+}
+
+
 
 
 export const getAllData = async () => {

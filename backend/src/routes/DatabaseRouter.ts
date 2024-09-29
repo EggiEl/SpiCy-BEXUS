@@ -2,6 +2,8 @@ import express, {Request, Response, response} from 'express';
 import {GetAllEntries, GetNewerEntries} from "../controllers/DatabaseController" 
 import { GetAllOxygenSensorData } from '../controllers/DatabaseController';
 import {GetNewerEntriesOxygen} from '../controllers/DatabaseController'; 
+import {GetAllOtherData} from '../controllers/DatabaseController';
+import {GetNewerEntriesOtherData} from '../controllers/DatabaseController';
 
 const databaserouter = express.Router() ; 
 
@@ -26,5 +28,17 @@ databaserouter.get("/oxygenSensor_latest/:sensor/:id", (request: Request, respon
 {
     GetNewerEntriesOxygen(request, response);
 } ) ; 
+
+
+databaserouter.get("/otherData" , (request: Request, response: Response) => {
+    GetAllOtherData(request, response);
+
+} 
+) ; 
+
+databaserouter.get("/otherData/:id", (request: Request, response: Response) => {
+    console.log("RouterHitOtherData")
+    GetNewerEntriesOtherData(request, response);
+} ) ;
 
 export default databaserouter

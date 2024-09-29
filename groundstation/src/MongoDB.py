@@ -34,6 +34,7 @@ class MongoDB:
             )
 
     def get_raw_data(self, binary_data: bytes):
+        print(len(binary_data))
         """gets called by the DATA_LOGGER
         and recieves a C "struct packet" in form of bytes.\n
         These bytes are saved in a mongo database
@@ -123,6 +124,8 @@ class MongoDB:
             offset += length_oxy_struct  # Move to the next OxygenReadout
             self.safeOx(oxy, "BEXUS", f"fullstruct_Sensor{i+1}", f"percentOtwo_Sensor{i+1}")
 
+        decoded_data["light"] = unpacked_data[offset : offset + 12]  # °C
+        offset += 12
         decoded_data["thermistor"] = unpacked_data[offset : offset + 9]  # °C
         decoded_data["heaterPWM"] = unpacked_data[
             offset + 9 : offset + 9 + 6
@@ -130,11 +133,13 @@ class MongoDB:
         decoded_data["pid"] = unpacked_data[
             offset + 9 + 6 : offset + 9 + 6 + 3
         ]  # W (values normed)
-        print(decoded_data)
+        
         ## save oxy
         # TODO
         ## save pressure
         # TODO
+
+
 
 
         
@@ -144,9 +149,29 @@ class MongoDB:
         thermistor = decoded_data["thermistor"] 
         # Get heaterPWM
         heatPower = decoded_data["heaterPWM"]
-        print("Thermistor: ", thermistor)
+        # Save the temperature of the thermistors in the database
         for temp in range(len(thermistor)-3): 
             self.safe_temp({"temperature": thermistor[temp], "timestamp_measurement": datetime.now(), "heaterPWM" : heatPower[temp],}, "BEXUS", f"TemperatureSensor{temp+1}")
+
+        otherData = {"TemperaturMotherboard" : thermistor[6], "TemperaturCPU" : thermistor[8], "BatteryVoltage" : decoded_data["power"][0], "BatteryCurrent" : decoded_data["power"][1],  "timestamp_measurement": datetime.now()}
+        self.safe_otherPlotData(otherData, "BEXUS", "otherData")
+
+
+    def safe_otherPlotData(self, struct: dict, db_name, collection_name):
+        if self.client:
+            try:
+                mydb = self.client[db_name]
+                mycol = mydb[collection_name]
+                insert_result = mycol.insert_one(struct)
+                print("Eingefügte ID:", insert_result.inserted_id)
+            except pymongo.errors.PyMongoError as e:
+                print("Error inserting Data", e)
+        else:
+            print("No connection to database.")
+            print(
+                "Make sure you used the MongoDB.connect() method before writing to the database."
+            )
+
 
     def safe_temp(self, struct: dict, db_name, collection_name): 
         if self.client:
@@ -154,7 +179,7 @@ class MongoDB:
                 mydb = self.client[db_name]
                 mycol = mydb[collection_name]
                 insert_result = mycol.insert_one(struct)
-                print("Eingefügte ID:", insert_result.inserted_id)
+                
             except pymongo.errors.PyMongoError as e:
                 print("Error inserting Data", e)
         else:

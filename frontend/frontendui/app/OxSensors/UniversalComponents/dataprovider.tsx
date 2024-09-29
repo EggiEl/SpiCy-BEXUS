@@ -6,37 +6,43 @@ import Navbar from "../OxComponents/navbar";
 import { useState } from "react";
 import TempSensorData from "../TempInterfaces/TempsensorData"
 import ZoomableChart from "../testplot";
+import OtherPlotField from "../OtherPlots/OtherPlotField";
+import { OtherDataProps } from "../OtherPlots/OtherPlotInterface";
 
 interface DataproviderProps {
     oxygenInitialData: OxygenSensorData[][];
     tempInitialData: TempSensorData[][]; 
+    otherPlotInitialData : OtherDataProps[][]
 
 }
 
-export default function Dataprovider({ oxygenInitialData, tempInitialData }: DataproviderProps) {
-    const [oxPlot, setOxPlot] = useState(true);
+export default function Dataprovider({ oxygenInitialData, tempInitialData, otherPlotInitialData }: DataproviderProps) {
+    const [oxPlot, setOxPlot] = useState(1);
 
-    const showOxPlot = () => {
-        setOxPlot(true);
-    };
+    
 
-    const showTempPlot = () => {
-        setOxPlot(false);
-    };
 
     return (
         <div >
            
-            <Navbar showOxPlot={showOxPlot} showTempPlot={showTempPlot} activePlot={oxPlot ? 'ox' : 'temp'} />
+            <Navbar  setActivePlot={setOxPlot} activePlot={oxPlot} />
             <div style={{paddingTop : 40}}> 
-            {oxPlot && 
+            {oxPlot===1 && 
             <div > 
             <PlotField plotInitalData={oxygenInitialData} />
           
             </div>
             }
-            {!oxPlot && <TempPlotfield plotInitalData={tempInitialData} />}
+            {oxPlot===2 && <TempPlotfield plotInitalData={tempInitialData} />}
             </div>
+
+            <div style={{color:"white"}}> 
+            {oxPlot === 3  && 
+            <OtherPlotField plotInitalData={otherPlotInitialData}/> 
+            }
+            </div>
+
+           
             
 
         </div>

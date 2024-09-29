@@ -13,7 +13,6 @@ const NavbarWrapper = styled.div`
    
     background-color: #333;
     position: fixed;
-    
 `;
 
 const Button = styled.button<{ isActive: boolean }>`
@@ -28,19 +27,21 @@ const Button = styled.button<{ isActive: boolean }>`
 `;
 
 interface NavbarProps {
-    showOxPlot: () => void;
-    showTempPlot: () => void;
-    activePlot: 'ox' | 'temp';
+   activePlot: number; 
+   setActivePlot: (value: number) => void;  
 }
 
-export default function Navbar({ showOxPlot, showTempPlot, activePlot }: NavbarProps) {
+export default function Navbar({ activePlot, setActivePlot }: NavbarProps) {
     return (
         <NavbarWrapper>
-            <Button onClick={showOxPlot} isActive={activePlot === 'ox'}>
+            <Button onClick={() => setActivePlot(1)} isActive={activePlot === 1}>
                 OxSensors
             </Button>
-            <Button onClick={showTempPlot} isActive={activePlot === 'temp'}>
+            <Button onClick={() => setActivePlot(2)} isActive={activePlot === 2}>
                 TempSensors
+            </Button>
+            <Button onClick={() => setActivePlot(3)} isActive={activePlot === 3}> 
+                Others
             </Button>
         </NavbarWrapper>
     );

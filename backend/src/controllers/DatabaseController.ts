@@ -1,6 +1,7 @@
 import express, {Request, Response} from 'express'; 
 import {getAllData, getNewerEntries} from "../services/DatabaseService"
 import { getAllOxygenSensorDataService, getNewerEntriesOxygen } from '../services/DatabaseService'; 
+import { getAllOtherData, getNewerEntriesOtherData } from '../services/DatabaseService';
 
 
 export const GetAllEntries = async (request: Request, response: Response) => {
@@ -34,4 +35,20 @@ export const GetNewerEntriesOxygen = async (request: Request, response: Response
     const newestDataResp = await getNewerEntriesOxygen(sensor, id);
     response.send(newestDataResp)
    console.log(newestDataResp)
+  }
+
+  export const GetAllOtherData = async (request: Request, response: Response) => { 
+    console.log("ConstrollerHitOtherData")
+    const OtherData = await getAllOtherData(); 
+     ; 
+    response.send(OtherData)
+  }
+
+
+  export const GetNewerEntriesOtherData = async (request: Request, response: Response) => {
+    console.log("ConstrollerHitNewerEntriesOtherData")
+    const id = request.params.id; 
+    console.log(id)
+    const newerOtherData = await getNewerEntriesOtherData(id);
+    response.send(newerOtherData)
   }

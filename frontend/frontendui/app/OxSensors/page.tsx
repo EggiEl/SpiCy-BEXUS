@@ -2,6 +2,7 @@
 import React from 'react';
 import axios from 'axios';
 import Dataprovider from './UniversalComponents/dataprovider';
+import { OtherDataProps } from './OtherPlots/OtherPlotInterface';
 
 const fetchData = async () => {
   try {
@@ -17,6 +18,16 @@ const fetchData = async () => {
 const fetchTempData = async () => {
   try {
     const response = await axios.get(`http://localhost:8000/storedData`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
+}
+
+const fetchotherData = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8000/otherData`);
     return response.data;
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -44,6 +55,7 @@ interface TempSensorData {
 const OxSensorsPage = async () => {
     const oxygensensordata: OxygenSensorData[][] = await fetchData();
     const tempsensorData : TempSensorData[][]= await fetchTempData(); 
+    const otherData : OtherDataProps[][] = await fetchotherData(); 
     console.log(tempsensorData);
 
 
@@ -60,7 +72,7 @@ const OxSensorsPage = async () => {
   // Pass the fetched data to the client component
   return (
   <div >
-    <Dataprovider oxygenInitialData={oxygensensordata} tempInitialData={tempsensorData} /> 
+    <Dataprovider otherPlotInitialData={otherData} oxygenInitialData={oxygensensordata} tempInitialData={tempsensorData} /> 
     
   </div>
   )
