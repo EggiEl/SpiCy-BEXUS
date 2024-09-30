@@ -125,26 +125,26 @@ export default function OtherPlot({ otherDataList, sensorname, measureTimeFeat, 
   return (
     <Container color="black">
       <Header>{sensorname}</Header>
-      <button style={{padding : 10, marginBottom: 20, fontSize : 20, borderRadius: 5}} onClick={toggleSlider}>
+      <button style={{padding : 5, marginBottom: 10, fontSize : 10, borderRadius: 5}} onClick={toggleSlider}>
   &#128269; Filter
 </button>
       {/* Input-Felder in einem flexiblen Layout */}
       <InputWrapper>
-        <StyledInput
+        <Input
           key={"default1"}
           type="number"
           color={"default"}
           label="Upper Limit"
           onChange={(e) => setUpperlimit(parseInt(e.target.value))}
         />
-        <StyledInput
+        <Input
           key={"default2"}
           type="number"
           color={"default"}
           label="Lower Limit"
           onChange={(e) => setLowerlimit(parseInt(e.target.value))}
         />
-         <StyledInput
+         <Input
           key={"default3"}
           type="number"
           color={"default"}

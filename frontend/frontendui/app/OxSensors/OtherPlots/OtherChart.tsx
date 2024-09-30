@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { OxygenSensorData } from "../OxInterfaces/OxygenSensorData";
 import { OxChartProps } from "../OxInterfaces/ComponentProps";
-import CustomTooltip from "../OxComponents/CustomTooltip";
+import CustomTooltip from "./TooltipOther";
+
+
 import {
   LineChart,
   Line,
@@ -109,7 +111,7 @@ export default function OtherChart({
               stroke="#333" 
              // Achse auf min und max Werte der Daten einstellen
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip/>} />
             <ReferenceLine
               y={upperlimit}
               label="Upper Limit"

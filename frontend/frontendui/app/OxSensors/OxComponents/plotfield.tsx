@@ -115,7 +115,7 @@ export default function PlotField({ plotInitalData }: InitialData) {
           <MdOutlineScience /> Sensor 6
         </button>
       </div>
-      <div className={`${styles.content} ${sidebarCollapsed ? styles.expanded : ''}`}>
+      <div className={`${styles.content} ${sidebarCollapsed ? styles.expanded : '' }`  }>
         {showPlot1 && <SensorPlotOx initialData={Oxsensor1} sensorname="Sensor1" measureTimeFeat={timeMeasurementFeat}  />}
         {showPlot2 && <SensorPlotOx initialData={Oxsensor2} sensorname="Sensor2" measureTimeFeat={timeMeasurementFeat}/>}
         {showPlot3 && <SensorPlotOx initialData={Oxsensor3} sensorname="Sensor3" measureTimeFeat={timeMeasurementFeat}/>}
