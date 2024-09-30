@@ -15,7 +15,7 @@ from colored_terminal import *
 # "ipconfig"
 # "netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
 
-IP_SERVER = ("169.254.218.4")
+IP_SERVER = ("172.16.18.170")
 PORT = 8888
 
 PACKET_LENTH = 472
@@ -237,7 +237,7 @@ class DATALOGGER:
             if len(self.rawdata)>=1:
                 self.save_raw_mongo()
                 if self.save_raw_bin():
-                    # print_white(f"saved {len(self.rawdata)} packages\n",indent=3)
+                    print_white(f"saved {len(self.rawdata)} packages\n",indent=3)
                     self.rawdata = []
             else:
                 time.sleep(DELAY_DATALOG_LOOP) #delay to conserve performance
