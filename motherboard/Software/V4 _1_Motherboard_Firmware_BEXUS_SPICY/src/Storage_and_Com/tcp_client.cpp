@@ -8,9 +8,9 @@
 // #include <Ethernet.h>
 
 static char AUTOMATIC_IP_ALLOCATION = 0;     /*0 means static ip allocation | 1 means dynamic*/
-static IPAddress SERVERIP(169, 254, 218, 4); // IP address of the Groundstation
+static IPAddress SERVERIP(172,16,18,170); // IP address of the Groundstation
 // #define SERVERIP IPAddress(100, 81, 57, 236)
-static IPAddress CLIENTIP(169, 254, 218, 100); // ip of this uC. Used ony in fixed IP allocation
+static IPAddress CLIENTIP(172,16,18,171); // ip of this uC. Used ony in fixed IP allocation
 // #define DNS IPAddress(8, 8, 8, 8)             // DNS server (e.g., Google DNS)
 // #define GATEWAY IPAddress(192, 168, 1, 1)
 static IPAddress SUBNET(255, 255, 0, 0);

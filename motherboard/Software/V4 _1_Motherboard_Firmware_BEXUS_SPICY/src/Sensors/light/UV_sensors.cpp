@@ -100,20 +100,15 @@ void light_read(float buffer[14])
 {
     if (!light_init)
     {
-        light_setup();
-    }
-
-    if (!light_init)
-    {
         return;
     }
 
-    debugf_status("Readout of light sensor\n");
+    // debugf_status("Readout of light sensor\n");
     if (ltr.newDataAvailable())
     {
         uint32_t readout_uv = ltr.readUVS(); // == 0xFFFFFFFF of failure
         float uv_in_lux = (LIGHT_LTR390_WFAC * (float)readout_uv) / (LIGHT_LTR390_UV_SENSITIFITY);
-        debugf_info("UV data %f lux, %u raw\n", uv_in_lux, readout_uv);
+        // debugf_info("UV data %f lux, %u raw\n", uv_in_lux, readout_uv);
         buffer[0] = uv_in_lux;
         buffer[1] = (float)readout_uv;
         buffer[2] = readout_uv;

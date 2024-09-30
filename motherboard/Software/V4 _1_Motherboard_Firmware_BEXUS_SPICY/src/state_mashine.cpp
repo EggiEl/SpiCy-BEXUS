@@ -63,6 +63,7 @@ void next_state()
     {
         pause_Core1();
         oxy_read_all(mesure_buffer);
+        // delay(1000);
         resume_Core1();
         memcpy(packet_dl.oxy_measure, mesure_buffer, sizeof(mesure_buffer));
         state = READ_LIGHT;

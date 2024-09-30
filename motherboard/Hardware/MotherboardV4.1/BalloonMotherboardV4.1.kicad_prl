@@ -81,7 +81,7 @@
     "files": [
       {
         "name": "BalloonMotherboardV4.1.kicad_sch",
-        "open": true,
+        "open": false,
         "window": {
           "display": 0,
           "maximized": false,
@@ -93,14 +93,14 @@
       },
       {
         "name": "BalloonMotherboardV4.1.kicad_pcb",
-        "open": true,
+        "open": false,
         "window": {
           "display": 0,
-          "maximized": true,
-          "pos_x": -11,
-          "pos_y": -11,
-          "size_x": 1942,
-          "size_y": 1030
+          "maximized": false,
+          "pos_x": 951,
+          "pos_y": 0,
+          "size_x": 978,
+          "size_y": 600
         }
       }
     ]

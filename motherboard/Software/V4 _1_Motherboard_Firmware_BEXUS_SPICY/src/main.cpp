@@ -45,7 +45,7 @@ void setup()
     tcp_check_command();
   }
   print_startup_message();
-
+  light_setup();
   sd_setup();
   // check_peripherals();
   debugf_sucess("Firmware flight v1.3\n");
@@ -73,7 +73,6 @@ void periodic_tasks_core_0()
     tcp_check_command();
   }
   rp2040.wdt_reset();
-  // tcp_check_command();
 }
 
 //-------------------------core2------------------------

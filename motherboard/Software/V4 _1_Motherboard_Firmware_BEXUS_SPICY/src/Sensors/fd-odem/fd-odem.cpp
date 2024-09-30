@@ -337,14 +337,14 @@ uint8_t oxy_read_all(struct OxygenReadout measure_buffer[6])
     // debugf_status(". ");
     success += oxy_meassure(NTC_OR_OxY_2, &measure_buffer[2]);
     rp2040.wdt_reset();
-    // debugf_status(". ");
+    // debugf_status(". "); 
     success += oxy_meassure(NTC_OR_OxY_3, &measure_buffer[3]);
     rp2040.wdt_reset();
     // debugf_status(". ");
-    success += oxy_meassure(NTC_4, &measure_buffer[4]);
+    success += oxy_meassure(OxY_4, &measure_buffer[4]);
     rp2040.wdt_reset();
     // debugf_status(". ");
-    success += oxy_meassure(NTC_5, &measure_buffer[5]);
+    success += oxy_meassure(OxY_5, &measure_buffer[5]);
     rp2040.wdt_reset();
     // debugf_status("done\n");
     return success;

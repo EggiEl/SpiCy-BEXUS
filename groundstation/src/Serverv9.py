@@ -15,7 +15,7 @@ from colored_terminal import *
 # "ipconfig"
 # "netstat" and then  "netstat -an | findstr "192.168.178.23:8888""
 
-IP_SERVER = ("169.254.218.4")
+IP_SERVER = ("172.16.18.170")
 PORT = 8888
 
 PACKET_LENTH = 472
