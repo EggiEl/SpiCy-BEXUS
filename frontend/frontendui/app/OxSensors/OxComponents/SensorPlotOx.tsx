@@ -24,8 +24,8 @@ const Container = styled.div.attrs((props) => ({
 
 const Header = styled.h1`
   text-align: center;
-  font-size: 2em;
-  margin-bottom: 80px;
+  font-size: 1em;
+  margin-bottom: 5px;
   color: #333;
 `;
 

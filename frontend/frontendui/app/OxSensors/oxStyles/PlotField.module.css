@@ -57,17 +57,17 @@
 }
 
 .content {
-    display: grid; /* Verwende Grid für die Anordnung */
-    grid-template-columns: repeat(2, 1fr); /* Zwei Plots nebeneinander */
+    display: flex; /* Verwende Grid für die Anordnung */
+   
     grid-gap: 5px; /* Abstand zwischen den Plots */
-    padding: 20px;
+    flex-wrap: wrap;
     margin-left: 260px;
     transition: margin-left 0.3s ease-in-out;
     overflow-x: hidden;
 }
 
 .content.expanded {
-    margin-left: 20px;
+    margin-left: 0;
 }
 
 .plotContainer {
