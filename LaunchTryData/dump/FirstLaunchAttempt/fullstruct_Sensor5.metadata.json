@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"51eabad726a94e38beb606b3858ec97e","collectionName":"fullstruct_Sensor5","type":"collection"}
