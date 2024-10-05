@@ -341,10 +341,10 @@ uint8_t oxy_read_all(struct OxygenReadout measure_buffer[6])
     success += oxy_meassure(NTC_OR_OxY_3, &measure_buffer[3]);
     rp2040.wdt_reset();
     // debugf_status(". ");
-    success += oxy_meassure(NTC_4, &measure_buffer[4]);
+    success += oxy_meassure(OxY_4, &measure_buffer[4]);
     rp2040.wdt_reset();
     // debugf_status(". ");
-    success += oxy_meassure(NTC_5, &measure_buffer[5]);
+    success += oxy_meassure(OxY_5, &measure_buffer[5]);
     rp2040.wdt_reset();
     // debugf_status("done\n");
     return success;
@@ -415,8 +415,9 @@ uint8_t oxy_meassure(const uint8_t Probe_Number, struct OxygenReadout *readout)
     debugf_info("ResistorTemp: %.4f OHM\n", readout->resistorTemp / 1000.0);
     debugf_info("PercentOtwo: %.4f %%\n", readout->percentOtwo / 1000.0);
 
-    oxy_decode_mesurement_errors(readout->error); // if theres an error this will print a debug statement
+   
 #endif
+ oxy_decode_mesurement_errors(readout->error); // if theres an error this will print a debug statement
 
     free(buf_return);
     return 1;
