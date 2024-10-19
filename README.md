@@ -1,5 +1,5 @@
 # SpiCy-BEXUS
-Please take a look at the [wiki](https://github.com/EggiEl/SpiCy-BEXUS/wiki) if you´re searching something.
+Please take a look at the [wiki](https://github.com/EggiEl/SpiCy-BEXUS/wiki) for an overview and pictures.
 
 
 # Git-for beginners: 
