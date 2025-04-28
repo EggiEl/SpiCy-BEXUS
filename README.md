@@ -52,7 +52,7 @@ This github documents the technical side of things.
 ### Contact Us
 Take a look at our [Website](https://spicybexus.de/)
 
-### Installs: 
+### Setup
 #### Node 
 https://nodejs.org/en/download
 
