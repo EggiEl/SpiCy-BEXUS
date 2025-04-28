@@ -52,51 +52,15 @@ This github documents the technical side of things.
 ### Contact Us
 Take a look at our [Website](https://spicybexus.de/)
 
-# Git-for beginners: 
-in der cmd ihres Vertrauens: 
-clone this repo: 
-```
-git clone https://github.com/EggiEl/SpiCy-BEXUS.git
-```
-- Neue Dateien aus Repo runterladen und mergen:
-```
-git pull
-```
-
-neue Dateien ins Repo einfügen: 
-
-- Stagen
-```
-git add . 
-```
-- Commiten (Bitte gute NAchrichten schreiben) 
-```
-git commit -m "Deine tolle Message" 
-```
-- Hochladen 
-```
-git push 
-```
-
-stand auschecken: 
-- Alte Commits anzeigen lassen
-```
-git log
-```
-- Alten Stand anschauen:
-```
-git checkout "hashcode" 
-```
-
-Installs: 
-## Node 
+### Installs: 
+#### Node 
 https://nodejs.org/en/download
 
-## MongoDB Community Server: 
+#### MongoDB Community Server: 
 https://www.mongodb.com/try/download/community
 
 
-## How to setup Project after cloning: 
+#### How to setup Project after cloning: 
 
 In the root of the Project use:
 ```
