@@ -1,0 +1,198 @@
+\documentclass[journal]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage[acronym,style=long]{glossaries}
+\usepackage{wrapfig}
+
+\usepackage[
+    backend=biber,
+    style=ieee,
+    citestyle=numeric
+]{biblatex}
+\addbibresource{references.bib}
+
+\makeglossaries
+
+\newacronym{er}{\ensuremath{\epsilon_r}}{relative permittivity}
+\newacronym{ereff}{\ensuremath{\epsilon_{r,eff}}}{effective relative permittivity}
+\newacronym{tantheta}{\ensuremath{\tan{\theta}}}{dielectric loss tangent}
+
+\title{Challenges of a high altitude experiment\\ as an interdisciplionary team}
+\title{Empirical evaluation of\\ oxygen production in high altitude}
+\author{Alexander Kubryk, Pablo Martin Carrilero, Tian Lan, Jayanth Narra, Ilana Schürmeyer, Eva-Maria Sontag, Fynn Gewiese, Sibtain Ali Thepdawala, Amanda Clot, Elias Eggenberger, Jacqueline Wiethaler, Runjjia Zhao}
+
+\begin{document}
+
+\maketitle
+
+\begin{wrapfigure}{l}{0.08\textwidth}
+	\centering
+	% \includegraphics[width=\linewidth]{./pics/REXUS_BEXUS_Logo_article-3055423975.jpg}
+	\includegraphics[width=\linewidth]{./pics/spicybexus_logo-272905222.jpeg}
+	% \caption{SpiCy Logo}
+\end{wrapfigure}
+
+\begin{abstract}
+	SpiCy (Stratospheric investigation of combinatory cyanobacterial biofilms) is a student-led mission to investigate the behavior of combinatory cyanobacterial biofilms under increased ionizing and non-ionizing radiation levels in the stratosphere to propose new alternatives of oxygen suppliance during space travel missions.
+
+	Project SpiCy intends to capitalize on the cyanobacterial ability to produce oxygen with minimum requirements and research their viability in long-term oxygen generation for human space flight and colonization missions.
+\end{abstract}
+
+\section{Biology}
+
+Cyanobacteria are among the oldest and most efficient photosynthetic organisms on planet Earth. They contribute 25\% of the oxygen on Earth today and were crucial in forming our atmosphere in the early stages of Earth’s development through oxygenation. As they are mostly aquatic or at least, need a certain degree of humidity, heterotrophic bacteria as a biofilm coordinator to mitigate their dependency are incorporated. These biofilms are a promising candidate in a plethora of space-related research (i.e. medicinal). Through forming adhesive biofilms, the bacteria are more resilient to radiation, thermal shocks, mechanical tearing and dry environments.
+\section{Mechanical design}
+
+\begin{wrapfigure}{l}{0.4\linewidth}
+	\centering
+	\includegraphics[width=\linewidth]{./pics/assembly.png}
+	\caption{tube assembly}
+\end{wrapfigure}
+% \begin{figure}[ht]
+% 	\centering
+% 	\includegraphics[width=0.5\linewidth]{./pics/assembly.png}
+% 	% \caption{Aproximation from \cite[269]{johnson_blackmagic}}
+% \end{figure}
+
+The mechanical design includes a styrofoam container housing individual biofilm tubes, each slot tailored to tube dimensions for stability and insulation. An aluminum profile cage reinforces the outer box for structural integrity and protection. A thermal control system regulates conditions for biofilm growth, with sensors providing real-time feedback for adjustments. A transparent plexiglass lid allows sunlight and visual inspection, securely attached for contamination prevention. An electronics compartment, made of durable plexiglass, organizes internal components with convenient access points for maintenance. Materials like styrofoam and quartz glass are chosen for their insulating and transparent properties, respectively, ensuring optimal functionality.
+
+
+\section{Electrical design}
+The electronic core of the system is orchestrated by a microcontroller, specifically an RP2040 This microcontroller serves as the brain, overseeing and coordinating all system operations. It reads in sensor data and adjusts the Power of the Heating elements according to this.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\linewidth]{./pics/motherboard_pic_hq.jpg}
+	\caption{motherboard}
+\end{figure}
+
+All data management will happen with one central data container, a struct named packet. It contains Sensordata, status, a timestamp and the pid values of the temperature system. It will be saved locally on the SD card and transmitted to a laptop via the ethernet connection.
+
+\section{Software}
+The embedded software architecture is implemented on the
+microcontroller in C++, covering essential functionalities like
+thermal control, sensor data acquisition and uplink/downlink
+communication processes. The thermal control is
+implemented as a PI controller, which controls the heating via
+PWM.
+For ground station operations, the system will utilize a tech
+stack consisting of a Node.js backend communicating with a
+MongoDB database, complemented by a Web-based
+Localhost Application frontend.
+
+
+\newpage
+\section{Flight data}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\linewidth]{./pics/data_oxy.png}
+	\caption{measurement of dissolved oxygen}
+\end{figure}
+
+Fig. 7.3-1 shows the measurement of dissolved oxygen, revealing significant differences between the samples during flight. Oxygen trends were averaged over 40 time points to compensate for single corrupted data points.
+
+Sample colors represent the following conditions:
+Light Blue: Nostoc sp. with B. subtilis
+Blue: Nostoc sp. with P. taiwanensis
+Green: Nostoc sp. with E. coli
+Black: Pure culture Nostoc sp.
+Orange: Scraped Nostoc sp. with E. coli from a previous cultivation batch
+Magenta: Medium control
+
+During launch preparation (I), samples were not exposed to light and oxygen production continued to decline. Mechanical movement of the gondola during transport and mounting may have contributed to this effect, as abrupt shaking could cause dissolved oxygen to form bubbles that could no longer be detected by the oxygen sensors.
+
+At late access (II), the light cover was removed shortly before launch. Pure Nostoc sp. (Black) and Nostoc sp. with E. coli (Green) immediately resumed oxygen production once light reached the samples (see ambient light measurement in Fig. 7.2-8). The other samples showed no significant change in oxygen production, suggesting a resting state caused by stress or insufficient light penetration due to the biofilms sinking to the bottom of the glass tubes.
+
+Shortly after launch during ascent (III), pure Nostoc sp. (Black) rapidly lost oxygen production. Surprisingly, the Nostoc sp. with P. taiwanensis sample (Blue) displayed increased dissolved oxygen levels immediately after launch. This is likely explained by either light finally reaching the previously sunken biofilm or partial dissolution of the biofilm into the medium, and not necessarily an effect related to biofilm activity.
+
+Most notably, Nostoc sp. with E. coli (Green) maintained stable oxygen levels throughout ascent, indicating continued oxygen production despite changing altitude, increased mechanical stress, and variable light exposure. A gradual reduction over time was expected, as the stratospheric environment provides non-optimal growth conditions and the organisms reduce metabolic activity in response.
+
+During the float phase (IV), Nostoc sp. with E. coli (Green) continued to show delayed oxygen decline, confirming sustained oxygen production. The expected decrease due to heterotrophic respiration by E. coli was not detected. Further analysis is required to investigate the presence and functional role of heterotrophic bacteria within the final biofilms. As described in Chapter 1.1, heterotrophic bacteria may contribute to maintaining the biofilm, promoting its initial formation, or conditioning surfaces for cyanobacterial attachment.
+
+The medium control (Magenta) showed no change in oxygen data during preparation, flight, or descent, confirming proper sensor function and absence of contamination in BG11 medium. The samples Nostoc sp. with B. subtilis (Light Blue) and scraped Nostoc sp. with E. coli (Orange) showed low oxygen readings even prior to launch. This was attributed to a missing calibration step caused by repeated disassembly during launch delays.
+
+No leakage, contamination, or visible structural damage was observed in the biomodule or glass tubes. All biological samples survived the flight and continued growing in the laboratory post-recovery, except for the scraped Nostoc sp. with E. coli sample (Orange), which died two weeks after return.
+
+In conclusion, pure Nostoc sp. showed an immediate and pronounced drop in oxygen production during flight, unlike the co-cultivated Nostoc sp. with E. coli. These results provide initial evidence that co-cultivation with heterotrophic bacteria may enhance resilience and support stable biofilm formation in cyanobacteria under extreme environmental stress.
+
+\section{Lessons learned}
+The project taught us several valuable lessons, beginning with the
+unexpected challenge of securing lab space. Initially, no professors had the
+resources to accommodate us, leaving us at an impasse. However, by
+reaching out to the dean and fostering connections with other universities, we
+successfully resolved this issue. Today, a dedicated lab space is available for
+our work, underscoring the importance of persistence and networking.
+Coordinating across sub-teams proved to be another significant challenge,
+largely due to the diversity of expertise required by the project. Effective
+communication between specialties took time to develop, but it became a
+crucial skill for our team. To prevent such difficulties in the future, we have
+adopted the SCRUM methodology to streamline collaboration. We also
+realized that unclear requirements further exacerbated these communication
+issues. Establishing better-defined and mutually agreed-upon requirements165
+not only improved coordination but also laid a stronger foundation for the
+project.
+A gap in expert knowledge became apparent during the experimental design
+phase, highlighting the need for specialized guidance. By collaborating
+extensively within the team and consulting external experts, we were able to
+refine our experimental approach. This experience emphasized the value of
+seeking diverse perspectives when faced with complex challenges.
+Securing funding and sponsorship presented another hurdle, particularly in
+the project's early stages. With time, support from LMU alleviated many of
+these concerns. Nevertheless, bureaucratic complications in using LMU funds
+for travel costs persist, prompting us to actively seek additional sponsors to
+cover these specific needs.
+On a technical front, the team acquired new skills, including soldering QFN
+components and cultivating cyanobacteria. While mastering these techniques
+involved overcoming initial challenges, conversations with experts and
+consistent practice helped us refine our methods. These skills not only
+advanced the project but also enriched the team’s technical repertoire.
+The outreach team grappled with balancing high-quality content production
+against the constraints of limited resources. Academic seminars had not
+prepared us for such practical limitations, so we adapted by developing
+flexible, cost-efficient approaches. This shift required creative problem-solving
+but proved essential for sustaining our public engagement efforts.
+Sensor selection also brought its share of challenges, particularly in
+identifying the optimal temperature sensor from numerous options. Through
+rigorous testing, we addressed this issue. Furthermore, lessons learned
+during the launch campaign underscored the critical importance of thorough
+labeling and documentation. A lack of visible labeling for tubes and sensors
+created significant difficulties during analysis, a mistake we now recognize as
+preventable. Moving forward, we will ensure that all components are labeled
+clearly and visibly, both on the hardware and within the user interface of the
+ground station.
+Defining project requirements was another area where clarity proved
+essential. A deeper understanding of the components and their
+interdependencies emerged as critical to achieving a design that met
+expectations. Through iterative refinement, we have gained confidence in
+establishing comprehensive requirements.
+Simulating the unique experimental environment posed challenges during the
+verification process, requiring innovative and non-traditional approaches. By
+thinking creatively, we developed methods to address these difficulties
+effectively. Similarly, careful planning before conducting experimental tests
+helped anticipate potential issues, saving time and resources in the long run.
+Mechanical design was another iterative process, where each cycle of
+refinement provided opportunities for improvement. This iterative approach,
+though time-intensive, proved indispensable in achieving the desired
+functionality.
+In summary, the project taught us resilience, adaptability, and the importance
+of meticulous planning and collaboration. Every challenge we faced became
+an opportunity to learn, ultimately strengthening our team and the project as a
+whole.
+
+\printbibliography
+
+\printglossaries
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\linewidth]{./pics/IMG-20241007-WA0013.jpg}
+	\caption{The team}
+\end{figure}
+\end{document}

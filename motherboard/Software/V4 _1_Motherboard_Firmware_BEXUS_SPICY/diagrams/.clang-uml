@@ -1,0 +1,13 @@
+
+compilation_database_dir: build
+output_directory: diagrams
+diagrams:
+  class_diagram:
+    type: class
+    title: Motherboard_Software
+    glob:
+      - ../src/*.cpp
+      - ../src/*.h
+    exclude:
+      namespaces:
+        - std
